@@ -287,6 +287,12 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 						OCR 服务商。
 					</Trans>
 				</DialogDescription>
+				<p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-amber-950 text-xs leading-normal dark:border-amber-800 dark:bg-amber-950/20 dark:text-amber-200">
+					<Trans>
+						隐私提示：PDF、Word、图片和扫描件导入会把文件内容发送给你配置或实例配置的 AI/OCR 服务商用于解析；JSON
+						导入只在本系统内读取。请确认文件中的个人信息可以被这些服务商处理后再上传。
+					</Trans>
+				</p>
 			</DialogHeader>
 
 			<form

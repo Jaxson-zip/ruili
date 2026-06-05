@@ -62,11 +62,12 @@ describe("integration settings copy", () => {
 
 		expect(screen.getByRole("heading", { name: "AI 模型服务商" })).toBeInTheDocument();
 		expect(screen.getByText("未配置已测试的服务商")).toBeInTheDocument();
+		expect(screen.getByText(/会把相关简历内容发送给该服务商处理/)).toBeInTheDocument();
 		expect(screen.getByRole("heading", { name: "添加 AI 服务商" })).toBeInTheDocument();
 		expect(screen.getByLabelText("名称")).toHaveAttribute("placeholder", "工作用 OpenAI");
 		expect(screen.getByText("服务商")).toBeInTheDocument();
 		expect(screen.getByLabelText("模型")).toBeInTheDocument();
-		expect(screen.getByLabelText("接口地址 (Base URL)")).toBeInTheDocument();
+		expect(screen.getByLabelText("接口地址（Base URL）")).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "保存 AI 服务商" })).toBeInTheDocument();
 		expect(screen.queryByText("AI Agent ready")).not.toBeInTheDocument();
 		expect(screen.queryByText("No tested Provider")).not.toBeInTheDocument();
@@ -99,8 +100,10 @@ describe("integration settings copy", () => {
 		wrap(<OCRSettingsSection />);
 
 		expect(screen.getByRole("heading", { name: "OCR 服务商" })).toBeInTheDocument();
+		expect(screen.getByText(/扫描版 PDF 会发送到 Azure Document Intelligence 做 OCR/)).toBeInTheDocument();
+		expect(screen.getByText(/识别出的文本会继续交给 AI 模型解析/)).toBeInTheDocument();
 		expect(screen.getByText("未配置 OCR 服务商")).toBeInTheDocument();
-		expect(screen.getByLabelText("服务端点 (Endpoint)")).toBeInTheDocument();
+		expect(screen.getByLabelText("服务端点（Endpoint）")).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "清除" })).toBeDisabled();
 		expect(screen.getByRole("button", { name: "保存 OCR 服务商" })).toBeDisabled();
 		expect(screen.queryByText("OCR ready")).not.toBeInTheDocument();

@@ -55,7 +55,10 @@ export function OCRSettingsSection() {
 						<Badge variant="secondary">Azure Document Intelligence</Badge>
 					</div>
 					<p className="text-muted-foreground text-sm">
-						<Trans>用于图片简历和扫描版 PDF 识别。密钥仅保存在当前浏览器，导入时随请求发送给后端调用 Azure。</Trans>
+						<Trans>
+							图片简历、扫描版 PDF 会发送到 Azure Document Intelligence 做 OCR；识别出的文本会继续交给 AI
+							模型解析。密钥仅保存在当前浏览器，导入时随请求发送给后端调用 Azure。
+						</Trans>
 					</p>
 				</div>
 

@@ -108,6 +108,8 @@ try {
 
 	const dialog = page.locator('[role="dialog"]');
 	await dialog.waitFor({ state: "visible", timeout: 15_000 });
+	await dialog.getByText(/隐私提示/).waitFor({ state: "visible", timeout: 10_000 });
+	await dialog.getByText(/JSON 导入只在本系统内读取/).waitFor({ state: "visible", timeout: 10_000 });
 
 	await dialog.locator('[data-slot="combobox-trigger"]').click();
 	await page.getByText("JSON Resume（标准简历数据，不是模板）").click();

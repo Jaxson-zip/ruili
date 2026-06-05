@@ -382,6 +382,9 @@ export function AISettingsSection() {
 				<div>
 					<h2 className="font-semibold text-lg">AI 模型服务商</h2>
 					<p className="text-muted-foreground text-sm">密钥会在服务端加密保存，保存后不会再次显示。</p>
+					<p className="mt-1 text-amber-700 text-xs leading-normal dark:text-amber-300">
+						启用后，AI 简历分析、导入解析、JD 匹配和润色会把相关简历内容发送给该服务商处理。
+					</p>
 				</div>
 
 				<p className="flex items-center gap-2 text-sm">
