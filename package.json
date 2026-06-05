@@ -38,7 +38,8 @@
 		"test:coverage": "turbo run test:coverage",
 		"test:ci": "turbo run test:ci",
 		"test:agent": "turbo run test:agent",
-		"verify:beta": "node tooling/verify-beta-smoke.mjs"
+		"verify:beta": "node tooling/verify-beta-smoke.mjs",
+		"verify:production": "node tooling/verify-production-canary.mjs"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.16",

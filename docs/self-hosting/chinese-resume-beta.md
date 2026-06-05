@@ -104,8 +104,11 @@ docker compose -f compose.yml --env-file .env.production config --quiet
 docker compose -f compose.yml --env-file .env.production up -d --build
 docker compose -f compose.yml --env-file .env.production ps
 curl -f http://127.0.0.1:3000/api/health
+pnpm verify:production --url https://resume.example.com
 APP_URL_OVERRIDE=https://resume.example.com pnpm verify:beta
 ```
+
+`verify:production` 是只读公网 canary，会检查 HTTPS 地址、`/api/health`、首页、隐私页和精品模板静态图；`verify:beta` 会注册测试账号并执行导入、编辑、PDF/DOCX 导出等重流程，适合正式开放前再跑一次。
 
 手工检查：
 
