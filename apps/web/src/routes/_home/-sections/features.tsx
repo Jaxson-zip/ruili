@@ -71,7 +71,7 @@ const getFeatures = (): Feature[] => [
 		id: "templates",
 		icon: LayoutIcon,
 		title: t`中文模板预览`,
-		description: t`首批 5 套稳定模板已经换成中文样张，更容易判断版式是否适合投递。`,
+		description: t`首批 3 套稳定模板已经换成中文样张，更容易判断版式是否适合投递。`,
 	},
 	{
 		id: "design",

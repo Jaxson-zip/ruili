@@ -137,14 +137,7 @@ export const templates = {
 	},
 } as const satisfies Record<Template, TemplateMetadata>;
 
-export const featuredTemplateIds = [
-	"onyx",
-	"bronzor",
-	"azurill",
-	"ditto",
-	"lapras",
-	"scizor",
-] as const satisfies Template[];
+export const featuredTemplateIds = ["ditto", "onyx", "scizor"] as const satisfies Template[];
 
 export const primaryTemplateIds = featuredTemplateIds;
 

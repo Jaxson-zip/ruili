@@ -13,7 +13,7 @@ export const composeStyles = (...styles: StyleInput[]): Style[] => {
 	});
 };
 
-const linkUnderlineStyle = { textDecoration: "underline" } satisfies Style;
+const linkUnderlineStyle = { textDecoration: "none" } satisfies Style;
 
 export const composeLinkStyles = (...styles: StyleInput[]): Style[] => composeStyles(...styles, linkUnderlineStyle);
 

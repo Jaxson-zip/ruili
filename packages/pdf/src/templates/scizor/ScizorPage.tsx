@@ -116,7 +116,6 @@ const useScizorTemplate = (): ScizorTemplate => {
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
 		const divider = "#D8DDE5";
-		const headingSurface = "#F5EFE7";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 		const bodyText = {
@@ -201,27 +200,22 @@ const useScizorTemplate = (): ScizorTemplate => {
 			},
 			section: {
 				flexDirection: "column",
-				rowGap: metrics.gapY(0.3),
-				borderTopWidth: 0.55,
-				borderTopColor: divider,
-				paddingTop: metrics.gapY(0.42),
+				rowGap: metrics.gapY(0.24),
 			},
 			sectionHeading: {
 				color: primary,
-				backgroundColor: headingSurface,
-				fontSize: metadata.typography.heading.fontSize * 0.88,
+				fontSize: metadata.typography.heading.fontSize * 0.86,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
-				borderLeftWidth: 2.4,
-				borderLeftColor: primary,
-				paddingHorizontal: metrics.gapX(0.42),
-				paddingVertical: metrics.gapY(0.1),
+				borderBottomWidth: 0.55,
+				borderBottomColor: primary,
+				paddingBottom: metrics.gapY(0.14),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(0.3),
+				rowGap: metrics.gapY(0.27),
 			},
 			item: {
-				rowGap: metrics.gapY(0.14),
+				rowGap: metrics.gapY(0.11),
 			},
 			levelContainer: {
 				width: "100%",
@@ -236,12 +230,12 @@ const useScizorTemplate = (): ScizorTemplate => {
 				flexDirection: r.row,
 				alignItems: "flex-start",
 				columnGap: metrics.gapX(1),
-				borderTopWidth: 2,
+				borderTopWidth: 0.9,
 				borderTopColor: primary,
 				borderBottomWidth: 0.8,
 				borderBottomColor: divider,
-				paddingTop: metrics.gapY(0.32),
-				paddingBottom: metrics.gapY(0.56),
+				paddingTop: metrics.gapY(0.3),
+				paddingBottom: metrics.gapY(0.46),
 			},
 			headerIdentity: {
 				flex: 1,
@@ -250,12 +244,12 @@ const useScizorTemplate = (): ScizorTemplate => {
 			},
 			headerName: {
 				color: foreground,
-				fontSize: metadata.typography.heading.fontSize * 1.72,
+				fontSize: metadata.typography.heading.fontSize * 1.54,
 				lineHeight: headerNameLineHeight,
 			},
 			headerNameRule: {
-				width: "30%",
-				borderBottomWidth: 1.4,
+				width: "18%",
+				borderBottomWidth: 0.8,
 				borderBottomColor: primary,
 			},
 			headerHeadline: {
@@ -301,7 +295,7 @@ const useScizorTemplate = (): ScizorTemplate => {
 				sectionHeading: (context) => ({
 					...baseStyles.sectionHeading,
 					color: accentFor(context),
-					borderLeftColor: accentFor(context),
+					borderBottomColor: accentFor(context),
 				}),
 				levelItem: (context) => ({ borderColor: accentFor(context) }),
 				levelItemActive: (context) => ({ backgroundColor: accentFor(context) }),

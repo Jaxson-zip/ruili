@@ -276,9 +276,8 @@ const useOnyxTemplate = (): OnyxTemplate => {
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
 		const muted = "#344256";
 		const softText = "#5F6D7E";
-		const hairline = "#D8E0EA";
-		const accentSurface = "#EEF4FA";
-		const sidebarBackground = "#F6F9FD";
+		const hairline = "#D9DEE7";
+		const sidebarBackground = "#F8FAFD";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 
@@ -365,26 +364,24 @@ const useOnyxTemplate = (): OnyxTemplate => {
 			},
 			section: {
 				flexDirection: "column",
-				rowGap: metrics.gapY(0.3),
+				rowGap: metrics.gapY(0.24),
 			},
 			sectionHeading: {
 				color: primary,
-				backgroundColor: accentSurface,
-				borderLeftWidth: 2.6,
-				borderLeftColor: primary,
-				fontSize: metadata.typography.heading.fontSize * 0.88,
+				borderBottomWidth: 0.55,
+				borderBottomColor: primary,
+				fontSize: metadata.typography.heading.fontSize * 0.86,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
 				lineHeight: 1.22,
-				paddingHorizontal: metrics.gapX(0.38),
-				paddingVertical: metrics.gapY(0.12),
+				paddingBottom: metrics.gapY(0.14),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(0.32),
+				rowGap: metrics.gapY(0.28),
 			},
 			item: {
-				rowGap: metrics.gapY(0.16),
-				paddingBottom: metrics.gapY(0.26),
+				rowGap: metrics.gapY(0.13),
+				paddingBottom: metrics.gapY(0.22),
 			},
 			levelContainer: {
 				display: "none",
@@ -399,14 +396,12 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				position: "relative",
 				alignItems: "flex-start",
 				rowGap: metrics.gapY(0.28),
-				backgroundColor: accentSurface,
-				borderTopWidth: 2.4,
+				borderTopWidth: 1.4,
 				borderTopColor: primary,
 				borderBottomWidth: 0.6,
 				borderBottomColor: hairline,
-				paddingHorizontal: metrics.gapX(0.72),
-				paddingTop: metrics.gapY(0.46),
-				paddingBottom: metrics.gapY(0.52),
+				paddingTop: metrics.gapY(0.36),
+				paddingBottom: metrics.gapY(0.46),
 			},
 			headerIdentity: {
 				alignItems: "flex-start",
@@ -414,7 +409,7 @@ const useOnyxTemplate = (): OnyxTemplate => {
 			},
 			headerName: {
 				color: foreground,
-				fontSize: metadata.typography.heading.fontSize * 1.64,
+				fontSize: metadata.typography.heading.fontSize * 1.56,
 				lineHeight: headerNameLineHeight,
 				textAlign: "left",
 			},
@@ -549,8 +544,7 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				sectionHeading: (context) => ({
 					...baseStyles.sectionHeading,
 					color: accentFor(context),
-					backgroundColor: context.placement === "sidebar" ? background : accentSurface,
-					borderLeftColor: accentFor(context),
+					borderBottomColor: context.placement === "sidebar" ? hairline : accentFor(context),
 				}),
 				item: (context) => ({
 					...baseStyles.item,

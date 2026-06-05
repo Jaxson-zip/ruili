@@ -8,7 +8,7 @@ const chromiumPath =
 	process.env.PLAYWRIGHT_CHROMIUM_PATH ??
 	path.join(os.homedir(), "AppData", "Local", "ms-playwright", "chromium-1208", "chrome-win64", "chrome.exe");
 const screenshotPath = path.resolve("artifacts", "homepage-templates.png");
-const expectedFeaturedTemplates = ["通用一页", "企业简洁", "标准双栏", "ATS 极简", "资深单栏", "高管咨询"];
+const expectedFeaturedTemplates = ["ATS 极简", "通用一页", "高管咨询"];
 
 const browser = await chromium.launch({
 	executablePath: chromiumPath,
