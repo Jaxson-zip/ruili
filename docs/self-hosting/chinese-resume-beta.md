@@ -32,6 +32,8 @@ docker compose -f compose.yml --env-file .env.production config --quiet
 
 这个命令会自动生成强随机的 `POSTGRES_PASSWORD`、`AUTH_SECRET`、`ENCRYPTION_SECRET`、SeaweedFS / S3 密钥，并写好匹配的 `DATABASE_URL`。
 
+`pnpm deploy:check` 会拦截常见上线事故：HTTPS 域名、本地地址、示例密钥、Postgres 密码不一致、Docker 内存/共享内存格式、`COMPOSE_ENV_FILE` 路径、SMTP/OAuth/OCR 半配置、安全开关误开等问题。只配置了一半的 SMTP、OAuth 或实例级 OCR 会被视为失败，因为这些配置上线后通常表现为“按钮不出现”“邮件发不出”或“导入功能不可用”。
+
 如果你手动从 `.env.example` 复制，必须替换这些值：
 
 - `APP_URL`: 必须是你的 HTTPS 域名，例如 `https://resume.example.com`

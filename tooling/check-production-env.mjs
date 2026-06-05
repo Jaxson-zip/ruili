@@ -82,6 +82,7 @@ const safeDecodeURIComponent = (value) => {
 };
 
 const isTrue = (value) => value === "true";
+const hasValue = (value) => (value ?? "").trim().length > 0;
 
 const isLocalHostname = (hostname) =>
 	["localhost", "127.0.0.1", "0.0.0.0", "::1", "host.docker.internal", "minio", "s3", "seaweedfs"].includes(hostname);
@@ -94,6 +95,39 @@ const isComposeInternalS3Endpoint = (url) =>
 	url.search === "" &&
 	url.hash === "";
 
+const parsePort = (value) => {
+	const port = Number(value);
+	return Number.isInteger(port) && port >= 1 && port <= 65_535 ? port : null;
+};
+
+const parseSizeToMiB = (value) => {
+	const match = value.trim().match(/^(\d+)([bkmg])?b?$/i);
+	if (!match) return null;
+
+	const amount = Number(match[1]);
+	const unit = (match[2] ?? "b").toLowerCase();
+
+	if (!Number.isSafeInteger(amount) || amount <= 0) return null;
+
+	switch (unit) {
+		case "b":
+			return amount / 1024 / 1024;
+		case "k":
+			return amount / 1024;
+		case "m":
+			return amount;
+		case "g":
+			return amount * 1024;
+		default:
+			return null;
+	}
+};
+
+const isAzureDocumentIntelligenceEndpoint = (url) => {
+	const hostname = url?.hostname.toLowerCase() ?? "";
+	return hostname.endsWith(".cognitiveservices.azure.com") || hostname.endsWith(".api.cognitive.microsoft.com");
+};
+
 const failures = [];
 const warnings = [];
 
@@ -105,6 +139,34 @@ if (!fs.existsSync(envPath)) {
 	for (const key of requiredKeys) {
 		const value = env.get(key);
 		if (!value) failures.push(`缺少 ${key}`);
+	}
+
+	for (const key of ["PORT", "SERVER_PORT", "SMTP_PORT"]) {
+		const value = env.get(key);
+		if (hasValue(value) && !parsePort(value)) failures.push(`${key} 必须是 1-65535 之间的端口号`);
+	}
+
+	for (const [key, minimumMiB] of [
+		["APP_MEMORY_LIMIT", 512],
+		["APP_SHM_SIZE", 64],
+	]) {
+		const value = env.get(key);
+		if (!hasValue(value)) continue;
+
+		const sizeMiB = parseSizeToMiB(value);
+		if (sizeMiB === null) {
+			failures.push(`${key} 必须使用 Docker 可识别的正数大小，例如 900m、1g、256m`);
+		} else if (sizeMiB < minimumMiB) {
+			warnings.push(`${key} 低于 ${minimumMiB}m；PDF 导出、图片处理或浏览器渲染可能不稳定`);
+		}
+	}
+
+	const composeEnvFile = env.get("COMPOSE_ENV_FILE");
+	if (hasValue(composeEnvFile)) {
+		const composeEnvPath = path.resolve(composeEnvFile);
+		if (!fs.existsSync(composeEnvPath)) {
+			failures.push(`COMPOSE_ENV_FILE 指向的文件不存在：${composeEnvFile}`);
+		}
 	}
 
 	const appUrl = env.get("APP_URL");
@@ -183,9 +245,76 @@ if (!fs.existsSync(envPath)) {
 		failures.push("FLAG_TRUST_PROXY_HEADERS 已开启；如确认上游代理可信，请显式传入 --allow-trusted-proxy-headers");
 	}
 
-	if (!env.get("SMTP_HOST")) warnings.push("SMTP 未配置：注册/找回密码邮件可能只能输出到日志");
-	if (env.get("SMTP_HOST") && isPlaceholder(env.get("SMTP_FROM"))) {
+	const smtpKeys = ["SMTP_HOST", "SMTP_USER", "SMTP_PASS", "SMTP_FROM"];
+	const smtpTransportKeys = ["SMTP_HOST", "SMTP_USER", "SMTP_PASS"];
+	const configuredSmtpTransportKeys = smtpTransportKeys.filter((key) => hasValue(env.get(key)));
+	const configuredSmtpKeys = smtpKeys.filter((key) => hasValue(env.get(key)));
+	if (configuredSmtpTransportKeys.length === 0) warnings.push("SMTP 未配置：注册/找回密码邮件可能只能输出到日志");
+	if (configuredSmtpTransportKeys.length > 0 && configuredSmtpKeys.length < smtpKeys.length) {
+		failures.push(`SMTP 配置不完整：${smtpKeys.filter((key) => !hasValue(env.get(key))).join(", ")} 仍为空`);
+	}
+	if (hasValue(env.get("SMTP_HOST")) && isPlaceholder(env.get("SMTP_FROM"))) {
 		failures.push("SMTP_FROM 仍是示例值，配置 SMTP 后必须使用真实发件地址");
+	}
+
+	const oauthEndpointKeys = [
+		"OAUTH_DISCOVERY_URL",
+		"OAUTH_AUTHORIZATION_URL",
+		"OAUTH_TOKEN_URL",
+		"OAUTH_USER_INFO_URL",
+	];
+	const configuredOauthKeys = [
+		"OAUTH_PROVIDER_NAME",
+		"OAUTH_CLIENT_ID",
+		"OAUTH_CLIENT_SECRET",
+		...oauthEndpointKeys,
+	].filter((key) => hasValue(env.get(key)));
+	if (configuredOauthKeys.length > 0) {
+		if (!hasValue(env.get("OAUTH_CLIENT_ID"))) failures.push("自定义 OAuth 已部分配置，但缺少 OAUTH_CLIENT_ID");
+		if (!hasValue(env.get("OAUTH_CLIENT_SECRET"))) failures.push("自定义 OAuth 已部分配置，但缺少 OAUTH_CLIENT_SECRET");
+
+		const hasDiscovery = hasValue(env.get("OAUTH_DISCOVERY_URL"));
+		const manualKeys = ["OAUTH_AUTHORIZATION_URL", "OAUTH_TOKEN_URL", "OAUTH_USER_INFO_URL"];
+		const missingManualKeys = manualKeys.filter((key) => !hasValue(env.get(key)));
+		if (!hasDiscovery && missingManualKeys.length > 0) {
+			failures.push(`自定义 OAuth 需要 OAUTH_DISCOVERY_URL，或补齐手动端点：${missingManualKeys.join(", ")}`);
+		}
+
+		for (const key of oauthEndpointKeys) {
+			const value = env.get(key);
+			if (!hasValue(value)) continue;
+
+			const url = tryParseUrl(value);
+			if (!url) {
+				failures.push(`${key} 不是有效 URL`);
+			} else if (!allowLocal && url.protocol !== "https:") {
+				failures.push(`${key} 正式上线必须使用 https://`);
+			}
+		}
+	}
+
+	const ocrKeys = ["OCR_PROVIDER", "OCR_AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT", "OCR_AZURE_DOCUMENT_INTELLIGENCE_KEY"];
+	const configuredOcrKeys = ocrKeys.filter((key) => hasValue(env.get(key)));
+	if (configuredOcrKeys.length > 0) {
+		if (env.get("OCR_PROVIDER") !== "azure-document-intelligence") {
+			failures.push("OCR_PROVIDER 当前只支持 azure-document-intelligence，或留空让用户自带 OCR Provider");
+		}
+		for (const key of ["OCR_AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT", "OCR_AZURE_DOCUMENT_INTELLIGENCE_KEY"]) {
+			if (!hasValue(env.get(key))) failures.push(`实例级 OCR 已部分配置，但缺少 ${key}`);
+		}
+
+		const endpoint = env.get("OCR_AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT");
+		if (hasValue(endpoint)) {
+			const url = tryParseUrl(endpoint);
+			if (!url) {
+				failures.push("OCR_AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT 不是有效 URL");
+			} else {
+				if (url.protocol !== "https:") failures.push("OCR_AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT 必须使用 https://");
+				if (!isAzureDocumentIntelligenceEndpoint(url)) {
+					failures.push("OCR_AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT 必须是 Azure Document Intelligence 域名");
+				}
+			}
+		}
 	}
 	if (env.get("FLAG_DISABLE_SIGNUPS") !== "true") warnings.push("当前允许公开注册；正式开放前确认是否需要关闭");
 	if (env.get("FLAG_TRUST_PROXY_HEADERS") !== "true")
