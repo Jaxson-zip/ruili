@@ -33,6 +33,7 @@ const getProductLinks = (): FooterLinkItem[] => [
 ];
 
 const getLegalLinks = (): FooterLinkItem[] => [
+	{ url: "/privacy", label: t`隐私与数据处理` },
 	{ url: upstreamRepositoryUrl, label: t`上游开源项目` },
 	{ url: upstreamLicenseUrl, label: t`MIT 许可证` },
 ];

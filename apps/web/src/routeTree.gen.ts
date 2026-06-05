@@ -29,6 +29,7 @@ import { Route as AuthLoginRouteImport } from "./routes/auth/login";
 import { Route as AuthForgotPasswordRouteImport } from "./routes/auth/forgot-password";
 import { Route as AgentNewRouteImport } from "./routes/agent/new";
 import { Route as AgentThreadIdRouteImport } from "./routes/agent/$threadId";
+import { Route as HomePrivacyRouteImport } from "./routes/_home/privacy";
 import { Route as UsernameSlugRouteImport } from "./routes/$username/$slug";
 import { Route as BuilderResumeIdRouteRouteImport } from "./routes/builder/$resumeId/route";
 import { Route as DashboardResumesIndexRouteImport } from "./routes/dashboard/resumes/index";
@@ -141,6 +142,11 @@ const AgentThreadIdRoute = AgentThreadIdRouteImport.update({
   path: "/$threadId",
   getParentRoute: () => AgentRouteRoute,
 } as any);
+const HomePrivacyRoute = HomePrivacyRouteImport.update({
+  id: "/privacy",
+  path: "/privacy",
+  getParentRoute: () => HomeRouteRoute,
+} as any);
 const UsernameSlugRoute = UsernameSlugRouteImport.update({
   id: "/$username/$slug",
   path: "/$username/$slug",
@@ -218,6 +224,7 @@ export interface FileRoutesByFullPath {
   "/settings": typeof SettingsRouteWithChildren;
   "/builder/$resumeId": typeof BuilderResumeIdRouteRouteWithChildren;
   "/$username/$slug": typeof UsernameSlugRoute;
+  "/privacy": typeof HomePrivacyRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
@@ -246,6 +253,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   "/settings": typeof SettingsRouteWithChildren;
   "/$username/$slug": typeof UsernameSlugRoute;
+  "/privacy": typeof HomePrivacyRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
@@ -281,6 +289,7 @@ export interface FileRoutesById {
   "/settings": typeof SettingsRouteWithChildren;
   "/builder/$resumeId": typeof BuilderResumeIdRouteRouteWithChildren;
   "/$username/$slug": typeof UsernameSlugRoute;
+  "/_home/privacy": typeof HomePrivacyRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
@@ -317,6 +326,7 @@ export interface FileRouteTypes {
     | "/settings"
     | "/builder/$resumeId"
     | "/$username/$slug"
+    | "/privacy"
     | "/agent/$threadId"
     | "/agent/new"
     | "/auth/forgot-password"
@@ -345,6 +355,7 @@ export interface FileRouteTypes {
   to:
     | "/settings"
     | "/$username/$slug"
+    | "/privacy"
     | "/agent/$threadId"
     | "/agent/new"
     | "/auth/forgot-password"
@@ -379,6 +390,7 @@ export interface FileRouteTypes {
     | "/settings"
     | "/builder/$resumeId"
     | "/$username/$slug"
+    | "/_home/privacy"
     | "/agent/$threadId"
     | "/agent/new"
     | "/auth/forgot-password"
@@ -559,6 +571,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AgentThreadIdRouteImport;
       parentRoute: typeof AgentRouteRoute;
     };
+    "/_home/privacy": {
+      id: "/_home/privacy";
+      path: "/privacy";
+      fullPath: "/privacy";
+      preLoaderRoute: typeof HomePrivacyRouteImport;
+      parentRoute: typeof HomeRouteRoute;
+    };
     "/$username/$slug": {
       id: "/$username/$slug";
       path: "/$username/$slug";
@@ -647,10 +666,12 @@ declare module "@tanstack/react-router" {
 }
 
 interface HomeRouteRouteChildren {
+  HomePrivacyRoute: typeof HomePrivacyRoute;
   HomeIndexRoute: typeof HomeIndexRoute;
 }
 
 const HomeRouteRouteChildren: HomeRouteRouteChildren = {
+  HomePrivacyRoute: HomePrivacyRoute,
   HomeIndexRoute: HomeIndexRoute,
 };
 

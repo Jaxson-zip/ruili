@@ -40,8 +40,14 @@ describe("Footer", () => {
 
 	it("keeps concise upstream attribution links", () => {
 		renderFooter();
+		expect(screen.getByText("隐私与数据处理")).toBeInTheDocument();
 		expect(screen.getByText("上游开源项目")).toBeInTheDocument();
 		expect(screen.getByText("MIT 许可证")).toBeInTheDocument();
+	});
+
+	it("links to the privacy and data processing page", () => {
+		renderFooter();
+		expect(screen.getByRole("link", { name: "隐私与数据处理" })).toHaveAttribute("href", "/privacy");
 	});
 
 	it("includes app version copy via Copyright", () => {
