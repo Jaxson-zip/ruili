@@ -131,7 +131,7 @@ export const templates = {
 		name: "高管咨询",
 		description: msg`标题强调更明确，适合咨询、高管、创业公司和需要强成果表达的候选人。`,
 		imageUrl: "/templates/jpg/scizor.jpg",
-		accentColor: "rgba(132, 93, 55, 1)",
+		accentColor: "rgba(63, 74, 90, 1)",
 		tags: ["单栏", "咨询", "管理层", "成果导向"],
 		sidebarPosition: "none",
 	},

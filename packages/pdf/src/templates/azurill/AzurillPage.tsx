@@ -143,10 +143,10 @@ const useAzurillTemplate = (): AzurillTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const muted = "#526071";
-		const hairline = "#D5DEE8";
-		const sidebarBackground = "#F1F6FA";
-		const sidebarHeadingSurface = "#E3EDF7";
+		const muted = "#4B5868";
+		const hairline = "#D4DAE3";
+		const softLine = "#E8ECF1";
+		const sidebarBackground = "#F7F9FB";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 
@@ -235,20 +235,20 @@ const useAzurillTemplate = (): AzurillTemplate => {
 			sectionHeading: {
 				color: primary,
 				fontSize: metadata.typography.heading.fontSize * 0.9,
-				borderBottomWidth: 0.6,
-				borderBottomColor: hairline,
-				borderLeftWidth: 2.4,
+				borderBottomWidth: 0.45,
+				borderBottomColor: softLine,
+				borderLeftWidth: 2.2,
 				borderLeftColor: primary,
 				paddingLeft: metrics.gapX(0.38),
-				paddingBottom: metrics.gapY(0.14),
+				paddingBottom: metrics.gapY(0.16),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			section: {
 				flexDirection: "column",
-				rowGap: metrics.gapY(0.32),
+				rowGap: metrics.gapY(0.3),
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(0.36),
+				rowGap: metrics.gapY(0.33),
 			},
 			item: {
 				rowGap: metrics.gapY(0.14),
@@ -268,12 +268,12 @@ const useAzurillTemplate = (): AzurillTemplate => {
 			},
 			sidebarColumn: {
 				backgroundColor: sidebarBackground,
-				borderLeftWidth: rtl ? 0 : 2.4,
-				borderLeftColor: primary,
-				borderRightWidth: rtl ? 2.4 : 0,
-				borderRightColor: primary,
-				paddingHorizontal: metrics.gapX(0.64),
-				paddingVertical: metrics.gapY(0.62),
+				borderLeftWidth: rtl ? 0 : 0.7,
+				borderLeftColor: hairline,
+				borderRightWidth: rtl ? 0.7 : 0,
+				borderRightColor: hairline,
+				paddingHorizontal: metrics.gapX(0.72),
+				paddingVertical: metrics.gapY(0.68),
 			},
 			mainColumn: {
 				flex: 1,
@@ -288,8 +288,8 @@ const useAzurillTemplate = (): AzurillTemplate => {
 				paddingBottom: metrics.gapY(0.62),
 			},
 			picture: {
-				width: Math.min(picture.size, 62),
-				height: Math.min(picture.size, 62),
+				width: Math.min(picture.size, 54),
+				height: Math.min(picture.size, 54),
 				objectFit: "cover",
 				aspectRatio: picture.aspectRatio,
 				borderRadius: Math.min(picture.borderRadius, 8),
@@ -308,17 +308,17 @@ const useAzurillTemplate = (): AzurillTemplate => {
 				rowGap: metrics.gapY(0.26),
 			},
 			headerName: {
-				fontSize: metadata.typography.heading.fontSize * 1.72,
+				fontSize: metadata.typography.heading.fontSize * 1.6,
 				lineHeight: headerNameLineHeight,
-				color: primary,
+				color: foreground,
 			},
 			headerContactRow: {
 				justifyContent: "flex-start",
 				flexDirection: r.row,
 				flexWrap: "wrap",
-				rowGap: metrics.gapY(0.18),
-				columnGap: metrics.gapX(0.58),
-				flexBasis: "35%",
+				rowGap: metrics.gapY(0.14),
+				columnGap: metrics.gapX(0.5),
+				flexBasis: "32%",
 			},
 			headerContactItem: {
 				flexDirection: r.row,
@@ -409,17 +409,16 @@ const useAzurillTemplate = (): AzurillTemplate => {
 					borderLeftColor: accentFor(context),
 					...(context.placement === "sidebar"
 						? {
-								backgroundColor: sidebarHeadingSurface,
-								borderBottomWidth: 0,
-								paddingHorizontal: metrics.gapX(0.34),
-								paddingVertical: metrics.gapY(0.1),
+								color: foregroundFor(context),
+								borderBottomColor: softLine,
+								paddingLeft: metrics.gapX(0.34),
 							}
 						: {}),
 				}),
 				levelItem: (context) => ({ borderColor: accentFor(context) }),
 				levelItemActive: (context) => ({ backgroundColor: accentFor(context) }),
 				icon: (context) => ({
-					display: metadata.page.hideIcons ? "none" : "flex",
+					display: "none",
 					size: metadata.typography.body.fontSize * 0.95,
 					color: accentFor(context),
 				}),

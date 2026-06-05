@@ -115,7 +115,10 @@ const useScizorTemplate = (): ScizorTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const divider = "#D8DDE5";
+		const muted = "#4D5968";
+		const divider = "#D2D8E0";
+		const softLine = "#E7EBF0";
+		const headerSurface = "#FAFAF8";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 		const bodyText = {
@@ -163,8 +166,7 @@ const useScizorTemplate = (): ScizorTemplate => {
 			},
 			small: {
 				fontSize: metadata.typography.body.fontSize * 0.875,
-				color: foreground,
-				opacity: 0.76,
+				color: muted,
 			},
 			bold: {
 				fontWeight: metadata.typography.body.fontWeights.at(-1) ?? "700",
@@ -200,22 +202,25 @@ const useScizorTemplate = (): ScizorTemplate => {
 			},
 			section: {
 				flexDirection: "column",
-				rowGap: metrics.gapY(0.24),
+				rowGap: metrics.gapY(0.31),
 			},
 			sectionHeading: {
-				color: primary,
-				fontSize: metadata.typography.heading.fontSize * 0.86,
+				color: foreground,
+				fontSize: metadata.typography.heading.fontSize * 0.9,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
-				borderBottomWidth: 0.55,
-				borderBottomColor: primary,
-				paddingBottom: metrics.gapY(0.14),
+				borderLeftWidth: 2.6,
+				borderLeftColor: primary,
+				borderBottomWidth: 0.45,
+				borderBottomColor: softLine,
+				paddingLeft: metrics.gapX(0.36),
+				paddingBottom: metrics.gapY(0.16),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(0.27),
+				rowGap: metrics.gapY(0.32),
 			},
 			item: {
-				rowGap: metrics.gapY(0.11),
+				rowGap: metrics.gapY(0.13),
 			},
 			levelContainer: {
 				width: "100%",
@@ -230,17 +235,19 @@ const useScizorTemplate = (): ScizorTemplate => {
 				flexDirection: r.row,
 				alignItems: "flex-start",
 				columnGap: metrics.gapX(1),
-				borderTopWidth: 0.9,
-				borderTopColor: primary,
-				borderBottomWidth: 0.8,
+				backgroundColor: headerSurface,
+				borderLeftWidth: 3.2,
+				borderLeftColor: primary,
+				borderBottomWidth: 0.65,
 				borderBottomColor: divider,
-				paddingTop: metrics.gapY(0.3),
-				paddingBottom: metrics.gapY(0.46),
+				paddingHorizontal: metrics.gapX(0.58),
+				paddingTop: metrics.gapY(0.42),
+				paddingBottom: metrics.gapY(0.52),
 			},
 			headerIdentity: {
 				flex: 1,
 				...r.headerIdentity,
-				rowGap: metrics.gapY(0.32),
+				rowGap: metrics.gapY(0.24),
 			},
 			headerName: {
 				color: foreground,
@@ -248,13 +255,10 @@ const useScizorTemplate = (): ScizorTemplate => {
 				lineHeight: headerNameLineHeight,
 			},
 			headerNameRule: {
-				width: "18%",
-				borderBottomWidth: 0.8,
-				borderBottomColor: primary,
+				display: "none",
 			},
 			headerHeadline: {
-				color: foreground,
-				opacity: 0.78,
+				color: muted,
 			},
 			headerContactRow: {
 				flexDirection: r.row,
@@ -266,8 +270,7 @@ const useScizorTemplate = (): ScizorTemplate => {
 				flexDirection: r.row,
 				alignItems: "center",
 				columnGap: metrics.gapX(1 / 6),
-				color: foreground,
-				opacity: 0.76,
+				color: muted,
 			},
 			picture: {
 				width: Math.min(picture.size, 58),
@@ -294,13 +297,14 @@ const useScizorTemplate = (): ScizorTemplate => {
 				...baseStyles,
 				sectionHeading: (context) => ({
 					...baseStyles.sectionHeading,
-					color: accentFor(context),
-					borderBottomColor: accentFor(context),
+					color: context.colors.foreground,
+					borderLeftColor: accentFor(context),
+					borderBottomColor: softLine,
 				}),
 				levelItem: (context) => ({ borderColor: accentFor(context) }),
 				levelItemActive: (context) => ({ backgroundColor: accentFor(context) }),
 				icon: (context) => ({
-					display: metadata.page.hideIcons ? "none" : "flex",
+					display: "none",
 					size: metadata.typography.body.fontSize,
 					color: accentFor(context),
 				}),

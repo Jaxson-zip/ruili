@@ -274,10 +274,13 @@ const useOnyxTemplate = (): OnyxTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const muted = "#344256";
-		const softText = "#5F6D7E";
-		const hairline = "#D9DEE7";
-		const sidebarBackground = "#F8FAFD";
+		const softText = "#5C6878";
+		const hairline = "#D6DCE5";
+		const headerSurface = "#202A37";
+		const headerText = "#FFFFFF";
+		const headerMuted = "#D9E0EA";
+		const headerDivider = "#778394";
+		const sidebarBackground = "#F9FAFC";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 
@@ -364,24 +367,27 @@ const useOnyxTemplate = (): OnyxTemplate => {
 			},
 			section: {
 				flexDirection: "column",
-				rowGap: metrics.gapY(0.24),
+				rowGap: metrics.gapY(0.3),
 			},
 			sectionHeading: {
-				color: primary,
-				borderBottomWidth: 0.55,
-				borderBottomColor: primary,
-				fontSize: metadata.typography.heading.fontSize * 0.86,
+				color: foreground,
+				borderLeftWidth: 2.4,
+				borderLeftColor: primary,
+				borderBottomWidth: 0.45,
+				borderBottomColor: hairline,
+				fontSize: metadata.typography.heading.fontSize * 0.9,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
 				lineHeight: 1.22,
-				paddingBottom: metrics.gapY(0.14),
+				paddingLeft: metrics.gapX(0.36),
+				paddingBottom: metrics.gapY(0.16),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(0.28),
+				rowGap: metrics.gapY(0.32),
 			},
 			item: {
 				rowGap: metrics.gapY(0.13),
-				paddingBottom: metrics.gapY(0.22),
+				paddingBottom: metrics.gapY(0.12),
 			},
 			levelContainer: {
 				display: "none",
@@ -396,25 +402,24 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				position: "relative",
 				alignItems: "flex-start",
 				rowGap: metrics.gapY(0.28),
-				borderTopWidth: 1.4,
-				borderTopColor: primary,
-				borderBottomWidth: 0.6,
-				borderBottomColor: hairline,
-				paddingTop: metrics.gapY(0.36),
-				paddingBottom: metrics.gapY(0.46),
+				backgroundColor: headerSurface,
+				borderBottomWidth: 0,
+				paddingHorizontal: metrics.gapX(0.72),
+				paddingTop: metrics.gapY(0.52),
+				paddingBottom: metrics.gapY(0.58),
 			},
 			headerIdentity: {
 				alignItems: "flex-start",
 				rowGap: metrics.gapY(0.1),
 			},
 			headerName: {
-				color: foreground,
+				color: headerText,
 				fontSize: metadata.typography.heading.fontSize * 1.56,
 				lineHeight: headerNameLineHeight,
 				textAlign: "left",
 			},
 			headerHeadline: {
-				color: muted,
+				color: headerMuted,
 				fontSize: metadata.typography.body.fontSize * 0.96,
 				textAlign: "left",
 			},
@@ -446,12 +451,12 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				columnGap: metrics.gapX(0.3),
 			},
 			contactText: {
-				color: muted,
+				color: headerMuted,
 				fontSize: metadata.typography.body.fontSize * 0.86,
 				textDecoration: "none",
 			},
 			contactDivider: {
-				color: "#A0A8B5",
+				color: headerDivider,
 				fontSize: metadata.typography.body.fontSize * 0.82,
 			},
 			compactSkillList: {
@@ -462,7 +467,7 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				paddingTop: metrics.gapY(0.02),
 			},
 			compactSkillRow: {
-				width: "48%",
+				width: "47%",
 			},
 			compactSkillText: {
 				...bodyText,
@@ -481,7 +486,7 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				paddingTop: metrics.gapY(0.02),
 			},
 			compactProfileRow: {
-				width: "48%",
+				width: "47%",
 			},
 			compactProfileText: {
 				...bodyText,
@@ -543,13 +548,14 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				}),
 				sectionHeading: (context) => ({
 					...baseStyles.sectionHeading,
-					color: accentFor(context),
-					borderBottomColor: context.placement === "sidebar" ? hairline : accentFor(context),
+					color: foregroundFor(context),
+					borderLeftColor: accentFor(context),
+					borderBottomColor: hairline,
 				}),
 				item: (context) => ({
 					...baseStyles.item,
 					...(context.placement === "main"
-						? { borderBottomWidth: 0.35, borderBottomColor: hairline }
+						? { borderBottomWidth: 0.25, borderBottomColor: "#EDF0F4" }
 						: { paddingBottom: 0 }),
 				}),
 				splitRow: (context) => ({

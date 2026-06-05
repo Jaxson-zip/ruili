@@ -124,9 +124,10 @@ const useDittoTemplate = (): DittoTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const muted = "#4F5967";
-		const hairline = "#D7DCE3";
-		const softLine = "#EEF1F5";
+		const muted = "#3E4958";
+		const hairline = "#CBD2DC";
+		const softLine = "#E7EBF0";
+		const headerSurface = "#FAFBFC";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 
@@ -212,22 +213,25 @@ const useDittoTemplate = (): DittoTemplate => {
 			},
 			section: {
 				flexDirection: "column",
-				rowGap: metrics.gapY(0.22),
+				rowGap: metrics.gapY(0.3),
 			},
 			sectionHeading: {
 				color: foreground,
-				borderBottomWidth: 0.55,
-				borderBottomColor: hairline,
-				fontSize: metadata.typography.heading.fontSize * 0.86,
+				borderLeftWidth: 2.2,
+				borderLeftColor: primary,
+				borderBottomWidth: 0.45,
+				borderBottomColor: softLine,
+				fontSize: metadata.typography.heading.fontSize * 0.9,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
-				paddingBottom: metrics.gapY(0.14),
+				paddingLeft: metrics.gapX(0.34),
+				paddingBottom: metrics.gapY(0.16),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(0.26),
+				rowGap: metrics.gapY(0.32),
 			},
 			item: {
-				rowGap: metrics.gapY(0.1),
+				rowGap: metrics.gapY(0.12),
 			},
 			levelContainer: {
 				width: "100%",
@@ -239,13 +243,15 @@ const useDittoTemplate = (): DittoTemplate => {
 				backgroundColor: primary,
 			},
 			header: {
-				rowGap: metrics.gapY(0.28),
-				borderTopWidth: 0.9,
-				borderTopColor: foreground,
-				borderBottomWidth: 0.7,
+				rowGap: metrics.gapY(0.3),
+				backgroundColor: headerSurface,
+				borderLeftWidth: 3,
+				borderLeftColor: primary,
+				borderBottomWidth: 0.65,
 				borderBottomColor: hairline,
-				paddingTop: metrics.gapY(0.3),
-				paddingBottom: metrics.gapY(0.42),
+				paddingHorizontal: metrics.gapX(0.52),
+				paddingTop: metrics.gapY(0.38),
+				paddingBottom: metrics.gapY(0.46),
 			},
 			headerTop: {
 				flexDirection: r.row,
@@ -292,7 +298,7 @@ const useDittoTemplate = (): DittoTemplate => {
 				color: muted,
 			},
 			sectionGroup: {
-				rowGap: metrics.sectionGap * 0.9,
+				rowGap: metrics.sectionGap * 0.86,
 			},
 			sidebarGroup: {
 				borderTopWidth: 0.7,
@@ -318,7 +324,8 @@ const useDittoTemplate = (): DittoTemplate => {
 				sectionHeading: (context) => ({
 					...baseStyles.sectionHeading,
 					color: foregroundFor(context),
-					borderBottomColor: context.placement === "sidebar" ? softLine : foregroundFor(context),
+					borderLeftColor: accentFor(context),
+					borderBottomColor: context.placement === "sidebar" ? softLine : hairline,
 				}),
 				levelItem: (context) => ({ borderColor: accentFor(context) }),
 				levelItemActive: (context) => ({ backgroundColor: accentFor(context) }),
