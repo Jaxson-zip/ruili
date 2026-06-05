@@ -82,10 +82,10 @@ export function ChangePasswordDialog(_: DialogProps<"auth.change-password">) {
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PasswordIcon />
-					<Trans>Update your password</Trans>
+					<Trans>修改密码</Trans>
 				</DialogTitle>
 				<DialogDescription>
-					<Trans>Enter your current password and a new password to update your account.</Trans>
+					<Trans>输入当前密码和新密码来更新账号。</Trans>
 				</DialogDescription>
 			</DialogHeader>
 
@@ -101,7 +101,7 @@ export function ChangePasswordDialog(_: DialogProps<"auth.change-password">) {
 					{(field) => (
 						<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 							<FormLabel>
-								<Trans>Current Password</Trans>
+								<Trans>当前密码</Trans>
 							</FormLabel>
 							<div className="flex items-center gap-x-1.5">
 								<FormControl
@@ -124,11 +124,11 @@ export function ChangePasswordDialog(_: DialogProps<"auth.change-password">) {
 										{showCurrentPassword
 											? t({
 													comment: "Accessible label for toggle button that hides the visible current password",
-													message: "Hide password",
+													message: "隐藏密码",
 												})
 											: t({
 													comment: "Accessible label for toggle button that reveals the masked current password",
-													message: "Show password",
+													message: "显示密码",
 												})}
 									</span>
 									{showCurrentPassword ? <EyeIcon /> : <EyeSlashIcon />}
@@ -143,7 +143,7 @@ export function ChangePasswordDialog(_: DialogProps<"auth.change-password">) {
 					{(field) => (
 						<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 							<FormLabel>
-								<Trans>New Password</Trans>
+								<Trans>新密码</Trans>
 							</FormLabel>
 							<div className="flex items-center gap-x-1.5">
 								<FormControl
@@ -166,11 +166,11 @@ export function ChangePasswordDialog(_: DialogProps<"auth.change-password">) {
 										{showNewPassword
 											? t({
 													comment: "Accessible label for toggle button that hides the visible new password",
-													message: "Hide password",
+													message: "隐藏密码",
 												})
 											: t({
 													comment: "Accessible label for toggle button that reveals the masked new password",
-													message: "Show password",
+													message: "显示密码",
 												})}
 									</span>
 									{showNewPassword ? <EyeIcon /> : <EyeSlashIcon />}

@@ -67,7 +67,7 @@ export function DisableTwoFactorDialog(_: DialogProps<"auth.two-factor.disable">
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<LockOpenIcon />
-					<Trans>Disable Two-Factor Authentication</Trans>
+					<Trans>关闭双重验证</Trans>
 				</DialogTitle>
 				<DialogDescription>
 					<Trans>
@@ -89,7 +89,7 @@ export function DisableTwoFactorDialog(_: DialogProps<"auth.two-factor.disable">
 					{(field) => (
 						<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 							<FormLabel>
-								<Trans>Password</Trans>
+								<Trans>密码</Trans>
 							</FormLabel>
 							<div className="flex items-center gap-x-1.5">
 								<FormControl
@@ -113,12 +113,12 @@ export function DisableTwoFactorDialog(_: DialogProps<"auth.two-factor.disable">
 											? t({
 													comment:
 														"Accessible label for toggle button that hides the visible password in two-factor disable dialog",
-													message: "Hide password",
+													message: "隐藏密码",
 												})
 											: t({
 													comment:
 														"Accessible label for toggle button that reveals the masked password in two-factor disable dialog",
-													message: "Show password",
+													message: "显示密码",
 												})}
 									</span>
 									{showPassword ? <EyeIcon /> : <EyeSlashIcon />}

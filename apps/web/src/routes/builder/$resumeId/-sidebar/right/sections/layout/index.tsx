@@ -65,7 +65,7 @@ function LayoutSectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Sidebar Width</Trans>
+							<Trans>侧栏宽度</Trans>
 						</FormLabel>
 						<div className="flex items-center gap-4">
 							<FormControl

@@ -29,7 +29,7 @@ export function SkillsSectionBuilder() {
 			</Reorder.Group>
 
 			<SectionAddItemButton type="skills">
-				<Trans>Add a new skill</Trans>
+				<Trans>添加技能</Trans>
 			</SectionAddItemButton>
 		</SectionBase>
 	);

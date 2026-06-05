@@ -14,14 +14,14 @@ export function NotFoundScreen({ routeId }: NotFoundRouteProps) {
 			<Alert>
 				<WarningIcon />
 				<AlertTitle>
-					<Trans>An error occurred while loading the page.</Trans>
+					<Trans>页面加载时出现错误。</Trans>
 				</AlertTitle>
 				<AlertDescription>{routeId}</AlertDescription>
 			</Alert>
 
 			<Link to=".." className={buttonVariants()}>
 				<ArrowLeftIcon />
-				<Trans>Go Back</Trans>
+				<Trans>返回</Trans>
 			</Link>
 		</div>
 	);

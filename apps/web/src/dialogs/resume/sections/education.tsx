@@ -63,7 +63,7 @@ export function CreateEducationDialog({ data }: DialogProps<"resume.sections.edu
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PlusIcon />
-					<Trans>Create a new education</Trans>
+					<Trans>新增教育经历</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -80,11 +80,11 @@ export function CreateEducationDialog({ data }: DialogProps<"resume.sections.edu
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Create</Trans>
+						<Trans>创建</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -115,7 +115,7 @@ export function UpdateEducationDialog({ data }: DialogProps<"resume.sections.edu
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PencilSimpleLineIcon />
-					<Trans>Update an existing education</Trans>
+					<Trans>编辑教育经历</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -132,11 +132,11 @@ export function UpdateEducationDialog({ data }: DialogProps<"resume.sections.edu
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Save Changes</Trans>
+						<Trans>保存修改</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -151,17 +151,17 @@ const EducationForm = withForm({
 
 		return (
 			<>
-				<form.AppField name="school">{(field) => <field.TextField label={<Trans>School</Trans>} />}</form.AppField>
+				<form.AppField name="school">{(field) => <field.TextField label={<Trans>学校</Trans>} />}</form.AppField>
 
-				<form.AppField name="area">{(field) => <field.TextField label={<Trans>Area of Study</Trans>} />}</form.AppField>
+				<form.AppField name="area">{(field) => <field.TextField label={<Trans>专业</Trans>} />}</form.AppField>
 
-				<form.AppField name="degree">{(field) => <field.TextField label={<Trans>Degree</Trans>} />}</form.AppField>
+				<form.AppField name="degree">{(field) => <field.TextField label={<Trans>学历/学位</Trans>} />}</form.AppField>
 
-				<form.AppField name="grade">{(field) => <field.TextField label={<Trans>Grade</Trans>} />}</form.AppField>
+				<form.AppField name="grade">{(field) => <field.TextField label={<Trans>成绩</Trans>} />}</form.AppField>
 
-				<form.AppField name="location">{(field) => <field.TextField label={<Trans>Location</Trans>} />}</form.AppField>
+				<form.AppField name="location">{(field) => <field.TextField label={<Trans>地点</Trans>} />}</form.AppField>
 
-				<form.AppField name="period">{(field) => <field.TextField label={<Trans>Period</Trans>} />}</form.AppField>
+				<form.AppField name="period">{(field) => <field.TextField label={<Trans>时间</Trans>} />}</form.AppField>
 
 				<form.Field name="website">
 					{(field) => (
@@ -170,7 +170,7 @@ const EducationForm = withForm({
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormLabel>
-								<Trans>Website</Trans>
+								<Trans>链接</Trans>
 							</FormLabel>
 							<URLInput
 								value={field.state.value}
@@ -196,7 +196,7 @@ const EducationForm = withForm({
 								}
 							/>
 							<FormLabel className="mt-0!">
-								<Trans>Show link in title</Trans>
+								<Trans>在标题中显示链接</Trans>
 							</FormLabel>
 						</FormItem>
 					)}
@@ -209,7 +209,7 @@ const EducationForm = withForm({
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormLabel>
-								<Trans>Description</Trans>
+								<Trans>描述</Trans>
 							</FormLabel>
 							<FormControl render={<RichInput value={field.state.value} onChange={(v) => field.handleChange(v)} />} />
 							<FormMessage errors={field.state.meta.errors} />

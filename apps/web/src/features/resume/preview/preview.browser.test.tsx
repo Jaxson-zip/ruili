@@ -82,7 +82,7 @@ describe("ResumePreviewClient", () => {
 
 		render(<ResumePreviewClient pageGap={16} pageLayout="vertical" pageScale={1.25} showPageNumbers={false} />);
 
-		expect(screen.getAllByRole("img", { name: /Loading resume page/ })).toHaveLength(3);
+		expect(screen.getAllByRole("img", { name: /正在加载简历第/ })).toHaveLength(3);
 	});
 
 	it("renders from explicit resume data when no builder resume is active", async () => {

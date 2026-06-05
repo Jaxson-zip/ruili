@@ -120,7 +120,7 @@ export function DeriveResumeWithJobDialog({ data }: DialogProps<"resume.deriveWi
 					<div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-amber-950 text-sm">
 						<p className="font-medium">需要先配置可用的 AI 模型</p>
 						<p className="mt-1 text-xs leading-normal opacity-85">
-							JD 派生需要 LLM。请先到设置里添加并测试一个 AI Provider。
+							JD 派生需要 LLM。请先到设置里添加并测试一个 AI 模型服务商。
 						</p>
 					</div>
 				) : null}

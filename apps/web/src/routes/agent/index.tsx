@@ -23,7 +23,7 @@ function RouteComponent() {
 						</div>
 						<div className="min-w-0 space-y-2">
 							<h1 className="font-semibold text-2xl tracking-tight">
-								<Trans>选择 AI Agent 会话</Trans>
+								<Trans>选择 AI 助手会话</Trans>
 							</h1>
 							<p className="text-muted-foreground text-sm">
 								<Trans>从左侧打开已有会话，或创建一个新的简历优化会话。</Trans>

@@ -89,7 +89,7 @@ function ThreadActions({ thread, activeThreadId }: ThreadActionsProps) {
 	};
 
 	const handleDelete = async () => {
-		const confirmed = await confirm(t`删除这个 AI Agent 会话？`, {
+		const confirmed = await confirm(t`删除这个 AI 助手会话？`, {
 			description: t`这个操作不可撤销，会删除会话消息和附件。`,
 		});
 
@@ -181,7 +181,7 @@ export function AgentThreadSidebar({ activeThreadId = null, className }: AgentTh
 				<div className="flex min-w-0 items-center gap-2">
 					<ChatCircleDotsIcon className="shrink-0" />
 					<div className="min-w-0 truncate font-semibold">
-						<Trans>AI Agent 会话</Trans>
+						<Trans>AI 助手会话</Trans>
 					</div>
 				</div>
 				<Button size="icon-sm" variant="ghost" nativeButton={false} render={<Link to="/dashboard/resumes" />}>

@@ -24,13 +24,10 @@ export function StatisticsSectionBuilder() {
 						<Alert>
 							<InfoIcon />
 							<AlertTitle>
-								<Trans>Track your resume's views and downloads</Trans>
+								<Trans>跟踪简历浏览和下载</Trans>
 							</AlertTitle>
 							<AlertDescription>
-								<Trans>
-									Turn on public sharing to track how many times your resume has been viewed or downloaded. Only you can
-									see your resume's statistics.
-								</Trans>
+								<Trans>开启公开分享后，可以统计这份简历被浏览或下载的次数。只有你可以看到这些统计数据。</Trans>
 							</AlertDescription>
 						</Alert>
 					</AccordionContent>
@@ -39,16 +36,16 @@ export function StatisticsSectionBuilder() {
 				<AccordionItem value="isPublic">
 					<AccordionContent className="grid @md:grid-cols-2 grid-cols-1 gap-4 pb-0">
 						<StatisticsItem
-							label={t`Views`}
+							label={t`浏览`}
 							value={statistics.views}
-							timestamp={statistics.lastViewedAt ? t`Last viewed on ${statistics.lastViewedAt.toDateString()}` : null}
+							timestamp={statistics.lastViewedAt ? t`最后浏览于 ${statistics.lastViewedAt.toDateString()}` : null}
 						/>
 
 						<StatisticsItem
-							label={t`Downloads`}
+							label={t`下载`}
 							value={statistics.downloads}
 							timestamp={
-								statistics.lastDownloadedAt ? t`Last downloaded on ${statistics.lastDownloadedAt.toDateString()}` : null
+								statistics.lastDownloadedAt ? t`最后下载于 ${statistics.lastDownloadedAt.toDateString()}` : null
 							}
 						/>
 					</AccordionContent>

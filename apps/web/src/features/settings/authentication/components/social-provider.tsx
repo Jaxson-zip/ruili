@@ -59,7 +59,7 @@ export function SocialProviderSection({ provider, name, animationDelay = 0 }: So
 							<Button variant="outline" onClick={handleUnlink}>
 								<LinkBreakIcon />
 								<Trans comment="Authentication settings action to unlink a connected social login provider">
-									Disconnect
+									断开连接
 								</Trans>
 							</Button>
 						</m.div>
@@ -73,7 +73,7 @@ export function SocialProviderSection({ provider, name, animationDelay = 0 }: So
 						>
 							<Button variant="outline" onClick={handleLink}>
 								<LinkIcon />
-								<Trans comment="Authentication settings action to link a social login provider">Connect</Trans>
+								<Trans comment="Authentication settings action to link a social login provider">连接</Trans>
 							</Button>
 						</m.div>
 					))

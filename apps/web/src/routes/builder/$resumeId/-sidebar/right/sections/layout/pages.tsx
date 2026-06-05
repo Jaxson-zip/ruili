@@ -31,13 +31,13 @@ const getColumnLabel = (columnId: ColumnId): string => {
 		.with("main", () =>
 			t({
 				comment: "Layout editor column label for the primary content area",
-				message: "Main",
+				message: "主栏",
 			}),
 		)
 		.with("sidebar", () =>
 			t({
 				comment: "Layout editor column label for the secondary sidebar area",
-				message: "Sidebar",
+				message: "侧栏",
 			}),
 		)
 		.exhaustive();
@@ -246,7 +246,7 @@ export function LayoutPages() {
 
 				<Button variant="outline" className="self-end" onClick={handleAddPage}>
 					<PlusIcon />
-					<Trans>Add Page</Trans>
+					<Trans>添加页面</Trans>
 				</Button>
 			</div>
 
@@ -280,7 +280,7 @@ function PageContainer({
 			<div className="flex items-center justify-between bg-secondary/50 px-4 py-3">
 				<div className="flex w-full items-center gap-4">
 					<span className="font-medium text-xs">
-						<Trans comment="Layout editor page label with 1-based page number">Page {pageIndex + 1}</Trans>
+						<Trans comment="Layout editor page label with 1-based page number">第 {pageIndex + 1} 页</Trans>
 					</span>
 
 					<label htmlFor={fullWidthSwitchId} className="flex cursor-pointer items-center gap-2">
@@ -291,7 +291,7 @@ function PageContainer({
 						/>
 
 						<span className="font-medium text-muted-foreground text-xs">
-							<Trans comment="Layout editor toggle label that makes a page single-column">Full Width</Trans>
+							<Trans comment="Layout editor toggle label that makes a page single-column">通栏</Trans>
 						</span>
 					</label>
 				</div>
@@ -299,7 +299,7 @@ function PageContainer({
 				{canDelete && (
 					<Button variant="ghost" onClick={() => onDelete(pageIndex)} className="h-5 w-auto gap-x-2.5 px-0!">
 						<TrashIcon />
-						<Trans>Delete Page</Trans>
+						<Trans>删除页面</Trans>
 					</Button>
 				)}
 			</div>
@@ -370,7 +370,7 @@ function LayoutColumn({
 
 					{items.length === 0 && (
 						<div className="rounded-md border border-dashed p-4 font-medium text-muted-foreground text-xs">
-							<Trans>Drag and drop sections here to move them between columns</Trans>
+							<Trans>将模块拖放到这里，以便在栏之间移动</Trans>
 						</div>
 					)}
 				</div>

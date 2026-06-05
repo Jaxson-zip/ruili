@@ -92,7 +92,7 @@ describe("ProfilesSectionBuilder", () => {
 				<ProfilesSectionBuilder />
 			</I18nProvider>,
 		);
-		expect(screen.getByRole("button", { name: "Add a new profile" })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "添加个人主页" })).toBeInTheDocument();
 	});
 
 	it("uses non-dashed border when items are present", () => {

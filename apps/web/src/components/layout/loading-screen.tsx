@@ -6,7 +6,7 @@ export function LoadingScreen() {
 		<div className="fixed inset-0 z-50 flex h-svh w-svw items-center justify-center gap-x-3 bg-background">
 			<Spinner className="size-6" />
 			<p className="text-muted-foreground">
-				<Trans>Loading…</Trans>
+				<Trans>加载中…</Trans>
 			</p>
 		</div>
 	);

@@ -186,7 +186,7 @@ export function PdfCanvasPage({
 		<figure className="shrink-0">
 			{showPageNumbers ? (
 				<figcaption className="mb-1 font-medium text-[0.625rem] text-muted-foreground">
-					Page {pageNumber} of {totalPages}
+					第 {pageNumber} 页 / 共 {totalPages} 页
 				</figcaption>
 			) : null}
 

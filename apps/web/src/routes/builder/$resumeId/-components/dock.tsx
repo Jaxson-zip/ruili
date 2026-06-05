@@ -51,7 +51,7 @@ export function BuilderDock({ pageLayout, onTogglePageLayout }: BuilderDockProps
 
 	const onCopyUrl = useCallback(async () => {
 		await copyToClipboard(publicUrl);
-		toast.success(t`A link to your resume has been copied to clipboard.`);
+		toast.success(t`简历链接已复制到剪贴板。`);
 	}, [publicUrl, copyToClipboard]);
 
 	const onDownloadJSON = useCallback(async () => {
@@ -71,7 +71,7 @@ export function BuilderDock({ pageLayout, onTogglePageLayout }: BuilderDockProps
 			const blob = await buildDocx(resume.data);
 			downloadWithAnchor(blob, filename);
 		} catch {
-			toast.error(t`There was a problem while generating the DOCX, please try again.`);
+			toast.error(t`生成 DOCX 时出现问题，请重试。`);
 		}
 	}, [resume]);
 
@@ -79,7 +79,7 @@ export function BuilderDock({ pageLayout, onTogglePageLayout }: BuilderDockProps
 		if (!resume) return;
 
 		const filename = generateFilename(resume.name, "pdf");
-		const toastId = toast.loading(t`Please wait while your PDF is being generated...`);
+		const toastId = toast.loading(t`正在生成 PDF，请稍候...`);
 
 		setIsPrinting(true);
 
@@ -87,7 +87,7 @@ export function BuilderDock({ pageLayout, onTogglePageLayout }: BuilderDockProps
 			const blob = await createResumePdfBlob(resume.data);
 			downloadWithAnchor(blob, filename);
 		} catch {
-			toast.error(t`There was a problem while generating the PDF, please try again.`);
+			toast.error(t`生成 PDF 时出现问题，请重试。`);
 		} finally {
 			setIsPrinting(false);
 			toast.dismiss(toastId);
@@ -103,28 +103,28 @@ export function BuilderDock({ pageLayout, onTogglePageLayout }: BuilderDockProps
 				transition={{ duration: 0.2, ease: "easeOut" }}
 				className="flex items-center rounded-r-full rounded-l-full bg-popover px-2 shadow-xl will-change-[transform,opacity]"
 			>
-				<DockIcon icon={MagnifyingGlassPlusIcon} title={t`Zoom in`} onClick={() => zoomIn(0.1)} />
-				<DockIcon icon={MagnifyingGlassMinusIcon} title={t`Zoom out`} onClick={() => zoomOut(0.1)} />
-				<DockIcon icon={CubeFocusIcon} title={t`Center view`} onClick={() => centerView()} />
+				<DockIcon icon={MagnifyingGlassPlusIcon} title={t`放大`} onClick={() => zoomIn(0.1)} />
+				<DockIcon icon={MagnifyingGlassMinusIcon} title={t`缩小`} onClick={() => zoomOut(0.1)} />
+				<DockIcon icon={CubeFocusIcon} title={t`居中视图`} onClick={() => centerView()} />
 				<DockIcon
 					icon={pageLayout === "horizontal" ? AlignTopIcon : AlignCenterHorizontalIcon}
-					title={t`Toggle page stacking`}
+					title={t`切换页面排列`}
 					onClick={onTogglePageLayout}
 				/>
 				<DockIcon
 					icon={ChatCircleDotsIcon}
-					title={t`打开 AI Agent`}
+					title={t`打开 AI 助手`}
 					onClick={() => {
 						if (!resume) return;
 						void navigate({ to: "/agent/new", search: { resumeId: resume.id } });
 					}}
 				/>
 				<div className="mx-1 h-8 w-px bg-border" />
-				<DockIcon icon={LinkSimpleIcon} title={t`Copy URL`} onClick={() => onCopyUrl()} />
-				<DockIcon icon={FileJsIcon} title={t`Download JSON`} onClick={() => onDownloadJSON()} />
-				<DockIcon icon={FileDocIcon} title={t`Download DOCX`} onClick={() => onDownloadDOCX()} />
+				<DockIcon icon={LinkSimpleIcon} title={t`复制链接`} onClick={() => onCopyUrl()} />
+				<DockIcon icon={FileJsIcon} title={t`下载 JSON`} onClick={() => onDownloadJSON()} />
+				<DockIcon icon={FileDocIcon} title={t`下载 DOCX`} onClick={() => onDownloadDOCX()} />
 				<DockIcon
-					title={t`Download PDF`}
+					title={t`下载 PDF`}
 					disabled={isPrinting}
 					onClick={() => onDownloadPDF()}
 					icon={isPrinting ? CircleNotchIcon : FilePdfIcon}

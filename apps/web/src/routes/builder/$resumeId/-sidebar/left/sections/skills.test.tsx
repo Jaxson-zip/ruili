@@ -71,6 +71,6 @@ describe("SkillsSectionBuilder", () => {
 				<SkillsSectionBuilder />
 			</I18nProvider>,
 		);
-		expect(screen.getByRole("button", { name: "Add a new skill" })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "添加技能" })).toBeInTheDocument();
 	});
 });

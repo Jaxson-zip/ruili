@@ -30,7 +30,7 @@ export function ExperienceSectionBuilder() {
 								type="experience"
 								item={item}
 								title={item.company}
-								subtitle={item.position || plural(item.roles.length, { one: "# role", other: "# roles" })}
+								subtitle={item.position || plural(item.roles.length, { one: "# 个岗位", other: "# 个岗位" })}
 							/>
 						);
 					})}
@@ -38,7 +38,7 @@ export function ExperienceSectionBuilder() {
 			</Reorder.Group>
 
 			<SectionAddItemButton type="experience">
-				<Trans>Add a new experience</Trans>
+				<Trans>添加工作经历</Trans>
 			</SectionAddItemButton>
 		</SectionBase>
 	);

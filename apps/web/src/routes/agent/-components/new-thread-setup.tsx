@@ -81,10 +81,10 @@ export function NewThreadSetup({ resumeId }: NewThreadSetupProps) {
 				</div>
 				<div className="min-w-0">
 					<h1 className="font-semibold text-3xl tracking-tight lg:text-4xl">
-						<Trans>新建 AI Agent 会话</Trans>
+						<Trans>新建 AI 助手会话</Trans>
 					</h1>
 					<p className="mt-1 text-muted-foreground">
-						<Trans>选择一个已测试的 Provider 和要优化的简历。</Trans>
+						<Trans>选择一个已测试的服务商和要优化的简历。</Trans>
 					</p>
 				</div>
 			</div>
@@ -92,9 +92,9 @@ export function NewThreadSetup({ resumeId }: NewThreadSetupProps) {
 			{providersError ? (
 				<div className="rounded-md border border-amber-300 bg-amber-50 p-4 text-amber-950 text-sm dark:bg-amber-950/20 dark:text-amber-200">
 					{isAgentConfigError(providersError) ? (
-						<Trans>AI agent setup is unavailable until REDIS_URL and ENCRYPTION_SECRET are configured.</Trans>
+						<Trans>需要配置 REDIS_URL 和 ENCRYPTION_SECRET 后才能使用 AI 助手。</Trans>
 					) : (
-						<Trans>AI agent setup is unavailable right now. Please try again in a moment.</Trans>
+						<Trans>AI 助手当前不可用，请稍后重试。</Trans>
 					)}
 				</div>
 			) : null}
@@ -116,13 +116,13 @@ export function NewThreadSetup({ resumeId }: NewThreadSetupProps) {
 								value={aiProviderId}
 								options={providerOptions}
 								disabled={isLoadingProviders || providerOptions.length === 0}
-								placeholder={isLoadingProviders ? t`加载 Providers...` : t`选择已测试的 Provider`}
+								placeholder={isLoadingProviders ? t`正在加载服务商...` : t`选择已测试的服务商`}
 								onValueChange={setAiProviderIdOverride}
 							/>
 							{providerOptions.length === 0 && !isLoadingProviders ? (
 								<div className="flex flex-col gap-3 rounded-md border border-dashed p-3 text-sm lg:flex-row lg:items-center lg:justify-between">
 									<span className="text-muted-foreground">
-										<Trans>需要先添加并测试一个 Provider。</Trans>
+										<Trans>需要先添加并测试一个服务商。</Trans>
 									</span>
 									<Button
 										size="sm"
@@ -131,7 +131,7 @@ export function NewThreadSetup({ resumeId }: NewThreadSetupProps) {
 										render={<Link to="/dashboard/settings/integrations" />}
 									>
 										<GearSixIcon />
-										<Trans>AI Providers</Trans>
+										<Trans>AI 服务商</Trans>
 									</Button>
 								</div>
 							) : null}
@@ -186,10 +186,10 @@ export function NewThreadSetup({ resumeId }: NewThreadSetupProps) {
 										toast.error(
 											getOrpcErrorMessage(error, {
 												byCode: {
-													PRECONDITION_FAILED: t`AI Agent 需要先配置 REDIS_URL 和 ENCRYPTION_SECRET。`,
-													BAD_REQUEST: t`请先选择一个已测试的 Provider。`,
+													PRECONDITION_FAILED: t`AI 助手需要先配置 REDIS_URL 和 ENCRYPTION_SECRET。`,
+													BAD_REQUEST: t`请先选择一个已测试的服务商。`,
 												},
-												fallback: t`创建 AI Agent 会话失败。`,
+												fallback: t`创建 AI 助手会话失败。`,
 											}),
 										),
 								},

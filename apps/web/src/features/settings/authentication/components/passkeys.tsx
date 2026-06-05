@@ -31,22 +31,22 @@ export function PasskeysSection() {
 						error,
 						t({
 							comment: "Fallback toast when passkey registration fails",
-							message: "Failed to register passkey. Please try again.",
+							message: "注册通行密钥失败，请重试。",
 						}),
 					),
 				);
 				return;
 			}
 
-			toast.success(t`Passkey registered successfully.`);
+			toast.success(t`通行密钥已注册。`);
 			await queryClient.invalidateQueries({ queryKey: ["auth", "passkeys"] });
 
-			const name = await prompt(t`Enter a name for your passkey.`, {
-				description: t`This will help you identify it later, if you plan to have multiple passkeys.`,
+			const name = await prompt(t`为这个通行密钥命名。`, {
+				description: t`如果你计划添加多个通行密钥，这能帮助你之后识别设备。`,
 				defaultValue: "",
 				confirmText: t({
 					comment: "Passkey rename prompt confirm action in authentication settings",
-					message: "Save",
+					message: "保存",
 				}),
 			});
 			if (name === null) return;
@@ -62,7 +62,7 @@ export function PasskeysSection() {
 						renameError,
 						t({
 							comment: "Fallback toast when renaming a passkey fails",
-							message: "Failed to rename passkey. Please try again.",
+							message: "重命名通行密钥失败，请重试。",
 						}),
 					),
 				);
@@ -72,7 +72,7 @@ export function PasskeysSection() {
 			await queryClient.invalidateQueries({ queryKey: ["auth", "passkeys"] });
 		},
 		onError: () => {
-			toast.error(t`Failed to register passkey. Please try again.`);
+			toast.error(t`注册通行密钥失败，请重试。`);
 		},
 	});
 
@@ -87,18 +87,18 @@ export function PasskeysSection() {
 						error,
 						t({
 							comment: "Fallback toast when deleting a passkey fails",
-							message: "Failed to delete passkey. Please try again.",
+							message: "删除通行密钥失败，请重试。",
 						}),
 					),
 				);
 				return;
 			}
 
-			toast.success(t`Passkey deleted successfully.`);
+			toast.success(t`通行密钥已删除。`);
 			await queryClient.invalidateQueries({ queryKey: ["auth", "passkeys"] });
 		},
 		onError: () => {
-			toast.error(t`Failed to delete passkey. Please try again.`);
+			toast.error(t`删除通行密钥失败，请重试。`);
 		},
 	});
 
@@ -125,18 +125,18 @@ export function PasskeysSection() {
 				<div className="flex flex-wrap items-center justify-between gap-3">
 					<h2 className="flex items-center gap-x-3 font-medium text-base">
 						<KeyIcon />
-						<Trans>Passkeys</Trans>
+						<Trans>通行密钥</Trans>
 					</h2>
 
 					<Button variant="outline" onClick={handleRegisterPasskey} disabled={registerPasskeyMutation.isPending}>
 						<PlusIcon />
-						<Trans>Register New Device</Trans>
+						<Trans>注册新设备</Trans>
 					</Button>
 				</div>
 
 				{passkeys.length === 0 && (
 					<p className="text-muted-foreground text-sm">
-						<Trans>No passkeys registered yet.</Trans>
+						<Trans>还没有注册通行密钥。</Trans>
 					</p>
 				)}
 
@@ -148,7 +148,7 @@ export function PasskeysSection() {
 									key={passkey.id}
 									className="flex flex-wrap items-center justify-between gap-2 rounded-md border bg-muted/40 px-3 py-2"
 								>
-									<p className="truncate font-medium text-sm">{passkey.name ?? t`Unnamed passkey`}</p>
+									<p className="truncate font-medium text-sm">{passkey.name ?? t`未命名通行密钥`}</p>
 
 									<div className="flex items-center gap-2">
 										<Button
@@ -158,7 +158,7 @@ export function PasskeysSection() {
 											disabled={deletePasskeyMutation.isPending}
 										>
 											<TrashIcon />
-											<Trans comment="Passkey row action to remove the selected passkey">Delete</Trans>
+											<Trans comment="Passkey row action to remove the selected passkey">删除</Trans>
 										</Button>
 									</div>
 								</div>

@@ -50,10 +50,10 @@ export function VerifyTwoFactorPage() {
 		<>
 			<div className="space-y-1 text-center">
 				<h1 className="font-semibold text-2xl tracking-tight">
-					<Trans>Two-Factor Authentication</Trans>
+					<Trans>双重验证</Trans>
 				</h1>
 				<div className="text-muted-foreground">
-					<Trans>Enter the verification code from your authenticator app</Trans>
+					<Trans>输入验证器应用中的验证码</Trans>
 				</div>
 			</div>
 

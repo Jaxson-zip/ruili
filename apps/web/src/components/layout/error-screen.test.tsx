@@ -32,14 +32,14 @@ describe("ErrorScreen", () => {
 
 	it("shows the user-facing error heading", () => {
 		renderError();
-		expect(screen.getByText("An error occurred while loading the page.")).toBeInTheDocument();
+		expect(screen.getByText("页面加载时出现错误。")).toBeInTheDocument();
 	});
 
 	it("calls reset when the Refresh button is clicked", () => {
 		const reset = vi.fn();
 		renderError({ reset });
 
-		fireEvent.click(screen.getByRole("button", { name: /refresh/i }));
+		fireEvent.click(screen.getByRole("button", { name: "刷新" }));
 		expect(reset).toHaveBeenCalledTimes(1);
 	});
 });

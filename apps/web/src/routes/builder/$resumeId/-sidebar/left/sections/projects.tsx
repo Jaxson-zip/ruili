@@ -34,7 +34,7 @@ export function ProjectsSectionBuilder() {
 			</Reorder.Group>
 
 			<SectionAddItemButton type="projects">
-				<Trans>Add a new project</Trans>
+				<Trans>添加项目经历</Trans>
 			</SectionAddItemButton>
 		</SectionBase>
 	);

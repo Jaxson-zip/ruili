@@ -32,7 +32,7 @@ export function PasswordSection() {
 		>
 			<h2 className="flex items-center gap-x-3 font-medium text-base">
 				<PasswordIcon />
-				<Trans>Password</Trans>
+				<Trans>密码</Trans>
 			</h2>
 
 			{match(hasPassword)
@@ -45,7 +45,7 @@ export function PasswordSection() {
 					>
 						<Button variant="outline" onClick={handleUpdatePassword}>
 							<PencilSimpleLineIcon />
-							<Trans>Update Password</Trans>
+							<Trans>更新密码</Trans>
 						</Button>
 					</m.div>
 				))
@@ -61,7 +61,7 @@ export function PasswordSection() {
 							nativeButton={false}
 							render={
 								<Link to="/auth/forgot-password">
-									<Trans>Set Password</Trans>
+									<Trans>设置密码</Trans>
 								</Link>
 							}
 						/>

@@ -95,8 +95,8 @@ const renderAnalysis = () =>
 describe("ResumeAnalysisSectionBuilder", () => {
 	it("renders Chinese guidance when AI provider is unavailable", () => {
 		renderAnalysis();
-		expect(screen.getByText(/配置 AI Provider 后/)).toBeInTheDocument();
-		expect(screen.getByText("打开 AI Providers")).toBeInTheDocument();
+		expect(screen.getByText(/配置 AI 模型服务商后/)).toBeInTheDocument();
+		expect(screen.getByText("打开 AI 服务商")).toBeInTheDocument();
 	});
 
 	it("renders Chinese action copy before the first analysis", () => {

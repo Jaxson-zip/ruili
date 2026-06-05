@@ -72,12 +72,12 @@ export function CommandPalette() {
 			<DialogHeader className="sr-only print:hidden">
 				<DialogTitle>
 					<Trans comment="Screen-reader dialog title for the command palette in the resume builder">
-						Builder Command Palette
+						简历编辑命令面板
 					</Trans>
 				</DialogTitle>
 				<DialogDescription>
 					<Trans comment="Screen-reader dialog description instructing users how to use the command palette">
-						Type a command or search…
+						输入命令或搜索...
 					</Trans>
 				</DialogDescription>
 			</DialogHeader>
@@ -88,11 +88,11 @@ export function CommandPalette() {
 					isFirstPage
 						? t({
 								comment: "Accessible label for the command palette dialog",
-								message: "Command Palette",
+								message: "命令面板",
 							})
 						: t({
 								comment: "Accessible label for command palette dialog when browsing a nested command page",
-								message: `Command Palette - ${currentPage}`,
+								message: `命令面板 - ${currentPage}`,
 							})
 				}
 			>
@@ -100,7 +100,7 @@ export function CommandPalette() {
 					loop
 					aria-label={t({
 						comment: "Accessible label for command list region inside command palette",
-						message: "Command Palette",
+						message: "命令面板",
 					})}
 					className="[&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5 **:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground **:[[cmdk-group]]:px-2 **:[[cmdk-input]]:h-12 **:[[cmdk-item]]:px-2 **:[[cmdk-item]]:py-3"
 				>
@@ -112,23 +112,23 @@ export function CommandPalette() {
 							isFirstPage
 								? t({
 										comment: "Placeholder in command palette input on root page",
-										message: "Type a command or search…",
+										message: "输入命令或搜索...",
 									})
 								: t({
 										comment: "Placeholder in command palette input on nested pages",
-										message: "Search…",
+										message: "搜索...",
 									})
 						}
 						aria-label={t({
 							comment: "Accessible label for command palette search input",
-							message: "Search commands",
+							message: "搜索命令",
 						})}
 					/>
 
 					<CommandList>
 						<CommandEmpty>
 							<Trans comment="Empty-state message when no command palette results match the search query">
-								The command you're looking for doesn't exist.
+								没有找到匹配的命令。
 							</Trans>
 						</CommandEmpty>
 

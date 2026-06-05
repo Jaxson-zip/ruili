@@ -52,7 +52,7 @@ export function NavigationCommandGroup() {
 					onSelect={() => onNavigate("/agent")}
 				>
 					<ChatCircleDotsIcon />
-					<Trans>AI Agent</Trans>
+					<Trans>AI 助手</Trans>
 				</CommandItem>
 
 				<CommandItem
@@ -95,21 +95,21 @@ export function NavigationCommandGroup() {
 				</CommandItem>
 
 				<CommandItem
-					keywords={[t`API Keys`]}
+					keywords={[t`API Key`, t`API 密钥`]}
 					value="navigation.settings.api-keys"
 					onSelect={() => onNavigate("/dashboard/settings/api-keys")}
 				>
 					<KeyIcon />
-					<Trans>API Keys</Trans>
+					<Trans>API 密钥</Trans>
 				</CommandItem>
 
 				<CommandItem
-					keywords={[t`AI Providers`, t`Provider`, t`大模型配置`]}
+					keywords={[t`AI 服务商`, t`Provider`, t`大模型配置`]}
 					value="navigation.settings.integrations"
 					onSelect={() => onNavigate("/dashboard/settings/integrations")}
 				>
 					<OpenAiLogoIcon />
-					<span>AI Providers</span>
+					<span>AI 服务商</span>
 				</CommandItem>
 
 				<CommandItem

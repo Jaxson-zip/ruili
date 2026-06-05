@@ -112,6 +112,6 @@ describe("ProjectsSectionBuilder buildSubtitle", () => {
 				<ProjectsSectionBuilder />
 			</I18nProvider>,
 		);
-		expect(screen.getByRole("button", { name: "Add a new project" })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "添加项目经历" })).toBeInTheDocument();
 	});
 });

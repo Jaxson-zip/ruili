@@ -28,9 +28,9 @@ export function getOrpcErrorMessage(
 export function getResumeErrorMessage(error: unknown): string {
 	return getOrpcErrorMessage(error, {
 		byCode: {
-			RESUME_SLUG_ALREADY_EXISTS: "A resume with this slug already exists.",
-			RESUME_LOCKED: "This resume is locked. Unlock it first to make changes.",
+			RESUME_SLUG_ALREADY_EXISTS: "这个公开链接已经被其他简历使用。",
+			RESUME_LOCKED: "这份简历已锁定，请先解锁再修改。",
 		},
-		fallback: "Something went wrong. Please try again.",
+		fallback: "操作失败，请稍后重试。",
 	});
 }

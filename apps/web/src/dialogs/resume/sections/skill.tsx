@@ -66,7 +66,7 @@ export function CreateSkillDialog({ data }: DialogProps<"resume.sections.skills.
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PlusIcon />
-					<Trans>Create a new skill</Trans>
+					<Trans>新增技能</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -83,11 +83,11 @@ export function CreateSkillDialog({ data }: DialogProps<"resume.sections.skills.
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Create</Trans>
+						<Trans>创建</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -118,7 +118,7 @@ export function UpdateSkillDialog({ data }: DialogProps<"resume.sections.skills.
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PencilSimpleLineIcon />
-					<Trans>Update an existing skill</Trans>
+					<Trans>编辑技能</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -135,11 +135,11 @@ export function UpdateSkillDialog({ data }: DialogProps<"resume.sections.skills.
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Save Changes</Trans>
+						<Trans>保存修改</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -180,7 +180,7 @@ const SkillForm = withForm({
 						{(field) => (
 							<FormItem className="flex-1" hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 								<FormLabel>
-									<Trans>Name</Trans>
+									<Trans>名称</Trans>
 								</FormLabel>
 								<FormControl
 									render={
@@ -224,9 +224,7 @@ const SkillForm = withForm({
 					</form.Field>
 				</div>
 
-				<form.AppField name="proficiency">
-					{(field) => <field.TextField label={<Trans>Proficiency</Trans>} />}
-				</form.AppField>
+				<form.AppField name="proficiency">{(field) => <field.TextField label={<Trans>熟练度</Trans>} />}</form.AppField>
 
 				<form.Field name="level">
 					{(field) => (
@@ -235,7 +233,7 @@ const SkillForm = withForm({
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormLabel>
-								<Trans>Level</Trans>
+								<Trans>等级</Trans>
 							</FormLabel>
 							<FormControl
 								render={
@@ -252,7 +250,7 @@ const SkillForm = withForm({
 							/>
 							<FormMessage errors={field.state.meta.errors} />
 							<FormDescription>
-								{Number(field.state.value) === 0 ? t`Hidden` : `${field.state.value} / 5`}
+								{Number(field.state.value) === 0 ? t`隐藏` : `${field.state.value} / 5`}
 							</FormDescription>
 						</FormItem>
 					)}
@@ -265,7 +263,7 @@ const SkillForm = withForm({
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormLabel>
-								<Trans>Keywords</Trans>
+								<Trans>关键词</Trans>
 							</FormLabel>
 							<FormControl
 								render={

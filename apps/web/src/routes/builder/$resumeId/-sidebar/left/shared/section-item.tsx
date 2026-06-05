@@ -112,7 +112,7 @@ function MoveItemSubmenu({ type, item, customSectionId }: MoveItemSubmenuProps) 
 		<DropdownMenuSub>
 			<DropdownMenuSubTrigger>
 				<ArrowBendUpRightIcon />
-				<Trans>Move to</Trans>
+				<Trans>移动到</Trans>
 			</DropdownMenuSubTrigger>
 
 			<DropdownMenuSubContent>
@@ -121,7 +121,7 @@ function MoveItemSubmenu({ type, item, customSectionId }: MoveItemSubmenuProps) 
 					<DropdownMenuSub key={pageIndex}>
 						<DropdownMenuSubTrigger>
 							<FileIcon />
-							<Trans>Page {pageIndex + 1}</Trans>
+							<Trans>第 {pageIndex + 1} 页</Trans>
 						</DropdownMenuSubTrigger>
 
 						<DropdownMenuSubContent>
@@ -138,7 +138,7 @@ function MoveItemSubmenu({ type, item, customSectionId }: MoveItemSubmenuProps) 
 							{/* Option to create a new section on this page */}
 							<DropdownMenuItem onClick={() => handleNewSectionOnPage(pageIndex)}>
 								<FolderPlusIcon />
-								<Trans>New Section</Trans>
+								<Trans>新建模块</Trans>
 							</DropdownMenuItem>
 						</DropdownMenuSubContent>
 					</DropdownMenuSub>
@@ -149,7 +149,7 @@ function MoveItemSubmenu({ type, item, customSectionId }: MoveItemSubmenuProps) 
 				{/* Option to create a new page with a new section */}
 				<DropdownMenuItem onClick={handleNewPage}>
 					<PlusCircleIcon />
-					<Trans>New Page</Trans>
+					<Trans>新建页面</Trans>
 				</DropdownMenuItem>
 			</DropdownMenuSubContent>
 		</DropdownMenuSub>
@@ -210,14 +210,14 @@ export function SectionItem<T extends CustomSectionItem | SectionItemType>({
 	};
 
 	const onDelete = async () => {
-		const confirmed = await confirm(t`Are you sure you want to delete this item?`, {
+		const confirmed = await confirm(t`确定要删除这一项吗？`, {
 			confirmText: t({
 				comment: "Destructive confirmation button label when deleting a section item in resume builder",
-				message: "Delete",
+				message: "删除",
 			}),
 			cancelText: t({
 				comment: "Confirmation dialog button label to abort deleting a section item in resume builder",
-				message: "Cancel",
+				message: "取消",
 			}),
 		});
 
@@ -284,7 +284,7 @@ export function SectionItem<T extends CustomSectionItem | SectionItemType>({
 					<DropdownMenuGroup>
 						<DropdownMenuItem onClick={onToggleVisibility}>
 							{item.hidden ? <EyeIcon /> : <EyeClosedIcon />}
-							{item.hidden ? <Trans>Show</Trans> : <Trans>Hide</Trans>}
+							{item.hidden ? <Trans>显示</Trans> : <Trans>隐藏</Trans>}
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
 
@@ -293,12 +293,12 @@ export function SectionItem<T extends CustomSectionItem | SectionItemType>({
 					<DropdownMenuGroup>
 						<DropdownMenuItem onClick={onUpdate}>
 							<PencilSimpleLineIcon />
-							<Trans>Update</Trans>
+							<Trans>编辑</Trans>
 						</DropdownMenuItem>
 
 						<DropdownMenuItem onClick={onDuplicate}>
 							<CopySimpleIcon />
-							<Trans>Duplicate</Trans>
+							<Trans>复制</Trans>
 						</DropdownMenuItem>
 
 						<MoveItemSubmenu type={type} item={item} customSectionId={customSectionId} />
@@ -309,7 +309,7 @@ export function SectionItem<T extends CustomSectionItem | SectionItemType>({
 					<DropdownMenuGroup>
 						<DropdownMenuItem variant="destructive" onClick={onDelete}>
 							<TrashSimpleIcon />
-							<Trans>Delete</Trans>
+							<Trans>删除</Trans>
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
 				</DropdownMenuContent>

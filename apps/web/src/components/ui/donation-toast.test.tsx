@@ -108,7 +108,7 @@ describe("DonationToast", () => {
 		});
 		renderCustomToast();
 
-		fireEvent.click(screen.getByRole("button", { name: "Dismiss" }));
+		fireEvent.click(screen.getByRole("button", { name: "关闭" }));
 
 		expect(useCookieMock.setDismissed).toHaveBeenCalledWith("true", {
 			expires: new Date("2026-06-10T12:05:00.000Z"),

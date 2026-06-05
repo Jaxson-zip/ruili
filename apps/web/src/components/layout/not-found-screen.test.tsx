@@ -31,7 +31,7 @@ const renderScreen = (routeId = "/missing") =>
 describe("NotFoundScreen", () => {
 	it("renders the documented error heading", () => {
 		renderScreen();
-		expect(screen.getByText("An error occurred while loading the page.")).toBeInTheDocument();
+		expect(screen.getByText("页面加载时出现错误。")).toBeInTheDocument();
 	});
 
 	it("displays the routeId that triggered the not-found", () => {
@@ -41,7 +41,7 @@ describe("NotFoundScreen", () => {
 
 	it("renders a Go Back link", () => {
 		renderScreen();
-		const link = screen.getByRole("link", { name: /go back/i });
+		const link = screen.getByRole("link", { name: "返回" });
 		expect(link.getAttribute("href")).toBe("..");
 	});
 });

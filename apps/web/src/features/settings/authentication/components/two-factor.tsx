@@ -39,7 +39,7 @@ export function TwoFactorSection() {
 			<div className="mt-4 flex items-center justify-between gap-x-4">
 				<h2 className="flex items-center gap-x-3 font-medium text-base">
 					{hasTwoFactor ? <LockOpenIcon /> : <KeyIcon />}
-					<Trans>Two-Factor Authentication</Trans>
+					<Trans>两步验证</Trans>
 				</h2>
 
 				{match(hasTwoFactor)
@@ -52,7 +52,7 @@ export function TwoFactorSection() {
 						>
 							<Button variant="outline" onClick={handleTwoFactorAction}>
 								<ToggleLeftIcon />
-								<Trans>Disable 2FA</Trans>
+								<Trans>关闭 2FA</Trans>
 							</Button>
 						</m.div>
 					))
@@ -65,7 +65,7 @@ export function TwoFactorSection() {
 						>
 							<Button variant="outline" onClick={handleTwoFactorAction}>
 								<ToggleRightIcon />
-								<Trans>Enable 2FA</Trans>
+								<Trans>开启 2FA</Trans>
 							</Button>
 						</m.div>
 					))

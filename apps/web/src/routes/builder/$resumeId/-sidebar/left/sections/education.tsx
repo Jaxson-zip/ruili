@@ -29,7 +29,7 @@ export function EducationSectionBuilder() {
 			</Reorder.Group>
 
 			<SectionAddItemButton type="education">
-				<Trans>Add a new education</Trans>
+				<Trans>添加教育经历</Trans>
 			</SectionAddItemButton>
 		</SectionBase>
 	);

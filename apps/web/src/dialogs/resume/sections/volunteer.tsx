@@ -60,7 +60,7 @@ export function CreateVolunteerDialog({ data }: DialogProps<"resume.sections.vol
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PlusIcon />
-					<Trans>Create a new volunteer experience</Trans>
+					<Trans>新增志愿经历</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -77,11 +77,11 @@ export function CreateVolunteerDialog({ data }: DialogProps<"resume.sections.vol
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Create</Trans>
+						<Trans>创建</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -112,7 +112,7 @@ export function UpdateVolunteerDialog({ data }: DialogProps<"resume.sections.vol
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PencilSimpleLineIcon />
-					<Trans>Update an existing volunteer experience</Trans>
+					<Trans>编辑志愿经历</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -129,11 +129,11 @@ export function UpdateVolunteerDialog({ data }: DialogProps<"resume.sections.vol
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Save Changes</Trans>
+						<Trans>保存修改</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -148,19 +148,17 @@ const VolunteerForm = withForm({
 
 		return (
 			<>
-				<form.AppField name="organization">
-					{(field) => <field.TextField label={<Trans>Organization</Trans>} />}
-				</form.AppField>
+				<form.AppField name="organization">{(field) => <field.TextField label={<Trans>组织</Trans>} />}</form.AppField>
 
-				<form.AppField name="location">{(field) => <field.TextField label={<Trans>Location</Trans>} />}</form.AppField>
+				<form.AppField name="location">{(field) => <field.TextField label={<Trans>地点</Trans>} />}</form.AppField>
 
-				<form.AppField name="period">{(field) => <field.TextField label={<Trans>Period</Trans>} />}</form.AppField>
+				<form.AppField name="period">{(field) => <field.TextField label={<Trans>时间</Trans>} />}</form.AppField>
 
 				<form.Field name="website">
 					{(field) => (
 						<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 							<FormLabel>
-								<Trans>Website</Trans>
+								<Trans>链接</Trans>
 							</FormLabel>
 							<URLInput
 								value={field.state.value}
@@ -186,7 +184,7 @@ const VolunteerForm = withForm({
 								}
 							/>
 							<FormLabel className="mt-0!">
-								<Trans>Show link in title</Trans>
+								<Trans>在标题中显示链接</Trans>
 							</FormLabel>
 						</FormItem>
 					)}
@@ -199,7 +197,7 @@ const VolunteerForm = withForm({
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormLabel>
-								<Trans>Description</Trans>
+								<Trans>描述</Trans>
 							</FormLabel>
 							<FormControl render={<RichInput value={field.state.value} onChange={(v) => field.handleChange(v)} />} />
 							<FormMessage errors={field.state.meta.errors} />

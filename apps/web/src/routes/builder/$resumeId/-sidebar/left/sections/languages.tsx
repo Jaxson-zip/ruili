@@ -29,7 +29,7 @@ export function LanguagesSectionBuilder() {
 			</Reorder.Group>
 
 			<SectionAddItemButton type="languages">
-				<Trans>Add a new language</Trans>
+				<Trans>添加语言</Trans>
 			</SectionAddItemButton>
 		</SectionBase>
 	);

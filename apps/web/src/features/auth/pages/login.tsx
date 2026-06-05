@@ -149,7 +149,7 @@ export function LoginPage({ disableEmailAuth, disableSignups }: Props) {
 											autoComplete="section-login username webauthn"
 											placeholder={t({
 												comment: "Example email placeholder for login identifier field",
-												message: "john.doe@example.com",
+												message: "zhangsan@example.com",
 											})}
 											className="lowercase"
 											name={field.name}
@@ -161,7 +161,7 @@ export function LoginPage({ disableEmailAuth, disableSignups }: Props) {
 								/>
 								<FormMessage errors={field.state.meta.errors} />
 								<FormDescription>
-									<Trans>You can also use your username to login.</Trans>
+									<Trans>也可以使用用户名登录。</Trans>
 								</FormDescription>
 							</FormItem>
 						)}
@@ -211,11 +211,11 @@ export function LoginPage({ disableEmailAuth, disableSignups }: Props) {
 											showPassword
 												? t({
 														comment: "Accessible label for button that hides the password in login form",
-														message: "Hide password",
+														message: "隐藏密码",
 													})
 												: t({
 														comment: "Accessible label for button that reveals the password in login form",
-														message: "Show password",
+														message: "显示密码",
 													})
 										}
 									>

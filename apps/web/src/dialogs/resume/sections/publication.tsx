@@ -60,7 +60,7 @@ export function CreatePublicationDialog({ data }: DialogProps<"resume.sections.p
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PlusIcon />
-					<Trans>Create a new publication</Trans>
+					<Trans>新增作品/出版物</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -77,11 +77,11 @@ export function CreatePublicationDialog({ data }: DialogProps<"resume.sections.p
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Create</Trans>
+						<Trans>创建</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -112,7 +112,7 @@ export function UpdatePublicationDialog({ data }: DialogProps<"resume.sections.p
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PencilSimpleLineIcon />
-					<Trans>Update an existing publication</Trans>
+					<Trans>编辑作品/出版物</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -129,11 +129,11 @@ export function UpdatePublicationDialog({ data }: DialogProps<"resume.sections.p
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Save Changes</Trans>
+						<Trans>保存修改</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -148,19 +148,17 @@ const PublicationForm = withForm({
 
 		return (
 			<>
-				<form.AppField name="title">{(field) => <field.TextField label={<Trans>Title</Trans>} />}</form.AppField>
+				<form.AppField name="title">{(field) => <field.TextField label={<Trans>标题</Trans>} />}</form.AppField>
 
-				<form.AppField name="publisher">
-					{(field) => <field.TextField label={<Trans>Publisher</Trans>} />}
-				</form.AppField>
+				<form.AppField name="publisher">{(field) => <field.TextField label={<Trans>出版方</Trans>} />}</form.AppField>
 
-				<form.AppField name="date">{(field) => <field.TextField label={<Trans>Date</Trans>} />}</form.AppField>
+				<form.AppField name="date">{(field) => <field.TextField label={<Trans>日期</Trans>} />}</form.AppField>
 
 				<form.Field name="website">
 					{(field) => (
 						<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 							<FormLabel>
-								<Trans>Website</Trans>
+								<Trans>链接</Trans>
 							</FormLabel>
 							<URLInput
 								value={field.state.value}
@@ -186,7 +184,7 @@ const PublicationForm = withForm({
 								}
 							/>
 							<FormLabel className="mt-0!">
-								<Trans>Show link in title</Trans>
+								<Trans>在标题中显示链接</Trans>
 							</FormLabel>
 						</FormItem>
 					)}
@@ -199,7 +197,7 @@ const PublicationForm = withForm({
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormLabel>
-								<Trans>Description</Trans>
+								<Trans>描述</Trans>
 							</FormLabel>
 							<FormControl render={<RichInput value={field.state.value} onChange={(v) => field.handleChange(v)} />} />
 							<FormMessage errors={field.state.meta.errors} />

@@ -29,7 +29,7 @@ export function AwardsSectionBuilder() {
 			</Reorder.Group>
 
 			<SectionAddItemButton type="awards">
-				<Trans>Add a new award</Trans>
+				<Trans>添加奖项</Trans>
 			</SectionAddItemButton>
 		</SectionBase>
 	);

@@ -69,7 +69,7 @@ function SourceToastCard({ onDismiss, onOpenSource }: SourceToastCardProps) {
 
 			<div className="mt-4 grid grid-cols-2 gap-2">
 				<Button size="sm" variant="outline" onClick={onDismiss}>
-					<Trans>Dismiss</Trans>
+					<Trans>关闭</Trans>
 				</Button>
 				<Button size="sm" onClick={onOpenSource}>
 					<Trans>查看锐历源码</Trans>

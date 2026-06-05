@@ -56,7 +56,7 @@ export function CreateSummaryItemDialog({ data }: DialogProps<"resume.sections.s
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PlusIcon />
-					<Trans>Create a new summary item</Trans>
+					<Trans>新增个人简介条目</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -73,11 +73,11 @@ export function CreateSummaryItemDialog({ data }: DialogProps<"resume.sections.s
 
 				<DialogFooter>
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Create</Trans>
+						<Trans>创建</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -113,7 +113,7 @@ export function UpdateSummaryItemDialog({ data }: DialogProps<"resume.sections.s
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PencilSimpleLineIcon />
-					<Trans>Update an existing summary item</Trans>
+					<Trans>编辑个人简介条目</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -130,11 +130,11 @@ export function UpdateSummaryItemDialog({ data }: DialogProps<"resume.sections.s
 
 				<DialogFooter>
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Save Changes</Trans>
+						<Trans>保存修改</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -150,7 +150,7 @@ const SummaryItemForm = withForm({
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Content</Trans>
+							<Trans>内容</Trans>
 						</FormLabel>
 						<FormControl render={<RichInput value={field.state.value} onChange={(v) => field.handleChange(v)} />} />
 						<FormMessage errors={field.state.meta.errors} />

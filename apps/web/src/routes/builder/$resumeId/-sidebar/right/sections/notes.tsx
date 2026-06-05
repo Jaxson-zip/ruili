@@ -25,19 +25,13 @@ function NotesSectionForm() {
 	return (
 		<div className="space-y-4">
 			<p>
-				<Trans>
-					This section is reserved for your personal notes specific to this resume. The content here remains private and
-					is not shared with anyone else.
-				</Trans>
+				<Trans>这里可以记录这份简历专属的个人备注。内容仅自己可见，不会分享给其他人。</Trans>
 			</p>
 
 			<RichInput value={notes} onChange={onChange} />
 
 			<p className="text-muted-foreground">
-				<Trans>
-					For example, information regarding which companies you sent this resume to or the links to the job
-					descriptions can be noted down here.
-				</Trans>
+				<Trans>例如，你可以记录这份简历投递过哪些公司，或保存对应岗位描述链接。</Trans>
 			</p>
 		</div>
 	);

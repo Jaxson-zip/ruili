@@ -70,7 +70,7 @@ export function CreateProfileDialog({ data }: DialogProps<"resume.sections.profi
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PlusIcon />
-					<Trans>Create a new profile</Trans>
+					<Trans>新增社交主页</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -87,11 +87,11 @@ export function CreateProfileDialog({ data }: DialogProps<"resume.sections.profi
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Create</Trans>
+						<Trans>创建</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -122,7 +122,7 @@ export function UpdateProfileDialog({ data }: DialogProps<"resume.sections.profi
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PencilSimpleLineIcon />
-					<Trans>Update an existing profile</Trans>
+					<Trans>编辑社交主页</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -139,11 +139,11 @@ export function UpdateProfileDialog({ data }: DialogProps<"resume.sections.profi
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Save Changes</Trans>
+						<Trans>保存修改</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -185,7 +185,7 @@ const ProfileForm = withForm({
 						{(field) => (
 							<FormItem className="flex-1" hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 								<FormLabel>
-									<Trans>Network</Trans>
+									<Trans>平台</Trans>
 								</FormLabel>
 								<FormControl
 									render={
@@ -233,7 +233,7 @@ const ProfileForm = withForm({
 					{(field) => (
 						<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 							<FormLabel>
-								<Trans>Username</Trans>
+								<Trans>用户名</Trans>
 							</FormLabel>
 							<InputGroup>
 								<InputGroupAddon align="inline-start">
@@ -265,7 +265,7 @@ const ProfileForm = withForm({
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormLabel>
-								<Trans>Website</Trans>
+								<Trans>链接</Trans>
 							</FormLabel>
 							<URLInput
 								value={field.state.value}
@@ -291,7 +291,7 @@ const ProfileForm = withForm({
 								}
 							/>
 							<FormLabel className="mt-0!">
-								<Trans>Show link in title</Trans>
+								<Trans>在标题中显示链接</Trans>
 							</FormLabel>
 						</FormItem>
 					)}

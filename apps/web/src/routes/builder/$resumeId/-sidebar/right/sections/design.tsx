@@ -88,7 +88,7 @@ function ColorSectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Primary Color</Trans>
+							<Trans>主色</Trans>
 						</FormLabel>
 						<div className="flex items-center gap-3">
 							<ColorPicker
@@ -121,7 +121,7 @@ function ColorSectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Text Color</Trans>
+							<Trans>文字颜色</Trans>
 						</FormLabel>
 						<div className="flex items-center gap-3">
 							<ColorPicker
@@ -154,7 +154,7 @@ function ColorSectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Background Color</Trans>
+							<Trans>背景颜色</Trans>
 						</FormLabel>
 						<div className="flex items-center gap-3">
 							<ColorPicker
@@ -296,7 +296,7 @@ function LevelSectionForm() {
 			}}
 		>
 			<h4 className="font-semibold text-lg leading-none tracking-tight">
-				<Trans>Level</Trans>
+				<Trans>等级</Trans>
 			</h4>
 
 			<div
@@ -318,7 +318,7 @@ function LevelSectionForm() {
 					{(field) => (
 						<FormItem className="shrink-0" hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 							<FormLabel>
-								<Trans>Icon</Trans>
+								<Trans>图标</Trans>
 							</FormLabel>
 							<FormControl
 								render={
@@ -340,7 +340,7 @@ function LevelSectionForm() {
 					{(field) => (
 						<FormItem className="flex-1" hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 							<FormLabel>
-								<Trans>Type</Trans>
+								<Trans>类型</Trans>
 							</FormLabel>
 							<FormControl
 								render={

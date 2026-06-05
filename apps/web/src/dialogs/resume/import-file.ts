@@ -57,7 +57,7 @@ export function getAiImportReadiness(input: AiImportReadinessInput): AiImportRea
 		return {
 			blocked: true,
 			title: "正在检查 AI 配置",
-			description: "请稍候，系统正在确认是否有已测试通过的 AI Provider。",
+			description: "请稍候，系统正在确认是否有已测试通过的 AI 模型服务商。",
 		};
 	}
 
@@ -65,7 +65,7 @@ export function getAiImportReadiness(input: AiImportReadinessInput): AiImportRea
 		return {
 			blocked: true,
 			title: "需要先配置可用的 AI 模型",
-			description: "PDF、Word 和图片导入需要 LLM 解析内容。请在设置里添加并测试一个 AI Provider。",
+			description: "PDF、Word 和图片导入需要 LLM 解析内容。请在设置里添加并测试一个 AI 模型服务商。",
 			actionLabel: "去配置 AI",
 		};
 	}
@@ -73,7 +73,7 @@ export function getAiImportReadiness(input: AiImportReadinessInput): AiImportRea
 	if (input.type === "image" && !input.hasOcrProvider) {
 		return {
 			blocked: true,
-			title: "图片导入还需要 OCR Provider",
+			title: "图片导入还需要 OCR 服务商",
 			description: "图片和扫描件需要先通过 OCR 识别文字，再交给 AI 结构化成简历。",
 			actionLabel: "去配置 OCR",
 		};

@@ -49,12 +49,12 @@ function getItemTitle(type: CustomSectionType, item: CustomSectionItemType): str
 					: stripped ||
 							t({
 								comment: "Fallback title for a custom summary item in resume builder when content is empty",
-								message: "Summary",
+								message: "概要",
 							});
 			}
 			return t({
 				comment: "Fallback title for a custom summary item in resume builder when content is unavailable",
-				message: "Summary",
+				message: "概要",
 			});
 		})
 		.with("profiles", () => ("network" in item ? item.network : ""))
@@ -77,12 +77,12 @@ function getItemTitle(type: CustomSectionType, item: CustomSectionItemType): str
 					: stripped ||
 							t({
 								comment: "Fallback title for a custom cover letter item in resume builder when recipient is empty",
-								message: "Cover Letter",
+								message: "求职信",
 							});
 			}
 			return t({
 				comment: "Fallback title for a custom cover letter item in resume builder when recipient is unavailable",
-				message: "Cover Letter",
+				message: "求职信",
 			});
 		})
 		.exhaustive();
@@ -127,7 +127,7 @@ export function CustomSectionBuilder() {
 
 			{/* Add Custom Section Button */}
 			<SectionAddItemButton type="custom" variant="outline" className="rounded-md">
-				<Trans>Add a new custom section</Trans>
+				<Trans>添加自定义模块</Trans>
 			</SectionAddItemButton>
 		</SectionBase>
 	);
@@ -170,7 +170,7 @@ function CustomSectionContainer({ section }: CustomSectionContainerProps) {
 					</Badge>
 					<span className="line-clamp-1 text-wrap font-medium text-base">{section.title}</span>
 					<span className="text-muted-foreground text-xs">
-						<Plural value={section.items.length} one="# item" other="# items" />
+						<Plural value={section.items.length} one="# 项" other="# 项" />
 					</span>
 				</button>
 
@@ -200,7 +200,7 @@ function CustomSectionContainer({ section }: CustomSectionContainerProps) {
 			{/* Add Item Button */}
 			<div className="border-t">
 				<SectionAddItemButton type={section.type} customSectionId={section.id}>
-					<Trans>Add a new item</Trans>
+					<Trans>添加新条目</Trans>
 				</SectionAddItemButton>
 			</div>
 		</div>
@@ -241,14 +241,14 @@ function CustomSectionDropdownMenu({ section }: CustomSectionDropdownMenuProps) 
 	};
 
 	const onDeleteSection = async () => {
-		const confirmed = await confirm(t`Are you sure you want to delete this custom section?`, {
+		const confirmed = await confirm(t`确定要删除这个自定义模块吗？`, {
 			confirmText: t({
 				comment: "Destructive confirmation button label when deleting a custom section in resume builder",
-				message: "Delete",
+				message: "删除",
 			}),
 			cancelText: t({
 				comment: "Confirmation dialog button label to abort deleting a custom section in resume builder",
-				message: "Cancel",
+				message: "取消",
 			}),
 		});
 
@@ -274,30 +274,30 @@ function CustomSectionDropdownMenu({ section }: CustomSectionDropdownMenuProps) 
 				<DropdownMenuGroup>
 					<DropdownMenuItem onClick={onToggleSectionVisibility}>
 						{section.hidden ? <EyeIcon /> : <EyeClosedIcon />}
-						{section.hidden ? <Trans>Show</Trans> : <Trans>Hide</Trans>}
+						{section.hidden ? <Trans>显示</Trans> : <Trans>隐藏</Trans>}
 					</DropdownMenuItem>
 
 					<DropdownMenuItem onClick={onUpdateSection}>
 						<PencilSimpleLineIcon />
-						<Trans>Update</Trans>
+						<Trans>编辑</Trans>
 					</DropdownMenuItem>
 
 					<DropdownMenuItem onClick={onDuplicateSection}>
 						<CopySimpleIcon />
-						<Trans>Duplicate</Trans>
+						<Trans>复制</Trans>
 					</DropdownMenuItem>
 
 					<DropdownMenuSub>
 						<DropdownMenuSubTrigger>
 							<ColumnsIcon />
-							<Trans>Columns</Trans>
+							<Trans>栏数</Trans>
 						</DropdownMenuSubTrigger>
 
 						<DropdownMenuSubContent>
 							<DropdownMenuRadioGroup value={section.columns.toString()} onValueChange={onSetColumns}>
 								{[1, 2, 3, 4, 5, 6].map((column) => (
 									<DropdownMenuRadioItem key={column} value={column.toString()}>
-										<Plural value={column} one="# Column" other="# Columns" />
+										<Plural value={column} one="# 栏" other="# 栏" />
 									</DropdownMenuRadioItem>
 								))}
 							</DropdownMenuRadioGroup>
@@ -310,7 +310,7 @@ function CustomSectionDropdownMenu({ section }: CustomSectionDropdownMenuProps) 
 				<DropdownMenuGroup>
 					<DropdownMenuItem variant="destructive" onClick={onDeleteSection}>
 						<TrashSimpleIcon />
-						<Trans>Delete</Trans>
+						<Trans>删除</Trans>
 					</DropdownMenuItem>
 				</DropdownMenuGroup>
 			</DropdownMenuContent>

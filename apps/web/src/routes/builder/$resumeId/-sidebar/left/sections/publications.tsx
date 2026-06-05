@@ -29,7 +29,7 @@ export function PublicationsSectionBuilder() {
 			</Reorder.Group>
 
 			<SectionAddItemButton type="publications">
-				<Trans>Add a new publication</Trans>
+				<Trans>添加出版物</Trans>
 			</SectionAddItemButton>
 		</SectionBase>
 	);

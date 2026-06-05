@@ -12,7 +12,7 @@ export const Route = createFileRoute("/dashboard/settings/integrations")({
 function RouteComponent() {
 	return (
 		<div className="space-y-4">
-			<DashboardHeader icon={BrainIcon} title={t`AI / OCR Providers`} />
+			<DashboardHeader icon={BrainIcon} title={t`AI / OCR 服务商`} />
 
 			<Separator />
 

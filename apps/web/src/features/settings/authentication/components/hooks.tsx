@@ -25,13 +25,13 @@ export function getProviderName(providerId: AuthProvider): string {
 		.with("credential", () =>
 			t({
 				comment: "Authentication provider display name in account settings",
-				message: "Password",
+				message: "密码",
 			}),
 		)
 		.with("passkey", () =>
 			t({
 				comment: "Authentication provider display name in account settings",
-				message: "Passkey",
+				message: "通行密钥",
 			}),
 		)
 		.with("google", () =>
@@ -108,7 +108,7 @@ export function useAuthAccounts() {
 export function useAuthProviderActions() {
 	const link = useCallback(async (provider: AuthProvider) => {
 		const providerName = getProviderName(provider);
-		const toastId = toast.loading(t`Linking your ${providerName} account...`);
+		const toastId = toast.loading(t`正在连接你的 ${providerName} 账号...`);
 
 		const { error } = await authClient.linkSocial({ provider, callbackURL: "/dashboard/settings/authentication" });
 
@@ -118,7 +118,7 @@ export function useAuthProviderActions() {
 					error,
 					t({
 						comment: "Fallback toast when linking a social authentication provider fails",
-						message: "Failed to link provider. Please try again.",
+						message: "连接服务商失败，请重试。",
 					}),
 				),
 				{ id: toastId },
@@ -131,7 +131,7 @@ export function useAuthProviderActions() {
 
 	const unlink = useCallback(async (provider: AuthProvider, accountId: string) => {
 		const providerName = getProviderName(provider);
-		const toastId = toast.loading(t`Unlinking your ${providerName} account...`);
+		const toastId = toast.loading(t`正在断开你的 ${providerName} 账号...`);
 
 		const { error } = await authClient.unlinkAccount({ providerId: provider, accountId });
 
@@ -141,7 +141,7 @@ export function useAuthProviderActions() {
 					error,
 					t({
 						comment: "Fallback toast when unlinking a social authentication provider fails",
-						message: "Failed to unlink provider. Please try again.",
+						message: "断开服务商失败，请重试。",
 					}),
 				),
 				{ id: toastId },

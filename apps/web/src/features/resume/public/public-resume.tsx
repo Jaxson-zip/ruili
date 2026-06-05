@@ -24,7 +24,7 @@ export function PublicResumeRoute() {
 		if (!resume) return;
 
 		const filename = generateFilename(resume.name || resume.data.basics.name || resume.slug, "pdf");
-		const toastId = toast.loading(t`Please wait while your PDF is being generated...`);
+		const toastId = toast.loading(t`正在生成 PDF，请稍候...`);
 
 		setIsPrinting(true);
 
@@ -32,7 +32,7 @@ export function PublicResumeRoute() {
 			const blob = await createResumePdfBlob(resume.data);
 			downloadWithAnchor(blob, filename);
 		} catch {
-			toast.error(t`There was a problem while generating the PDF, please try again.`);
+			toast.error(t`生成 PDF 时出现问题，请重试。`);
 		} finally {
 			setIsPrinting(false);
 			toast.dismiss(toastId);
@@ -58,8 +58,8 @@ export function PublicResumeRoute() {
 				variant="outline"
 				disabled={isPrinting}
 				onClick={onDownloadPDF}
-				aria-label={t`Download PDF`}
-				title={t`Download PDF`}
+				aria-label={t`下载 PDF`}
+				title={t`下载 PDF`}
 				className="fixed right-6 bottom-6 z-50 rounded-full bg-background/95 opacity-70 shadow-lg backdrop-blur transition-opacity hover:opacity-100 print:hidden"
 			>
 				{isPrinting ? <CircleNotchIcon className="size-5 animate-spin" /> : <DownloadSimpleIcon className="size-5" />}

@@ -49,10 +49,10 @@ export function VerifyTwoFactorBackupPage() {
 		<>
 			<div className="space-y-1 text-center">
 				<h1 className="font-semibold text-2xl tracking-tight">
-					<Trans>Verify with a Backup Code</Trans>
+					<Trans>使用备用码验证</Trans>
 				</h1>
 				<div className="text-muted-foreground">
-					<Trans>Enter one of your saved backup codes to access your account</Trans>
+					<Trans>输入一个已保存的备用码来登录账号</Trans>
 				</div>
 			</div>
 

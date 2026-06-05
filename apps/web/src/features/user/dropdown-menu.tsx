@@ -39,7 +39,7 @@ export function UserDropdownMenu({ children }: Props) {
 	};
 
 	const handleLogout = async () => {
-		const toastId = toast.loading(t`Signing out...`);
+		const toastId = toast.loading(t`正在退出登录...`);
 
 		await authClient.signOut({
 			fetchOptions: {
@@ -53,7 +53,7 @@ export function UserDropdownMenu({ children }: Props) {
 							error,
 							t({
 								comment: "Fallback toast when signing out fails",
-								message: "Failed to sign out. Please try again.",
+								message: "退出登录失败，请重试。",
 							}),
 						),
 						{ id: toastId },

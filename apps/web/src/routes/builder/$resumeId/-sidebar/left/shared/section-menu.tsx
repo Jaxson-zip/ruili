@@ -58,8 +58,8 @@ export function SectionDropdownMenu({ type }: Props) {
 	};
 
 	const onRenameSection = async () => {
-		const newTitle = await prompt(t`What do you want to rename this section to?`, {
-			description: t`Leave empty to reset the title to the original.`,
+		const newTitle = await prompt(t`你想把这个模块重命名为什么？`, {
+			description: t`留空即可恢复为原始标题。`,
 			defaultValue: section.title,
 		});
 
@@ -85,15 +85,15 @@ export function SectionDropdownMenu({ type }: Props) {
 	};
 
 	const onReset = async () => {
-		const confirmed = await confirm(t`Are you sure you want to reset this section?`, {
-			description: t`This will remove all items from this section.`,
+		const confirmed = await confirm(t`确定要重置这个模块吗？`, {
+			description: t`这会移除该模块中的所有条目。`,
 			confirmText: t({
 				comment: "Destructive confirmation button label when resetting a resume section",
-				message: "Reset",
+				message: "重置",
 			}),
 			cancelText: t({
 				comment: "Confirmation dialog button label to abort resetting a resume section",
-				message: "Cancel",
+				message: "取消",
 			}),
 		});
 
@@ -124,7 +124,7 @@ export function SectionDropdownMenu({ type }: Props) {
 						<DropdownMenuGroup>
 							<DropdownMenuItem onClick={onAddItem}>
 								<PlusIcon />
-								<Trans>Add a new item</Trans>
+								<Trans>添加新条目</Trans>
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
 
@@ -135,25 +135,25 @@ export function SectionDropdownMenu({ type }: Props) {
 				<DropdownMenuGroup>
 					<DropdownMenuItem onClick={onToggleVisibility}>
 						{section.hidden ? <EyeIcon /> : <EyeClosedIcon />}
-						{section.hidden ? <Trans>Show</Trans> : <Trans>Hide</Trans>}
+						{section.hidden ? <Trans>显示</Trans> : <Trans>隐藏</Trans>}
 					</DropdownMenuItem>
 
 					<DropdownMenuItem onClick={onRenameSection}>
 						<PencilSimpleLineIcon />
-						<Trans>Rename</Trans>
+						<Trans>重命名</Trans>
 					</DropdownMenuItem>
 
 					<DropdownMenuSub>
 						<DropdownMenuSubTrigger>
 							<ColumnsIcon />
-							<Trans>Columns</Trans>
+							<Trans>栏数</Trans>
 						</DropdownMenuSubTrigger>
 
 						<DropdownMenuSubContent>
 							<DropdownMenuRadioGroup value={section.columns.toString()} onValueChange={onSetColumns}>
 								{[1, 2, 3, 4, 5, 6].map((column) => (
 									<DropdownMenuRadioItem key={column} value={column.toString()}>
-										<Plural value={column} one="# Column" other="# Columns" />
+										<Plural value={column} one="# 栏" other="# 栏" />
 									</DropdownMenuRadioItem>
 								))}
 							</DropdownMenuRadioGroup>
@@ -166,7 +166,7 @@ export function SectionDropdownMenu({ type }: Props) {
 				<DropdownMenuGroup>
 					<DropdownMenuItem variant="destructive" onClick={onReset}>
 						<BroomIcon />
-						<Trans>Reset</Trans>
+						<Trans>重置</Trans>
 					</DropdownMenuItem>
 				</DropdownMenuGroup>
 			</DropdownMenuContent>

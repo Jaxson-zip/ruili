@@ -52,7 +52,7 @@ export function ForgotPasswordPage() {
 		<>
 			<div className="space-y-1 text-center">
 				<h1 className="font-semibold text-2xl tracking-tight">
-					<Trans>Forgot your password?</Trans>
+					<Trans>忘记密码？</Trans>
 				</h1>
 
 				<div className="text-muted-foreground">
@@ -94,7 +94,7 @@ export function ForgotPasswordPage() {
 										autoComplete="email"
 										placeholder={t({
 											comment: "Example email placeholder on forgot-password form",
-											message: "john.doe@example.com",
+											message: "zhangsan@example.com",
 										})}
 										name={field.name}
 										value={field.state.value}
@@ -121,10 +121,10 @@ function PostForgotPasswordScreen() {
 		<>
 			<div className="space-y-1 text-center">
 				<h1 className="font-semibold text-2xl tracking-tight">
-					<Trans>You've got mail!</Trans>
+					<Trans>邮件已发送</Trans>
 				</h1>
 				<p className="text-muted-foreground">
-					<Trans>Check your email for a link to reset your password.</Trans>
+					<Trans>请查收邮箱，点击链接重置密码。</Trans>
 				</p>
 			</div>
 

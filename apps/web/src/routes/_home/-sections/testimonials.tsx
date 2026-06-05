@@ -3,7 +3,7 @@ import { QuotesIcon } from "@phosphor-icons/react";
 import { m } from "motion/react";
 import { useMemo } from "react";
 
-const testimonials: string[] = [
+const observations: string[] = [
 	"编辑和预览放在同一个工作台里，改完马上能看到效果，比来回调 Word 模板省心很多。",
 	"准备校招简历时很方便，模块、排版和 PDF 导出都比较稳定，适合针对不同岗位保存多个版本。",
 	"我更在意数据能自己掌控。可以自托管，也能继续二开，这一点对长期维护个人简历库很重要。",
@@ -18,10 +18,10 @@ const testimonials: string[] = [
 ];
 
 type TestimonialCardProps = {
-	testimonial: string;
+	observation: string;
 };
 
-function TestimonialCard({ testimonial }: TestimonialCardProps) {
+function TestimonialCard({ observation }: TestimonialCardProps) {
 	return (
 		<m.div
 			className="group relative flex w-full flex-col overflow-hidden text-pretty rounded-2xl border bg-card p-4 will-change-transform"
@@ -33,21 +33,21 @@ function TestimonialCard({ testimonial }: TestimonialCardProps) {
 				weight="fill"
 				className="absolute -right-2 -bottom-4 size-18 opacity-10 transition-[bottom] duration-200 group-hover:-bottom-16"
 			/>
-			<p className="flex-1 text-muted-foreground leading-relaxed">{testimonial}</p>
+			<p className="flex-1 text-muted-foreground leading-relaxed">{observation}</p>
 		</m.div>
 	);
 }
 
 type TestimonialColumnProps = {
 	id: string;
-	testimonials: string[];
+	observations: string[];
 };
 
-function TestimonialColumn({ id, testimonials }: TestimonialColumnProps) {
+function TestimonialColumn({ id, observations }: TestimonialColumnProps) {
 	return (
 		<div className="flex w-[320px] shrink-0 flex-col gap-y-4 sm:w-[360px] md:w-[400px]">
-			{testimonials.map((testimonial) => (
-				<TestimonialCard key={`${id}-${testimonial}`} testimonial={testimonial} />
+			{observations.map((observation) => (
+				<TestimonialCard key={`${id}-${observation}`} observation={observation} />
 			))}
 		</div>
 	);
@@ -55,7 +55,7 @@ function TestimonialColumn({ id, testimonials }: TestimonialColumnProps) {
 
 type TestimonialColumnData = {
 	id: string;
-	testimonials: string[];
+	observations: string[];
 };
 
 type MarqueeMasonryProps = {
@@ -78,7 +78,7 @@ function MarqueeMasonry({ columns, direction, duration = 30 }: MarqueeMasonryPro
 			transition={{ x: { repeat: Number.POSITIVE_INFINITY, repeatType: "loop", duration, ease: "linear" } }}
 		>
 			{marqueeColumns.map((column) => (
-				<TestimonialColumn key={column.id} id={column.id} testimonials={column.testimonials} />
+				<TestimonialColumn key={column.id} id={column.id} observations={column.observations} />
 			))}
 		</m.div>
 	);
@@ -88,8 +88,8 @@ export function Testimonials() {
 	const columns = useMemo(() => {
 		const columns: TestimonialColumnData[] = [];
 
-		for (let index = 0; index < testimonials.length; index += 2) {
-			columns.push({ id: `column-${index / 2}`, testimonials: testimonials.slice(index, index + 2) });
+		for (let index = 0; index < observations.length; index += 2) {
+			columns.push({ id: `column-${index / 2}`, observations: observations.slice(index, index + 2) });
 		}
 
 		return columns;
@@ -105,11 +105,13 @@ export function Testimonials() {
 				transition={{ duration: 0.6 }}
 			>
 				<h2 className="font-semibold text-2xl tracking-tight md:text-4xl xl:text-5xl">
-					<Trans>用户反馈</Trans>
+					<Trans>内测观察</Trans>
 				</h2>
 
 				<p className="max-w-4xl text-balance text-muted-foreground leading-relaxed">
-					<Trans>来自中文简历编辑、PDF 导出和多岗位投递场景的使用体验，帮助你判断锐历是否适合自己的求职流程。</Trans>
+					<Trans>
+						围绕中文简历编辑、PDF 导出和多岗位投递场景整理的产品观察，用来说明锐历 Beta 优先解决哪些真实流程问题。
+					</Trans>
 				</p>
 			</m.div>
 

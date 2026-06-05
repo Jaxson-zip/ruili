@@ -244,7 +244,7 @@ describe("builder resume autosave", () => {
 
 		expect(useResumeStore.getState().resume?.data.basics.name).toBe("Unsaved Name");
 		expect(toastMocks.error).toHaveBeenCalledWith(
-			"Your latest changes could not be saved.",
+			"最新修改未能保存。",
 			expect.objectContaining({ duration: Number.POSITIVE_INFINITY }),
 		);
 		expect(orpcMocks.patchResume).not.toHaveBeenCalled();

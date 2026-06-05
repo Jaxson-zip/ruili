@@ -116,7 +116,7 @@ describe("EducationSectionBuilder", () => {
 
 	it("renders the Add a new education affordance", () => {
 		render(wrap(<EducationSectionBuilder />));
-		expect(screen.getByRole("button", { name: "Add a new education" })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "添加教育经历" })).toBeInTheDocument();
 	});
 });
 
@@ -127,20 +127,20 @@ describe("ExperienceSectionBuilder", () => {
 		expect(subtitles[0]).toBe("Senior Engineer");
 	});
 
-	it("falls back to 'N roles' when position is empty and multiple roles exist", () => {
+	it("falls back to the Chinese role count when position is empty and multiple roles exist", () => {
 		render(wrap(<ExperienceSectionBuilder />));
 		const subtitles = screen.getAllByTestId("item-subtitle").map((el) => el.textContent);
-		expect(subtitles[1]).toBe("2 roles");
+		expect(subtitles[1]).toBe("2 个岗位");
 	});
 
-	it("uses '1 role' (singular) for a single role entry", () => {
+	it("uses the Chinese role count for a single role entry", () => {
 		render(wrap(<ExperienceSectionBuilder />));
 		const subtitles = screen.getAllByTestId("item-subtitle").map((el) => el.textContent);
-		expect(subtitles[2]).toBe("1 role");
+		expect(subtitles[2]).toBe("1 个岗位");
 	});
 
 	it("renders the Add a new experience affordance", () => {
 		render(wrap(<ExperienceSectionBuilder />));
-		expect(screen.getByRole("button", { name: "Add a new experience" })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "添加工作经历" })).toBeInTheDocument();
 	});
 });

@@ -71,7 +71,7 @@ export function ColorPicker({ value, defaultValue, onChange, trigger, children }
 
 				<div className="flex flex-col gap-2">
 					<span className="font-medium text-muted-foreground text-xs">
-						<Trans>Presets</Trans>
+						<Trans>预设</Trans>
 					</span>
 
 					<div className="grid grid-cols-8 gap-3 rounded bg-muted p-3">
@@ -95,7 +95,7 @@ export function ColorPicker({ value, defaultValue, onChange, trigger, children }
 
 				<div className="flex flex-col gap-2">
 					<span className="font-medium text-muted-foreground text-xs">
-						<Trans>Custom</Trans>
+						<Trans>自定义</Trans>
 					</span>
 
 					<div className="rounded bg-muted p-3 *:w-full! [&_.w-color-alpha>div]:rounded-full! [&_.w-color-alpha]:mt-4! [&_.w-color-alpha]:h-4! [&_.w-color-hue]:mt-4! [&_.w-color-hue]:h-4! [&_.w-color-hue]:rounded-full! [&_.w-color-saturation]:h-36! [&_.w-color-saturation]:rounded-[calc(var(--radius-lg)-0.25rem)]!">

@@ -55,11 +55,11 @@ export function ResetPasswordPage({ token }: Props) {
 		<>
 			<div className="space-y-1 text-center">
 				<h1 className="font-semibold text-2xl tracking-tight">
-					<Trans>Reset your password</Trans>
+					<Trans>重置密码</Trans>
 				</h1>
 
 				<div className="text-muted-foreground">
-					<Trans>Please enter a new password for your account</Trans>
+					<Trans>请输入新的账号密码</Trans>
 				</div>
 			</div>
 
@@ -101,11 +101,11 @@ export function ResetPasswordPage({ token }: Props) {
 										showPassword
 											? t({
 													comment: "Accessible label for button that hides password in reset-password form",
-													message: "Hide password",
+													message: "隐藏密码",
 												})
 											: t({
 													comment: "Accessible label for button that reveals password in reset-password form",
-													message: "Show password",
+													message: "显示密码",
 												})
 									}
 								>

@@ -35,7 +35,7 @@ export function VolunteerSectionBuilder() {
 			</Reorder.Group>
 
 			<SectionAddItemButton type="volunteer">
-				<Trans>Add a new volunteer experience</Trans>
+				<Trans>添加志愿经历</Trans>
 			</SectionAddItemButton>
 		</SectionBase>
 	);

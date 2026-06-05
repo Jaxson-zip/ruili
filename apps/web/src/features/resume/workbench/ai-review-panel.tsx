@@ -46,7 +46,7 @@ export function AIReviewPanel({ resumeId }: Props) {
 				description: getOrpcErrorMessage(error, {
 					byCode: {
 						BAD_REQUEST: "模型返回的分析格式无效，请换一个模型或稍后重试。",
-						BAD_GATEWAY: "无法连接到 AI Provider，请检查 Base URL、模型名和 API Key。",
+						BAD_GATEWAY: "无法连接到 AI 模型服务商，请检查 Base URL、模型名和 API Key。",
 						PRECONDITION_FAILED: "需要先配置 REDIS_URL 和 ENCRYPTION_SECRET。",
 					},
 					fallback: "分析简历时发生错误，请稍后重试。",
@@ -74,7 +74,7 @@ export function AIReviewPanel({ resumeId }: Props) {
 				<h2 className="font-semibold text-[#111827] text-lg tracking-normal">AI 审稿</h2>
 				<div className="mt-4 rounded-md border border-amber-200 bg-amber-50 p-4 text-amber-950 text-sm leading-6">
 					<strong className="block">需要先配置可用的 AI 模型</strong>
-					<span>AI 改简历需要 LLM。请到设置里添加并测试一个 Provider，然后再生成中文审稿建议。</span>
+					<span>AI 改简历需要 LLM。请到设置里添加并测试一个服务商，然后再生成中文审稿建议。</span>
 					<Button
 						className="mt-4 bg-[#111827] text-white hover:bg-[#1f2937]"
 						size="sm"

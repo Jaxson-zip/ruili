@@ -60,7 +60,7 @@ export function CreateProjectDialog({ data }: DialogProps<"resume.sections.proje
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PlusIcon />
-					<Trans>Create a new project</Trans>
+					<Trans>新增项目经历</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -77,11 +77,11 @@ export function CreateProjectDialog({ data }: DialogProps<"resume.sections.proje
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Create</Trans>
+						<Trans>创建</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -112,7 +112,7 @@ export function UpdateProjectDialog({ data }: DialogProps<"resume.sections.proje
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PencilSimpleLineIcon />
-					<Trans>Update an existing project</Trans>
+					<Trans>编辑项目经历</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -129,11 +129,11 @@ export function UpdateProjectDialog({ data }: DialogProps<"resume.sections.proje
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Save Changes</Trans>
+						<Trans>保存修改</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -153,9 +153,9 @@ const ProjectForm = withForm({
 
 		return (
 			<>
-				<form.AppField name="name">{(field) => <field.TextField label={<Trans>Name</Trans>} />}</form.AppField>
+				<form.AppField name="name">{(field) => <field.TextField label={<Trans>名称</Trans>} />}</form.AppField>
 
-				<form.AppField name="period">{(field) => <field.TextField label={<Trans>Period</Trans>} />}</form.AppField>
+				<form.AppField name="period">{(field) => <field.TextField label={<Trans>时间</Trans>} />}</form.AppField>
 
 				<form.Field name="website">
 					{(field) => (
@@ -164,7 +164,7 @@ const ProjectForm = withForm({
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormLabel>
-								<Trans>Website</Trans>
+								<Trans>链接</Trans>
 							</FormLabel>
 							<URLInput
 								value={field.state.value}
@@ -190,7 +190,7 @@ const ProjectForm = withForm({
 								}
 							/>
 							<FormLabel className="mt-0!">
-								<Trans>Show link in title</Trans>
+								<Trans>在标题中显示链接</Trans>
 							</FormLabel>
 						</FormItem>
 					)}
@@ -203,7 +203,7 @@ const ProjectForm = withForm({
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormLabel>
-								<Trans>Description</Trans>
+								<Trans>描述</Trans>
 							</FormLabel>
 							<AiPolishDescriptionAction
 								itemKind="project"

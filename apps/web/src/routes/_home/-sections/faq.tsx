@@ -16,7 +16,7 @@ const getFaqItems = (): FAQItemData[] => [
 	},
 	{
 		question: t`AI 改简历是不是还需要接 LLM？`,
-		answer: t`是的。PDF、Word 解析和简历优化需要配置可用的 AI Provider；图片简历和扫描版 PDF 还需要 OCR Provider。基础编辑、模板预览和 PDF 导出不依赖 LLM。`,
+		answer: t`是的。PDF、Word 解析和简历优化需要配置可用的 AI 模型服务商；图片简历和扫描版 PDF 还需要 OCR 服务商。基础编辑、模板预览和 PDF 导出不依赖 LLM。`,
 	},
 	{
 		question: t`现在支持 Word 编辑和回退吗？`,
@@ -32,7 +32,7 @@ const getFaqItems = (): FAQItemData[] => [
 	},
 	{
 		question: t`可以自托管吗？`,
-		answer: t`可以。自托管后你可以控制部署域名、数据库、邮件服务、AI Provider 和 OCR Provider，更适合做成自己的中文简历产品。`,
+		answer: t`可以。自托管后你可以控制部署域名、数据库、邮件服务、AI 模型服务商和 OCR 服务商，更适合做成自己的中文简历产品。`,
 	},
 ];
 

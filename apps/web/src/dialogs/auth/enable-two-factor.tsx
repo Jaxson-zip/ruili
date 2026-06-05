@@ -198,7 +198,7 @@ export function EnableTwoFactorDialog(_: DialogProps<"auth.two-factor.enable">) 
 							{(field) => (
 								<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 									<FormLabel>
-										<Trans>Password</Trans>
+										<Trans>密码</Trans>
 									</FormLabel>
 									<div className="flex items-center gap-x-1.5">
 										<FormControl
@@ -222,12 +222,12 @@ export function EnableTwoFactorDialog(_: DialogProps<"auth.two-factor.enable">) 
 													? t({
 															comment:
 																"Accessible label for toggle button that hides the visible password in two-factor setup",
-															message: "Hide password",
+															message: "隐藏密码",
 														})
 													: t({
 															comment:
 																"Accessible label for toggle button that reveals the masked password in two-factor setup",
-															message: "Show password",
+															message: "显示密码",
 														})}
 											</span>
 											{showPassword ? <EyeIcon /> : <EyeSlashIcon />}
@@ -240,7 +240,7 @@ export function EnableTwoFactorDialog(_: DialogProps<"auth.two-factor.enable">) 
 
 						<DialogFooter>
 							<Button type="submit">
-								<Trans>Continue</Trans>
+								<Trans>继续</Trans>
 							</Button>
 						</DialogFooter>
 					</form>
@@ -263,7 +263,7 @@ export function EnableTwoFactorDialog(_: DialogProps<"auth.two-factor.enable">) 
 							)}
 
 							<p>
-								<Trans>Then, enter the 6 digit code that the app provides to continue.</Trans>
+								<Trans>然后输入验证器应用提供的 6 位验证码继续。</Trans>
 							</p>
 
 							<form
@@ -355,9 +355,9 @@ function extractSecretFromTotpUri(totpUri: string): string | null {
 
 function TwoFactorDialogTitle({ step }: TwoFactorStepProps) {
 	return match(step)
-		.with("enable", () => <Trans>Enable Two-Factor Authentication</Trans>)
-		.with("verify", () => <Trans>Setup Authenticator App</Trans>)
-		.with("backup", () => <Trans>Copy Backup Codes</Trans>)
+		.with("enable", () => <Trans>开启双重验证</Trans>)
+		.with("verify", () => <Trans>设置验证器应用</Trans>)
+		.with("backup", () => <Trans>复制备用码</Trans>)
 		.exhaustive();
 }
 
@@ -375,7 +375,7 @@ function TwoFactorDialogDescription({ step }: TwoFactorStepProps) {
 				into your app.
 			</Trans>
 		))
-		.with("backup", () => <Trans>Copy and store these backup codes in case you lose your device.</Trans>)
+		.with("backup", () => <Trans>复制并妥善保存这些备用码，防止设备丢失后无法登录。</Trans>)
 		.exhaustive();
 }
 

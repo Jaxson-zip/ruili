@@ -38,7 +38,7 @@ export function CertificationsSectionBuilder() {
 			</Reorder.Group>
 
 			<SectionAddItemButton type="certifications">
-				<Trans>Add a new certification</Trans>
+				<Trans>添加证书</Trans>
 			</SectionAddItemButton>
 		</SectionBase>
 	);

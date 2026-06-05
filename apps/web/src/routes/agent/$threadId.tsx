@@ -236,7 +236,7 @@ function PatchToolCard({ part, action, onRevert, isReverting }: PatchToolCardPro
 					{actionId ? (
 						<Button size="xs" variant="ghost" disabled={revertDisabled} onClick={() => onRevert(actionId)}>
 							<ClockCounterClockwiseIcon />
-							<Trans>Restore</Trans>
+							<Trans>恢复</Trans>
 						</Button>
 					) : null}
 				</div>
@@ -429,7 +429,7 @@ function MessagePart({ part, isUser, onAnswer, onRevert, isReverting, actionsByI
 		return (
 			<details className="rounded-md border bg-muted/40 px-3 py-2 text-sm">
 				<summary className="cursor-pointer text-muted-foreground">
-					<Trans>Thinking</Trans>
+					<Trans>思考中</Trans>
 				</summary>
 				<div className="mt-2 whitespace-pre-wrap">{part.text}</div>
 			</details>
@@ -583,7 +583,7 @@ function AgentChat({
 	};
 
 	const handleDelete = async () => {
-		const confirmation = await confirm(t`删除这个 AI Agent 会话？`, {
+		const confirmation = await confirm(t`删除这个 AI 助手会话？`, {
 			description: t`这个操作不可撤销，会删除会话消息和上传附件。简历草稿仍会保留在“我的简历”里。`,
 		});
 
@@ -822,9 +822,9 @@ function AgentChatReadOnlyBanner({ isReadOnly, readOnlyReason }: AgentChatReadOn
 	return (
 		<div className="border-amber-300 border-b bg-amber-50 px-4 py-2 text-amber-950 text-sm dark:bg-amber-950/20 dark:text-amber-200">
 			{readOnlyReason === "archived" ? (
-				<Trans>This thread is archived. New messages cannot be sent.</Trans>
+				<Trans>这个会话已归档，不能继续发送新消息。</Trans>
 			) : (
-				<Trans>This thread is read-only because the working resume or AI provider is unavailable.</Trans>
+				<Trans>当前简历或 AI 服务商不可用，这个会话暂时只读。</Trans>
 			)}
 		</div>
 	);
@@ -849,7 +849,7 @@ function AgentChatMessages({
 					<div className="grid gap-6 py-12 text-center">
 						<SparkleIcon className="mx-auto size-8 text-muted-foreground" />
 						<h2 className="font-semibold text-2xl">
-							<Trans>What do you want to do?</Trans>
+							<Trans>你想怎么改？</Trans>
 						</h2>
 						<StarterPromptMarquee onSelect={onStarterSelect} />
 					</div>
@@ -869,7 +869,7 @@ function AgentChatMessages({
 				{isStreaming ? (
 					<div className="flex justify-start">
 						<div className="rounded-md bg-muted px-4 py-3 text-muted-foreground text-sm">
-							<Trans>Working…</Trans>
+							<Trans>处理中…</Trans>
 						</div>
 					</div>
 				) : null}
@@ -880,7 +880,7 @@ function AgentChatMessages({
 						{!isReadOnly ? (
 							<Button size="sm" variant="outline" type="button" onClick={onRetry}>
 								<ArrowClockwiseIcon />
-								<Trans>Retry</Trans>
+								<Trans>重试</Trans>
 							</Button>
 						) : null}
 					</div>
@@ -908,13 +908,13 @@ function AgentChatHeader({
 					<Button size="icon-sm" variant="ghost" onClick={onToggleThreads}>
 						<SidebarSimpleIcon />
 						<span className="sr-only">
-							<Trans>Toggle threads</Trans>
+							<Trans>切换会话列表</Trans>
 						</span>
 					</Button>
 				) : null}
 
 				<div className="min-w-0 truncate font-semibold">
-					<Trans>Chat</Trans>
+					<Trans>对话</Trans>
 				</div>
 			</div>
 			<div className="flex items-center gap-1">
@@ -922,7 +922,7 @@ function AgentChatHeader({
 					<Button size="icon-sm" variant="ghost" onClick={onToggleResume}>
 						<SquaresFourIcon />
 						<span className="sr-only">
-							<Trans>Toggle resume preview</Trans>
+							<Trans>切换简历预览</Trans>
 						</span>
 					</Button>
 				) : null}
@@ -932,7 +932,7 @@ function AgentChatHeader({
 							<Button size="icon-sm" variant="ghost">
 								<DotsThreeVerticalIcon />
 								<span className="sr-only">
-									<Trans>Thread actions</Trans>
+									<Trans>会话操作</Trans>
 								</span>
 							</Button>
 						}
@@ -941,11 +941,11 @@ function AgentChatHeader({
 					<DropdownMenuContent align="end">
 						<DropdownMenuItem onClick={onCopyConversation}>
 							<CopyIcon />
-							<Trans>Copy</Trans>
+							<Trans>复制</Trans>
 						</DropdownMenuItem>
 						<DropdownMenuItem onClick={onCopyConversationJson}>
 							<CopyIcon />
-							<Trans>Copy JSON</Trans>
+							<Trans>复制 JSON</Trans>
 						</DropdownMenuItem>
 
 						<DropdownMenuSeparator />
@@ -953,13 +953,13 @@ function AgentChatHeader({
 						{!isArchived ? (
 							<DropdownMenuItem disabled={isArchivePending} onClick={onArchive}>
 								<ArchiveIcon />
-								<Trans>Archive</Trans>
+								<Trans>归档</Trans>
 							</DropdownMenuItem>
 						) : null}
 
 						<DropdownMenuItem variant="destructive" disabled={isDeletePending} onClick={onDelete}>
 							<TrashIcon />
-							<Trans>Delete</Trans>
+							<Trans>删除</Trans>
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
@@ -1132,7 +1132,7 @@ function ResumePane({ resume }: ResumePaneProps) {
 			<div className="flex h-14 shrink-0 items-center justify-between border-b px-4">
 				<div>
 					<div className="font-semibold">
-						<Trans>Resume</Trans>
+						<Trans>简历</Trans>
 					</div>
 					<div className="text-muted-foreground text-xs">{resume?.name ?? t`Missing working resume`}</div>
 				</div>
@@ -1166,7 +1166,7 @@ function ResumePane({ resume }: ResumePaneProps) {
 								}
 							/>
 							<TooltipContent side="bottom" align="center">
-								<Trans>Zoom level</Trans>
+								<Trans>缩放比例</Trans>
 							</TooltipContent>
 						</Tooltip>
 						<ToolbarButton
@@ -1186,11 +1186,7 @@ function ResumePane({ resume }: ResumePaneProps) {
 						>
 							<ArrowSquareOutIcon />
 						</ToolbarButton>
-						<ToolbarButton
-							label={t`Download PDF`}
-							disabled={!resume || isPrinting}
-							onClick={() => void onDownloadPDF()}
-						>
+						<ToolbarButton label={t`下载 PDF`} disabled={!resume || isPrinting} onClick={() => void onDownloadPDF()}>
 							{isPrinting ? <CircleNotchIcon className="animate-spin" /> : <FilePdfIcon />}
 						</ToolbarButton>
 					</div>
@@ -1207,7 +1203,7 @@ function ResumePane({ resume }: ResumePaneProps) {
 						/>
 					) : (
 						<div className="rounded-md border border-dashed p-6 text-center text-muted-foreground">
-							<Trans>The working resume was deleted. This thread is read-only.</Trans>
+							<Trans>关联简历已被删除，这个会话现在只读。</Trans>
 						</div>
 					)}
 				</div>
@@ -1254,7 +1250,7 @@ function RouteComponent() {
 	if (isLoading) {
 		return (
 			<div className="grid h-svh place-items-center bg-background text-muted-foreground">
-				<Trans>正在加载 AI Agent 工作区...</Trans>
+				<Trans>正在加载 AI 助手工作区...</Trans>
 			</div>
 		);
 	}
@@ -1264,7 +1260,7 @@ function RouteComponent() {
 			<div className="grid h-svh place-items-center bg-background p-6 text-center">
 				<div className="space-y-4">
 					<p className="text-muted-foreground">
-						<Trans>无法打开这个 AI Agent 会话。</Trans>
+						<Trans>无法打开这个 AI 助手会话。</Trans>
 					</p>
 					<Button onClick={() => void navigate({ to: "/agent/new" })}>
 						<Trans>新建会话</Trans>
@@ -1338,11 +1334,11 @@ function RouteComponent() {
 							</TabsTrigger>
 							<TabsTrigger value="chat">
 								<ChatCircleDotsIcon />
-								<Trans>Chat</Trans>
+								<Trans>对话</Trans>
 							</TabsTrigger>
 							<TabsTrigger value="resume">
 								<SquaresFourIcon />
-								<Trans>Resume</Trans>
+								<Trans>简历</Trans>
 							</TabsTrigger>
 						</TabsList>
 					</Tabs>

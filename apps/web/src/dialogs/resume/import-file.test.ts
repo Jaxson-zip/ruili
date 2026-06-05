@@ -66,7 +66,7 @@ describe("resume import file helpers", () => {
 				hasAIProvider: true,
 				hasOcrProvider: false,
 			}),
-		).toMatchObject({ blocked: true, title: "图片导入还需要 OCR Provider" });
+		).toMatchObject({ blocked: true, title: "图片导入还需要 OCR 服务商" });
 
 		expect(
 			getAiImportReadiness({

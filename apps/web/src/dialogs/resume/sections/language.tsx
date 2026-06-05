@@ -57,7 +57,7 @@ export function CreateLanguageDialog({ data }: DialogProps<"resume.sections.lang
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PlusIcon />
-					<Trans>Create a new language</Trans>
+					<Trans>新增语言能力</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -74,11 +74,11 @@ export function CreateLanguageDialog({ data }: DialogProps<"resume.sections.lang
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Create</Trans>
+						<Trans>创建</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -109,7 +109,7 @@ export function UpdateLanguageDialog({ data }: DialogProps<"resume.sections.lang
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PencilSimpleLineIcon />
-					<Trans>Update an existing language</Trans>
+					<Trans>编辑语言能力</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -126,11 +126,11 @@ export function UpdateLanguageDialog({ data }: DialogProps<"resume.sections.lang
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Save Changes</Trans>
+						<Trans>保存修改</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -143,9 +143,9 @@ const LanguageForm = withForm({
 	render: ({ form }) => {
 		return (
 			<>
-				<form.AppField name="language">{(field) => <field.TextField label={<Trans>Language</Trans>} />}</form.AppField>
+				<form.AppField name="language">{(field) => <field.TextField label={<Trans>语言</Trans>} />}</form.AppField>
 
-				<form.AppField name="fluency">{(field) => <field.TextField label={<Trans>Fluency</Trans>} />}</form.AppField>
+				<form.AppField name="fluency">{(field) => <field.TextField label={<Trans>熟练度</Trans>} />}</form.AppField>
 
 				<form.Field name="level">
 					{(field) => (
@@ -154,7 +154,7 @@ const LanguageForm = withForm({
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormLabel>
-								<Trans>Level</Trans>
+								<Trans>等级</Trans>
 							</FormLabel>
 							<FormControl
 								render={
@@ -171,7 +171,7 @@ const LanguageForm = withForm({
 							/>
 							<FormMessage errors={field.state.meta.errors} />
 							<FormDescription>
-								{Number(field.state.value) === 0 ? t`Hidden` : `${field.state.value} / 5`}
+								{Number(field.state.value) === 0 ? t`隐藏` : `${field.state.value} / 5`}
 							</FormDescription>
 						</FormItem>
 					)}

@@ -29,21 +29,21 @@ export function ApiKeysSettingsPage() {
 	});
 
 	const onDelete = async (id: string) => {
-		const confirmation = await confirm(t`Are you sure you want to delete this API key?`, {
-			description: t`The API key will no longer be able to access your data after deletion. This action cannot be undone.`,
+		const confirmation = await confirm(t`确定要删除这个 API Key 吗？`, {
+			description: t`删除后这个 API Key 将无法再访问你的数据，此操作无法撤销。`,
 			confirmText: t({
 				comment: "API key deletion confirmation dialog confirm action in settings",
-				message: "Delete",
+				message: "删除",
 			}),
 			cancelText: t({
 				comment: "API key deletion confirmation dialog cancel action in settings",
-				message: "Cancel",
+				message: "取消",
 			}),
 		});
 
 		if (!confirmation) return;
 
-		const toastId = toast.loading(t`Deleting your API key...`);
+		const toastId = toast.loading(t`正在删除 API Key...`);
 
 		const { error } = await authClient.apiKey.delete({ keyId: id });
 
@@ -53,7 +53,7 @@ export function ApiKeysSettingsPage() {
 					error,
 					t({
 						comment: "Fallback toast when deleting an API key fails",
-						message: "Failed to delete the API key. Please try again.",
+						message: "删除 API Key 失败，请重试。",
 					}),
 				),
 				{ id: toastId },
@@ -61,7 +61,7 @@ export function ApiKeysSettingsPage() {
 			return;
 		}
 
-		toast.success(t`The API key has been deleted successfully.`, { id: toastId });
+		toast.success(t`API Key 已删除。`, { id: toastId });
 		void queryClient.invalidateQueries({ queryKey: ["auth", "api-keys"] });
 	};
 
@@ -79,7 +79,7 @@ export function ApiKeysSettingsPage() {
 
 				<div className="flex-1 space-y-2">
 					<h3 className="font-semibold">
-						<Trans>How do I use the API?</Trans>
+						<Trans>如何使用 API？</Trans>
 					</h3>
 
 					<p className="text-muted-foreground leading-relaxed">
@@ -108,7 +108,7 @@ export function ApiKeysSettingsPage() {
 					onClick={() => openDialog("api-key.create", undefined)}
 				>
 					<PlusIcon />
-					<Trans>Create a new API key</Trans>
+					<Trans>创建新的 API Key</Trans>
 				</Button>
 
 				<AnimatePresence initial={false} mode="popLayout">
@@ -126,7 +126,7 @@ export function ApiKeysSettingsPage() {
 							<div className="flex-1 space-y-1">
 								<p className="font-mono text-xs">{key.start}...</p>
 								<div className="text-muted-foreground text-xs">
-									<Trans>Expires on {key.expiresAt?.toLocaleDateString()}</Trans>
+									<Trans>到期时间：{key.expiresAt?.toLocaleDateString()}</Trans>
 								</div>
 							</div>
 

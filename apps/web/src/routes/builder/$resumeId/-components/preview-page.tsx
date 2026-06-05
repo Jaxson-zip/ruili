@@ -15,7 +15,7 @@ export function PreviewPage() {
 	const [pageLayout, setPageLayout] = useState(DEFAULT_BUILDER_PREVIEW_PAGE_LAYOUT);
 
 	useHotkey("Mod+S", () => {
-		toast.info(t`Your changes are saved automatically.`, { id: "auto-save", icon: <FloppyDiskIcon /> });
+		toast.info(t`你的修改会自动保存。`, { id: "auto-save", icon: <FloppyDiskIcon /> });
 	});
 
 	return (

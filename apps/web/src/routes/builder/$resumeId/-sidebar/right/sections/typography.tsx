@@ -67,7 +67,7 @@ function TypographySectionForm() {
 				void form.handleSubmit();
 			}}
 		>
-			<TypographyFieldGroup label={<Trans context="Body Text (paragraphs, lists, etc.)">Body</Trans>} />
+			<TypographyFieldGroup label={<Trans context="Body Text (paragraphs, lists, etc.)">正文</Trans>} />
 
 			<form.Field name="body.fontFamily">
 				{(field) => (
@@ -76,7 +76,7 @@ function TypographySectionForm() {
 						hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 					>
 						<FormLabel>
-							<Trans>Font Family</Trans>
+							<Trans>字体</Trans>
 						</FormLabel>
 						<FormControl
 							render={
@@ -105,7 +105,7 @@ function TypographySectionForm() {
 						hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 					>
 						<FormLabel>
-							<Trans>Font Weights</Trans>
+							<Trans>字重</Trans>
 						</FormLabel>
 						<FormControl
 							render={
@@ -129,7 +129,7 @@ function TypographySectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Font Size</Trans>
+							<Trans>字号</Trans>
 						</FormLabel>
 						<InputGroup>
 							<FormControl
@@ -163,7 +163,7 @@ function TypographySectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Line Height</Trans>
+							<Trans>行高</Trans>
 						</FormLabel>
 						<InputGroup>
 							<FormControl
@@ -193,7 +193,7 @@ function TypographySectionForm() {
 				)}
 			</form.Field>
 
-			<TypographyFieldGroup label={<Trans context="Headings or Titles (H1, H2, H3, H4, H5, H6)">Heading</Trans>} />
+			<TypographyFieldGroup label={<Trans context="Headings or Titles (H1, H2, H3, H4, H5, H6)">标题</Trans>} />
 
 			<form.Field name="heading.fontFamily">
 				{(field) => (
@@ -202,7 +202,7 @@ function TypographySectionForm() {
 						hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 					>
 						<FormLabel>
-							<Trans>Font Family</Trans>
+							<Trans>字体</Trans>
 						</FormLabel>
 						<FormControl
 							render={
@@ -231,7 +231,7 @@ function TypographySectionForm() {
 						hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 					>
 						<FormLabel>
-							<Trans>Font Weight</Trans>
+							<Trans>字重</Trans>
 						</FormLabel>
 						<FormControl
 							render={
@@ -255,7 +255,7 @@ function TypographySectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Font Size</Trans>
+							<Trans>字号</Trans>
 						</FormLabel>
 						<InputGroup>
 							<FormControl
@@ -289,7 +289,7 @@ function TypographySectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Line Height</Trans>
+							<Trans>行高</Trans>
 						</FormLabel>
 						<InputGroup>
 							<FormControl

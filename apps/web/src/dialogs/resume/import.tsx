@@ -48,27 +48,27 @@ const formSchema = z.discriminatedUnion("type", [
 	}),
 	z.object({
 		type: z.literal("pdf"),
-		file: z.instanceof(File).refine(isPdfResumeFile, { message: "File must be a PDF" }),
+		file: z.instanceof(File).refine(isPdfResumeFile, { message: "文件必须是 PDF" }),
 	}),
 	z.object({
 		type: z.literal("docx"),
-		file: z.instanceof(File).refine(isWordResumeFile, { message: "File must be a Microsoft Word document" }),
+		file: z.instanceof(File).refine(isWordResumeFile, { message: "文件必须是 Microsoft Word 文档" }),
 	}),
 	z.object({
 		type: z.literal("image"),
-		file: z.instanceof(File).refine(isImageResumeFile, { message: "File must be a supported image" }),
+		file: z.instanceof(File).refine(isImageResumeFile, { message: "文件必须是支持的图片格式" }),
 	}),
 	z.object({
 		type: z.literal("reactive-resume-json"),
-		file: z.instanceof(File).refine(isJsonResumeFile, { message: "File must be a JSON file" }),
+		file: z.instanceof(File).refine(isJsonResumeFile, { message: "文件必须是 JSON 文件" }),
 	}),
 	z.object({
 		type: z.literal("reactive-resume-v4-json"),
-		file: z.instanceof(File).refine(isJsonResumeFile, { message: "File must be a JSON file" }),
+		file: z.instanceof(File).refine(isJsonResumeFile, { message: "文件必须是 JSON 文件" }),
 	}),
 	z.object({
 		type: z.literal("json-resume-json"),
-		file: z.instanceof(File).refine(isJsonResumeFile, { message: "File must be a JSON file" }),
+		file: z.instanceof(File).refine(isJsonResumeFile, { message: "文件必须是 JSON 文件" }),
 	}),
 ]);
 
@@ -129,7 +129,7 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 			setIsImporting(true);
 
 			const toastId = toast.loading(t`正在导入简历...`, {
-				description: t`如果导入 PDF 或 Word，解析速度取决于 AI Provider 响应，请不要关闭窗口或刷新页面。`,
+				description: t`如果导入 PDF 或 Word，解析速度取决于 AI 模型服务商响应，请不要关闭窗口或刷新页面。`,
 			});
 
 			try {
@@ -154,8 +154,8 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 				}
 
 				if (value.type === "pdf") {
-					if (isLoadingAiProviders) throw new Error(t`正在加载 AI Providers，请稍后重试。`);
-					if (!hasAIProvider) throw new Error(t`PDF 导入需要一个已测试的 AI Provider，请先到 AI Providers 里配置。`);
+					if (isLoadingAiProviders) throw new Error(t`正在加载 AI 模型服务商，请稍后重试。`);
+					if (!hasAIProvider) throw new Error(t`PDF 导入需要一个已测试的 AI 模型服务商，请先到集成设置里配置。`);
 
 					const base64 = await fileToBase64(value.file);
 					const ocr = loadBrowserOcrProvider();
@@ -167,8 +167,8 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 				}
 
 				if (value.type === "docx") {
-					if (isLoadingAiProviders) throw new Error(t`正在加载 AI Providers，请稍后重试。`);
-					if (!hasAIProvider) throw new Error(t`Word 导入需要一个已测试的 AI Provider，请先到 AI Providers 里配置。`);
+					if (isLoadingAiProviders) throw new Error(t`正在加载 AI 模型服务商，请稍后重试。`);
+					if (!hasAIProvider) throw new Error(t`Word 导入需要一个已测试的 AI 模型服务商，请先到集成设置里配置。`);
 
 					const base64 = await fileToBase64(value.file);
 
@@ -184,10 +184,10 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 				}
 
 				if (value.type === "image") {
-					if (isLoadingAiProviders) throw new Error(t`正在加载 AI Providers，请稍后重试。`);
-					if (!hasAIProvider) throw new Error(t`图片导入需要一个已测试的 AI Provider，请先到 AI Providers 里配置。`);
+					if (isLoadingAiProviders) throw new Error(t`正在加载 AI 模型服务商，请稍后重试。`);
+					if (!hasAIProvider) throw new Error(t`图片导入需要一个已测试的 AI 模型服务商，请先到集成设置里配置。`);
 					const ocr = loadBrowserOcrProvider();
-					if (!ocr) throw new Error(t`图片/扫描件导入需要先到 AI / OCR Providers 配置 OCR Provider。`);
+					if (!ocr) throw new Error(t`图片/扫描件导入需要先到集成设置里配置 OCR 服务商。`);
 
 					const base64 = await fileToBase64(value.file);
 
@@ -202,7 +202,7 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 					throw new Error(
 						t({
 							comment: "Error shown when AI import endpoint returns no parsed resume data",
-							message: "AI Provider 没有返回可用的简历数据。",
+							message: "AI 模型服务商没有返回可用的简历数据。",
 						}),
 					);
 				}
@@ -214,15 +214,15 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 			} catch (error: unknown) {
 				const fallbackMessage =
 					value.type === "docx"
-						? t`Word 解析失败。当前 AI Provider 可能不支持直接读取 .docx 文件，请换支持文件输入的模型，或先导入 PDF / JSON。`
+						? t`Word 解析失败。当前 AI 模型服务商可能不支持直接读取 .docx 文件，请换支持文件输入的模型，或先导入 PDF / JSON。`
 						: value.type === "pdf"
-							? t`PDF 解析失败。如果这是扫描版图片 PDF，请先到 AI / OCR Providers 配置 OCR Provider；如果是普通文本 PDF，请换一个可用的 AI Provider 后重试。`
+							? t`PDF 解析失败。如果这是扫描版图片 PDF，请先到集成设置里配置 OCR 服务商；如果是普通文本 PDF，请换一个可用的 AI 模型服务商后重试。`
 							: value.type === "image"
-								? t`图片解析失败。请先配置 OCR Provider，并上传清晰的 PNG/JPG/WebP/GIF 简历截图。`
+								? t`图片解析失败。请先配置 OCR 服务商，并上传清晰的 PNG/JPG/WebP/GIF 简历截图。`
 								: t`导入简历失败，请检查文件格式后重试。`;
 				const badRequestMessage =
 					value.type === "image"
-						? t`OCR Provider 配置不可用。请确认 Endpoint 是 Azure Document Intelligence 地址，并检查 API Key。`
+						? t`OCR 服务商配置不可用。请确认 Endpoint 是 Azure Document Intelligence 地址，并检查 API Key。`
 						: t({
 								comment: "Error shown when AI parsing returns invalid resume structure during import",
 								message: "导入文件无法解析成有效简历，请检查文件内容是否是完整简历。",
@@ -234,7 +234,7 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 							BAD_REQUEST: badRequestMessage,
 							BAD_GATEWAY: t({
 								comment: "Error shown when AI provider is unreachable during PDF/DOCX resume import",
-								message: "无法连接 AI Provider / OCR Provider，或当前模型不支持解析该文件。",
+								message: "无法连接 AI 模型服务商或 OCR 服务商，或当前模型不支持解析该文件。",
 							}),
 						},
 						fallback: fallbackMessage,
@@ -283,8 +283,8 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 				</DialogTitle>
 				<DialogDescription>
 					<Trans>
-						导入已有简历文件继续编辑。JSON 可以直接导入，PDF 和 Microsoft Word 需要 AI Provider；图片和扫描件还需要 OCR
-						Provider。
+						导入已有简历文件继续编辑。JSON 可以直接导入，PDF 和 Microsoft Word 需要 AI 模型服务商；图片和扫描件还需要
+						OCR 服务商。
 					</Trans>
 				</DialogDescription>
 			</DialogHeader>
@@ -320,7 +320,7 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 												label: (
 													<div className="flex items-center gap-x-2">
 														Microsoft Word（.doc/.docx）
-														<Badge>需 AI Provider</Badge>
+														<Badge>需 AI 模型服务商</Badge>
 													</div>
 												),
 											},
@@ -330,7 +330,7 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 												label: (
 													<div className="flex items-center gap-x-2">
 														PDF
-														<Badge>需 AI Provider，扫描件需 OCR</Badge>
+														<Badge>需 AI，扫描件需 OCR</Badge>
 													</div>
 												),
 											},
@@ -340,7 +340,7 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 												label: (
 													<div className="flex items-center gap-x-2">
 														图片 / 扫描件（PNG/JPG/WebP/GIF）
-														<Badge>需 OCR Provider + AI Provider</Badge>
+														<Badge>需 OCR + AI</Badge>
 													</div>
 												),
 											},

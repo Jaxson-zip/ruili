@@ -98,13 +98,13 @@ export function ResumePreviewLoader({
 					<figure key={pageNumber} className="shrink-0">
 						{showPageNumbers ? (
 							<figcaption className="mb-1 font-medium text-[0.625rem] text-muted-foreground">
-								Page {pageNumber} of {pageCount}
+								第 {pageNumber} 页 / 共 {pageCount} 页
 							</figcaption>
 						) : null}
 
 						<div
 							role="img"
-							aria-label={`Loading resume page ${pageNumber} of ${pageCount}`}
+							aria-label={`正在加载简历第 ${pageNumber} 页，共 ${pageCount} 页`}
 							style={pageSize}
 							className={cn("aspect-page overflow-hidden rounded-md bg-white", pageClassName)}
 						>

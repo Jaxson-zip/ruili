@@ -60,7 +60,7 @@ export function CreateCertificationDialog({ data }: DialogProps<"resume.sections
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PlusIcon />
-					<Trans>Create a new certification</Trans>
+					<Trans>新增证书</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -77,11 +77,11 @@ export function CreateCertificationDialog({ data }: DialogProps<"resume.sections
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Create</Trans>
+						<Trans>创建</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -112,7 +112,7 @@ export function UpdateCertificationDialog({ data }: DialogProps<"resume.sections
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PencilSimpleLineIcon />
-					<Trans>Update an existing certification</Trans>
+					<Trans>编辑证书</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -129,11 +129,11 @@ export function UpdateCertificationDialog({ data }: DialogProps<"resume.sections
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Save Changes</Trans>
+						<Trans>保存修改</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -148,17 +148,17 @@ const CertificationForm = withForm({
 
 		return (
 			<>
-				<form.AppField name="title">{(field) => <field.TextField label={<Trans>Title</Trans>} />}</form.AppField>
+				<form.AppField name="title">{(field) => <field.TextField label={<Trans>标题</Trans>} />}</form.AppField>
 
-				<form.AppField name="issuer">{(field) => <field.TextField label={<Trans>Issuer</Trans>} />}</form.AppField>
+				<form.AppField name="issuer">{(field) => <field.TextField label={<Trans>颁发机构</Trans>} />}</form.AppField>
 
-				<form.AppField name="date">{(field) => <field.TextField label={<Trans>Date</Trans>} />}</form.AppField>
+				<form.AppField name="date">{(field) => <field.TextField label={<Trans>日期</Trans>} />}</form.AppField>
 
 				<form.Field name="website">
 					{(field) => (
 						<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 							<FormLabel>
-								<Trans>Website</Trans>
+								<Trans>链接</Trans>
 							</FormLabel>
 							<URLInput
 								value={field.state.value}
@@ -184,7 +184,7 @@ const CertificationForm = withForm({
 								}
 							/>
 							<FormLabel className="mt-0!">
-								<Trans>Show link in title</Trans>
+								<Trans>在标题中显示链接</Trans>
 							</FormLabel>
 						</FormItem>
 					)}
@@ -197,7 +197,7 @@ const CertificationForm = withForm({
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormLabel>
-								<Trans>Description</Trans>
+								<Trans>描述</Trans>
 							</FormLabel>
 							<FormControl render={<RichInput value={field.state.value} onChange={(v) => field.handleChange(v)} />} />
 							<FormMessage errors={field.state.meta.errors} />

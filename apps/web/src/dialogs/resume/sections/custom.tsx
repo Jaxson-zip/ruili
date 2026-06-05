@@ -92,7 +92,7 @@ export function CreateCustomSectionDialog({ data }: DialogProps<"resume.sections
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PlusIcon />
-					<Trans>Create a new custom section</Trans>
+					<Trans>新增自定义模块</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -109,11 +109,11 @@ export function CreateCustomSectionDialog({ data }: DialogProps<"resume.sections
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Create</Trans>
+						<Trans>创建</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -146,7 +146,7 @@ export function UpdateCustomSectionDialog({ data }: DialogProps<"resume.sections
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PencilSimpleLineIcon />
-					<Trans>Update an existing custom section</Trans>
+					<Trans>编辑自定义模块</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -163,11 +163,11 @@ export function UpdateCustomSectionDialog({ data }: DialogProps<"resume.sections
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Save Changes</Trans>
+						<Trans>保存修改</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -189,7 +189,7 @@ const CreateCustomSectionForm = withForm({
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormLabel>
-								<Trans>Title</Trans>
+								<Trans>标题</Trans>
 							</FormLabel>
 							<FormControl
 								render={
@@ -213,7 +213,7 @@ const CreateCustomSectionForm = withForm({
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormLabel>
-								<Trans>Section Type</Trans>
+								<Trans>模块类型</Trans>
 							</FormLabel>
 							<FormControl
 								render={
@@ -254,7 +254,7 @@ const UpdateCustomSectionForm = withForm({
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormLabel>
-								<Trans>Title</Trans>
+								<Trans>标题</Trans>
 							</FormLabel>
 							<FormControl
 								render={
@@ -278,7 +278,7 @@ const UpdateCustomSectionForm = withForm({
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormLabel>
-								<Trans>Section Type</Trans>
+								<Trans>模块类型</Trans>
 							</FormLabel>
 							<FormControl
 								render={

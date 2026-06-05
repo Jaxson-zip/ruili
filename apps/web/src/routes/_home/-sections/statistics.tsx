@@ -92,7 +92,7 @@ export function Statistics() {
 	return (
 		<section id="statistics" aria-labelledby="stats-heading">
 			<h2 id="stats-heading" className="sr-only">
-				{t`Application Statistics`}
+				{t`应用统计`}
 			</h2>
 
 			<div className="grid grid-cols-1 sm:grid-cols-2">

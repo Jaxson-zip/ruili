@@ -41,7 +41,7 @@ const getFeatures = (): Feature[] => [
 		id: "ai-optimization",
 		icon: DotsThreeIcon,
 		title: t`AI 优化入口`,
-		description: t`接入 AI Provider 后，可继续扩展岗位匹配、经历改写和关键词检查。`,
+		description: t`接入 AI 模型服务商后，可继续扩展岗位匹配、经历改写和关键词检查。`,
 	},
 	{
 		id: "structured-editing",
@@ -83,7 +83,7 @@ const getFeatures = (): Feature[] => [
 		id: "self-host",
 		icon: CloudArrowUpIcon,
 		title: t`可自托管`,
-		description: t`可以部署到自己的服务器，控制域名、数据库、邮件、AI Provider 和 OCR Provider。`,
+		description: t`可以部署到自己的服务器，控制域名、数据库、邮件、AI 模型服务商和 OCR 服务商。`,
 	},
 	{
 		id: "data-control",

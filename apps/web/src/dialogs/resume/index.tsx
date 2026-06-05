@@ -355,7 +355,7 @@ export function UpdateResumeDialog({ data }: DialogProps<"resume.update">) {
 		},
 		validators: { onSubmit: formSchema },
 		onSubmit: ({ value }) => {
-			const toastId = toast.loading(t`Updating your resume...`);
+			const toastId = toast.loading(t`正在更新简历...`);
 
 			updateResume(value, {
 				onSuccess: (updated) => {
@@ -370,7 +370,7 @@ export function UpdateResumeDialog({ data }: DialogProps<"resume.update">) {
 						});
 					}
 
-					toast.success(t`Your resume has been updated successfully.`, { id: toastId });
+					toast.success(t`简历已更新`, { id: toastId });
 					closeDialog();
 				},
 				onError: (error) => {
@@ -394,10 +394,10 @@ export function UpdateResumeDialog({ data }: DialogProps<"resume.update">) {
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PencilSimpleLineIcon />
-					<Trans>Update Resume</Trans>
+					<Trans>编辑简历</Trans>
 				</DialogTitle>
 				<DialogDescription>
-					<Trans>Changed your mind? Rename your resume to something more descriptive.</Trans>
+					<Trans>给这份简历换一个更清楚的名称，方便区分不同投递版本。</Trans>
 				</DialogDescription>
 			</DialogHeader>
 
@@ -413,7 +413,7 @@ export function UpdateResumeDialog({ data }: DialogProps<"resume.update">) {
 
 				<DialogFooter>
 					<Button type="submit" disabled={isPending}>
-						<Trans>Save Changes</Trans>
+						<Trans>保存修改</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -430,17 +430,17 @@ export function DuplicateResumeDialog({ data }: DialogProps<"resume.duplicate">)
 	const form = useAppForm({
 		defaultValues: {
 			id: data.id,
-			name: `${data.name} (Copy)`,
+			name: `${data.name} 副本`,
 			slug: `${data.slug}-copy`,
 			tags: data.tags,
 		},
 		validators: { onSubmit: formSchema },
 		onSubmit: ({ value }) => {
-			const toastId = toast.loading(t`Duplicating your resume...`);
+			const toastId = toast.loading(t`正在复制简历...`);
 
 			duplicateResume(value, {
 				onSuccess: async (id) => {
-					toast.success(t`Your resume has been duplicated successfully.`, { id: toastId });
+					toast.success(t`简历已复制`, { id: toastId });
 					closeDialog();
 
 					if (!data.shouldRedirect) return;
@@ -467,10 +467,10 @@ export function DuplicateResumeDialog({ data }: DialogProps<"resume.duplicate">)
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PencilSimpleLineIcon />
-					<Trans>Duplicate Resume</Trans>
+					<Trans>复制简历</Trans>
 				</DialogTitle>
 				<DialogDescription>
-					<Trans>Duplicate your resume to create a new one, just like the original.</Trans>
+					<Trans>复制当前简历，创建一份内容相同的新版本。</Trans>
 				</DialogDescription>
 			</DialogHeader>
 
@@ -486,7 +486,7 @@ export function DuplicateResumeDialog({ data }: DialogProps<"resume.duplicate">)
 
 				<DialogFooter>
 					<Button type="submit" disabled={isPending}>
-						<Trans>Duplicate</Trans>
+						<Trans>复制</Trans>
 					</Button>
 				</DialogFooter>
 			</form>

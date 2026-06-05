@@ -36,7 +36,7 @@ export function SharingSectionBuilder() {
 
 	const onCopyUrl = useCallback(async () => {
 		await copyToClipboard(publicUrl);
-		toast.success(t`A link to your resume has been copied to clipboard.`);
+		toast.success(t`简历链接已复制到剪贴板。`);
 	}, [publicUrl, copyToClipboard]);
 
 	const onTogglePublic = useCallback(
@@ -47,7 +47,7 @@ export function SharingSectionBuilder() {
 					draft.isPublic = updated.isPublic;
 				});
 			} catch (error) {
-				const message = error instanceof ORPCError ? error.message : t`Something went wrong. Please try again.`;
+				const message = error instanceof ORPCError ? error.message : t`出现问题，请重试。`;
 				toast.error(message);
 			}
 		},
@@ -55,9 +55,9 @@ export function SharingSectionBuilder() {
 	);
 
 	const onSetPassword = useCallback(async () => {
-		const value = await prompt(t`Protect your resume from unauthorized access with a password`, {
-			description: t`Anyone visiting the resume's public URL must enter this password to access it.`,
-			confirmText: t`Set Password`,
+		const value = await prompt(t`用密码保护简历，避免未授权访问`, {
+			description: t`访问这份简历公开链接的人必须输入密码才能查看。`,
+			confirmText: t`设置密码`,
 			inputProps: {
 				type: "password",
 				minLength: 6,
@@ -67,18 +67,18 @@ export function SharingSectionBuilder() {
 		if (!value) return;
 
 		const password = value.trim();
-		if (!password) return toast.error(t`Password cannot be empty.`);
+		if (!password) return toast.error(t`密码不能为空。`);
 
-		const toastId = toast.loading(t`Enabling password protection...`);
+		const toastId = toast.loading(t`正在开启密码保护...`);
 
 		try {
 			await setPassword({ id: resume.id, password });
 			patchResume((draft) => {
 				draft.hasPassword = true;
 			});
-			toast.success(t`Password protection has been enabled.`, { id: toastId });
+			toast.success(t`已开启密码保护。`, { id: toastId });
 		} catch (error) {
-			const message = error instanceof ORPCError ? error.message : t`Something went wrong. Please try again.`;
+			const message = error instanceof ORPCError ? error.message : t`出现问题，请重试。`;
 			toast.error(message, { id: toastId });
 		}
 	}, [patchResume, prompt, resume.id, setPassword]);
@@ -86,23 +86,23 @@ export function SharingSectionBuilder() {
 	const onRemovePassword = useCallback(async () => {
 		if (!resume.hasPassword) return;
 
-		const confirmation = await confirm(t`Are you sure you want to remove password protection?`, {
-			description: t`Anyone who has the resume's public URL will be able to view and download your resume without entering a password.`,
-			confirmText: t`Confirm`,
-			cancelText: t`Cancel`,
+		const confirmation = await confirm(t`确定要移除密码保护吗？`, {
+			description: t`拥有公开链接的人将无需输入密码即可查看和下载这份简历。`,
+			confirmText: t`确认`,
+			cancelText: t`取消`,
 		});
 		if (!confirmation) return;
 
-		const toastId = toast.loading(t`Removing password protection...`);
+		const toastId = toast.loading(t`正在移除密码保护...`);
 
 		try {
 			await removePassword({ id: resume.id });
 			patchResume((draft) => {
 				draft.hasPassword = false;
 			});
-			toast.success(t`Password protection has been disabled.`, { id: toastId });
+			toast.success(t`已关闭密码保护。`, { id: toastId });
 		} catch (error) {
-			const message = error instanceof ORPCError ? error.message : t`Something went wrong. Please try again.`;
+			const message = error instanceof ORPCError ? error.message : t`出现问题，请重试。`;
 			toast.error(message, { id: toastId });
 		}
 	}, [confirm, patchResume, removePassword, resume.hasPassword, resume.id]);
@@ -120,11 +120,11 @@ export function SharingSectionBuilder() {
 
 				<Label htmlFor="sharing-switch" className="my-2 flex flex-col items-start gap-y-1 font-normal">
 					<span className="font-medium">
-						<Trans>Allow Public Access</Trans>
+						<Trans>允许公开访问</Trans>
 					</span>
 
 					<span className="text-muted-foreground text-xs">
-						<Trans>Anyone with the link can view and download the resume.</Trans>
+						<Trans>拥有链接的人可以查看并下载这份简历。</Trans>
 					</span>
 				</Label>
 			</div>
@@ -147,26 +147,21 @@ export function SharingSectionBuilder() {
 
 					<p className="text-muted-foreground">
 						{isPasswordProtected ? (
-							<Trans>
-								Your resume's public link is currently protected by a password. Share the password only with people you
-								trust.
-							</Trans>
+							<Trans>这份简历的公开链接已受密码保护。请只把密码分享给你信任的人。</Trans>
 						) : (
-							<Trans>
-								Optionally, set a password so that only people with the password can view your resume through the link.
-							</Trans>
+							<Trans>你也可以设置密码，让只有知道密码的人才能通过链接查看简历。</Trans>
 						)}
 					</p>
 
 					{isPasswordProtected ? (
 						<Button variant="outline" onClick={onRemovePassword}>
 							<LockSimpleOpenIcon />
-							<Trans>Remove Password</Trans>
+							<Trans>移除密码</Trans>
 						</Button>
 					) : (
 						<Button variant="outline" onClick={onSetPassword}>
 							<LockSimpleIcon />
-							<Trans>Set Password</Trans>
+							<Trans>设置密码</Trans>
 						</Button>
 					)}
 				</div>

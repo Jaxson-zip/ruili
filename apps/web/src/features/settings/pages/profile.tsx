@@ -22,7 +22,7 @@ const formSchema = z.object({
 		.min(1)
 		.max(64)
 		.regex(/^[a-z0-9._-]+$/, {
-			message: "Username can only contain lowercase letters, numbers, dots, hyphens and underscores.",
+			message: "用户名只能包含小写字母、数字、点、连字符和下划线。",
 		}),
 	email: z.email().trim(),
 });
@@ -54,14 +54,14 @@ export function ProfileSettingsPage({ session }: Props) {
 						error,
 						t({
 							comment: "Fallback toast when updating profile details fails",
-							message: "Failed to update your profile. Please try again.",
+							message: "更新个人资料失败，请重试。",
 						}),
 					),
 				);
 				return;
 			}
 
-			toast.success(t`Your profile has been updated successfully.`);
+			toast.success(t`个人资料已更新。`);
 			form.reset({ name: value.name, username: value.username, email: session.user.email });
 			void router.invalidate();
 
@@ -77,16 +77,14 @@ export function ProfileSettingsPage({ session }: Props) {
 							error,
 							t({
 								comment: "Fallback toast when requesting email change confirmation fails",
-								message: "Failed to request email change. Please try again.",
+								message: "请求修改邮箱失败，请重试。",
 							}),
 						),
 					);
 					return;
 				}
 
-				toast.success(
-					t`A confirmation link has been sent to your current email address. Please check your inbox to confirm the change.`,
-				);
+				toast.success(t`确认链接已发送到你当前的邮箱，请打开收件箱完成确认。`);
 				form.reset({ name: value.name, username: value.username, email: session.user.email });
 				void router.invalidate();
 			}
@@ -100,7 +98,7 @@ export function ProfileSettingsPage({ session }: Props) {
 	const isDirty = useStore(form.store, (s) => s.isDirty);
 
 	const handleResendVerificationEmail = async () => {
-		const toastId = toast.loading(t`Resending verification email...`);
+		const toastId = toast.loading(t`正在重新发送验证邮件...`);
 
 		const { error } = await authClient.sendVerificationEmail({
 			email: session.user.email,
@@ -113,7 +111,7 @@ export function ProfileSettingsPage({ session }: Props) {
 					error,
 					t({
 						comment: "Fallback toast when resending account verification email fails",
-						message: "Failed to resend verification email. Please try again.",
+						message: "重新发送验证邮件失败，请重试。",
 					}),
 				),
 				{ id: toastId },
@@ -121,10 +119,7 @@ export function ProfileSettingsPage({ session }: Props) {
 			return;
 		}
 
-		toast.success(
-			t`A new verification link has been sent to your email address. Please check your inbox to verify your account.`,
-			{ id: toastId },
-		);
+		toast.success(t`新的验证链接已发送到你的邮箱，请打开收件箱验证账号。`, { id: toastId });
 		void router.invalidate();
 	};
 
@@ -144,7 +139,7 @@ export function ProfileSettingsPage({ session }: Props) {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Name</Trans>
+							<Trans>姓名</Trans>
 						</FormLabel>
 						<FormControl
 							render={
@@ -154,7 +149,7 @@ export function ProfileSettingsPage({ session }: Props) {
 									autoComplete="name"
 									placeholder={t({
 										comment: "Example full name placeholder on profile settings form",
-										message: "John Doe",
+										message: "张三",
 									})}
 									name={field.name}
 									value={field.state.value}
@@ -172,7 +167,7 @@ export function ProfileSettingsPage({ session }: Props) {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Username</Trans>
+							<Trans>用户名</Trans>
 						</FormLabel>
 						<FormControl
 							render={
@@ -182,7 +177,7 @@ export function ProfileSettingsPage({ session }: Props) {
 									autoComplete="username"
 									placeholder={t({
 										comment: "Example username placeholder on profile settings form",
-										message: "john.doe",
+										message: "zhangsan",
 									})}
 									className="lowercase"
 									name={field.name}
@@ -201,7 +196,7 @@ export function ProfileSettingsPage({ session }: Props) {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Email Address</Trans>
+							<Trans>邮箱地址</Trans>
 						</FormLabel>
 						<FormControl
 							render={
@@ -210,7 +205,7 @@ export function ProfileSettingsPage({ session }: Props) {
 									autoComplete="email"
 									placeholder={t({
 										comment: "Example email placeholder on profile settings form",
-										message: "john.doe@example.com",
+										message: "zhangsan@example.com",
 									})}
 									className="lowercase"
 									name={field.name}
@@ -224,19 +219,19 @@ export function ProfileSettingsPage({ session }: Props) {
 						{session.user.emailVerified === true ? (
 							<p className="flex items-center gap-x-1.5 text-green-700 text-xs">
 								<CheckIcon />
-								<Trans>Verified</Trans>
+								<Trans>已验证</Trans>
 							</p>
 						) : (
 							<p className="flex items-center gap-x-1.5 text-amber-600 text-xs">
 								<WarningIcon className="size-3.5" />
-								<Trans>Unverified</Trans>
+								<Trans>未验证</Trans>
 								<span>|</span>
 								<Button
 									variant="link"
 									className="h-auto gap-x-1.5 p-0! text-inherit text-xs"
 									onClick={handleResendVerificationEmail}
 								>
-									<Trans>Resend verification email</Trans>
+									<Trans>重新发送验证邮件</Trans>
 								</Button>
 							</p>
 						)}
@@ -254,11 +249,11 @@ export function ProfileSettingsPage({ session }: Props) {
 						className="flex items-center gap-x-4 justify-self-end will-change-[transform,opacity]"
 					>
 						<Button type="reset" variant="ghost" onClick={onCancel}>
-							<Trans comment="Profile settings form action to discard unsaved edits">Cancel</Trans>
+							<Trans comment="Profile settings form action to discard unsaved edits">取消</Trans>
 						</Button>
 
 						<Button type="submit">
-							<Trans>Save Changes</Trans>
+							<Trans>保存修改</Trans>
 						</Button>
 					</m.div>
 				)}

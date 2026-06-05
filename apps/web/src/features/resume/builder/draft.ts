@@ -129,7 +129,7 @@ async function flushResumeSave(id: string) {
 
 		runtime.pendingResume ??= submitted;
 		runtime.hasPendingLocalChanges = true;
-		runtime.syncErrorToastId = toast.error(t`Your latest changes could not be saved.`, {
+		runtime.syncErrorToastId = toast.error(t`最新修改未能保存。`, {
 			id: runtime.syncErrorToastId,
 			duration: Number.POSITIVE_INFINITY,
 		});
@@ -278,7 +278,7 @@ export const useResumeStore = create<ResumeStore>()(
 			if (!currentResume) return;
 
 			if (currentResume.isLocked) {
-				lockedToastId = toast.error(t`This resume is locked and cannot be updated.`, {
+				lockedToastId = toast.error(t`这份简历已锁定，无法更新。`, {
 					id: lockedToastId,
 				});
 				return;

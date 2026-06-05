@@ -76,7 +76,7 @@ export function ResumeAnalysisSectionBuilder() {
 						}),
 						BAD_GATEWAY: t({
 							comment: "Error description when AI provider cannot be reached during resume analysis",
-							message: "无法连接到 AI Provider，请检查 Base URL、模型名和 API Key。",
+							message: "无法连接到 AI 模型服务商，请检查 Base URL、模型名和 API Key。",
 						}),
 					},
 					fallback: t({
@@ -256,7 +256,7 @@ function DisabledState() {
 			<InfoIcon />
 			<AlertDescription className="space-y-3">
 				<p>
-					<Trans>配置 AI Provider 后，可以生成中文简历分析，包括综合评分、当前优势和可执行的修改建议。</Trans>
+					<Trans>配置 AI 模型服务商后，可以生成中文简历分析，包括综合评分、当前优势和可执行的修改建议。</Trans>
 				</p>
 
 				<Button
@@ -265,7 +265,7 @@ function DisabledState() {
 					nativeButton={false}
 					render={
 						<Link to="/dashboard/settings/integrations">
-							<Trans>打开 AI Providers</Trans>
+							<Trans>打开 AI 服务商</Trans>
 							<ArrowRightIcon />
 						</Link>
 					}

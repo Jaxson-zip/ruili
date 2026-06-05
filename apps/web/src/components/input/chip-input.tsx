@@ -394,7 +394,7 @@ export function ChipInput({
 												: "border-border bg-muted/50 text-foreground/80",
 										)}
 									>
-										{isEditingKeyword ? <Trans>Edit</Trans> : chips.length}
+										{isEditingKeyword ? <Trans>编辑</Trans> : chips.length}
 									</m.span>
 								)}
 							</AnimatePresence>

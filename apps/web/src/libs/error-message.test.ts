@@ -78,17 +78,17 @@ describe("getOrpcErrorMessage", () => {
 describe("getResumeErrorMessage", () => {
 	it("returns mapped message for RESUME_SLUG_ALREADY_EXISTS", () => {
 		const error = new ORPCError("RESUME_SLUG_ALREADY_EXISTS");
-		expect(getResumeErrorMessage(error)).toBe("A resume with this slug already exists.");
+		expect(getResumeErrorMessage(error)).toBe("这个公开链接已经被其他简历使用。");
 	});
 
 	it("returns mapped message for RESUME_LOCKED", () => {
 		const error = new ORPCError("RESUME_LOCKED");
-		expect(getResumeErrorMessage(error)).toBe("This resume is locked. Unlock it first to make changes.");
+		expect(getResumeErrorMessage(error)).toBe("这份简历已锁定，请先解锁再修改。");
 	});
 
 	it("returns generic fallback for unknown codes", () => {
 		const error = new ORPCError("UNKNOWN");
-		expect(getResumeErrorMessage(error)).toBe("Something went wrong. Please try again.");
+		expect(getResumeErrorMessage(error)).toBe("操作失败，请稍后重试。");
 	});
 
 	it("returns fallback for plain Error (delegates to getOrpcErrorMessage)", () => {
@@ -97,6 +97,6 @@ describe("getResumeErrorMessage", () => {
 	});
 
 	it("returns fallback for unknown shape", () => {
-		expect(getResumeErrorMessage(null)).toBe("Something went wrong. Please try again.");
+		expect(getResumeErrorMessage(null)).toBe("操作失败，请稍后重试。");
 	});
 });

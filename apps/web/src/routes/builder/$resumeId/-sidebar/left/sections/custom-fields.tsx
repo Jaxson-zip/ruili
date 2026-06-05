@@ -96,7 +96,7 @@ export const CustomFieldsSection = withForm({
 											<PopoverContent align="center">
 												<div className="flex flex-col gap-y-1.5">
 													<Label htmlFor={linkField.name} className="text-muted-foreground text-xs">
-														<Trans>Enter the URL to link to</Trans>
+														<Trans>输入要链接到的 URL</Trans>
 													</Label>
 
 													<Input
@@ -105,7 +105,7 @@ export const CustomFieldsSection = withForm({
 														id={linkField.name}
 														placeholder={t({
 															comment: "Placeholder text for custom link URL field in resume builder",
-															message: "Must start with https://",
+															message: "必须以 https:// 开头",
 														})}
 														onChange={(e) => {
 															linkField.handleChange(e.target.value);
@@ -139,7 +139,7 @@ export const CustomFieldsSection = withForm({
 							}}
 						>
 							<ListPlusIcon />
-							<Trans>Add a custom field</Trans>
+							<Trans>添加自定义字段</Trans>
 						</Button>
 					</Reorder.Group>
 				)}

@@ -47,7 +47,7 @@ const appSidebarItems = [
 	},
 	{
 		icon: <ChatCircleDotsIcon />,
-		label: "AI Agent",
+		label: "AI 助手",
 		href: "/agent",
 	},
 ] as const satisfies SidebarItem[];
@@ -70,12 +70,12 @@ const settingsSidebarItems = [
 	},
 	{
 		icon: <KeyIcon />,
-		label: "API Keys",
+		label: "API 密钥",
 		href: "/dashboard/settings/api-keys",
 	},
 	{
 		icon: <BrainIcon />,
-		label: "AI Providers",
+		label: "AI 服务商",
 		href: "/dashboard/settings/integrations",
 	},
 	{

@@ -29,7 +29,7 @@ export function ProfilesSectionBuilder() {
 			</Reorder.Group>
 
 			<SectionAddItemButton type="profiles">
-				<Trans>Add a new profile</Trans>
+				<Trans>添加个人主页</Trans>
 			</SectionAddItemButton>
 		</SectionBase>
 	);

@@ -62,7 +62,7 @@ export function CreateInterestDialog({ data }: DialogProps<"resume.sections.inte
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PlusIcon />
-					<Trans>Create a new interest</Trans>
+					<Trans>新增兴趣爱好</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -79,11 +79,11 @@ export function CreateInterestDialog({ data }: DialogProps<"resume.sections.inte
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Create</Trans>
+						<Trans>创建</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -114,7 +114,7 @@ export function UpdateInterestDialog({ data }: DialogProps<"resume.sections.inte
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PencilSimpleLineIcon />
-					<Trans>Update an existing interest</Trans>
+					<Trans>编辑兴趣爱好</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -131,11 +131,11 @@ export function UpdateInterestDialog({ data }: DialogProps<"resume.sections.inte
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Save Changes</Trans>
+						<Trans>保存修改</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -176,7 +176,7 @@ const InterestForm = withForm({
 						{(field) => (
 							<FormItem className="flex-1" hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 								<FormLabel>
-									<Trans>Name</Trans>
+									<Trans>名称</Trans>
 								</FormLabel>
 								<FormControl
 									render={
@@ -227,7 +227,7 @@ const InterestForm = withForm({
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormLabel>
-								<Trans>Keywords</Trans>
+								<Trans>关键词</Trans>
 							</FormLabel>
 							<FormControl
 								render={

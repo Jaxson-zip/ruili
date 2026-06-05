@@ -29,7 +29,7 @@ export function ReferencesSectionBuilder() {
 			</Reorder.Group>
 
 			<SectionAddItemButton type="references">
-				<Trans>Add a new reference</Trans>
+				<Trans>添加推荐人</Trans>
 			</SectionAddItemButton>
 		</SectionBase>
 	);

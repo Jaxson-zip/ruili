@@ -55,7 +55,7 @@ const CreateApiKeyForm = ({ setApiKey }: CreateApiKeyFormProps) => {
 		},
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {
-			const toastId = toast.loading(t`Creating your API key...`);
+			const toastId = toast.loading(t`正在创建 API 密钥...`);
 
 			const { data, error } = await authClient.apiKey.create({
 				name: value.name,
@@ -68,7 +68,7 @@ const CreateApiKeyForm = ({ setApiKey }: CreateApiKeyFormProps) => {
 						error,
 						t({
 							comment: "Fallback toast when creating an API key fails",
-							message: "Failed to create API key. Please try again.",
+							message: "API 密钥创建失败，请稍后重试。",
 						}),
 					),
 					{ id: toastId },
@@ -88,7 +88,7 @@ const CreateApiKeyForm = ({ setApiKey }: CreateApiKeyFormProps) => {
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PlusIcon />
-					<Trans>Create a new API key</Trans>
+					<Trans>创建新的 API 密钥</Trans>
 				</DialogTitle>
 				<DialogDescription>
 					<Trans>这会生成一个新的 API key，用于访问锐历 API，让程序可以读取或操作你的简历数据。</Trans>
@@ -107,7 +107,7 @@ const CreateApiKeyForm = ({ setApiKey }: CreateApiKeyFormProps) => {
 					{(field) => (
 						<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 							<FormLabel>
-								<Trans>Name</Trans>
+								<Trans>名称</Trans>
 							</FormLabel>
 							<FormControl
 								render={
@@ -123,9 +123,7 @@ const CreateApiKeyForm = ({ setApiKey }: CreateApiKeyFormProps) => {
 							/>
 							<FormMessage errors={field.state.meta.errors} />
 							<FormDescription>
-								<Trans>
-									Tip: Give your API key a name, corresponding to the purpose of the key, to help you identify it later.
-								</Trans>
+								<Trans>建议按用途给 API 密钥命名，后续更容易识别。</Trans>
 							</FormDescription>
 						</FormItem>
 					)}
@@ -135,7 +133,7 @@ const CreateApiKeyForm = ({ setApiKey }: CreateApiKeyFormProps) => {
 					{(field) => (
 						<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 							<FormLabel>
-								<Trans>Expires in</Trans>
+								<Trans>有效期</Trans>
 							</FormLabel>
 							<FormControl
 								render={
@@ -146,22 +144,22 @@ const CreateApiKeyForm = ({ setApiKey }: CreateApiKeyFormProps) => {
 											{
 												// 1 month = 30 days
 												value: 3600 * 24 * 30,
-												label: t`1 month`,
+												label: t`1 个月`,
 											},
 											{
 												// 3 months = 90 days
 												value: 3600 * 24 * 90,
-												label: t`3 months`,
+												label: t`3 个月`,
 											},
 											{
 												// 6 months = 180 days
 												value: 3600 * 24 * 180,
-												label: t`6 months`,
+												label: t`6 个月`,
 											},
 											{
 												// 1 year = 365 days
 												value: 3600 * 24 * 365,
-												label: t`1 year`,
+												label: t`1 年`,
 											},
 										]}
 									/>
@@ -174,7 +172,7 @@ const CreateApiKeyForm = ({ setApiKey }: CreateApiKeyFormProps) => {
 
 				<DialogFooter>
 					<Button type="submit">
-						<Trans comment="Create API key dialog submit action">Create</Trans>
+						<Trans comment="Create API key dialog submit action">创建</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -193,7 +191,7 @@ const CopyApiKeyForm = ({ apiKey }: CopyApiKeyFormProps) => {
 
 	const onCopy = async () => {
 		await copyToClipboard(apiKey);
-		toast.success(t`Your API key has been copied to the clipboard.`);
+		toast.success(t`API 密钥已复制到剪贴板。`);
 	};
 
 	const onConfirm = () => {
@@ -206,10 +204,10 @@ const CopyApiKeyForm = ({ apiKey }: CopyApiKeyFormProps) => {
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<CopyIcon />
-					<Trans>Here's your new API key</Trans>
+					<Trans>这是你的新 API 密钥</Trans>
 				</DialogTitle>
 				<DialogDescription>
-					<Trans>Copy this secret key and use it in your applications to access your data.</Trans>
+					<Trans>复制这段密钥，在你的应用中用它访问简历数据。</Trans>
 				</DialogDescription>
 			</DialogHeader>
 
@@ -224,13 +222,13 @@ const CopyApiKeyForm = ({ apiKey }: CopyApiKeyFormProps) => {
 				</InputGroup>
 
 				<span className="font-medium text-muted-foreground text-sm">
-					<Trans>For security reasons, this key will only be displayed once.</Trans>
+					<Trans>出于安全原因，这段密钥只会显示一次。</Trans>
 				</span>
 			</div>
 
 			<DialogFooter>
 				<Button onClick={onConfirm}>
-					<Trans comment="Create API key dialog acknowledgment action after copying">Confirm</Trans>
+					<Trans comment="Create API key dialog acknowledgment action after copying">确认</Trans>
 				</Button>
 			</DialogFooter>
 		</DialogContent>

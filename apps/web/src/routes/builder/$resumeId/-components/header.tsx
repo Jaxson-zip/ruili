@@ -40,7 +40,7 @@ export function BuilderHeader() {
 				<SidebarSimpleIcon />
 				<span className="sr-only">
 					<Trans comment="Screen-reader label for opening or closing the left sidebar in resume builder">
-						Toggle left sidebar
+						切换左侧栏
 					</Trans>
 				</span>
 			</Button>
@@ -51,7 +51,7 @@ export function BuilderHeader() {
 					variant="ghost"
 					aria-label={t({
 						comment: "Accessible label for button navigating from builder to resumes dashboard",
-						message: "Go to resumes dashboard",
+						message: "返回简历列表",
 					})}
 					nativeButton={false}
 					render={
@@ -71,7 +71,7 @@ export function BuilderHeader() {
 					<SidebarSimpleIcon className="-scale-x-100" />
 					<span className="sr-only">
 						<Trans comment="Screen-reader label for opening or closing the right sidebar in resume builder">
-							Toggle right sidebar
+							切换右侧栏
 						</Trans>
 					</span>
 				</Button>
@@ -106,8 +106,8 @@ function BuilderHeaderDropdown() {
 
 	const handleToggleLock = async () => {
 		if (!isLocked) {
-			const confirmation = await confirm(t`Are you sure you want to lock this resume?`, {
-				description: t`When locked, the resume cannot be updated or deleted.`,
+			const confirmation = await confirm(t`确定要锁定这份简历吗？`, {
+				description: t`锁定后，这份简历将无法更新或删除。`,
 			});
 
 			if (!confirmation) return;
@@ -129,19 +129,19 @@ function BuilderHeaderDropdown() {
 	};
 
 	const handleDelete = async () => {
-		const confirmation = await confirm(t`Are you sure you want to delete this resume?`, {
-			description: t`This action cannot be undone.`,
+		const confirmation = await confirm(t`确定要删除这份简历吗？`, {
+			description: t`此操作无法撤销。`,
 		});
 
 		if (!confirmation) return;
 
-		const toastId = toast.loading(t`Deleting your resume...`);
+		const toastId = toast.loading(t`正在删除简历...`);
 
 		deleteResume(
 			{ id },
 			{
 				onSuccess: () => {
-					toast.success(t`Your resume has been deleted successfully.`, { id: toastId });
+					toast.success(t`简历已删除。`, { id: toastId });
 					void navigate({ to: "/dashboard/resumes", search: { sort: "lastUpdatedAt", tags: [] } });
 				},
 				onError: (error) => {
@@ -164,24 +164,24 @@ function BuilderHeaderDropdown() {
 			<DropdownMenuContent>
 				<DropdownMenuItem disabled={isLocked} onClick={handleUpdate}>
 					<PencilSimpleLineIcon className="me-2" />
-					<Trans>Update</Trans>
+					<Trans>编辑</Trans>
 				</DropdownMenuItem>
 
 				<DropdownMenuItem onClick={handleDuplicate}>
 					<CopySimpleIcon className="me-2" />
-					<Trans>Duplicate</Trans>
+					<Trans>复制</Trans>
 				</DropdownMenuItem>
 
 				<DropdownMenuItem onClick={handleToggleLock}>
 					{isLocked ? <LockSimpleOpenIcon className="me-2" /> : <LockSimpleIcon className="me-2" />}
-					{isLocked ? <Trans>Unlock</Trans> : <Trans>Lock</Trans>}
+					{isLocked ? <Trans>解锁</Trans> : <Trans>锁定</Trans>}
 				</DropdownMenuItem>
 
 				<DropdownMenuSeparator />
 
 				<DropdownMenuItem variant="destructive" disabled={isLocked} onClick={handleDelete}>
 					<TrashSimpleIcon className="me-2" />
-					<Trans>Delete</Trans>
+					<Trans>删除</Trans>
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

@@ -24,25 +24,25 @@ export function DangerZoneSettingsPage() {
 	const { mutate: deleteAccount } = useMutation(orpc.auth.deleteAccount.mutationOptions());
 
 	const handleDeleteAccount = async () => {
-		const confirmed = await confirm(t`Are you sure you want to delete your account?`, {
-			description: t`This action cannot be undone. All your data will be permanently deleted.`,
+		const confirmed = await confirm(t`确定要删除你的账号吗？`, {
+			description: t`此操作无法撤销，所有数据都会被永久删除。`,
 			confirmText: t({
 				comment: "Account deletion confirmation dialog confirm action in danger zone",
-				message: "Confirm",
+				message: "确认",
 			}),
 			cancelText: t({
 				comment: "Account deletion confirmation dialog cancel action in danger zone",
-				message: "Cancel",
+				message: "取消",
 			}),
 		});
 
 		if (!confirmed) return;
 
-		const toastId = toast.loading(t`Deleting your account...`);
+		const toastId = toast.loading(t`正在删除账号...`);
 
 		deleteAccount(undefined, {
 			onSuccess: async () => {
-				toast.success(t`Your account has been deleted successfully.`, { id: toastId });
+				toast.success(t`账号已删除。`, { id: toastId });
 				await authClient.signOut();
 				void navigate({ to: "/" });
 			},
@@ -52,7 +52,7 @@ export function DangerZoneSettingsPage() {
 						error,
 						t({
 							comment: "Fallback toast when account deletion fails",
-							message: "Failed to delete your account. Please try again.",
+							message: "删除账号失败，请重试。",
 						}),
 					),
 					{ id: toastId },
@@ -69,14 +69,14 @@ export function DangerZoneSettingsPage() {
 			className="grid max-w-xl gap-6 will-change-[transform,opacity]"
 		>
 			<p className="leading-relaxed">
-				<Trans>To delete your account, you need to enter the confirmation text and click the button below.</Trans>
+				<Trans>要删除账号，请输入确认文本并点击下方按钮。</Trans>
 			</p>
 
 			<Input
 				type="text"
 				value={confirmationText}
 				onChange={(e) => setConfirmationText(e.target.value)}
-				placeholder={t`Type "${CONFIRMATION_TEXT}" to confirm`}
+				placeholder={t`输入 "${CONFIRMATION_TEXT}" 以确认`}
 			/>
 
 			<m.div
@@ -87,7 +87,7 @@ export function DangerZoneSettingsPage() {
 			>
 				<Button variant="destructive" onClick={handleDeleteAccount} disabled={!isConfirmationValid}>
 					<TrashSimpleIcon />
-					<Trans>Delete Account</Trans>
+					<Trans>删除账号</Trans>
 				</Button>
 			</m.div>
 		</m.div>

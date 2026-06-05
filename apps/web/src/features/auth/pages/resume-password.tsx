@@ -82,11 +82,11 @@ export function ResumePasswordPage({ redirectPath }: Props) {
 		<>
 			<div className="space-y-4 text-center">
 				<h1 className="font-semibold text-2xl tracking-tight">
-					<Trans>The resume you are trying to access is password protected</Trans>
+					<Trans>这份简历已开启密码保护</Trans>
 				</h1>
 
 				<div className="text-muted-foreground leading-relaxed">
-					<Trans>Please enter the password shared with you by the owner of the resume to continue.</Trans>
+					<Trans>请输入简历所有者提供的访问密码。</Trans>
 				</div>
 			</div>
 
@@ -128,11 +128,11 @@ export function ResumePasswordPage({ redirectPath }: Props) {
 										showPassword
 											? t({
 													comment: "Accessible label for button that hides password on protected resume screen",
-													message: "Hide password",
+													message: "隐藏密码",
 												})
 											: t({
 													comment: "Accessible label for button that reveals password on protected resume screen",
-													message: "Show password",
+													message: "显示密码",
 												})
 									}
 								>

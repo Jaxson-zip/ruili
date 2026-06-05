@@ -27,7 +27,7 @@ describe("ResumePreviewLoader", () => {
 
 		render(<ResumePreviewLoader pageCount={pageCount} />);
 
-		expect(screen.getAllByRole("img", { name: /Loading resume page/ })).toHaveLength(pageCount);
+		expect(screen.getAllByRole("img", { name: /正在加载简历第/ })).toHaveLength(pageCount);
 	});
 
 	it("writes numeric page gaps as valid CSS custom-property lengths", () => {

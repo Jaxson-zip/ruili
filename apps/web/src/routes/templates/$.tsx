@@ -13,7 +13,7 @@ const PDFViewer = lazy(async () => {
 
 export const Route = createFileRoute("/templates/$")({
 	component: TemplatePdfRoute,
-	errorComponent: () => <div>Template not found</div>,
+	errorComponent: () => <div>未找到这个简历模板</div>,
 	head: () => ({
 		meta: [createNoindexFollowMeta()],
 	}),

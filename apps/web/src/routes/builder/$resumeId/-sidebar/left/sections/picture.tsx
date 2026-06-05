@@ -61,7 +61,7 @@ function PicturePreviewControls({
 				ref={fileInputRef}
 				type="file"
 				accept="image/*"
-				aria-label={t`Upload picture`}
+				aria-label={t`上传照片`}
 				className="hidden"
 				onChange={onUploadPicture}
 			/>
@@ -69,7 +69,7 @@ function PicturePreviewControls({
 			<button
 				type="button"
 				onClick={picture.url ? onDeletePicture : onSelectPicture}
-				aria-label={picture.url ? t`Delete picture` : t`Upload picture`}
+				aria-label={picture.url ? t`删除照片` : t`上传照片`}
 				className="group/picture relative size-18 cursor-pointer overflow-hidden rounded-md bg-secondary transition-colors hover:bg-secondary/50"
 			>
 				{(pictureSrc || normalizedPictureUrl) && (
@@ -136,7 +136,7 @@ function PictureGeometryFields({ form, onAutoSave }: PictureGeometryFieldsProps)
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Size</Trans>
+							<Trans>大小</Trans>
 						</FormLabel>
 						<InputGroup>
 							<InputGroupInput
@@ -168,7 +168,7 @@ function PictureGeometryFields({ form, onAutoSave }: PictureGeometryFieldsProps)
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Rotation</Trans>
+							<Trans>旋转</Trans>
 						</FormLabel>
 						<InputGroup>
 							<FormControl
@@ -202,7 +202,7 @@ function PictureGeometryFields({ form, onAutoSave }: PictureGeometryFieldsProps)
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Aspect Ratio</Trans>
+							<Trans>宽高比</Trans>
 						</FormLabel>
 						<div className="flex items-center gap-x-2">
 							<FormControl
@@ -231,7 +231,7 @@ function PictureGeometryFields({ form, onAutoSave }: PictureGeometryFieldsProps)
 									variant="outline"
 									title={t({
 										comment: "Preset button for setting picture aspect ratio to square",
-										message: "Square",
+										message: "正方形",
 									})}
 									onClick={() => {
 										field.handleChange(1);
@@ -245,7 +245,7 @@ function PictureGeometryFields({ form, onAutoSave }: PictureGeometryFieldsProps)
 									variant="outline"
 									title={t({
 										comment: "Preset button for setting picture aspect ratio to landscape orientation",
-										message: "Landscape",
+										message: "横向",
 									})}
 									onClick={() => {
 										field.handleChange(1.5);
@@ -259,7 +259,7 @@ function PictureGeometryFields({ form, onAutoSave }: PictureGeometryFieldsProps)
 									variant="outline"
 									title={t({
 										comment: "Preset button for setting picture aspect ratio to portrait orientation",
-										message: "Portrait",
+										message: "纵向",
 									})}
 									onClick={() => {
 										field.handleChange(0.5);
@@ -278,7 +278,7 @@ function PictureGeometryFields({ form, onAutoSave }: PictureGeometryFieldsProps)
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Border Radius</Trans>
+							<Trans>圆角</Trans>
 						</FormLabel>
 						<div className="flex items-center gap-x-2">
 							<InputGroup>
@@ -445,7 +445,7 @@ function PictureSectionForm() {
 		const file = e.target.files?.[0];
 		if (!file) return;
 
-		const toastId = toast.loading(t`Uploading picture…`);
+		const toastId = toast.loading(t`正在上传照片...`);
 
 		uploadFile(file, {
 			onSuccess: ({ url }) => {
@@ -460,7 +460,7 @@ function PictureSectionForm() {
 						error,
 						t({
 							comment: "Fallback toast when uploading profile picture for resume fails",
-							message: "Failed to upload picture. Please try again.",
+							message: "上传照片失败，请重试。",
 						}),
 					),
 					{ id: toastId },
@@ -527,7 +527,7 @@ function PictureSectionForm() {
 						{(field) => (
 							<FormItem className="flex-1" hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 								<FormLabel>
-									<Trans>Border Width</Trans>
+									<Trans>边框宽度</Trans>
 								</FormLabel>
 								<InputGroup>
 									<FormControl
@@ -583,7 +583,7 @@ function PictureSectionForm() {
 						{(field) => (
 							<FormItem className="flex-1" hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 								<FormLabel>
-									<Trans>Shadow Width</Trans>
+									<Trans>阴影宽度</Trans>
 								</FormLabel>
 								<InputGroup>
 									<FormControl

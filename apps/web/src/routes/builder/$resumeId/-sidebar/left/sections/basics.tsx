@@ -54,7 +54,7 @@ function BasicsSectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Name</Trans>
+							<Trans>姓名</Trans>
 						</FormLabel>
 						<FormControl
 							render={
@@ -78,7 +78,7 @@ function BasicsSectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Headline</Trans>
+							<Trans>标题</Trans>
 						</FormLabel>
 						<FormControl
 							render={
@@ -102,7 +102,7 @@ function BasicsSectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Email</Trans>
+							<Trans>邮箱</Trans>
 						</FormLabel>
 						<FormControl
 							render={
@@ -127,7 +127,7 @@ function BasicsSectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Phone</Trans>
+							<Trans>电话</Trans>
 						</FormLabel>
 						<FormControl
 							render={
@@ -151,7 +151,7 @@ function BasicsSectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Location</Trans>
+							<Trans>所在地</Trans>
 						</FormLabel>
 						<FormControl
 							render={
@@ -175,7 +175,7 @@ function BasicsSectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Website</Trans>
+							<Trans>网站</Trans>
 						</FormLabel>
 						<URLInput
 							name={field.name}

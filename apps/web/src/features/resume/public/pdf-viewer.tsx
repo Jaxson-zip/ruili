@@ -226,7 +226,7 @@ export function PdfViewer({ className, data }: PdfViewerProps) {
 
 			{error ? (
 				<div className="absolute inset-0 flex items-center justify-center bg-background px-6 text-center text-muted-foreground text-sm">
-					Unable to display PDF preview.
+					无法显示 PDF 预览。
 				</div>
 			) : isReady ? null : (
 				<div className="absolute inset-0 flex items-center justify-center bg-background">

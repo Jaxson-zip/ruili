@@ -484,7 +484,7 @@ function renderEditorToolbar(state: EditorToolbarState, isFullscreen: boolean) {
 
 						<div className="flex flex-col gap-0.5">
 							<PopoverTitle>
-								<Trans>Text Color</Trans>
+								<Trans>文字颜色</Trans>
 							</PopoverTitle>
 							<span className="text-muted-foreground text-xs">
 								<Trans comment="Preset or custom shade refer to the color picker">
@@ -533,7 +533,7 @@ function renderEditorToolbar(state: EditorToolbarState, isFullscreen: boolean) {
 						checked={state.isParagraph}
 						onCheckedChange={state.setParagraph}
 					>
-						<Trans>Paragraph</Trans>
+						<Trans>段落</Trans>
 					</DropdownMenuCheckboxItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuCheckboxItem
@@ -541,42 +541,42 @@ function renderEditorToolbar(state: EditorToolbarState, isFullscreen: boolean) {
 						checked={state.isHeading1}
 						onCheckedChange={state.toggleHeading1}
 					>
-						<Trans>Heading 1</Trans>
+						<Trans>标题 1</Trans>
 					</DropdownMenuCheckboxItem>
 					<DropdownMenuCheckboxItem
 						disabled={!state.canHeading2}
 						checked={state.isHeading2}
 						onCheckedChange={state.toggleHeading2}
 					>
-						<Trans>Heading 2</Trans>
+						<Trans>标题 2</Trans>
 					</DropdownMenuCheckboxItem>
 					<DropdownMenuCheckboxItem
 						disabled={!state.canHeading3}
 						checked={state.isHeading3}
 						onCheckedChange={state.toggleHeading3}
 					>
-						<Trans>Heading 3</Trans>
+						<Trans>标题 3</Trans>
 					</DropdownMenuCheckboxItem>
 					<DropdownMenuCheckboxItem
 						disabled={!state.canHeading4}
 						checked={state.isHeading4}
 						onCheckedChange={state.toggleHeading4}
 					>
-						<Trans>Heading 4</Trans>
+						<Trans>标题 4</Trans>
 					</DropdownMenuCheckboxItem>
 					<DropdownMenuCheckboxItem
 						disabled={!state.canHeading5}
 						checked={state.isHeading5}
 						onCheckedChange={state.toggleHeading5}
 					>
-						<Trans>Heading 5</Trans>
+						<Trans>标题 5</Trans>
 					</DropdownMenuCheckboxItem>
 					<DropdownMenuCheckboxItem
 						disabled={!state.canHeading6}
 						checked={state.isHeading6}
 						onCheckedChange={state.toggleHeading6}
 					>
-						<Trans>Heading 6</Trans>
+						<Trans>标题 6</Trans>
 					</DropdownMenuCheckboxItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
@@ -603,28 +603,28 @@ function renderEditorToolbar(state: EditorToolbarState, isFullscreen: boolean) {
 						checked={state.isLeftAlign}
 						onCheckedChange={state.toggleLeftAlign}
 					>
-						<Trans>Left Align</Trans>
+						<Trans>左对齐</Trans>
 					</DropdownMenuCheckboxItem>
 					<DropdownMenuCheckboxItem
 						disabled={!state.canCenterAlign}
 						checked={state.isCenterAlign}
 						onCheckedChange={state.toggleCenterAlign}
 					>
-						<Trans>Center Align</Trans>
+						<Trans>居中对齐</Trans>
 					</DropdownMenuCheckboxItem>
 					<DropdownMenuCheckboxItem
 						disabled={!state.canRightAlign}
 						checked={state.isRightAlign}
 						onCheckedChange={state.toggleRightAlign}
 					>
-						<Trans>Right Align</Trans>
+						<Trans>右对齐</Trans>
 					</DropdownMenuCheckboxItem>
 					<DropdownMenuCheckboxItem
 						disabled={!state.canJustifyAlign}
 						checked={state.isJustifyAlign}
 						onCheckedChange={state.toggleJustifyAlign}
 					>
-						<Trans>Justify Align</Trans>
+						<Trans>两端对齐</Trans>
 					</DropdownMenuCheckboxItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
@@ -743,39 +743,39 @@ function renderEditorToolbar(state: EditorToolbarState, isFullscreen: boolean) {
 				<DropdownMenuContent>
 					<DropdownMenuItem disabled={!state.canInsertTable} onClick={state.insertTable}>
 						<PlusIcon />
-						<Trans>Insert Table</Trans>
+						<Trans>插入表格</Trans>
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem disabled={!state.canAddColumnBefore} onClick={state.addColumnBefore}>
 						<ColumnsPlusLeftIcon />
-						<Trans>Add Column Before</Trans>
+						<Trans>左侧添加列</Trans>
 					</DropdownMenuItem>
 					<DropdownMenuItem disabled={!state.canAddColumnAfter} onClick={state.addColumnAfter}>
 						<ColumnsPlusRightIcon />
-						<Trans>Add Column After</Trans>
+						<Trans>右侧添加列</Trans>
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem disabled={!state.canAddRowBefore} onClick={state.addRowBefore}>
 						<RowsPlusTopIcon />
-						<Trans>Add Row Before</Trans>
+						<Trans>上方添加行</Trans>
 					</DropdownMenuItem>
 					<DropdownMenuItem disabled={!state.canAddRowAfter} onClick={state.addRowAfter}>
 						<RowsPlusBottomIcon />
-						<Trans>Add Row After</Trans>
+						<Trans>下方添加行</Trans>
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem disabled={!state.canDeleteColumn} onClick={state.deleteColumn}>
 						<TrashSimpleIcon />
-						<Trans>Delete Column</Trans>
+						<Trans>删除列</Trans>
 					</DropdownMenuItem>
 					<DropdownMenuItem disabled={!state.canDeleteRow} onClick={state.deleteRow}>
 						<TrashSimpleIcon />
-						<Trans>Delete Row</Trans>
+						<Trans>删除行</Trans>
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem variant="destructive" disabled={!state.canDeleteTable} onClick={state.deleteTable}>
 						<TrashSimpleIcon />
-						<Trans>Delete Table</Trans>
+						<Trans>删除表格</Trans>
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>

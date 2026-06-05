@@ -66,7 +66,7 @@ describe("StatisticsSectionBuilder", () => {
 			lastDownloadedAt: null,
 		};
 		renderStats();
-		expect(screen.getByText("Track your resume's views and downloads")).toBeInTheDocument();
+		expect(screen.getByText("跟踪简历浏览和下载")).toBeInTheDocument();
 	});
 
 	it("renders the views/downloads counters when isPublic=true", () => {
@@ -80,8 +80,8 @@ describe("StatisticsSectionBuilder", () => {
 		renderStats();
 		expect(screen.getByText("42")).toBeInTheDocument();
 		expect(screen.getByText("7")).toBeInTheDocument();
-		expect(screen.getByText("Views")).toBeInTheDocument();
-		expect(screen.getByText("Downloads")).toBeInTheDocument();
+		expect(screen.getByText("浏览")).toBeInTheDocument();
+		expect(screen.getByText("下载")).toBeInTheDocument();
 	});
 
 	it("renders 'last viewed/downloaded' timestamps when present", () => {
@@ -93,7 +93,7 @@ describe("StatisticsSectionBuilder", () => {
 			lastDownloadedAt: null,
 		};
 		renderStats();
-		// Just verify some 'Last viewed' copy appears — the date formatting depends on the runner's locale.
-		expect(screen.getByText(/Last viewed/i)).toBeInTheDocument();
+		// Just verify some "last viewed" copy appears — the date formatting depends on the runner's locale.
+		expect(screen.getByText(/最后浏览于/)).toBeInTheDocument();
 	});
 });

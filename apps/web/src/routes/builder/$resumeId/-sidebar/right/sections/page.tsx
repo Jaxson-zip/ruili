@@ -68,7 +68,7 @@ function PageSectionForm() {
 						hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 					>
 						<FormLabel>
-							<Trans context="Page Format (A4, Letter, Free-form)">Format</Trans>
+							<Trans context="Page Format (A4, Letter, Free-form)">纸张格式</Trans>
 						</FormLabel>
 						<FormControl
 							render={
@@ -76,7 +76,7 @@ function PageSectionForm() {
 									options={[
 										{ value: "a4", label: t`A4` },
 										{ value: "letter", label: t`Letter` },
-										{ value: "free-form", label: t`Free-form` },
+										{ value: "free-form", label: t`自定义尺寸` },
 									]}
 									value={field.state.value}
 									onValueChange={(value) => {
@@ -96,7 +96,7 @@ function PageSectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Margin (Horizontal)</Trans>
+							<Trans>水平页边距</Trans>
 						</FormLabel>
 						<InputGroup>
 							<FormControl
@@ -131,7 +131,7 @@ function PageSectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Margin (Vertical)</Trans>
+							<Trans>垂直页边距</Trans>
 						</FormLabel>
 						<InputGroup>
 							<FormControl
@@ -166,7 +166,7 @@ function PageSectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Spacing (Horizontal)</Trans>
+							<Trans>水平间距</Trans>
 						</FormLabel>
 						<InputGroup>
 							<FormControl
@@ -200,7 +200,7 @@ function PageSectionForm() {
 				{(field) => (
 					<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 						<FormLabel>
-							<Trans>Spacing (Vertical)</Trans>
+							<Trans>垂直间距</Trans>
 						</FormLabel>
 						<InputGroup>
 							<FormControl
@@ -248,7 +248,7 @@ function PageSectionForm() {
 							}
 						/>
 						<FormLabel>
-							<Trans>Hide all icons on the resume</Trans>
+							<Trans>隐藏简历中的所有图标</Trans>
 						</FormLabel>
 					</FormItem>
 				)}

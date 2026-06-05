@@ -67,7 +67,7 @@ export function CreateExperienceDialog({ data }: DialogProps<"resume.sections.ex
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PlusIcon />
-					<Trans>Create a new experience</Trans>
+					<Trans>新增工作经历</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -84,11 +84,11 @@ export function CreateExperienceDialog({ data }: DialogProps<"resume.sections.ex
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Create</Trans>
+						<Trans>创建</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -119,7 +119,7 @@ export function UpdateExperienceDialog({ data }: DialogProps<"resume.sections.ex
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PencilSimpleLineIcon />
-					<Trans>Update an existing experience</Trans>
+					<Trans>编辑工作经历</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -136,11 +136,11 @@ export function UpdateExperienceDialog({ data }: DialogProps<"resume.sections.ex
 
 				<DialogFooter className="sm:col-span-full">
 					<Button variant="ghost" onClick={requestClose}>
-						<Trans>Cancel</Trans>
+						<Trans>取消</Trans>
 					</Button>
 
 					<Button type="submit" disabled={isSubmitting}>
-						<Trans>Save Changes</Trans>
+						<Trans>保存修改</Trans>
 					</Button>
 				</DialogFooter>
 			</form>
@@ -167,13 +167,13 @@ const ExperienceForm = withForm({
 
 		return (
 			<>
-				<form.AppField name="company">{(field) => <field.TextField label={<Trans>Company</Trans>} />}</form.AppField>
+				<form.AppField name="company">{(field) => <field.TextField label={<Trans>公司</Trans>} />}</form.AppField>
 
-				<form.AppField name="location">{(field) => <field.TextField label={<Trans>Location</Trans>} />}</form.AppField>
+				<form.AppField name="location">{(field) => <field.TextField label={<Trans>地点</Trans>} />}</form.AppField>
 
-				<form.AppField name="position">{(field) => <field.TextField label={<Trans>Position</Trans>} />}</form.AppField>
+				<form.AppField name="position">{(field) => <field.TextField label={<Trans>职位</Trans>} />}</form.AppField>
 
-				<form.AppField name="period">{(field) => <field.TextField label={<Trans>Period</Trans>} />}</form.AppField>
+				<form.AppField name="period">{(field) => <field.TextField label={<Trans>时间</Trans>} />}</form.AppField>
 
 				<form.Field name="website">
 					{(field) => (
@@ -182,7 +182,7 @@ const ExperienceForm = withForm({
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormLabel>
-								<Trans>Website</Trans>
+								<Trans>链接</Trans>
 							</FormLabel>
 							<URLInput
 								value={field.state.value}
@@ -208,7 +208,7 @@ const ExperienceForm = withForm({
 								}
 							/>
 							<FormLabel>
-								<Trans>Show link in title</Trans>
+								<Trans>在标题中显示链接</Trans>
 							</FormLabel>
 						</FormItem>
 					)}
@@ -218,10 +218,10 @@ const ExperienceForm = withForm({
 				<div className="flex items-center justify-between sm:col-span-full">
 					<div className="space-y-1">
 						<p className="font-medium text-foreground">
-							<Trans>Role Progression</Trans>
+							<Trans>职位发展</Trans>
 						</p>
 						<p className="text-muted-foreground text-xs">
-							<Trans>Add multiple roles to show career progression at the same company.</Trans>
+							<Trans>在同一家公司添加多个岗位，用来展示晋升或岗位变化。</Trans>
 						</p>
 					</div>
 
@@ -239,7 +239,7 @@ const ExperienceForm = withForm({
 						}}
 					>
 						<PlusIcon />
-						<Trans>Add Role</Trans>
+						<Trans>添加岗位</Trans>
 					</Button>
 				</div>
 
@@ -270,7 +270,7 @@ const ExperienceForm = withForm({
 					</form.Field>
 				)}
 
-				{/* Single Role Description — only show when no roles are defined */}
+				{/* Single Role Description 鈥?only show when no roles are defined */}
 				{!hasRoles && (
 					<form.Field name="description">
 						{(field) => (
@@ -279,7 +279,7 @@ const ExperienceForm = withForm({
 								hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 							>
 								<FormLabel>
-									<Trans>Description</Trans>
+									<Trans>描述</Trans>
 								</FormLabel>
 								<AiPolishDescriptionAction
 									itemKind="experience"
@@ -336,12 +336,12 @@ const RoleFields = withForm({
 						}}
 					>
 						<RowsIcon />
-						<Trans>Reorder</Trans>
+						<Trans>排序</Trans>
 					</Button>
 
 					<Button size="sm" variant="ghost" className="text-destructive hover:text-destructive" onClick={onRemove}>
 						<TrashSimpleIcon />
-						<Trans>Remove</Trans>
+						<Trans>删除</Trans>
 					</Button>
 				</div>
 
@@ -350,7 +350,7 @@ const RoleFields = withForm({
 						{(field) => (
 							<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 								<FormLabel>
-									<Trans>Position</Trans>
+									<Trans>职位</Trans>
 								</FormLabel>
 								<FormControl
 									render={
@@ -371,7 +371,7 @@ const RoleFields = withForm({
 						{(field) => (
 							<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 								<FormLabel>
-									<Trans>Period</Trans>
+									<Trans>时间</Trans>
 								</FormLabel>
 								<FormControl
 									render={
@@ -395,7 +395,7 @@ const RoleFields = withForm({
 								hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 							>
 								<FormLabel>
-									<Trans>Description</Trans>
+									<Trans>描述</Trans>
 								</FormLabel>
 								<AiPolishDescriptionAction
 									itemKind="role"

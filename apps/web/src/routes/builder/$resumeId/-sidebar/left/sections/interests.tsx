@@ -29,7 +29,7 @@ export function InterestsSectionBuilder() {
 			</Reorder.Group>
 
 			<SectionAddItemButton type="interests">
-				<Trans>Add a new interest</Trans>
+				<Trans>添加兴趣</Trans>
 			</SectionAddItemButton>
 		</SectionBase>
 	);

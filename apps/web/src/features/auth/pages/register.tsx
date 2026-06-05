@@ -23,7 +23,7 @@ const formSchema = z.object({
 		.trim()
 		.toLowerCase()
 		.regex(/^[a-z0-9._-]+$/, {
-			message: "Username can only contain lowercase letters, numbers, dots, hyphens and underscores.",
+			message: "用户名只能包含小写字母、数字、点、短横线和下划线。",
 		}),
 	email: z.email().toLowerCase(),
 	password: z.string().min(6).max(64),
@@ -41,7 +41,7 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 		defaultValues: { name: "", username: "", email: "", password: "" },
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {
-			const toastId = toast.loading(t`Signing up...`);
+			const toastId = toast.loading(t`正在注册...`);
 
 			const { error } = await authClient.signUp.email({
 				name: value.name,
@@ -57,7 +57,7 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 					error.message ||
 						t({
 							comment: "Fallback toast when account registration fails without a server error message",
-							message: "Failed to create your account. Please try again.",
+							message: "账号创建失败，请稍后重试。",
 						}),
 					{ id: toastId },
 				);
@@ -75,7 +75,7 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 		<>
 			<div className="space-y-1 text-center">
 				<h1 className="font-semibold text-2xl tracking-tight">
-					<Trans>Create a new account</Trans>
+					<Trans>创建新账号</Trans>
 				</h1>
 
 				<div className="text-muted-foreground">
@@ -87,7 +87,7 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 							className="h-auto gap-1.5 px-1! py-0"
 							render={
 								<Link to="/auth/login">
-									<Trans comment="Call-to-action link from registration page to login page">Sign in now</Trans>{" "}
+									<Trans comment="Call-to-action link from registration page to login page">现在登录</Trans>{" "}
 									<ArrowRightIcon />
 								</Link>
 							}
@@ -109,7 +109,7 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 						{(field) => (
 							<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 								<FormLabel>
-									<Trans comment="Label for full name input on registration form">Name</Trans>
+									<Trans comment="Label for full name input on registration form">姓名</Trans>
 								</FormLabel>
 								<FormControl
 									render={
@@ -119,7 +119,7 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 											autoComplete="section-register name"
 											placeholder={t({
 												comment: "Example full name placeholder on registration form",
-												message: "John Doe",
+												message: "张三",
 											})}
 											name={field.name}
 											value={field.state.value}
@@ -137,7 +137,7 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 						{(field) => (
 							<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 								<FormLabel>
-									<Trans comment="Label for username input on registration form">Username</Trans>
+									<Trans comment="Label for username input on registration form">用户名</Trans>
 								</FormLabel>
 								<FormControl
 									render={
@@ -147,7 +147,7 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 											autoComplete="section-register username"
 											placeholder={t({
 												comment: "Example username placeholder on registration form",
-												message: "john.doe",
+												message: "zhangsan",
 											})}
 											className="lowercase"
 											name={field.name}
@@ -166,7 +166,7 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 						{(field) => (
 							<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 								<FormLabel>
-									<Trans comment="Label for email input on registration form">Email Address</Trans>
+									<Trans comment="Label for email input on registration form">邮箱地址</Trans>
 								</FormLabel>
 								<FormControl
 									render={
@@ -175,7 +175,7 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 											autoComplete="section-register email"
 											placeholder={t({
 												comment: "Example email placeholder on registration form",
-												message: "john.doe@example.com",
+												message: "zhangsan@example.com",
 											})}
 											className="lowercase"
 											name={field.name}
@@ -194,7 +194,7 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 						{(field) => (
 							<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 								<FormLabel>
-									<Trans comment="Label for password input on registration form">Password</Trans>
+									<Trans comment="Label for password input on registration form">密码</Trans>
 								</FormLabel>
 								<div className="flex items-center gap-x-1.5">
 									<FormControl
@@ -220,11 +220,11 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 											showPassword
 												? t({
 														comment: "Accessible label for button that hides password in registration form",
-														message: "Hide password",
+														message: "隐藏密码",
 													})
 												: t({
 														comment: "Accessible label for button that reveals password in registration form",
-														message: "Show password",
+														message: "显示密码",
 													})
 										}
 									>
@@ -237,7 +237,7 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 					</form.Field>
 
 					<Button type="submit" className="w-full">
-						<Trans comment="Primary action button label on registration form">Sign up</Trans>
+						<Trans comment="Primary action button label on registration form">注册</Trans>
 					</Button>
 				</form>
 			)}
@@ -252,19 +252,19 @@ function PostSignupScreen() {
 		<>
 			<div className="space-y-1 text-center">
 				<h1 className="font-semibold text-2xl tracking-tight">
-					<Trans>You've got mail!</Trans>
+					<Trans>邮件已发送</Trans>
 				</h1>
 				<p className="text-muted-foreground">
-					<Trans>Check your email for a link to verify your account.</Trans>
+					<Trans>请查收邮箱，点击链接完成账号验证。</Trans>
 				</p>
 			</div>
 
 			<Alert>
 				<AlertTitle>
-					<Trans>This step is optional, but recommended.</Trans>
+					<Trans>这一步不是必须的，但建议完成。</Trans>
 				</AlertTitle>
 				<AlertDescription>
-					<Trans>Verifying your email is required when resetting your password.</Trans>
+					<Trans>后续找回密码时需要先验证邮箱。</Trans>
 				</AlertDescription>
 			</Alert>
 
@@ -272,7 +272,7 @@ function PostSignupScreen() {
 				nativeButton={false}
 				render={
 					<Link to="/dashboard">
-						<Trans comment="Button label to continue to dashboard after successful registration">Continue</Trans>{" "}
+						<Trans comment="Button label to continue to dashboard after successful registration">继续</Trans>{" "}
 						<ArrowRightIcon />
 					</Link>
 				}
