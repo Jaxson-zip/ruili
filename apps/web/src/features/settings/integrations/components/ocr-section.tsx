@@ -55,7 +55,7 @@ export function OCRSettingsSection() {
 						<Badge variant="secondary">Azure Document Intelligence</Badge>
 					</div>
 					<p className="text-muted-foreground text-sm">
-						<Trans>用于图片简历和扫描版 PDF 识别。Key 仅保存在当前浏览器，导入时随请求发送给后端调用 Azure。</Trans>
+						<Trans>用于图片简历和扫描版 PDF 识别。密钥仅保存在当前浏览器，导入时随请求发送给后端调用 Azure。</Trans>
 					</p>
 				</div>
 
@@ -70,7 +70,7 @@ export function OCRSettingsSection() {
 			<div className="rounded-md border bg-card p-4">
 				<div className="grid gap-4 md:grid-cols-2">
 					<div className="space-y-2">
-						<Label htmlFor="ocr-endpoint">服务端点 (Endpoint)</Label>
+						<Label htmlFor="ocr-endpoint">服务端点（Endpoint）</Label>
 						<Input
 							id="ocr-endpoint"
 							type="url"
@@ -84,7 +84,7 @@ export function OCRSettingsSection() {
 					</div>
 
 					<div className="space-y-2">
-						<Label htmlFor="ocr-api-key">API Key</Label>
+						<Label htmlFor="ocr-api-key">密钥（API Key）</Label>
 						<Input
 							id="ocr-api-key"
 							type="password"
@@ -102,7 +102,7 @@ export function OCRSettingsSection() {
 
 				{savedProvider ? (
 					<p className="mt-3 text-muted-foreground text-sm">
-						<Trans>当前已保存</Trans>: {savedProvider.endpoint} · Key {maskKey(savedProvider.apiKey)}
+						<Trans>当前已保存</Trans>：{savedProvider.endpoint} · 密钥 {maskKey(savedProvider.apiKey)}
 					</p>
 				) : null}
 

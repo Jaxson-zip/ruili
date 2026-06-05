@@ -9,20 +9,20 @@ type SectionTranslator = {
 };
 
 const sectionTitleMessages = {
-	summary: msg`Summary`,
-	profiles: msg`Profiles`,
-	experience: msg`Experience`,
-	education: msg`Education`,
-	projects: msg`Projects`,
-	skills: msg`Skills`,
-	languages: msg`Languages`,
-	interests: msg`Interests`,
-	awards: msg`Awards`,
-	certifications: msg`Certifications`,
-	publications: msg`Publications`,
-	volunteer: msg`Volunteer`,
-	references: msg`References`,
-	"cover-letter": msg`Cover Letter`,
+	summary: msg`个人总结`,
+	profiles: msg`个人链接`,
+	experience: msg`工作经历`,
+	education: msg`教育经历`,
+	projects: msg`项目经历`,
+	skills: msg`技能`,
+	languages: msg`语言能力`,
+	interests: msg`兴趣爱好`,
+	awards: msg`奖项荣誉`,
+	certifications: msg`证书认证`,
+	publications: msg`发表作品`,
+	volunteer: msg`志愿经历`,
+	references: msg`推荐人`,
+	"cover-letter": msg`求职信`,
 } satisfies Record<"summary" | SectionType | CustomSectionType, MessageDescriptor>;
 
 export const createSectionTitleResolver = (translator: SectionTranslator = i18n): SectionTitleResolver => {

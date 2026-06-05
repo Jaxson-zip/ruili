@@ -222,7 +222,7 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 								: t`导入简历失败，请检查文件格式后重试。`;
 				const badRequestMessage =
 					value.type === "image"
-						? t`OCR 服务商配置不可用。请确认 Endpoint 是 Azure Document Intelligence 地址，并检查 API Key。`
+						? t`OCR 服务商配置不可用。请确认服务端点是 Azure Document Intelligence 地址，并检查密钥。`
 						: t({
 								comment: "Error shown when AI parsing returns invalid resume structure during import",
 								message: "导入文件无法解析成有效简历，请检查文件内容是否是完整简历。",

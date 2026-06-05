@@ -53,14 +53,14 @@ export const LaprasPage = ({ page, pageIndex }: TemplatePageProps) => {
 			<TemplateProvider styles={styles} colors={colors}>
 				{showHeader && <Header styles={styles} />}
 
-				<View style={composeStyles(styles.sectionGroup, { rowGap: metrics.gapY(1.5) })}>
+				<View style={composeStyles(styles.sectionGroup, { rowGap: metrics.sectionGap * 0.92 })}>
 					{mainSections.map((section) => (
 						<Section key={section} section={section} placement="main" />
 					))}
 				</View>
 
 				{!page.fullWidth && (
-					<View style={composeStyles(styles.sectionGroup, { rowGap: metrics.gapY(1.5) })}>
+					<View style={composeStyles(styles.sectionGroup, { rowGap: metrics.sectionGap * 0.82 })}>
 						{sidebarSections.map((section) => (
 							<Section key={section} section={section} placement="sidebar" />
 						))}
@@ -122,8 +122,8 @@ const useLaprasTemplate = (): LaprasTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const muted = "#5F6673";
-		const hairline = "#D8DDE5";
+		const muted = "#566170";
+		const hairline = "#D7DDE5";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 
@@ -208,22 +208,22 @@ const useLaprasTemplate = (): LaprasTemplate => {
 			section: {
 				flexDirection: "column",
 				rowGap: metrics.gapY(0.32),
-				borderLeftWidth: 2,
-				borderLeftColor: primary,
-				borderBottomWidth: 0.7,
+				borderBottomWidth: 0.55,
 				borderBottomColor: hairline,
-				paddingLeft: metrics.gapX(0.7),
-				paddingBottom: metrics.gapY(0.55),
+				paddingBottom: metrics.gapY(0.42),
 			},
 			sectionHeading: {
 				alignSelf: "flex-start",
-				color: primary,
-				fontSize: metadata.typography.heading.fontSize * 0.92,
-				paddingBottom: metrics.gapY(0.04),
+				color: background,
+				backgroundColor: primary,
+				fontSize: metadata.typography.heading.fontSize * 0.86,
+				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
+				paddingHorizontal: metrics.gapX(0.46),
+				paddingVertical: metrics.gapY(0.1),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(0.35),
+				rowGap: metrics.gapY(0.3),
 			},
 			item: {
 				rowGap: metrics.gapY(0.14),
@@ -241,13 +241,16 @@ const useLaprasTemplate = (): LaprasTemplate => {
 				flexDirection: r.row,
 				alignItems: "flex-start",
 				columnGap: metrics.gapX(1),
-				borderBottomWidth: 1.2,
-				borderBottomColor: foreground,
-				paddingBottom: metrics.gapY(0.7),
+				borderTopWidth: 2,
+				borderTopColor: primary,
+				borderBottomWidth: 0.8,
+				borderBottomColor: hairline,
+				paddingTop: metrics.gapY(0.32),
+				paddingBottom: metrics.gapY(0.56),
 			},
 			picture: {
-				width: picture.size,
-				height: picture.size,
+				width: Math.min(picture.size, 58),
+				height: Math.min(picture.size, 58),
 				objectFit: "cover",
 				aspectRatio: picture.aspectRatio,
 				borderRadius: picture.borderRadius,
@@ -292,6 +295,10 @@ const useLaprasTemplate = (): LaprasTemplate => {
 				...baseStyles,
 				levelItem: (context) => ({ borderColor: accentFor(context) }),
 				levelItemActive: (context) => ({ backgroundColor: accentFor(context) }),
+				sectionHeading: (context) => ({
+					...baseStyles.sectionHeading,
+					backgroundColor: accentFor(context),
+				}),
 				icon: (context) => ({
 					display: metadata.page.hideIcons ? "none" : "flex",
 					size: metadata.typography.body.fontSize,

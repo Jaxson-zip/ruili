@@ -12,7 +12,7 @@ export const Route = createFileRoute("/dashboard/settings/api-keys")({
 function RouteComponent() {
 	return (
 		<div className="space-y-4">
-			<DashboardHeader icon={KeyIcon} title={t`API Key`} />
+			<DashboardHeader icon={KeyIcon} title={t`API 密钥`} />
 
 			<Separator />
 

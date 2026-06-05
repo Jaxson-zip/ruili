@@ -115,8 +115,8 @@ const useScizorTemplate = (): ScizorTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const muted = "#5F6673";
 		const divider = "#D8DDE5";
+		const headingSurface = "#F5EFE7";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 		const bodyText = {
@@ -164,7 +164,8 @@ const useScizorTemplate = (): ScizorTemplate => {
 			},
 			small: {
 				fontSize: metadata.typography.body.fontSize * 0.875,
-				color: muted,
+				color: foreground,
+				opacity: 0.76,
 			},
 			bold: {
 				fontWeight: metadata.typography.body.fontWeights.at(-1) ?? "700",
@@ -200,22 +201,24 @@ const useScizorTemplate = (): ScizorTemplate => {
 			},
 			section: {
 				flexDirection: "column",
-				rowGap: metrics.gapY(0.32),
-				borderTopWidth: 0.8,
+				rowGap: metrics.gapY(0.3),
+				borderTopWidth: 0.55,
 				borderTopColor: divider,
-				paddingTop: metrics.gapY(0.5),
+				paddingTop: metrics.gapY(0.42),
 			},
 			sectionHeading: {
 				color: primary,
-				fontSize: metadata.typography.heading.fontSize * 0.92,
+				backgroundColor: headingSurface,
+				fontSize: metadata.typography.heading.fontSize * 0.88,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
-				borderLeftWidth: 2,
+				borderLeftWidth: 2.4,
 				borderLeftColor: primary,
-				paddingLeft: metrics.gapX(0.45),
+				paddingHorizontal: metrics.gapX(0.42),
+				paddingVertical: metrics.gapY(0.1),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(0.36),
+				rowGap: metrics.gapY(0.3),
 			},
 			item: {
 				rowGap: metrics.gapY(0.14),
@@ -233,9 +236,12 @@ const useScizorTemplate = (): ScizorTemplate => {
 				flexDirection: r.row,
 				alignItems: "flex-start",
 				columnGap: metrics.gapX(1),
-				borderBottomWidth: 1.2,
-				borderBottomColor: foreground,
-				paddingBottom: metrics.gapY(0.7),
+				borderTopWidth: 2,
+				borderTopColor: primary,
+				borderBottomWidth: 0.8,
+				borderBottomColor: divider,
+				paddingTop: metrics.gapY(0.32),
+				paddingBottom: metrics.gapY(0.56),
 			},
 			headerIdentity: {
 				flex: 1,
@@ -248,12 +254,13 @@ const useScizorTemplate = (): ScizorTemplate => {
 				lineHeight: headerNameLineHeight,
 			},
 			headerNameRule: {
-				width: "36%",
-				borderBottomWidth: 1.2,
+				width: "30%",
+				borderBottomWidth: 1.4,
 				borderBottomColor: primary,
 			},
 			headerHeadline: {
-				color: muted,
+				color: foreground,
+				opacity: 0.78,
 			},
 			headerContactRow: {
 				flexDirection: r.row,
@@ -265,7 +272,8 @@ const useScizorTemplate = (): ScizorTemplate => {
 				flexDirection: r.row,
 				alignItems: "center",
 				columnGap: metrics.gapX(1 / 6),
-				color: muted,
+				color: foreground,
+				opacity: 0.76,
 			},
 			picture: {
 				width: Math.min(picture.size, 58),

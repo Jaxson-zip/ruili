@@ -274,10 +274,11 @@ const useOnyxTemplate = (): OnyxTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const muted = "#394150";
-		const softText = "#636E7F";
-		const hairline = "#D9DEE7";
-		const sidebarBackground = "#F7F9FC";
+		const muted = "#344256";
+		const softText = "#5F6D7E";
+		const hairline = "#D8E0EA";
+		const accentSurface = "#EEF4FA";
+		const sidebarBackground = "#F6F9FD";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 
@@ -364,24 +365,26 @@ const useOnyxTemplate = (): OnyxTemplate => {
 			},
 			section: {
 				flexDirection: "column",
-				rowGap: metrics.gapY(0.24),
+				rowGap: metrics.gapY(0.3),
 			},
 			sectionHeading: {
 				color: primary,
-				borderBottomWidth: 0.65,
-				borderBottomColor: hairline,
-				fontSize: metadata.typography.heading.fontSize * 0.84,
+				backgroundColor: accentSurface,
+				borderLeftWidth: 2.6,
+				borderLeftColor: primary,
+				fontSize: metadata.typography.heading.fontSize * 0.88,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
 				lineHeight: 1.22,
-				paddingBottom: metrics.gapY(0.14),
+				paddingHorizontal: metrics.gapX(0.38),
+				paddingVertical: metrics.gapY(0.12),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(0.28),
+				rowGap: metrics.gapY(0.32),
 			},
 			item: {
-				rowGap: metrics.gapY(0.12),
-				paddingBottom: metrics.gapY(0.22),
+				rowGap: metrics.gapY(0.16),
+				paddingBottom: metrics.gapY(0.26),
 			},
 			levelContainer: {
 				display: "none",
@@ -395,13 +398,15 @@ const useOnyxTemplate = (): OnyxTemplate => {
 			header: {
 				position: "relative",
 				alignItems: "flex-start",
-				rowGap: metrics.gapY(0.24),
-				borderTopWidth: 2.2,
+				rowGap: metrics.gapY(0.28),
+				backgroundColor: accentSurface,
+				borderTopWidth: 2.4,
 				borderTopColor: primary,
-				borderBottomWidth: 0.8,
+				borderBottomWidth: 0.6,
 				borderBottomColor: hairline,
-				paddingTop: metrics.gapY(0.38),
-				paddingBottom: metrics.gapY(0.5),
+				paddingHorizontal: metrics.gapX(0.72),
+				paddingTop: metrics.gapY(0.46),
+				paddingBottom: metrics.gapY(0.52),
 			},
 			headerIdentity: {
 				alignItems: "flex-start",
@@ -409,7 +414,7 @@ const useOnyxTemplate = (): OnyxTemplate => {
 			},
 			headerName: {
 				color: foreground,
-				fontSize: metadata.typography.heading.fontSize * 1.58,
+				fontSize: metadata.typography.heading.fontSize * 1.64,
 				lineHeight: headerNameLineHeight,
 				textAlign: "left",
 			},
@@ -457,12 +462,12 @@ const useOnyxTemplate = (): OnyxTemplate => {
 			compactSkillList: {
 				flexDirection: r.row,
 				flexWrap: "wrap",
-				rowGap: metrics.gapY(0.16),
-				columnGap: metrics.gapX(0.85),
+				rowGap: metrics.gapY(0.2),
+				columnGap: metrics.gapX(0.72),
 				paddingTop: metrics.gapY(0.02),
 			},
 			compactSkillRow: {
-				width: "47.5%",
+				width: "48%",
 			},
 			compactSkillText: {
 				...bodyText,
@@ -476,12 +481,12 @@ const useOnyxTemplate = (): OnyxTemplate => {
 			compactProfileList: {
 				flexDirection: r.row,
 				flexWrap: "wrap",
-				rowGap: metrics.gapY(0.14),
-				columnGap: metrics.gapX(0.85),
+				rowGap: metrics.gapY(0.18),
+				columnGap: metrics.gapX(0.72),
 				paddingTop: metrics.gapY(0.02),
 			},
 			compactProfileRow: {
-				width: "47.5%",
+				width: "48%",
 			},
 			compactProfileText: {
 				...bodyText,
@@ -544,7 +549,8 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				sectionHeading: (context) => ({
 					...baseStyles.sectionHeading,
 					color: accentFor(context),
-					borderBottomColor: context.placement === "sidebar" ? hairline : accentFor(context),
+					backgroundColor: context.placement === "sidebar" ? background : accentSurface,
+					borderLeftColor: accentFor(context),
 				}),
 				item: (context) => ({
 					...baseStyles.item,

@@ -124,9 +124,10 @@ const useDittoTemplate = (): DittoTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const muted = "#525A66";
-		const hairline = "#DADDE3";
-		const softLine = "#EEF0F3";
+		const muted = "#4F5967";
+		const hairline = "#D7DCE3";
+		const softLine = "#EEF1F5";
+		const headingSurface = "#F4F6F8";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 
@@ -145,7 +146,7 @@ const useDittoTemplate = (): DittoTemplate => {
 				backgroundColor: background,
 				paddingHorizontal: metrics.page.paddingHorizontal,
 				paddingVertical: metrics.page.paddingVertical,
-				rowGap: metrics.headerGap * 0.72,
+				rowGap: metrics.headerGap * 0.66,
 				fontFamily: metadata.typography.body.fontFamily,
 				fontSize: metadata.typography.body.fontSize,
 				lineHeight: metadata.typography.body.lineHeight,
@@ -199,7 +200,6 @@ const useDittoTemplate = (): DittoTemplate => {
 			richListItemContent: {
 				...bodyText,
 				flex: 1,
-				lineHeight: metadata.typography.body.lineHeight * 1.03,
 			},
 			splitRow: {
 				flexDirection: r.row,
@@ -213,21 +213,24 @@ const useDittoTemplate = (): DittoTemplate => {
 			},
 			section: {
 				flexDirection: "column",
-				rowGap: metrics.gapY(0.3),
+				rowGap: metrics.gapY(0.28),
 			},
 			sectionHeading: {
 				color: foreground,
-				fontSize: metadata.typography.heading.fontSize * 0.92,
-				borderBottomWidth: 0.7,
-				borderBottomColor: hairline,
-				paddingBottom: metrics.gapY(0.16),
+				backgroundColor: headingSurface,
+				borderLeftWidth: 2,
+				borderLeftColor: foreground,
+				fontSize: metadata.typography.heading.fontSize * 0.88,
+				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
+				paddingHorizontal: metrics.gapX(0.36),
+				paddingVertical: metrics.gapY(0.1),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(0.38),
+				rowGap: metrics.gapY(0.3),
 			},
 			item: {
-				rowGap: metrics.gapY(0.15),
+				rowGap: metrics.gapY(0.12),
 			},
 			levelContainer: {
 				width: "100%",
@@ -239,10 +242,13 @@ const useDittoTemplate = (): DittoTemplate => {
 				backgroundColor: primary,
 			},
 			header: {
-				rowGap: metrics.gapY(0.48),
-				borderBottomWidth: 0.9,
+				rowGap: metrics.gapY(0.36),
+				borderTopWidth: 1.4,
+				borderTopColor: foreground,
+				borderBottomWidth: 0.7,
 				borderBottomColor: hairline,
-				paddingBottom: metrics.gapY(0.64),
+				paddingTop: metrics.gapY(0.34),
+				paddingBottom: metrics.gapY(0.48),
 			},
 			headerTop: {
 				flexDirection: r.row,
@@ -256,7 +262,7 @@ const useDittoTemplate = (): DittoTemplate => {
 				rowGap: metrics.gapY(0.18),
 			},
 			headerName: {
-				fontSize: metadata.typography.heading.fontSize * 1.72,
+				fontSize: metadata.typography.heading.fontSize * 1.62,
 				lineHeight: headerNameLineHeight,
 				color: foreground,
 			},
@@ -318,12 +324,13 @@ const useDittoTemplate = (): DittoTemplate => {
 				sectionHeading: (context) => ({
 					...baseStyles.sectionHeading,
 					color: foregroundFor(context),
-					borderBottomColor: context.placement === "sidebar" ? softLine : hairline,
+					backgroundColor: context.placement === "sidebar" ? background : headingSurface,
+					borderLeftColor: foregroundFor(context),
 				}),
 				levelItem: (context) => ({ borderColor: accentFor(context) }),
 				levelItemActive: (context) => ({ backgroundColor: accentFor(context) }),
 				icon: () => ({
-					display: metadata.page.hideIcons ? "none" : "flex",
+					display: "none",
 					size: metadata.typography.body.fontSize * 0.9,
 					color: muted,
 				}),

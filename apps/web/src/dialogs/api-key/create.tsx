@@ -91,7 +91,7 @@ const CreateApiKeyForm = ({ setApiKey }: CreateApiKeyFormProps) => {
 					<Trans>创建新的 API 密钥</Trans>
 				</DialogTitle>
 				<DialogDescription>
-					<Trans>这会生成一个新的 API key，用于访问锐历 API，让程序可以读取或操作你的简历数据。</Trans>
+					<Trans>这会生成一个新的 API 密钥，用于访问锐历 API，让程序可以读取或操作你的简历数据。</Trans>
 				</DialogDescription>
 			</DialogHeader>
 

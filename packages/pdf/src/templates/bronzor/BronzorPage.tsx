@@ -140,9 +140,10 @@ const useBronzorTemplate = (): BronzorTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const muted = "#5E6673";
+		const muted = "#5C6470";
 		const hairline = "#D8D3CC";
 		const warmSurface = "#FBF8F4";
+		const headingSurface = "#F1E9DE";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 
@@ -226,28 +227,26 @@ const useBronzorTemplate = (): BronzorTemplate => {
 				...r.alignEnd,
 			},
 			section: {
-				flexDirection: r.row,
-				columnGap: metrics.columnGap * 0.92,
-				borderTopWidth: 0.6,
+				flexDirection: "column",
+				rowGap: metrics.gapY(0.3),
+				borderTopWidth: 0.55,
 				borderTopColor: hairline,
-				paddingTop: metrics.gapY(0.48),
+				paddingTop: metrics.gapY(0.42),
 			},
 			sectionHeading: {
-				width: `${metadata.layout.sidebarWidth}%`,
-				flexShrink: 0,
 				alignSelf: "flex-start",
 				color: primary,
-				borderLeftWidth: 2.2,
+				backgroundColor: headingSurface,
+				borderLeftWidth: 2.4,
 				borderLeftColor: primary,
-				fontSize: metadata.typography.heading.fontSize * 0.78,
+				fontSize: metadata.typography.heading.fontSize * 0.86,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
-				paddingHorizontal: metrics.gapX(0.4),
-				paddingVertical: metrics.gapY(0.04),
+				paddingHorizontal: metrics.gapX(0.42),
+				paddingVertical: metrics.gapY(0.1),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				flex: 1,
-				rowGap: metrics.gapY(0.2),
+				rowGap: metrics.gapY(0.28),
 			},
 			sections: {
 				flexDirection: "column",
@@ -257,12 +256,12 @@ const useBronzorTemplate = (): BronzorTemplate => {
 				alignItems: "flex-start",
 				columnGap: metrics.gapX(0.9),
 				backgroundColor: warmSurface,
-				borderTopWidth: 2.4,
+				borderTopWidth: 2.2,
 				borderTopColor: primary,
 				borderBottomWidth: 0.7,
 				borderBottomColor: hairline,
-				paddingHorizontal: metrics.gapX(0.7),
-				paddingVertical: metrics.gapY(0.62),
+				paddingHorizontal: metrics.gapX(0.78),
+				paddingVertical: metrics.gapY(0.58),
 			},
 			picture: {
 				width: Math.min(picture.size, 58),
@@ -289,7 +288,7 @@ const useBronzorTemplate = (): BronzorTemplate => {
 				lineHeight: headerNameLineHeight,
 			},
 			headerContactRow: {
-				width: "34%",
+				width: "39%",
 				justifyContent: "flex-start",
 				rowGap: metrics.gapY(0.1),
 			},

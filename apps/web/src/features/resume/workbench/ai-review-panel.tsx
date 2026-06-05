@@ -46,7 +46,7 @@ export function AIReviewPanel({ resumeId }: Props) {
 				description: getOrpcErrorMessage(error, {
 					byCode: {
 						BAD_REQUEST: "模型返回的分析格式无效，请换一个模型或稍后重试。",
-						BAD_GATEWAY: "无法连接到 AI 模型服务商，请检查 Base URL、模型名和 API Key。",
+						BAD_GATEWAY: "无法连接到 AI 模型服务商，请检查接口地址、模型名和密钥。",
 						PRECONDITION_FAILED: "需要先配置 REDIS_URL 和 ENCRYPTION_SECRET。",
 					},
 					fallback: "分析简历时发生错误，请稍后重试。",

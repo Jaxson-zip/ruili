@@ -39,20 +39,20 @@ const defaultValues: FormValues = {
 };
 
 const SECTION_TYPE_OPTIONS: { value: CustomSectionType; label: MessageDescriptor }[] = [
-	{ value: "summary", label: msg`Summary` },
-	{ value: "experience", label: msg`Experience` },
-	{ value: "education", label: msg`Education` },
-	{ value: "projects", label: msg`Projects` },
-	{ value: "profiles", label: msg`Profiles` },
-	{ value: "skills", label: msg`Skills` },
-	{ value: "languages", label: msg`Languages` },
-	{ value: "interests", label: msg`Interests` },
-	{ value: "awards", label: msg`Awards` },
-	{ value: "certifications", label: msg`Certifications` },
-	{ value: "publications", label: msg`Publications` },
-	{ value: "volunteer", label: msg`Volunteer` },
-	{ value: "references", label: msg`References` },
-	{ value: "cover-letter", label: msg`Cover Letter` },
+	{ value: "summary", label: msg`个人总结` },
+	{ value: "experience", label: msg`工作经历` },
+	{ value: "education", label: msg`教育经历` },
+	{ value: "projects", label: msg`项目经历` },
+	{ value: "profiles", label: msg`个人链接` },
+	{ value: "skills", label: msg`技能` },
+	{ value: "languages", label: msg`语言能力` },
+	{ value: "interests", label: msg`兴趣爱好` },
+	{ value: "awards", label: msg`奖项荣誉` },
+	{ value: "certifications", label: msg`证书认证` },
+	{ value: "publications", label: msg`发表作品` },
+	{ value: "volunteer", label: msg`志愿经历` },
+	{ value: "references", label: msg`推荐人` },
+	{ value: "cover-letter", label: msg`求职信` },
 ];
 
 function isCustomSectionType(value: string | null | undefined): value is CustomSectionType {

@@ -29,8 +29,8 @@ export function ApiKeysSettingsPage() {
 	});
 
 	const onDelete = async (id: string) => {
-		const confirmation = await confirm(t`确定要删除这个 API Key 吗？`, {
-			description: t`删除后这个 API Key 将无法再访问你的数据，此操作无法撤销。`,
+		const confirmation = await confirm(t`确定要删除这个 API 密钥吗？`, {
+			description: t`删除后这个 API 密钥将无法再访问你的数据，此操作无法撤销。`,
 			confirmText: t({
 				comment: "API key deletion confirmation dialog confirm action in settings",
 				message: "删除",
@@ -43,7 +43,7 @@ export function ApiKeysSettingsPage() {
 
 		if (!confirmation) return;
 
-		const toastId = toast.loading(t`正在删除 API Key...`);
+		const toastId = toast.loading(t`正在删除 API 密钥...`);
 
 		const { error } = await authClient.apiKey.delete({ keyId: id });
 
@@ -53,7 +53,7 @@ export function ApiKeysSettingsPage() {
 					error,
 					t({
 						comment: "Fallback toast when deleting an API key fails",
-						message: "删除 API Key 失败，请重试。",
+						message: "删除 API 密钥失败，请重试。",
 					}),
 				),
 				{ id: toastId },
@@ -61,7 +61,7 @@ export function ApiKeysSettingsPage() {
 			return;
 		}
 
-		toast.success(t`API Key 已删除。`, { id: toastId });
+		toast.success(t`API 密钥已删除。`, { id: toastId });
 		void queryClient.invalidateQueries({ queryKey: ["auth", "api-keys"] });
 	};
 
@@ -108,7 +108,7 @@ export function ApiKeysSettingsPage() {
 					onClick={() => openDialog("api-key.create", undefined)}
 				>
 					<PlusIcon />
-					<Trans>创建新的 API Key</Trans>
+					<Trans>创建新的 API 密钥</Trans>
 				</Button>
 
 				<AnimatePresence initial={false} mode="popLayout">

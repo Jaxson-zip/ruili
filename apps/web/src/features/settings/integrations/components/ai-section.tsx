@@ -152,7 +152,7 @@ function ProviderRow({ provider }: ProviderRowProps) {
 						{providerLabel(provider.provider)} · {provider.model}
 					</p>
 					<p className="truncate">{provider.baseURL ?? AI_PROVIDER_DEFAULT_BASE_URLS[provider.provider]}</p>
-					<p>Key: {provider.apiKeyPreview}</p>
+					<p>密钥：{provider.apiKeyPreview}</p>
 					{provider.testError ? <p className="text-rose-600">{provider.testError}</p> : null}
 				</div>
 			</div>
@@ -301,7 +301,7 @@ function CreateProviderForm() {
 				</div>
 
 				<div className="space-y-2">
-					<Label htmlFor="ai-base-url">接口地址 (Base URL)</Label>
+					<Label htmlFor="ai-base-url">接口地址（Base URL）</Label>
 					<Input
 						id="ai-base-url"
 						type="url"
@@ -315,7 +315,7 @@ function CreateProviderForm() {
 				</div>
 
 				<div className="space-y-2 md:col-span-2">
-					<Label htmlFor="ai-api-key">API Key</Label>
+					<Label htmlFor="ai-api-key">密钥（API Key）</Label>
 					<Input
 						id="ai-api-key"
 						type="password"
@@ -381,7 +381,7 @@ export function AISettingsSection() {
 			<div className="flex items-center justify-between gap-4">
 				<div>
 					<h2 className="font-semibold text-lg">AI 模型服务商</h2>
-					<p className="text-muted-foreground text-sm">API Key 会在服务端加密保存，保存后不会再次显示。</p>
+					<p className="text-muted-foreground text-sm">密钥会在服务端加密保存，保存后不会再次显示。</p>
 				</div>
 
 				<p className="flex items-center gap-2 text-sm">

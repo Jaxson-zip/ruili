@@ -76,7 +76,7 @@ export function ResumeAnalysisSectionBuilder() {
 						}),
 						BAD_GATEWAY: t({
 							comment: "Error description when AI provider cannot be reached during resume analysis",
-							message: "无法连接到 AI 模型服务商，请检查 Base URL、模型名和 API Key。",
+							message: "无法连接到 AI 模型服务商，请检查接口地址、模型名和密钥。",
 						}),
 					},
 					fallback: t({
