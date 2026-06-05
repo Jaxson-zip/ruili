@@ -84,8 +84,8 @@ export function ConfirmDialogProvider({ children }: ConfirmDialogProviderProps) 
 					</AlertDialogHeader>
 
 					<AlertDialogFooter>
-						<AlertDialogCancel onClick={handleCancel}>{state.cancelText ?? "Cancel"}</AlertDialogCancel>
-						<AlertDialogAction onClick={handleConfirm}>{state.confirmText ?? "Confirm"}</AlertDialogAction>
+						<AlertDialogCancel onClick={handleCancel}>{state.cancelText ?? "取消"}</AlertDialogCancel>
+						<AlertDialogAction onClick={handleConfirm}>{state.confirmText ?? "确认"}</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>
 			</AlertDialog>

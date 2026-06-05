@@ -36,7 +36,7 @@ export function SocialAuth({ requestSignUp = false }: SocialAuthProps) {
 				<hr className="flex-1" />
 				<span className="font-medium text-xs tracking-wide">
 					<Trans context="Choose to authenticate with a social provider (Google, GitHub, etc.) instead of email and password">
-						or continue with
+						或使用以下方式继续
 					</Trans>
 				</span>
 				<hr className="flex-1" />
@@ -67,17 +67,16 @@ function SocialAuthButtons({ providers, requestSignUp }: SocialAuthButtonsProps)
 	const router = useRouter();
 
 	const handleSocialLogin = async (provider: string) => {
-		const toastId = toast.loading(t`Signing in...`);
+		const toastId = toast.loading(t`正在登录...`);
 
 		const { error } = await authClient.signIn.social(getSocialSignInOptions(provider, requestSignUp));
 
 		if (error) {
 			toast.error(
-				error.message ||
-					t({
-						comment: "Fallback toast when social sign-in fails without a provider error message",
-						message: "Failed to sign in. Please try again.",
-					}),
+				t({
+					comment: "Fallback toast when social sign-in fails",
+					message: "登录失败，请稍后重试。",
+				}),
 				{ id: toastId },
 			);
 			return;
@@ -88,7 +87,7 @@ function SocialAuthButtons({ providers, requestSignUp }: SocialAuthButtonsProps)
 	};
 
 	const handleOAuthLogin = async () => {
-		const toastId = toast.loading(t`Signing in...`);
+		const toastId = toast.loading(t`正在登录...`);
 
 		const { error } = await authClient.signIn.oauth2({
 			providerId: "custom",
@@ -97,11 +96,10 @@ function SocialAuthButtons({ providers, requestSignUp }: SocialAuthButtonsProps)
 
 		if (error) {
 			toast.error(
-				error.message ||
-					t({
-						comment: "Fallback toast when custom OAuth sign-in fails without a provider error message",
-						message: "Failed to sign in. Please try again.",
-					}),
+				t({
+					comment: "Fallback toast when custom OAuth sign-in fails",
+					message: "登录失败，请稍后重试。",
+				}),
 				{ id: toastId },
 			);
 			return;
@@ -112,17 +110,16 @@ function SocialAuthButtons({ providers, requestSignUp }: SocialAuthButtonsProps)
 	};
 
 	const handlePasskeyLogin = async () => {
-		const toastId = toast.loading(t`Signing in...`);
+		const toastId = toast.loading(t`正在登录...`);
 
 		const { error } = await authClient.signIn.passkey({ autoFill: false });
 
 		if (error) {
 			toast.error(
-				error.message ||
-					t({
-						comment: "Fallback toast when passkey sign-in fails without an error message",
-						message: "Failed to sign in. Please try again.",
-					}),
+				t({
+					comment: "Fallback toast when passkey sign-in fails",
+					message: "登录失败，请稍后重试。",
+				}),
 				{ id: toastId },
 			);
 			return;
@@ -149,7 +146,7 @@ function SocialAuthButtons({ providers, requestSignUp }: SocialAuthButtonsProps)
 				className={cn("hidden", "passkey" in providers && "inline-flex")}
 			>
 				<FingerprintIcon />
-				<Trans comment="Label for passkey sign-in button">Passkey</Trans>
+				<Trans comment="Label for passkey sign-in button">通行密钥</Trans>
 			</Button>
 
 			<Button

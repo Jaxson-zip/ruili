@@ -140,8 +140,9 @@ const useBronzorTemplate = (): BronzorTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const muted = "#5F6673";
-		const hairline = "#D9DEE7";
+		const muted = "#5E6673";
+		const hairline = "#D8D3CC";
+		const warmSurface = "#FBF8F4";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 
@@ -157,14 +158,14 @@ const useBronzorTemplate = (): BronzorTemplate => {
 		const baseStyles = StyleSheet.create({
 			page: {
 				flexDirection: "column",
-				rowGap: metrics.headerGap * 0.9,
+				rowGap: metrics.headerGap * 0.82,
 				color: foreground,
 				backgroundColor: background,
 				paddingHorizontal: metrics.page.paddingHorizontal,
 				paddingVertical: metrics.page.paddingVertical,
 				fontFamily: metadata.typography.body.fontFamily,
 				fontSize: metadata.typography.body.fontSize,
-				lineHeight: metadata.typography.body.lineHeight,
+				lineHeight: Math.min(metadata.typography.body.lineHeight, 1.42),
 				direction: r.pageDirection,
 			},
 			text: bodyText,
@@ -190,7 +191,7 @@ const useBronzorTemplate = (): BronzorTemplate => {
 				color: foreground,
 			},
 			small: {
-				fontSize: metadata.typography.body.fontSize * 0.875,
+				fontSize: metadata.typography.body.fontSize * 0.86,
 				color: muted,
 			},
 			bold: {
@@ -226,25 +227,27 @@ const useBronzorTemplate = (): BronzorTemplate => {
 			},
 			section: {
 				flexDirection: r.row,
-				columnGap: metrics.columnGap,
-				borderTopWidth: 0.8,
+				columnGap: metrics.columnGap * 0.92,
+				borderTopWidth: 0.6,
 				borderTopColor: hairline,
-				paddingTop: metrics.gapY(0.55),
+				paddingTop: metrics.gapY(0.48),
 			},
 			sectionHeading: {
 				width: `${metadata.layout.sidebarWidth}%`,
 				flexShrink: 0,
 				alignSelf: "flex-start",
-				borderRadius: 3,
-				backgroundColor: primary,
-				color: background,
-				fontSize: metadata.typography.heading.fontSize * 0.82,
-				paddingHorizontal: metrics.gapX(0.45),
-				paddingVertical: metrics.gapY(0.1),
+				color: primary,
+				borderLeftWidth: 2.2,
+				borderLeftColor: primary,
+				fontSize: metadata.typography.heading.fontSize * 0.78,
+				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
+				paddingHorizontal: metrics.gapX(0.4),
+				paddingVertical: metrics.gapY(0.04),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
 				flex: 1,
+				rowGap: metrics.gapY(0.2),
 			},
 			sections: {
 				flexDirection: "column",
@@ -253,9 +256,13 @@ const useBronzorTemplate = (): BronzorTemplate => {
 				flexDirection: r.row,
 				alignItems: "flex-start",
 				columnGap: metrics.gapX(0.9),
-				borderBottomWidth: 1.1,
-				borderBottomColor: primary,
-				paddingBottom: metrics.gapY(0.75),
+				backgroundColor: warmSurface,
+				borderTopWidth: 2.4,
+				borderTopColor: primary,
+				borderBottomWidth: 0.7,
+				borderBottomColor: hairline,
+				paddingHorizontal: metrics.gapX(0.7),
+				paddingVertical: metrics.gapY(0.62),
 			},
 			picture: {
 				width: Math.min(picture.size, 58),
@@ -275,25 +282,27 @@ const useBronzorTemplate = (): BronzorTemplate => {
 			},
 			headerIdentity: {
 				...r.headerIdentity,
-				rowGap: metrics.gapY(0.25),
+				rowGap: metrics.gapY(0.18),
 			},
 			headerName: {
-				fontSize: metadata.typography.heading.fontSize * 1.85,
+				fontSize: metadata.typography.heading.fontSize * 1.7,
 				lineHeight: headerNameLineHeight,
 			},
 			headerContactRow: {
-				width: "35%",
+				width: "34%",
 				justifyContent: "flex-start",
-				rowGap: metrics.gapY(0.12),
+				rowGap: metrics.gapY(0.1),
 			},
 			headerContactItem: {
 				flexDirection: r.row,
 				alignItems: "center",
-				columnGap: metrics.gapX(1 / 6),
+				columnGap: metrics.gapX(0.22),
+				color: muted,
+				fontSize: metadata.typography.body.fontSize * 0.88,
 			},
 			icon: {
 				display: metadata.page.hideIcons ? "none" : "flex",
-				size: metadata.typography.body.fontSize,
+				size: metadata.typography.body.fontSize * 0.86,
 				color: primary,
 			},
 		});

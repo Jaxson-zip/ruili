@@ -62,11 +62,23 @@ OCR_POLL_INTERVAL_MS="1000"
 ## 启动
 
 ```bash
-docker compose -f compose.yml config
+pnpm deploy:check .env
+docker compose -f compose.yml --env-file .env config --quiet
 docker compose -f compose.yml up -d --build
+docker compose -f compose.yml ps
 ```
 
 只暴露 `3000` 给反向代理。Postgres、Redis、SeaweedFS 默认只在 Docker 网络内部通信，不应直接开放公网端口。
+
+启动后至少确认：
+
+```bash
+docker compose -f compose.yml ps
+docker compose -f compose.yml logs --tail=120 reactive_resume
+curl -f http://127.0.0.1:3000/api/health
+```
+
+`/api/health` 不健康时不要接入公网流量。
 
 ## 反向代理
 
@@ -81,13 +93,11 @@ docker compose -f compose.yml up -d --build
 ## 上线前检查
 
 ```bash
-pnpm.cmd --filter web typecheck
-pnpm.cmd --filter @reactive-resume/api typecheck
-pnpm.cmd --filter @reactive-resume/env typecheck
-node tooling\verify-homepage-templates.mjs
-node tooling\verify-template-starter.mjs
-node tooling\verify-builder-quick-edit.mjs
-docker compose -f compose.yml config
+pnpm deploy:check .env
+docker compose -f compose.yml --env-file .env config --quiet
+docker compose -f compose.yml up -d --build
+docker compose -f compose.yml ps
+curl -f http://127.0.0.1:3000/api/health
 ```
 
 手工检查：
@@ -101,6 +111,22 @@ docker compose -f compose.yml config
 - PDF 导出非空白。
 - 1 核 1G 机器已开启 Swap，并测试连续导出 3 次 PDF。
 
+## 免费部署取舍
+
+不建议把完整产品直接部署到 Vercel。锐历 Ruili 的完整运行依赖 API、worker、Postgres、Redis、S3/SeaweedFS、Chromium/PDF 导出等服务，单纯前端托管无法覆盖这些运行时。
+
+可选路径：
+
+- Vercel/Cloudflare Pages：只适合放静态营销页、文档页或下载入口，再链接到 VPS 上的产品实例。
+- 低价 VPS + Docker Compose：当前最短上线方案，成本可控，服务边界清楚。
+- Render/Fly/Railway 等 PaaS：可以部署完整产品或拆分服务，但免费层休眠、资源限制、持久化和出站网络策略不稳定，不建议作为正式 Beta 唯一承载。
+
 ## 开源署名
 
-本项目基于 Reactive Resume 二次开发，需保留 MIT License、原项目版权声明和开源链接。可以作为自己的作品集项目展示，但页面、README、仓库说明中要写清楚“基于 Reactive Resume 二次开发”。
+本项目基于 Reactive Resume 二次开发，需保留 MIT License、原项目版权声明和开源链接。可以作为作品集项目、商业 Beta 或自托管服务展示，但页面、README、页脚、仓库说明中要写清楚“基于 Reactive Resume 二次开发”。
+
+上线前不要做这些事：
+
+- 不要删除仓库根目录 `LICENSE` 中的 MIT License 和上游 copyright。
+- 不要移除 README、页脚或关于页里的 Reactive Resume attribution/link。
+- 不要使用“官方版”“官方合作”“上游背书”等容易暗示 Reactive Resume/原作者认可或背书的表述。

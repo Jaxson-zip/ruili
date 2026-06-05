@@ -20,6 +20,22 @@
 - 本次没有执行真实部署、没有访问公网域名、没有跑注册/登录/PDF 导出等端到端冒烟。
 - AI/OCR 体验依赖用户或实例管理员配置可用 Provider；没有平台兜底额度时，AI 导入和 OCR 导入不会开箱即用。
 
+## 今天上线 Go/No-Go
+
+Go 条件：
+
+- [ ] `pnpm deploy:check .env` 通过。阻塞项。
+- [ ] `docker compose -f compose.yml --env-file .env config --quiet` 通过。阻塞项。
+- [ ] `docker compose -f compose.yml up -d --build` 后所有核心容器为 running/healthy。阻塞项。
+- [ ] `curl -f http://127.0.0.1:3000/api/health` 返回健康。阻塞项。
+- [ ] HTTPS 域名可访问，且 `APP_URL` 与公网域名一致。阻塞项。
+- [ ] 完成核心 smoke：注册/登录、创建简历、保存编辑、模板切换、PDF 导出非空白。阻塞项。
+- [ ] DOCX/PDF/图片导入失败态或 AI/OCR 配置入口可读，不会让用户误以为平台默认提供免费 AI/OCR 额度。阻塞公开 Beta。
+- [ ] README、页脚/关于页、仓库 `LICENSE` 保留 MIT License、Reactive Resume attribution/link 和上游 copyright。阻塞公开仓库/作品集展示。
+- [ ] 1C1G 机器已开 Swap，并限制邀请人数；如果要更稳，改用 2C2G。1C1G 未开 Swap 且公开放量为阻塞项。
+
+No-Go：任一“阻塞项”未满足时，不接入公网流量；任一“阻塞公开 Beta”未满足时，只能内部测试，不做公开邀请。
+
 ## 最短上线方案
 
 1. 准备服务器：优先 2C2G；如果只能 1C1G，先开 2G Swap，并限制 Beta 用户数。
@@ -47,7 +63,7 @@ ENCRYPTION_SECRET="<openssl rand -hex 32>"
 5. 上线前本机检查：
 
 ```bash
-pnpm deploy:check
+pnpm deploy:check .env
 docker compose -f compose.yml --env-file .env config --quiet
 docker compose -f compose.yml up -d --build
 docker compose -f compose.yml ps
@@ -56,6 +72,15 @@ curl -f http://127.0.0.1:3000/api/health
 
 6. 配反向代理：Nginx/Caddy/1Panel 反代 `127.0.0.1:3000`，开启 HTTPS，只开放 `80/443/SSH`。
 7. 上线后冒烟：注册/登录、创建简历、保存编辑、模板切换、PDF 导出、JSON 导入、DOCX/PDF 导入失败态、AI/OCR 配置入口、`/api/health`。
+
+Compose health 可用下面的命令快速看：
+
+```bash
+docker compose -f compose.yml ps
+docker compose -f compose.yml logs --tail=120 reactive_resume postgres redis seaweedfs
+```
+
+核心 smoke 以“真实浏览器操作成功”为准，不只看容器启动成功。
 
 ## 依赖服务
 
@@ -80,7 +105,7 @@ curl -f http://127.0.0.1:3000/api/health
 - `docs/self-hosting/chinese-resume-beta.md` 已明确建议 2C2G 起步，并给出 1C1G 必须开启 2G Swap 的命令。
 - 当前 `FLAG_DISABLE_IMAGE_PROCESSING=false`，低配机器可考虑改为 `true` 降低图片处理压力，但会牺牲相关体验。
 
-上线建议：1C1G 仅邀请制，打开 Swap，限制并发，保留 `restart: unless-stopped`，并持续看 `docker compose logs -f reactive_resume postgres redis seaweedfs`。
+上线建议：1C1G 仅邀请制，打开 Swap，限制并发，保留 `restart: unless-stopped`，并持续看 `docker compose logs -f reactive_resume postgres redis seaweedfs`。最低建议仍是 2C2G；1C1G 可内测，但 PDF/Chromium/AI/OCR 是最容易触发内存压力的路径。
 
 ## 生产 env 必填项
 
@@ -102,7 +127,17 @@ curl -f http://127.0.0.1:3000/api/health
 - `FLAG_ALLOW_UNSAFE_AI_BASE_URL`：公开多用户站点保持 `false`，避免 SSRF 风险。
 - `OCR_PROVIDER` 与 Azure OCR env：公开站点可保持为空，让用户自带 OCR Provider。
 
-仓库还提供 `pnpm deploy:check`，会检查 `.env` 中 HTTPS、本地地址、示例值、密码长度、Postgres 密码一致性等问题。
+仓库还提供 `pnpm deploy:check .env`，会检查 `.env` 中 HTTPS、本地地址、示例值、密码长度、Postgres 密码一致性等问题。
+
+## 免费部署取舍
+
+Vercel 不适合完整部署锐历 Ruili。完整产品不是纯前端站点，还需要 API、worker、Postgres、Redis、S3/SeaweedFS、Chromium/PDF 导出等服务。Vercel 可以承载静态营销页、产品介绍页或跳转入口，但不要把它当成完整生产方案。
+
+完整产品优先：
+
+- 低价 VPS + Docker Compose：最适合今天/明天上线邀请制 Beta。
+- Render/Fly/Railway：可以作为替代，但免费层休眠、资源、持久化、网络和浏览器运行限制不稳定，适合试验，不适合作为公开 Beta 的唯一承载。
+- 自管云服务拆分：更稳但配置成本更高，今天上线不如单机 Compose 直接。
 
 ## AI/OCR 未配置时的用户体验
 
@@ -148,13 +183,16 @@ docker compose -f compose.yml logs -f reactive_resume
 - 页面组件和设置页信息中也保留上游项目和许可证入口。
 - 模板来源另有 NOTICE 文件记录 MIT 模板来源。
 
+可以作为 GitHub 作品集、商业 Beta 或自托管产品展示，但必须继续保留 MIT License、上游 copyright、Reactive Resume attribution/link。不要删除原作者版权，也不要使用“官方版”“官方合作”“上游背书”等容易误导用户的表述。
+
 仍建议上线前人工检查页脚、关于页、邮件模板和公开首页，确保不会暗示这是 Reactive Resume 官方版本，也不要把“基于开源项目二次开发”的说明藏得过深。
 
 ## 上线前阻塞项清单
 
 - 真实 `.env` 未完成：阻塞。
-- `pnpm deploy:check` 未通过：阻塞。
+- `pnpm deploy:check .env` 未通过：阻塞。
 - `docker compose -f compose.yml --env-file .env config --quiet` 未通过：阻塞。
+- Compose 核心容器未 running/healthy：阻塞。
 - 生产域名 HTTPS 和 `APP_URL` 不一致：阻塞。
 - `/api/health` 不健康：阻塞。
 - 注册/登录、创建简历、PDF 导出未冒烟：阻塞。

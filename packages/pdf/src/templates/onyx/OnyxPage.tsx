@@ -274,10 +274,10 @@ const useOnyxTemplate = (): OnyxTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const muted = "#3F4652";
-		const softText = "#687386";
-		const hairline = "#D8DEE8";
-		const sidebarBackground = "#F6F8FB";
+		const muted = "#394150";
+		const softText = "#636E7F";
+		const hairline = "#D9DEE7";
+		const sidebarBackground = "#F7F9FC";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 
@@ -296,7 +296,7 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				backgroundColor: background,
 				paddingHorizontal: metrics.page.paddingHorizontal,
 				paddingVertical: metrics.page.paddingVertical,
-				rowGap: metrics.gapY(1.12),
+				rowGap: metrics.gapY(0.95),
 				fontFamily: metadata.typography.body.fontFamily,
 				fontSize: metadata.typography.body.fontSize,
 				lineHeight: Math.min(metadata.typography.body.lineHeight, 1.42),
@@ -364,24 +364,24 @@ const useOnyxTemplate = (): OnyxTemplate => {
 			},
 			section: {
 				flexDirection: "column",
-				rowGap: metrics.gapY(0.2),
+				rowGap: metrics.gapY(0.24),
 			},
 			sectionHeading: {
-				color: background,
-				backgroundColor: primary,
-				fontSize: metadata.typography.heading.fontSize * 0.88,
+				color: primary,
+				borderBottomWidth: 0.65,
+				borderBottomColor: hairline,
+				fontSize: metadata.typography.heading.fontSize * 0.84,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
-				lineHeight: 1.18,
-				paddingHorizontal: metrics.gapX(0.5),
-				paddingVertical: metrics.gapY(0.18),
+				lineHeight: 1.22,
+				paddingBottom: metrics.gapY(0.14),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(0.32),
+				rowGap: metrics.gapY(0.28),
 			},
 			item: {
-				rowGap: metrics.gapY(0.1),
-				paddingBottom: metrics.gapY(0.24),
+				rowGap: metrics.gapY(0.12),
+				paddingBottom: metrics.gapY(0.22),
 			},
 			levelContainer: {
 				display: "none",
@@ -394,25 +394,29 @@ const useOnyxTemplate = (): OnyxTemplate => {
 			},
 			header: {
 				position: "relative",
-				alignItems: "center",
-				rowGap: metrics.gapY(0.28),
-				borderBottomWidth: 1,
-				borderBottomColor: primary,
-				paddingBottom: metrics.gapY(0.55),
+				alignItems: "flex-start",
+				rowGap: metrics.gapY(0.24),
+				borderTopWidth: 2.2,
+				borderTopColor: primary,
+				borderBottomWidth: 0.8,
+				borderBottomColor: hairline,
+				paddingTop: metrics.gapY(0.38),
+				paddingBottom: metrics.gapY(0.5),
 			},
 			headerIdentity: {
-				alignItems: "center",
-				rowGap: metrics.gapY(0.12),
+				alignItems: "flex-start",
+				rowGap: metrics.gapY(0.1),
 			},
 			headerName: {
-				fontSize: metadata.typography.heading.fontSize * 1.66,
+				color: foreground,
+				fontSize: metadata.typography.heading.fontSize * 1.58,
 				lineHeight: headerNameLineHeight,
-				textAlign: "center",
+				textAlign: "left",
 			},
 			headerHeadline: {
 				color: muted,
-				fontSize: metadata.typography.body.fontSize * 0.98,
-				textAlign: "center",
+				fontSize: metadata.typography.body.fontSize * 0.96,
+				textAlign: "left",
 			},
 			picture: {
 				position: "absolute",
@@ -432,7 +436,7 @@ const useOnyxTemplate = (): OnyxTemplate => {
 			contactList: {
 				flexDirection: r.row,
 				flexWrap: "wrap",
-				justifyContent: "center",
+				justifyContent: "flex-start",
 				rowGap: metrics.gapY(0.1),
 				columnGap: metrics.gapX(0.3),
 			},
@@ -455,9 +459,7 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				flexWrap: "wrap",
 				rowGap: metrics.gapY(0.16),
 				columnGap: metrics.gapX(0.85),
-				paddingBottom: metrics.gapY(0.1),
-				borderBottomWidth: 0.35,
-				borderBottomColor: hairline,
+				paddingTop: metrics.gapY(0.02),
 			},
 			compactSkillRow: {
 				width: "47.5%",
@@ -476,9 +478,7 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				flexWrap: "wrap",
 				rowGap: metrics.gapY(0.14),
 				columnGap: metrics.gapX(0.85),
-				paddingBottom: metrics.gapY(0.1),
-				borderBottomWidth: 0.35,
-				borderBottomColor: hairline,
+				paddingTop: metrics.gapY(0.02),
 			},
 			compactProfileRow: {
 				width: "47.5%",
@@ -543,8 +543,8 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				}),
 				sectionHeading: (context) => ({
 					...baseStyles.sectionHeading,
-					color: background,
-					backgroundColor: accentFor(context),
+					color: accentFor(context),
+					borderBottomColor: context.placement === "sidebar" ? hairline : accentFor(context),
 				}),
 				item: (context) => ({
 					...baseStyles.item,

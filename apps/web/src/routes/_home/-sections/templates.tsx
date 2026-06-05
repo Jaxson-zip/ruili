@@ -1,7 +1,7 @@
 import { Trans } from "@lingui/react/macro";
 import { m } from "motion/react";
 import { useMemo } from "react";
-import { featuredTemplateIds, onlineStyleTemplateReferences, templates } from "@/dialogs/resume/template/data";
+import { featuredTemplateIds, templates } from "@/dialogs/resume/template/data";
 
 type SystemTemplatePreview = {
 	id: string;
@@ -32,15 +32,7 @@ const systemTemplatePreviews: SystemTemplatePreview[] = featuredTemplateIds.map(
 	};
 });
 
-const styleTemplatePreviews: SystemTemplatePreview[] = onlineStyleTemplateReferences.map((reference) => ({
-	id: `style-${reference.id}`,
-	name: reference.name,
-	role: reference.tags.slice(0, 2).join(" / "),
-	imageUrl: reference.imageUrl,
-	source: "可套用风格",
-}));
-
-const templatePreviews = [...systemTemplatePreviews, ...styleTemplatePreviews];
+const templatePreviews = systemTemplatePreviews;
 
 function TemplateItem({ preview }: TemplateItemProps) {
 	return (
@@ -127,7 +119,7 @@ export function Templates() {
 				</h2>
 
 				<p className="max-w-2xl text-muted-foreground leading-relaxed">
-					<Trans>系统模板可直接导出，风格样张可在模板库一键套用，保留你的简历内容。</Trans>
+					<Trans>首页只展示真实可导出的首批精品模板，预览效果和 PDF 导出保持一致。</Trans>
 				</p>
 			</m.div>
 

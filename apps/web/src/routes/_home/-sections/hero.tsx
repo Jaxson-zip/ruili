@@ -108,7 +108,7 @@ export function Hero() {
 								<GithubLogoIcon aria-hidden="true" className="size-4" />
 								<Trans>查看源码</Trans>
 								<span className="sr-only">
-									<Trans>(opens in new tab)</Trans>
+									<Trans>（在新标签页打开）</Trans>
 								</span>
 							</a>
 						}

@@ -60,15 +60,16 @@ describe("templates metadata", () => {
 
 	it("keeps featured templates unique and backed by system metadata", () => {
 		expect(new Set(featuredTemplateIds).size).toBe(featuredTemplateIds.length);
-		expect(featuredTemplateIds).toEqual(["onyx", "azurill", "ditto", "bronzor", "lapras"]);
+		expect(featuredTemplateIds).toEqual(["onyx", "bronzor", "azurill", "ditto", "lapras", "scizor"]);
 
 		for (const id of featuredTemplateIds) {
 			expect(templates[id], id).toBeDefined();
+			expect(templates[id].accentColor, id).toMatch(/^rgba\(/);
 		}
 	});
 
 	it("keeps primary templates as a small subset of featured templates", () => {
-		expect(primaryTemplateIds).toEqual(["onyx", "azurill", "ditto"]);
+		expect(primaryTemplateIds).toEqual(featuredTemplateIds);
 		expect(new Set(primaryTemplateIds).size).toBe(primaryTemplateIds.length);
 
 		for (const id of primaryTemplateIds) {

@@ -47,7 +47,7 @@ export function Header() {
 			animate={{ y: 0, opacity: 1 }}
 			transition={{ duration: 0.35, ease: "easeOut" }}
 		>
-			<nav aria-label={t`Main navigation`} className="container mx-auto flex items-center gap-x-4 p-3 lg:px-12">
+			<nav aria-label={t`主导航`} className="container mx-auto flex items-center gap-x-4 p-3 lg:px-12">
 				<Link to="/" className="transition-opacity hover:opacity-80" aria-label={t`锐历 - 返回首页`}>
 					<BrandIcon className="size-10" />
 				</Link>
@@ -61,7 +61,7 @@ export function Header() {
 						<Button
 							size="icon"
 							nativeButton={false}
-							aria-label={t`Go to dashboard`}
+							aria-label={t`进入工作台`}
 							render={
 								<Link to="/dashboard">
 									<ArrowRightIcon aria-hidden="true" />

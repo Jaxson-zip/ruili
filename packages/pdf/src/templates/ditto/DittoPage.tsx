@@ -124,9 +124,9 @@ const useDittoTemplate = (): DittoTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const muted = "#5F6673";
-		const hairline = "#D7DBE2";
-		const sidebarTint = "#F7F8FA";
+		const muted = "#525A66";
+		const hairline = "#DADDE3";
+		const softLine = "#EEF0F3";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 
@@ -145,7 +145,7 @@ const useDittoTemplate = (): DittoTemplate => {
 				backgroundColor: background,
 				paddingHorizontal: metrics.page.paddingHorizontal,
 				paddingVertical: metrics.page.paddingVertical,
-				rowGap: metrics.headerGap * 0.85,
+				rowGap: metrics.headerGap * 0.72,
 				fontFamily: metadata.typography.body.fontFamily,
 				fontSize: metadata.typography.body.fontSize,
 				lineHeight: metadata.typography.body.lineHeight,
@@ -154,7 +154,7 @@ const useDittoTemplate = (): DittoTemplate => {
 			text: bodyText,
 			heading: {
 				fontFamily: metadata.typography.heading.fontFamily,
-				fontSize: metadata.typography.heading.fontSize,
+				fontSize: metadata.typography.heading.fontSize * 0.98,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "600",
 				lineHeight: metadata.typography.heading.lineHeight,
 				color: foreground,
@@ -183,6 +183,7 @@ const useDittoTemplate = (): DittoTemplate => {
 			richParagraph: {
 				margin: 0,
 				...bodyText,
+				lineHeight: metadata.typography.body.lineHeight * 1.03,
 			},
 			richListItemRow: {
 				flexDirection: "row",
@@ -193,10 +194,12 @@ const useDittoTemplate = (): DittoTemplate => {
 				...bodyText,
 				width: metadata.typography.body.fontSize,
 				textAlign: r.listMarkerTextAlign,
+				color: muted,
 			},
 			richListItemContent: {
 				...bodyText,
 				flex: 1,
+				lineHeight: metadata.typography.body.lineHeight * 1.03,
 			},
 			splitRow: {
 				flexDirection: r.row,
@@ -210,20 +213,21 @@ const useDittoTemplate = (): DittoTemplate => {
 			},
 			section: {
 				flexDirection: "column",
-				rowGap: metrics.gapY(0.26),
+				rowGap: metrics.gapY(0.3),
 			},
 			sectionHeading: {
-				color: primary,
-				borderBottomWidth: 0.8,
+				color: foreground,
+				fontSize: metadata.typography.heading.fontSize * 0.92,
+				borderBottomWidth: 0.7,
 				borderBottomColor: hairline,
-				paddingBottom: metrics.gapY(0.12),
+				paddingBottom: metrics.gapY(0.16),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(0.32),
+				rowGap: metrics.gapY(0.38),
 			},
 			item: {
-				rowGap: metrics.gapY(0.14),
+				rowGap: metrics.gapY(0.15),
 			},
 			levelContainer: {
 				width: "100%",
@@ -235,10 +239,10 @@ const useDittoTemplate = (): DittoTemplate => {
 				backgroundColor: primary,
 			},
 			header: {
-				rowGap: metrics.gapY(0.55),
-				borderBottomWidth: 1.2,
-				borderBottomColor: foreground,
-				paddingBottom: metrics.gapY(0.7),
+				rowGap: metrics.gapY(0.48),
+				borderBottomWidth: 0.9,
+				borderBottomColor: hairline,
+				paddingBottom: metrics.gapY(0.64),
 			},
 			headerTop: {
 				flexDirection: r.row,
@@ -249,21 +253,23 @@ const useDittoTemplate = (): DittoTemplate => {
 			headerIdentity: {
 				...r.headerIdentity,
 				flex: 1,
-				rowGap: metrics.gapY(0.22),
+				rowGap: metrics.gapY(0.18),
 			},
 			headerName: {
-				fontSize: metadata.typography.heading.fontSize * 1.85,
+				fontSize: metadata.typography.heading.fontSize * 1.72,
 				lineHeight: headerNameLineHeight,
+				color: foreground,
 			},
 			headerHeadline: {
 				color: muted,
+				fontSize: metadata.typography.body.fontSize * 1.02,
 			},
 			picture: {
-				width: Math.min(picture.size, 56),
-				height: Math.min(picture.size, 56),
+				width: Math.min(picture.size, 48),
+				height: Math.min(picture.size, 48),
 				objectFit: "cover",
 				aspectRatio: picture.aspectRatio,
-				borderRadius: Math.min(picture.borderRadius, 6),
+				borderRadius: Math.min(picture.borderRadius, 4),
 				borderColor: rgbaStringToHex(picture.borderColor),
 				borderWidth: picture.borderWidth,
 				shadowColor: rgbaStringToHex(picture.shadowColor),
@@ -273,22 +279,26 @@ const useDittoTemplate = (): DittoTemplate => {
 			contactList: {
 				flexDirection: r.row,
 				flexWrap: "wrap",
-				rowGap: metrics.gapY(0.14),
-				columnGap: metrics.gapX(0.75),
+				rowGap: metrics.gapY(0.12),
+				columnGap: metrics.gapX(0.62),
+				borderTopWidth: 0.6,
+				borderTopColor: softLine,
+				paddingTop: metrics.gapY(0.34),
 			},
 			contactItem: {
 				flexDirection: r.row,
 				alignItems: "center",
-				columnGap: metrics.gapX(1 / 6),
+				columnGap: metrics.gapX(0.16),
+				color: muted,
 			},
-			sectionGroup: {},
+			sectionGroup: {
+				rowGap: metrics.sectionGap * 0.9,
+			},
 			sidebarGroup: {
-				backgroundColor: sidebarTint,
-				borderTopWidth: 0.8,
+				borderTopWidth: 0.7,
 				borderTopColor: hairline,
-				paddingTop: metrics.gapY(0.65),
-				paddingHorizontal: metrics.gapX(0.65),
-				paddingBottom: metrics.gapY(0.65),
+				paddingTop: metrics.gapY(0.54),
+				rowGap: metrics.sectionGap * 0.78,
 			},
 		});
 
@@ -307,14 +317,15 @@ const useDittoTemplate = (): DittoTemplate => {
 				richListItemContent: (context) => ({ ...baseStyles.richListItemContent, color: foregroundFor(context) }),
 				sectionHeading: (context) => ({
 					...baseStyles.sectionHeading,
-					color: accentFor(context),
+					color: foregroundFor(context),
+					borderBottomColor: context.placement === "sidebar" ? softLine : hairline,
 				}),
 				levelItem: (context) => ({ borderColor: accentFor(context) }),
 				levelItemActive: (context) => ({ backgroundColor: accentFor(context) }),
-				icon: (context) => ({
+				icon: () => ({
 					display: metadata.page.hideIcons ? "none" : "flex",
-					size: metadata.typography.body.fontSize,
-					color: accentFor(context),
+					size: metadata.typography.body.fontSize * 0.9,
+					color: muted,
 				}),
 			} satisfies DittoStyles,
 		};

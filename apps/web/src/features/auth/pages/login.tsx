@@ -38,7 +38,7 @@ export function LoginPage({ disableEmailAuth, disableSignups }: Props) {
 		defaultValues: { identifier: "", password: "" },
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {
-			const toastId = toast.loading(t`Signing in...`);
+			const toastId = toast.loading(t`正在登录...`);
 
 			try {
 				const isEmail = value.identifier.includes("@");
@@ -49,11 +49,10 @@ export function LoginPage({ disableEmailAuth, disableSignups }: Props) {
 
 				if (result.error) {
 					toast.error(
-						result.error.message ||
-							t({
-								comment: "Fallback toast when sign-in fails and no server error message is available",
-								message: "Failed to sign in. Please try again.",
-							}),
+						t({
+							comment: "Fallback toast when sign-in fails",
+							message: "登录失败，请检查账号或密码后重试。",
+						}),
 						{ id: toastId },
 					);
 					return;
@@ -75,7 +74,7 @@ export function LoginPage({ disableEmailAuth, disableSignups }: Props) {
 				await router.invalidate();
 				void navigate({ to: "/dashboard", replace: true });
 			} catch {
-				toast.error(t`Failed to sign in. Please try again.`, { id: toastId });
+				toast.error(t`登录失败，请检查账号或密码后重试。`, { id: toastId });
 			}
 		},
 	});
@@ -103,22 +102,20 @@ export function LoginPage({ disableEmailAuth, disableSignups }: Props) {
 		<>
 			<div className="space-y-1 text-center">
 				<h1 className="font-semibold text-2xl tracking-tight">
-					<Trans comment="Title on the login page">Sign in to your account</Trans>
+					<Trans comment="Title on the login page">登录账号</Trans>
 				</h1>
 
 				{!disableSignups && (
 					<div className="text-muted-foreground">
 						<Trans>
-							Don't have an account?{" "}
+							还没有账号？{" "}
 							<Button
 								variant="link"
 								nativeButton={false}
 								className="h-auto gap-1.5 px-1! py-0"
 								render={
 									<Link to="/auth/register">
-										<Trans comment="Call-to-action link from login page to account registration page">
-											Create one now
-										</Trans>{" "}
+										<Trans comment="Call-to-action link from login page to account registration page">立即创建</Trans>{" "}
 										<ArrowRightIcon />
 									</Link>
 								}
@@ -141,7 +138,7 @@ export function LoginPage({ disableEmailAuth, disableSignups }: Props) {
 						{(field) => (
 							<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 								<FormLabel>
-									<Trans comment="Label for login identifier input that accepts email or username">Email Address</Trans>
+									<Trans comment="Label for login identifier input that accepts email or username">邮箱地址</Trans>
 								</FormLabel>
 								<FormControl
 									render={
@@ -172,7 +169,7 @@ export function LoginPage({ disableEmailAuth, disableSignups }: Props) {
 							<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 								<div className="flex items-center justify-between">
 									<FormLabel>
-										<Trans comment="Label for password input on login form">Password</Trans>
+										<Trans comment="Label for password input on login form">密码</Trans>
 									</FormLabel>
 
 									<Button
@@ -182,7 +179,7 @@ export function LoginPage({ disableEmailAuth, disableSignups }: Props) {
 										className="h-auto p-0 text-xs leading-none"
 										render={
 											<Link to="/auth/forgot-password">
-												<Trans comment="Link label to password reset page from login form">Forgot Password?</Trans>
+												<Trans comment="Link label to password reset page from login form">忘记密码？</Trans>
 											</Link>
 										}
 									/>
@@ -228,7 +225,7 @@ export function LoginPage({ disableEmailAuth, disableSignups }: Props) {
 					</form.Field>
 
 					<Button type="submit" className="w-full">
-						<Trans comment="Primary action button label on login form">Sign in</Trans>
+						<Trans comment="Primary action button label on login form">登录</Trans>
 					</Button>
 				</form>
 			)}

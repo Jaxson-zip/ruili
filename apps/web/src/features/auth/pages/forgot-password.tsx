@@ -22,7 +22,7 @@ export function ForgotPasswordPage() {
 		defaultValues: { email: "" },
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {
-			const toastId = toast.loading(t`Sending password reset email...`);
+			const toastId = toast.loading(t`正在发送密码重置邮件...`);
 
 			const { error } = await authClient.requestPasswordReset({
 				email: value.email,
@@ -31,11 +31,10 @@ export function ForgotPasswordPage() {
 
 			if (error) {
 				toast.error(
-					error.message ||
-						t({
-							comment: "Fallback toast when requesting password reset email fails without backend message",
-							message: "Failed to send password reset email. Please try again.",
-						}),
+					t({
+						comment: "Fallback toast when requesting password reset email fails",
+						message: "密码重置邮件发送失败，请稍后重试。",
+					}),
 					{ id: toastId },
 				);
 				return;
@@ -57,14 +56,14 @@ export function ForgotPasswordPage() {
 
 				<div className="text-muted-foreground">
 					<Trans>
-						Remember your password?{" "}
+						想起密码了？{" "}
 						<Button
 							variant="link"
 							className="h-auto gap-1.5 px-1! py-0"
 							nativeButton={false}
 							render={
 								<Link to="/auth/login">
-									<Trans comment="Call-to-action link from forgot-password page to login page">Sign in now</Trans>{" "}
+									<Trans comment="Call-to-action link from forgot-password page to login page">现在登录</Trans>{" "}
 									<ArrowRightIcon />
 								</Link>
 							}
@@ -85,7 +84,7 @@ export function ForgotPasswordPage() {
 					{(field) => (
 						<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 							<FormLabel>
-								<Trans comment="Label for email input on forgot-password form">Email Address</Trans>
+								<Trans comment="Label for email input on forgot-password form">邮箱地址</Trans>
 							</FormLabel>
 							<FormControl
 								render={
@@ -109,7 +108,7 @@ export function ForgotPasswordPage() {
 				</form.Field>
 
 				<Button type="submit" className="w-full">
-					<Trans comment="Primary action button label on forgot-password form">Send Password Reset Email</Trans>
+					<Trans comment="Primary action button label on forgot-password form">发送密码重置邮件</Trans>
 				</Button>
 			</form>
 		</>
@@ -132,7 +131,7 @@ function PostForgotPasswordScreen() {
 				nativeButton={false}
 				render={
 					<a href="mailto:">
-						<Trans comment="Button label to open the user's default email app">Open Email Client</Trans>
+						<Trans comment="Button label to open the user's default email app">打开邮箱客户端</Trans>
 					</a>
 				}
 			/>

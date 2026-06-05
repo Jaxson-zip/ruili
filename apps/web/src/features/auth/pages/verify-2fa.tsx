@@ -11,7 +11,7 @@ import { authClient } from "@/libs/auth/client";
 import { useAppForm } from "@/libs/tanstack-form";
 
 const formSchema = z.object({
-	code: z.string().length(6, "Code must be 6 digits"),
+	code: z.string().length(6, "验证码必须是 6 位数字"),
 });
 
 export function VerifyTwoFactorPage() {
@@ -22,7 +22,7 @@ export function VerifyTwoFactorPage() {
 		defaultValues: { code: "" },
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {
-			const toastId = toast.loading(t`Verifying code...`);
+			const toastId = toast.loading(t`正在验证...`);
 
 			const { error } = await authClient.twoFactor.verifyTotp({
 				code: value.code,
@@ -30,11 +30,10 @@ export function VerifyTwoFactorPage() {
 
 			if (error) {
 				toast.error(
-					error.message ||
-						t({
-							comment: "Fallback toast when verifying a two-factor authentication code fails",
-							message: "Failed to verify your code. Please try again.",
-						}),
+					t({
+						comment: "Fallback toast when verifying a two-factor authentication code fails",
+						message: "验证码验证失败，请重试。",
+					}),
 					{ id: toastId },
 				);
 				return;
@@ -97,14 +96,14 @@ export function VerifyTwoFactorPage() {
 						render={
 							<Link to="/auth/login">
 								<ArrowLeftIcon />
-								<Trans comment="Secondary navigation button on 2FA verification screen">Back to Login</Trans>
+								<Trans comment="Secondary navigation button on 2FA verification screen">返回登录</Trans>
 							</Link>
 						}
 					/>
 
 					<Button type="submit" className="flex-1">
 						<CheckIcon />
-						<Trans comment="Primary action button to submit 2FA code">Verify</Trans>
+						<Trans comment="Primary action button to submit 2FA code">验证</Trans>
 					</Button>
 				</div>
 			</form>
@@ -116,7 +115,7 @@ export function VerifyTwoFactorPage() {
 				render={
 					<Link to="/auth/verify-2fa-backup">
 						<Trans comment="Link to backup-code verification flow when authenticator app is unavailable">
-							Lost access to your authenticator?
+							无法使用验证器？
 						</Trans>
 					</Link>
 				}

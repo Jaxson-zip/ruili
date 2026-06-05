@@ -44,7 +44,7 @@ describe("TemplateGalleryDialog", () => {
 	it("renders the localized title and intro copy", () => {
 		renderGallery();
 		expect(screen.getByText("模板库")).toBeInTheDocument();
-		expect(screen.getByText(/只改变版式、颜色和布局/)).toBeInTheDocument();
+		expect(screen.getByText(/首屏只推荐真实可导出的中文模板/)).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "导入我的模板（JSON）" })).toBeInTheDocument();
 		expect(screen.getByLabelText("搜索模板")).toBeInTheDocument();
 	});
@@ -53,7 +53,8 @@ describe("TemplateGalleryDialog", () => {
 		renderGallery();
 		const previews = screen.getAllByRole("img");
 		expect(previews).toHaveLength(Object.keys(templates).length + onlineStyleTemplateReferences.length);
-		expect(screen.getByText("精品中文风格")).toBeInTheDocument();
+		expect(screen.getByText("精品可导出模板")).toBeInTheDocument();
+		expect(screen.getByText("风格参考（近似套用）")).toBeInTheDocument();
 		expect(screen.getByText(`${onlineStyleTemplateReferences.length} 个`)).toBeInTheDocument();
 		expect(screen.getByRole("img", { name: onlineStyleTemplateReferences[0]?.name })).toBeInTheDocument();
 		expect(screen.queryByText(/待重做参考/)).toBeNull();
@@ -63,8 +64,8 @@ describe("TemplateGalleryDialog", () => {
 	it("separates primary templates from the remaining exportable templates", () => {
 		renderGallery();
 
-		expect(screen.getByText("主推模板")).toBeInTheDocument();
-		expect(screen.getByText("全部可导出模板")).toBeInTheDocument();
+		expect(screen.getByText("精品可导出模板")).toBeInTheDocument();
+		expect(screen.getByText("更多可导出模板")).toBeInTheDocument();
 		expect(screen.getByText(`${primaryTemplateIds.length} 个`)).toBeInTheDocument();
 		expect(screen.getByText(`${Object.keys(templates).length - primaryTemplateIds.length} 个`)).toBeInTheDocument();
 	});
@@ -107,6 +108,7 @@ describe("TemplateGalleryDialog", () => {
 
 		recipe(draft);
 		expect(draft.metadata.template).toBe("onyx");
+		expect(draft.metadata.design.colors.primary).toBe(templates.onyx.accentColor);
 		expect(draft.metadata.layout.pages[0]?.fullWidth).toBe(true);
 		expect(draft.metadata.layout.pages[0]?.sidebar).toEqual([]);
 		expect(draft.metadata.layout.pages[0]?.main).toContain("skills");

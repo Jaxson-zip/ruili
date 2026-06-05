@@ -27,23 +27,22 @@ export function ResetPasswordPage({ token }: Props) {
 		defaultValues: { password: "" },
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {
-			const toastId = toast.loading(t`Resetting your password...`);
+			const toastId = toast.loading(t`正在重置密码...`);
 
 			const { error } = await authClient.resetPassword({ token, newPassword: value.password });
 
 			if (error) {
 				toast.error(
-					error.message ||
-						t({
-							comment: "Fallback toast when resetting password fails and no backend message is available",
-							message: "Failed to reset your password. Please try again.",
-						}),
+					t({
+						comment: "Fallback toast when resetting password fails",
+						message: "密码重置失败，请稍后重试。",
+					}),
 					{ id: toastId },
 				);
 				return;
 			}
 
-			toast.success(t`Your password has been reset successfully. You can now sign in with your new password.`, {
+			toast.success(t`密码已重置成功，现在可以使用新密码登录。`, {
 				id: toastId,
 			});
 
@@ -75,7 +74,7 @@ export function ResetPasswordPage({ token }: Props) {
 					{(field) => (
 						<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 							<FormLabel>
-								<Trans comment="Label for new password input on reset-password form">New Password</Trans>
+								<Trans comment="Label for new password input on reset-password form">新密码</Trans>
 							</FormLabel>
 							<div className="flex items-center gap-x-1.5">
 								<FormControl
@@ -118,7 +117,7 @@ export function ResetPasswordPage({ token }: Props) {
 				</form.Field>
 
 				<Button type="submit" className="w-full">
-					<Trans comment="Primary action button label on reset-password form">Reset Password</Trans>
+					<Trans comment="Primary action button label on reset-password form">重置密码</Trans>
 				</Button>
 			</form>
 		</>

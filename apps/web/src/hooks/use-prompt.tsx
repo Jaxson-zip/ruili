@@ -53,8 +53,8 @@ export function PromptDialogProvider({ children }: PromptDialogProviderProps) {
 		inputProps: undefined,
 	});
 
-	const cancelText = state.cancelText ?? t`Cancel`;
-	const confirmText = state.confirmText ?? t`Confirm`;
+	const cancelText = state.cancelText ?? t`取消`;
+	const confirmText = state.confirmText ?? t`确认`;
 
 	React.useEffect(() => {
 		if (!state.open) return;

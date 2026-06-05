@@ -72,7 +72,7 @@ export function Footer() {
 										href={social.url}
 										target="_blank"
 										rel="noopener noreferrer"
-										aria-label={`${social.label} (${t`opens in new tab`})`}
+										aria-label={`${social.label} (${t`在新标签页打开`})`}
 									>
 										<social.icon aria-hidden="true" size={18} />
 									</a>
@@ -126,7 +126,7 @@ function FooterLink({ url, label }: FooterLinkItem) {
 
 				{isExternal && (
 					<span className="sr-only">
-						<Trans>(opens in new tab)</Trans>
+						<Trans>（在新标签页打开）</Trans>
 					</span>
 				)}
 

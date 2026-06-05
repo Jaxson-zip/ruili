@@ -90,9 +90,13 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 	}
 
 	function onSelectTemplate(template: Template) {
+		const metadata = templates[template];
+
 		updateResumeData((draft) => {
 			draft.metadata.template = template;
-			draft.metadata.layout = createRecommendedTemplateLayout(draft, templates[template]);
+			if ("accentColor" in metadata && metadata.accentColor)
+				draft.metadata.design.colors.primary = metadata.accentColor;
+			draft.metadata.layout = createRecommendedTemplateLayout(draft, metadata);
 		});
 
 		closeDialog();
@@ -192,7 +196,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 						<Trans>模板库</Trans>
 					</DialogTitle>
 					<DialogDescription className="leading-relaxed">
-						<Trans>先选可导出模板，再套用中文风格；只改变版式、颜色和布局，不替换正文内容。</Trans>
+						<Trans>首屏只推荐真实可导出的中文模板；风格参考放在后面，可近似套用但不替换正文内容。</Trans>
 					</DialogDescription>
 				</DialogHeader>
 
@@ -239,7 +243,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 
 				<div className="flex flex-wrap gap-2 text-xs">
 					<Badge variant="secondary">可导出模板 {allSystemTemplateIds.length - hiddenSystemTemplateCount} 个</Badge>
-					<Badge variant="secondary">中文风格 {onlineStyleTemplateReferences.length} 个</Badge>
+					<Badge variant="secondary">首批主推 {primaryTemplateIds.length} 个</Badge>
 					<Badge variant="secondary">保留简历内容</Badge>
 				</div>
 				<input ref={fileInputRef} hidden type="file" accept="application/json,.json" onChange={onImportTemplate} />
@@ -269,21 +273,12 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 
 					<section className="space-y-4">
 						<TemplateSectionHeader
-							title="精品中文风格"
-							badge={`${visibleOnlineStyles.length} 个`}
-							description="无水印样张，可一键套用到当前简历，并映射到可导出的系统模板。"
-						/>
-						<CollectionReferenceGrid references={visibleOnlineStyles} onSelect={onSelectCollectionReference} />
-					</section>
-
-					<section className="space-y-4">
-						<TemplateSectionHeader
-							title="主推模板"
+							title="精品可导出模板"
 							badge={`${visiblePrimaryTemplates.length} 个`}
 							description={
 								hiddenSystemTemplateCount > 0
 									? `已隐藏 ${hiddenSystemTemplateCount} 个系统模板，可在右上角恢复。`
-									: "适合作为新简历的默认起点，导出稳定，阅读负担低。"
+									: "首批上线只主推真实可导出的模板，预览效果和 PDF 导出保持一致。"
 							}
 						/>
 						<div className="grid grid-cols-1 xs:grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
@@ -300,16 +295,16 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 						</div>
 						{visiblePrimaryTemplates.length === 0 ? (
 							<div className="rounded-md border border-dashed bg-secondary/20 px-4 py-8 text-center text-muted-foreground text-sm">
-								<Trans>主推模板已全部隐藏，可点击右上角恢复全部。</Trans>
+								<Trans>精品模板已全部隐藏，可点击右上角恢复全部。</Trans>
 							</div>
 						) : null}
 					</section>
 
 					<section className="space-y-4">
 						<TemplateSectionHeader
-							title="全部可导出模板"
+							title="更多可导出模板"
 							badge={`${visibleSecondaryTemplates.length} 个`}
-							description="不同岗位和审美倾向的系统模板，切换后保留当前内容。"
+							description="仍可导出，但不是首批主推；适合后续逐个打磨后再放到首页。"
 						/>
 						<div className="grid grid-cols-1 xs:grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
 							{visibleSecondaryTemplates.map(([template, metadata]) => (
@@ -328,6 +323,15 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 								<Trans>全部可导出模板已隐藏或被筛选，可点击右上角恢复全部，或换个筛选条件。</Trans>
 							</div>
 						) : null}
+					</section>
+
+					<section className="space-y-4">
+						<TemplateSectionHeader
+							title="风格参考（近似套用）"
+							badge={`${visibleOnlineStyles.length} 个`}
+							description="这些是参考样张，会映射到最接近的可导出模板；后续会逐个重做成真实模板。"
+						/>
+						<CollectionReferenceGrid references={visibleOnlineStyles} onSelect={onSelectCollectionReference} />
 					</section>
 
 					{resultCount === 0 ? (

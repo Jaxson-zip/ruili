@@ -122,9 +122,8 @@ const useLaprasTemplate = (): LaprasTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const borderColor = "#CCCCCC";
-		const pictureBorderRadius = Math.min(picture.borderRadius, 30);
-		const headingNegativeMargin = metadata.typography.heading.fontSize + 6;
+		const muted = "#5F6673";
+		const hairline = "#D8DDE5";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 
@@ -143,7 +142,7 @@ const useLaprasTemplate = (): LaprasTemplate => {
 				backgroundColor: background,
 				paddingHorizontal: metrics.page.paddingHorizontal,
 				paddingVertical: metrics.page.paddingVertical,
-				rowGap: metrics.gapY(1.5),
+				rowGap: metrics.headerGap * 0.85,
 				fontFamily: metadata.typography.body.fontFamily,
 				fontSize: metadata.typography.body.fontSize,
 				lineHeight: metadata.typography.body.lineHeight,
@@ -173,6 +172,7 @@ const useLaprasTemplate = (): LaprasTemplate => {
 			},
 			small: {
 				fontSize: metadata.typography.body.fontSize * 0.875,
+				color: muted,
 			},
 			bold: {
 				fontWeight: metadata.typography.body.fontWeights.at(-1) ?? "600",
@@ -207,21 +207,26 @@ const useLaprasTemplate = (): LaprasTemplate => {
 			},
 			section: {
 				flexDirection: "column",
-				rowGap: metrics.gapY(0.25),
-				borderWidth: 1,
-				borderColor: borderColor,
-				borderRadius: pictureBorderRadius,
-				backgroundColor: background,
-				padding: metrics.gapX(1),
+				rowGap: metrics.gapY(0.32),
+				borderLeftWidth: 2,
+				borderLeftColor: primary,
+				borderBottomWidth: 0.7,
+				borderBottomColor: hairline,
+				paddingLeft: metrics.gapX(0.7),
+				paddingBottom: metrics.gapY(0.55),
 			},
 			sectionHeading: {
 				alignSelf: "flex-start",
-				marginTop: -headingNegativeMargin,
-				backgroundColor: background,
-				paddingHorizontal: metrics.gapX(1),
+				color: primary,
+				fontSize: metadata.typography.heading.fontSize * 0.92,
+				paddingBottom: metrics.gapY(0.04),
+				textAlign: r.sectionHeadingTextAlign,
+			},
+			sectionItems: {
+				rowGap: metrics.gapY(0.35),
 			},
 			item: {
-				rowGap: metrics.gapY(0.125),
+				rowGap: metrics.gapY(0.14),
 			},
 			levelContainer: {
 				width: "100%",
@@ -234,13 +239,11 @@ const useLaprasTemplate = (): LaprasTemplate => {
 			},
 			header: {
 				flexDirection: r.row,
-				alignItems: "center",
+				alignItems: "flex-start",
 				columnGap: metrics.gapX(1),
-				borderWidth: 1,
-				borderColor: borderColor,
-				borderRadius: pictureBorderRadius,
-				backgroundColor: background,
-				padding: metrics.gapX(1),
+				borderBottomWidth: 1.2,
+				borderBottomColor: foreground,
+				paddingBottom: metrics.gapY(0.7),
 			},
 			picture: {
 				width: picture.size,
@@ -255,6 +258,7 @@ const useLaprasTemplate = (): LaprasTemplate => {
 				transform: `rotate(${picture.rotation}deg)`,
 			},
 			headerTitle: {
+				flex: 1,
 				rowGap: metrics.gapY(0.5),
 			},
 			headerIdentity: {
@@ -269,12 +273,13 @@ const useLaprasTemplate = (): LaprasTemplate => {
 				flexDirection: r.row,
 				flexWrap: "wrap",
 				rowGap: metrics.gapY(0.125),
-				columnGap: metrics.gapX(0.5),
+				columnGap: metrics.gapX(0.7),
 			},
 			contactItem: {
 				flexDirection: r.row,
 				alignItems: "center",
 				columnGap: metrics.gapX(1 / 6),
+				color: muted,
 			},
 			sectionGroup: {},
 		});

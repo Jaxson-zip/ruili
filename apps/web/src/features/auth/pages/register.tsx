@@ -80,7 +80,7 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 
 				<div className="text-muted-foreground">
 					<Trans>
-						Already have an account?{" "}
+						已有账号？{" "}
 						<Button
 							variant="link"
 							nativeButton={false}

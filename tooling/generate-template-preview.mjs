@@ -107,7 +107,7 @@ try {
 	await page.waitForTimeout(500);
 
 	await page.locator('nav[aria-label="快速编辑"]').getByRole("button", { name: "模板", exact: true }).click();
-	await page.getByRole("button", { name: /切换模板/ }).click();
+	await page.getByRole("button", { name: /更换模板/ }).click();
 
 	const templateDialog = page.locator('[role="dialog"]');
 	await templateDialog.waitFor({ state: "visible", timeout: 10_000 });

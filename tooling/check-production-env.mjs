@@ -4,6 +4,7 @@ import process from "node:process";
 
 const args = process.argv.slice(2);
 const allowLocal = args.includes("--allow-local");
+const allowTrustedProxyHeaders = args.includes("--allow-trusted-proxy-headers");
 const envArg = args.find((arg) => !arg.startsWith("--"));
 const envPath = path.resolve(envArg ?? ".env");
 
@@ -14,6 +15,8 @@ const requiredKeys = [
 	"AUTH_SECRET",
 	"S3_ACCESS_KEY_ID",
 	"S3_SECRET_ACCESS_KEY",
+	"S3_ENDPOINT",
+	"S3_BUCKET",
 	"REDIS_URL",
 	"ENCRYPTION_SECRET",
 ];
@@ -70,6 +73,27 @@ const tryParseUrl = (value) => {
 	}
 };
 
+const safeDecodeURIComponent = (value) => {
+	try {
+		return decodeURIComponent(value);
+	} catch {
+		return value;
+	}
+};
+
+const isTrue = (value) => value === "true";
+
+const isLocalHostname = (hostname) =>
+	["localhost", "127.0.0.1", "0.0.0.0", "::1", "host.docker.internal", "minio", "s3", "seaweedfs"].includes(hostname);
+
+const isComposeInternalS3Endpoint = (url) =>
+	url?.protocol === "http:" &&
+	url.hostname === "seaweedfs" &&
+	url.port === "8333" &&
+	url.pathname === "/" &&
+	url.search === "" &&
+	url.hash === "";
+
 const failures = [];
 const warnings = [];
 
@@ -88,8 +112,11 @@ if (!fs.existsSync(envPath)) {
 		const url = tryParseUrl(appUrl);
 		if (!url) failures.push("APP_URL 不是有效 URL");
 		if (!allowLocal && url?.protocol !== "https:") failures.push("APP_URL 正式上线必须使用 https:// 域名");
-		if (!allowLocal && ["localhost", "127.0.0.1", "0.0.0.0"].includes(url?.hostname ?? "")) {
+		if (!allowLocal && isLocalHostname(url?.hostname ?? "")) {
 			failures.push("APP_URL 仍然指向本机地址");
+		}
+		if (url && (url.pathname !== "/" || url.search !== "" || url.hash !== "")) {
+			failures.push("APP_URL 必须是站点根地址，不能带路径、查询参数或 hash");
 		}
 	}
 
@@ -99,17 +126,31 @@ if (!fs.existsSync(envPath)) {
 		if (!url) failures.push("DATABASE_URL 不是有效 PostgreSQL URL");
 		if (url && !["postgres:", "postgresql:"].includes(url.protocol))
 			failures.push("DATABASE_URL 协议必须是 postgres/postgresql");
-		if (!allowLocal && ["localhost", "127.0.0.1", "0.0.0.0"].includes(url?.hostname ?? "")) {
+		if (!allowLocal && isLocalHostname(url?.hostname ?? "")) {
 			failures.push("DATABASE_URL 正式上线不应指向本机地址");
 		}
-		if (databaseUrl.includes("postgres:postgres@")) failures.push("DATABASE_URL 仍在使用默认 postgres 密码");
+		const urlPassword = url?.password ? safeDecodeURIComponent(url.password) : "";
+		if (url?.username === "postgres" && urlPassword === "postgres")
+			failures.push("DATABASE_URL 仍在使用默认 postgres 密码");
 
 		const postgresPassword = env.get("POSTGRES_PASSWORD");
-		const urlPassword = url?.password ? decodeURIComponent(url.password) : "";
 		if (url?.hostname === "postgres" && postgresPassword && urlPassword && postgresPassword !== urlPassword) {
 			failures.push("POSTGRES_PASSWORD 和 DATABASE_URL 中的数据库密码不一致");
 		}
 	}
+
+	const s3Endpoint = env.get("S3_ENDPOINT");
+	if (s3Endpoint) {
+		const url = tryParseUrl(s3Endpoint);
+		if (isPlaceholder(s3Endpoint)) failures.push("S3_ENDPOINT 仍是示例值");
+		if (!url) failures.push("S3_ENDPOINT 不是有效 URL");
+		if (!allowLocal && url && !isComposeInternalS3Endpoint(url) && isLocalHostname(url.hostname)) {
+			failures.push("S3_ENDPOINT 正式上线不应指向本机或内部开发服务");
+		}
+	}
+
+	const s3Bucket = env.get("S3_BUCKET");
+	if (s3Bucket && isPlaceholder(s3Bucket)) failures.push("S3_BUCKET 仍是示例值");
 
 	for (const key of [
 		"POSTGRES_PASSWORD",
@@ -134,7 +175,18 @@ if (!fs.existsSync(envPath)) {
 		failures.push("ENCRYPTION_SECRET 长度至少 32 位");
 	}
 
+	if (isTrue(env.get("FLAG_ALLOW_UNSAFE_AI_BASE_URL")))
+		failures.push("FLAG_ALLOW_UNSAFE_AI_BASE_URL 不能在生产环境开启");
+	if (isTrue(env.get("FLAG_ALLOW_UNSAFE_OAUTH_REDIRECT_URI")))
+		failures.push("FLAG_ALLOW_UNSAFE_OAUTH_REDIRECT_URI 不能在生产环境开启");
+	if (isTrue(env.get("FLAG_TRUST_PROXY_HEADERS")) && !allowTrustedProxyHeaders) {
+		failures.push("FLAG_TRUST_PROXY_HEADERS 已开启；如确认上游代理可信，请显式传入 --allow-trusted-proxy-headers");
+	}
+
 	if (!env.get("SMTP_HOST")) warnings.push("SMTP 未配置：注册/找回密码邮件可能只能输出到日志");
+	if (env.get("SMTP_HOST") && isPlaceholder(env.get("SMTP_FROM"))) {
+		failures.push("SMTP_FROM 仍是示例值，配置 SMTP 后必须使用真实发件地址");
+	}
 	if (env.get("FLAG_DISABLE_SIGNUPS") !== "true") warnings.push("当前允许公开注册；正式开放前确认是否需要关闭");
 	if (env.get("FLAG_TRUST_PROXY_HEADERS") !== "true")
 		warnings.push("如放在 Nginx/CDN 后面，建议确认是否需要开启 FLAG_TRUST_PROXY_HEADERS");

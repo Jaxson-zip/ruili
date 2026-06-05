@@ -22,18 +22,17 @@ export function VerifyTwoFactorBackupPage() {
 		defaultValues: { code: "" },
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {
-			const toastId = toast.loading(t`Verifying backup code...`);
+			const toastId = toast.loading(t`正在验证备用码...`);
 			const formattedCode = `${value.code.slice(0, 5)}-${value.code.slice(5)}`;
 
 			const { error } = await authClient.twoFactor.verifyBackupCode({ code: formattedCode });
 
 			if (error) {
 				toast.error(
-					error.message ||
-						t({
-							comment: "Fallback toast when verifying a backup two-factor authentication code fails",
-							message: "Failed to verify your backup code. Please try again.",
-						}),
+					t({
+						comment: "Fallback toast when verifying a backup two-factor authentication code fails",
+						message: "备用码验证失败，请重试。",
+					}),
 					{ id: toastId },
 				);
 				return;
@@ -95,14 +94,14 @@ export function VerifyTwoFactorBackupPage() {
 						render={
 							<Link to="/auth/verify-2fa">
 								<ArrowLeftIcon />
-								<Trans comment="Secondary navigation button on backup-code verification screen">Go Back</Trans>
+								<Trans comment="Secondary navigation button on backup-code verification screen">返回</Trans>
 							</Link>
 						}
 					/>
 
 					<Button type="submit" className="flex-1">
 						<CheckIcon />
-						<Trans comment="Primary action button to submit backup code">Verify</Trans>
+						<Trans comment="Primary action button to submit backup code">验证</Trans>
 					</Button>
 				</div>
 			</form>

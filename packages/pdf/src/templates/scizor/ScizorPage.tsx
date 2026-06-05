@@ -115,7 +115,8 @@ const useScizorTemplate = (): ScizorTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const divider = "#D8DCE2";
+		const muted = "#5F6673";
+		const divider = "#D8DDE5";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 		const bodyText = {
@@ -131,11 +132,9 @@ const useScizorTemplate = (): ScizorTemplate => {
 			page: {
 				color: foreground,
 				backgroundColor: background,
-				borderTopWidth: metrics.gapY(0.45),
-				borderTopColor: primary,
 				paddingHorizontal: metrics.page.paddingHorizontal,
 				paddingVertical: metrics.page.paddingVertical,
-				rowGap: metrics.sectionGap,
+				rowGap: metrics.headerGap * 0.85,
 				fontFamily: metadata.typography.body.fontFamily,
 				fontSize: metadata.typography.body.fontSize,
 				lineHeight: metadata.typography.body.lineHeight,
@@ -165,6 +164,7 @@ const useScizorTemplate = (): ScizorTemplate => {
 			},
 			small: {
 				fontSize: metadata.typography.body.fontSize * 0.875,
+				color: muted,
 			},
 			bold: {
 				fontWeight: metadata.typography.body.fontWeights.at(-1) ?? "700",
@@ -200,22 +200,25 @@ const useScizorTemplate = (): ScizorTemplate => {
 			},
 			section: {
 				flexDirection: "column",
-				rowGap: metrics.gapY(0.25),
-				borderTopWidth: 1,
+				rowGap: metrics.gapY(0.32),
+				borderTopWidth: 0.8,
 				borderTopColor: divider,
-				paddingTop: metrics.gapY(0.65),
+				paddingTop: metrics.gapY(0.5),
 			},
 			sectionHeading: {
-				color: foreground,
-				fontSize: metadata.typography.heading.fontSize * 0.9,
+				color: primary,
+				fontSize: metadata.typography.heading.fontSize * 0.92,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
-				textTransform: "uppercase",
+				borderLeftWidth: 2,
+				borderLeftColor: primary,
+				paddingLeft: metrics.gapX(0.45),
+				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				rowGap: metrics.itemGapY,
+				rowGap: metrics.gapY(0.36),
 			},
 			item: {
-				rowGap: metrics.gapY(0.125),
+				rowGap: metrics.gapY(0.14),
 			},
 			levelContainer: {
 				width: "100%",
@@ -230,25 +233,27 @@ const useScizorTemplate = (): ScizorTemplate => {
 				flexDirection: r.row,
 				alignItems: "flex-start",
 				columnGap: metrics.gapX(1),
-				paddingBottom: metrics.gapY(0.35),
+				borderBottomWidth: 1.2,
+				borderBottomColor: foreground,
+				paddingBottom: metrics.gapY(0.7),
 			},
 			headerIdentity: {
 				flex: 1,
 				...r.headerIdentity,
-				rowGap: metrics.gapY(0.45),
+				rowGap: metrics.gapY(0.32),
 			},
 			headerName: {
 				color: foreground,
-				fontSize: metadata.typography.heading.fontSize * 1.85,
+				fontSize: metadata.typography.heading.fontSize * 1.72,
 				lineHeight: headerNameLineHeight,
 			},
 			headerNameRule: {
-				width: "72%",
-				borderBottomWidth: 2,
-				borderBottomColor: divider,
+				width: "36%",
+				borderBottomWidth: 1.2,
+				borderBottomColor: primary,
 			},
 			headerHeadline: {
-				color: foreground,
+				color: muted,
 			},
 			headerContactRow: {
 				flexDirection: r.row,
@@ -260,14 +265,14 @@ const useScizorTemplate = (): ScizorTemplate => {
 				flexDirection: r.row,
 				alignItems: "center",
 				columnGap: metrics.gapX(1 / 6),
-				color: foreground,
+				color: muted,
 			},
 			picture: {
-				width: picture.size,
-				height: picture.size,
+				width: Math.min(picture.size, 58),
+				height: Math.min(picture.size, 58),
 				objectFit: "cover",
 				aspectRatio: picture.aspectRatio,
-				borderRadius: picture.borderRadius,
+				borderRadius: Math.min(picture.borderRadius, 8),
 				borderColor: rgbaStringToHex(picture.borderColor),
 				borderWidth: picture.borderWidth,
 				shadowColor: rgbaStringToHex(picture.shadowColor),
@@ -285,10 +290,11 @@ const useScizorTemplate = (): ScizorTemplate => {
 			colors,
 			styles: {
 				...baseStyles,
-				page: {
-					...baseStyles.page,
-					borderTopColor: primary,
-				},
+				sectionHeading: (context) => ({
+					...baseStyles.sectionHeading,
+					color: accentFor(context),
+					borderLeftColor: accentFor(context),
+				}),
 				levelItem: (context) => ({ borderColor: accentFor(context) }),
 				levelItemActive: (context) => ({ backgroundColor: accentFor(context) }),
 				icon: (context) => ({

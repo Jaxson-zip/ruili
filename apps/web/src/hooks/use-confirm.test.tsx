@@ -42,7 +42,7 @@ describe("useConfirm", () => {
 		const cancelBtn = document.body.querySelector('button[type="button"][data-slot="alert-dialog-cancel"]');
 		// Fallback: cancel buttons in shadcn/base-ui dialogs usually carry role="button" + text.
 		const buttons = Array.from(document.body.querySelectorAll<HTMLButtonElement>("button"));
-		const cancel = buttons.find((b) => /cancel/i.test(b.textContent ?? ""));
+		const cancel = buttons.find((b) => /取消/.test(b.textContent ?? ""));
 
 		await act(async () => {
 			(cancelBtn as HTMLButtonElement | null)?.click() ?? cancel?.click();

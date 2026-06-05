@@ -57,6 +57,6 @@ describe("Header", () => {
 	it("labels the navigation landmark", () => {
 		const { container } = renderHeader();
 		const nav = container.querySelector("nav") as HTMLElement;
-		expect(nav.getAttribute("aria-label")).toBe("Main navigation");
+		expect(nav.getAttribute("aria-label")).toBe("主导航");
 	});
 });

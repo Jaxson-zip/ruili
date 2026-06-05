@@ -6,6 +6,7 @@ export type TemplateMetadata = {
 	name: string;
 	description: MessageDescriptor;
 	imageUrl: string;
+	accentColor?: string;
 	tags: string[];
 	sidebarPosition: "left" | "right" | "none";
 };
@@ -27,6 +28,7 @@ export const templates = {
 		name: "标准双栏",
 		description: msg`适合产品、技术和通用岗位，左侧放辅助信息，右侧突出总结、经历和项目成果。`,
 		imageUrl: "/templates/jpg/azurill.jpg",
+		accentColor: "rgba(31, 58, 95, 1)",
 		tags: ["双栏", "中文投递", "产品", "技术岗"],
 		sidebarPosition: "left",
 	},
@@ -34,6 +36,7 @@ export const templates = {
 		name: "企业简洁",
 		description: msg`克制、稳重、信息密度适中，适合金融、咨询、运营和传统企业岗位。`,
 		imageUrl: "/templates/jpg/bronzor.jpg",
+		accentColor: "rgba(111, 94, 74, 1)",
 		tags: ["简洁", "专业", "金融", "咨询"],
 		sidebarPosition: "none",
 	},
@@ -55,6 +58,7 @@ export const templates = {
 		name: "ATS 极简",
 		description: msg`少装饰、强可读，适合网申系统、校招和需要高兼容性的中文简历。`,
 		imageUrl: "/templates/jpg/ditto.jpg",
+		accentColor: "rgba(38, 43, 51, 1)",
 		tags: ["ATS 友好", "极简", "校招", "信息密集"],
 		sidebarPosition: "none",
 	},
@@ -83,6 +87,7 @@ export const templates = {
 		name: "资深单栏",
 		description: msg`严肃的一页单栏结构，适合资深工程师、负责人和企业级岗位投递。`,
 		imageUrl: "/templates/jpg/lapras.jpg",
+		accentColor: "rgba(49, 65, 85, 1)",
 		tags: ["单栏", "资深", "企业级", "技术负责人"],
 		sidebarPosition: "none",
 	},
@@ -104,6 +109,7 @@ export const templates = {
 		name: "通用一页",
 		description: msg`通用的一页式结构，适合技术、产品、运营和职能岗位的日常版本维护。`,
 		imageUrl: "/templates/jpg/onyx.jpg",
+		accentColor: "rgba(35, 43, 55, 1)",
 		tags: ["单栏", "通用", "一页版", "专业"],
 		sidebarPosition: "none",
 	},
@@ -125,14 +131,22 @@ export const templates = {
 		name: "高管咨询",
 		description: msg`标题强调更明确，适合咨询、高管、创业公司和需要强成果表达的候选人。`,
 		imageUrl: "/templates/jpg/scizor.jpg",
+		accentColor: "rgba(132, 93, 55, 1)",
 		tags: ["单栏", "咨询", "管理层", "成果导向"],
 		sidebarPosition: "none",
 	},
 } as const satisfies Record<Template, TemplateMetadata>;
 
-export const featuredTemplateIds = ["onyx", "azurill", "ditto", "bronzor", "lapras"] as const satisfies Template[];
+export const featuredTemplateIds = [
+	"onyx",
+	"bronzor",
+	"azurill",
+	"ditto",
+	"lapras",
+	"scizor",
+] as const satisfies Template[];
 
-export const primaryTemplateIds = ["onyx", "azurill", "ditto"] as const satisfies Template[];
+export const primaryTemplateIds = featuredTemplateIds;
 
 export const onlineStyleTemplateReferences = [
 	{

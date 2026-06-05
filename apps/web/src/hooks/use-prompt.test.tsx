@@ -30,7 +30,7 @@ describe("usePrompt", () => {
 		expect(typeof result.current).toBe("function");
 	});
 
-	it("resolves null when Cancel is clicked", async () => {
+	it("resolves null when the cancel button is clicked", async () => {
 		const { result } = renderHook(() => usePrompt(), { wrapper });
 
 		let promise!: Promise<string | null>;
@@ -39,13 +39,13 @@ describe("usePrompt", () => {
 		});
 
 		await act(async () => {
-			clickButton(/cancel/i);
+			clickButton(/取消/);
 		});
 
 		await expect(promise).resolves.toBeNull();
 	});
 
-	it("resolves to current input value when Confirm is clicked", async () => {
+	it("resolves to current input value when the confirm button is clicked", async () => {
 		const { result } = renderHook(() => usePrompt(), { wrapper });
 
 		let promise!: Promise<string | null>;
@@ -54,7 +54,7 @@ describe("usePrompt", () => {
 		});
 
 		await act(async () => {
-			clickButton(/confirm/i);
+			clickButton(/确认/);
 		});
 
 		await expect(promise).resolves.toBe("Initial");
@@ -73,7 +73,7 @@ describe("usePrompt", () => {
 		expect(input?.value).toBe("preset");
 
 		await act(async () => {
-			clickButton(/confirm/i);
+			clickButton(/确认/);
 		});
 
 		await expect(promise).resolves.toBe("preset");
