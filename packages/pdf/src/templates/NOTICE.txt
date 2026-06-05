@@ -1,0 +1,9 @@
+PDF template source notes
+
+- The PDF templates in this package are original React PDF implementations for this fork.
+- Ditto and Onyx were redesigned with layout direction inspired by open resume template projects:
+  - mnjul/html-resume, Apache License 2.0: https://github.com/mnjul/html-resume
+  - Afif718/Resumify, MIT License: https://github.com/Afif718/Resumify
+- No upstream template source code is copied into these React PDF components.
+
+Keep upstream license notices when reusing or further adapting source material.

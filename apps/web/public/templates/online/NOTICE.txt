@@ -1,0 +1,8 @@
+Template preview source notes
+
+- mnjul/html-resume: Apache License 2.0, used as layout inspiration for the timeline preview.
+- Afif718/Resumify: MIT License, used as layout inspiration for modern, sidebar, business, creative, and elegant previews.
+- mmmlllnnn/ResumeCollection: MIT License, used as the source for homepage collection preview images in ../collection.
+- The preview SVGs in this folder contain localized Chinese sample data and were generated for Ruili.
+
+Keep upstream license notices when reusing or further adapting these sources.

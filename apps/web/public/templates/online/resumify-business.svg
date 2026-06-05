@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" width="595" height="842" role="img" aria-label="商务专业">
+		<defs>
+			<style>
+				.text { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; }
+				.body { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; fill: #334155; font-weight: 400; }
+				.strong { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; font-weight: 700; }
+				.section-title { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; font-size: 14px; font-weight: 700; }
+				.muted { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; fill: #64748b; }
+				.white { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; fill: #fff; }
+			</style>
+			<filter id="paper" x="-10%" y="-10%" width="120%" height="120%">
+				<feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0f172a" flood-opacity=".12"/>
+			</filter>
+		</defs>
+		<rect x="0" y="0" width="595" height="842" rx="0" fill="#fbfaf6" filter="url(#paper)"/>
+		<g class="text"><rect x="0" y="0" width="595" height="842" fill="#fbfaf6"/>
+<text x="297.5" y="68" class="strong" font-size="29" text-anchor="middle" fill="#111827">许嘉言</text>
+<text x="297.5" y="98" class="body" font-size="12" text-anchor="middle" fill="#64748b">财务分析 / 经营分析</text>
+<text x="297.5" y="122" class="body" font-size="9.5" text-anchor="middle" fill="#64748b">深圳 · xujiayan@example.com · +86 136 0000 0000</text>
+<line x1="70" y1="150" x2="525" y2="150" stroke="#27303f" stroke-width="2"/>
+
+		<text x="70" y="196" class="section-title" fill="#27303f" >个人总结</text>
+		<line x1="70" y1="206" x2="525" y2="206" stroke="#27303f" stroke-width="1.3" opacity=".55"/>
+		<text x="70" y="224" class="body" font-size="11">具备预算、成本、经营分析和管理报表经验，熟悉多业务线预算滚动预测与利润模型搭建。</text>
+	
+
+		<text x="70" y="286" class="section-title" fill="#27303f" >工作经历</text>
+		<line x1="70" y1="296" x2="525" y2="296" stroke="#27303f" stroke-width="1.3" opacity=".55"/>
+		
+				<g>
+					<text x="70" y="322" class="strong" font-size="13">经营分析师</text>
+					<text x="70" y="340" class="muted" font-size="10">腾讯云  2021 - 至今</text>
+				
+				<circle cx="74" cy="360" r="2.4" fill="#27303f"/>
+				<text x="84" y="364" class="body" font-size="10">搭建事业部经营分析模型，月度结账周期缩短 2 天</text>
+			
+				<circle cx="74" cy="383" r="2.4" fill="#27303f"/>
+				<text x="84" y="387" class="body" font-size="10">优化费用归因口径，预算偏差率降低 18%</text>
+			
+				<circle cx="74" cy="406" r="2.4" fill="#27303f"/>
+				<text x="84" y="410" class="body" font-size="10">完成 5 条产品线毛利复盘和价格策略测算</text>
+			
+				</g>
+			
+				<g>
+					<text x="70" y="440" class="strong" font-size="13">审计顾问</text>
+					<text x="70" y="458" class="muted" font-size="10">普华永道  2018 - 2021</text>
+				
+				<circle cx="74" cy="478" r="2.4" fill="#27303f"/>
+				<text x="84" y="482" class="body" font-size="10">参与 TMT 客户年审与内控测试</text>
+			
+				<circle cx="74" cy="501" r="2.4" fill="#27303f"/>
+				<text x="84" y="505" class="body" font-size="10">负责收入确认、应收账款和成本抽样</text>
+			
+				</g>
+			
+	
+
+		<text x="70" y="594" class="section-title" fill="#27303f" >教育经历</text>
+		<line x1="70" y1="604" x2="525" y2="604" stroke="#27303f" stroke-width="1.3" opacity=".55"/>
+		<text x="70" y="626" class="body" font-size="11">中山大学 / 会计学 / 本科</text>
+	
+
+		<text x="70" y="684" class="section-title" fill="#27303f" >技能</text>
+		<line x1="70" y1="694" x2="525" y2="694" stroke="#27303f" stroke-width="1.3" opacity=".55"/>
+		
+				<rect x="70" y="712" width="56" height="20" rx="10" fill="#27303f" opacity=".10" stroke="#27303f" stroke-opacity=".25"/>
+				<text x="98" y="726" class="body" font-size="9.5" text-anchor="middle" fill="#27303f">预算管理</text>
+			
+				<rect x="133" y="712" width="56" height="20" rx="10" fill="#27303f" opacity=".10" stroke="#27303f" stroke-opacity=".25"/>
+				<text x="161" y="726" class="body" font-size="9.5" text-anchor="middle" fill="#27303f">成本分析</text>
+			
+				<rect x="70" y="739" width="96" height="20" rx="10" fill="#27303f" opacity=".10" stroke="#27303f" stroke-opacity=".25"/>
+				<text x="118" y="753" class="body" font-size="9.5" text-anchor="middle" fill="#27303f">Power BI</text>
+			
+				<rect x="173" y="739" width="48" height="20" rx="10" fill="#27303f" opacity=".10" stroke="#27303f" stroke-opacity=".25"/>
+				<text x="197" y="753" class="body" font-size="9.5" text-anchor="middle" fill="#27303f">SQL</text>
+			
+				<rect x="70" y="766" width="66" height="20" rx="10" fill="#27303f" opacity=".10" stroke="#27303f" stroke-opacity=".25"/>
+				<text x="103" y="780" class="body" font-size="9.5" text-anchor="middle" fill="#27303f">Excel</text>
+			
+				<rect x="143" y="766" width="56" height="20" rx="10" fill="#27303f" opacity=".10" stroke="#27303f" stroke-opacity=".25"/>
+				<text x="171" y="780" class="body" font-size="9.5" text-anchor="middle" fill="#27303f">财务模型</text>
+			
+	</g>
+	</svg>

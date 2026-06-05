@@ -1,0 +1,7 @@
+Font files bundled for offline PDF rendering:
+
+- IBM Plex Serif Regular/SemiBold: Copyright IBM Corp., licensed under the SIL Open Font License 1.1.
+- Noto Sans CJK SC Regular/Bold: Copyright Google Inc., licensed under the SIL Open Font License 1.1.
+- Noto Serif CJK SC Regular/Bold: Copyright Google Inc., licensed under the SIL Open Font License 1.1.
+
+These files are used so Chinese resume previews and PDF exports do not depend on external font CDNs.

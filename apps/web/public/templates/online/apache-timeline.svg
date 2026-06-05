@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" width="595" height="842" role="img" aria-label="开源时间轴">
+		<defs>
+			<style>
+				.text { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; }
+				.body { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; fill: #334155; font-weight: 400; }
+				.strong { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; font-weight: 700; }
+				.section-title { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; font-size: 14px; font-weight: 700; }
+				.muted { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; fill: #64748b; }
+				.white { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; fill: #fff; }
+			</style>
+			<filter id="paper" x="-10%" y="-10%" width="120%" height="120%">
+				<feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0f172a" flood-opacity=".12"/>
+			</filter>
+		</defs>
+		<rect x="0" y="0" width="595" height="842" rx="0" fill="#fbfaf6" filter="url(#paper)"/>
+		<g class="text"><rect x="0" y="0" width="595" height="842" fill="#fbfaf6"/>
+<text x="297.5" y="74" class="strong" font-size="30" text-anchor="middle" fill="#111827">顾承安</text>
+<text x="297.5" y="104" class="body" font-size="12" text-anchor="middle" fill="#64748b">战略咨询顾问 / 供应链方向</text>
+<line x1="210" y1="130" x2="385" y2="130" stroke="#4b5563" stroke-width="1.5"/>
+
+		<text x="96" y="182" class="section-title" fill="#4b5563" >简介</text>
+		<line x1="96" y1="192" x2="500" y2="192" stroke="#4b5563" stroke-width="1.3" opacity=".55"/>
+		<text x="96" y="210" class="body" font-size="11">参与制造、零售与新能源行业项目，擅长访谈、建模、报告撰写和高压交付。</text>
+	
+
+		<text x="96" y="280" class="section-title" fill="#4b5563" >经历时间轴</text>
+		<line x1="96" y1="290" x2="500" y2="290" stroke="#4b5563" stroke-width="1.3" opacity=".55"/>
+		
+					<text x="170" y="322" class="muted" font-size="10" text-anchor="end">2020 - 至今</text>
+					<circle cx="196" cy="318" r="4.5" fill="#fff" stroke="#4b5563" stroke-width="2"/>
+					<line x1="196" y1="326" x2="196" y2="416" stroke="#4b5563" stroke-width="1" opacity=".45"/>
+					<text x="218" y="322" class="strong" font-size="13">高级咨询顾问</text>
+					<text x="218" y="340" class="muted" font-size="11" fill="#4b5563">某咨询公司</text>
+					
+				<circle cx="222" cy="360" r="2.4" fill="#4b5563"/>
+				<text x="232" y="364" class="body" font-size="10">新能源采购降本项目，识别 1.2 亿年度节省空间</text>
+			
+				<circle cx="222" cy="383" r="2.4" fill="#4b5563"/>
+				<text x="232" y="387" class="body" font-size="10">零售门店模型重构，单店坪效提升方案落地 40 城</text>
+			
+				<circle cx="222" cy="406" r="2.4" fill="#4b5563"/>
+				<text x="232" y="410" class="body" font-size="10">负责高管访谈、财务模型与最终汇报</text>
+			
+				
+					<text x="170" y="440" class="muted" font-size="10" text-anchor="end">2018 - 2020</text>
+					<circle cx="196" cy="436" r="4.5" fill="#fff" stroke="#4b5563" stroke-width="2"/>
+					<line x1="196" y1="444" x2="196" y2="534" stroke="#4b5563" stroke-width="1" opacity=".45"/>
+					<text x="218" y="440" class="strong" font-size="13">咨询顾问</text>
+					<text x="218" y="458" class="muted" font-size="11" fill="#4b5563">德勤</text>
+					
+				<circle cx="222" cy="478" r="2.4" fill="#4b5563"/>
+				<text x="232" y="482" class="body" font-size="10">参与供应链计划和库存优化项目</text>
+			
+				<circle cx="222" cy="501" r="2.4" fill="#4b5563"/>
+				<text x="232" y="505" class="body" font-size="10">输出行业研究、竞品分析和管理层材料</text>
+			
+				
+	
+
+		<text x="96" y="626" class="section-title" fill="#4b5563" >技能</text>
+		<line x1="96" y1="636" x2="500" y2="636" stroke="#4b5563" stroke-width="1.3" opacity=".55"/>
+		
+				<rect x="96" y="654" width="56" height="20" rx="10" fill="#4b5563" opacity=".10" stroke="#4b5563" stroke-opacity=".25"/>
+				<text x="124" y="668" class="body" font-size="9.5" text-anchor="middle" fill="#4b5563">行业研究</text>
+			
+				<rect x="159" y="654" width="56" height="20" rx="10" fill="#4b5563" opacity=".10" stroke="#4b5563" stroke-opacity=".25"/>
+				<text x="187" y="668" class="body" font-size="9.5" text-anchor="middle" fill="#4b5563">财务模型</text>
+			
+				<rect x="222" y="654" width="56" height="20" rx="10" fill="#4b5563" opacity=".10" stroke="#4b5563" stroke-opacity=".25"/>
+				<text x="250" y="668" class="body" font-size="9.5" text-anchor="middle" fill="#4b5563">访谈纪要</text>
+			
+				<rect x="96" y="681" width="56" height="20" rx="10" fill="#4b5563" opacity=".10" stroke="#4b5563" stroke-opacity=".25"/>
+				<text x="124" y="695" class="body" font-size="9.5" text-anchor="middle" fill="#4b5563">高管汇报</text>
+			
+				<rect x="159" y="681" width="48" height="20" rx="10" fill="#4b5563" opacity=".10" stroke="#4b5563" stroke-opacity=".25"/>
+				<text x="183" y="695" class="body" font-size="9.5" text-anchor="middle" fill="#4b5563">供应链</text>
+			
+				<rect x="214" y="681" width="56" height="20" rx="10" fill="#4b5563" opacity=".10" stroke="#4b5563" stroke-opacity=".25"/>
+				<text x="242" y="695" class="body" font-size="9.5" text-anchor="middle" fill="#4b5563">英文汇报</text>
+			
+	
+<text x="96" y="742" class="body" font-size="11">复旦大学 / 管理学硕士</text></g>
+	</svg>

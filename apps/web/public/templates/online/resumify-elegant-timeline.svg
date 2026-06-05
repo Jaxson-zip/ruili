@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" width="595" height="842" role="img" aria-label="优雅时间轴">
+		<defs>
+			<style>
+				.text { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; }
+				.body { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; fill: #334155; font-weight: 400; }
+				.strong { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; font-weight: 700; }
+				.section-title { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; font-size: 14px; font-weight: 700; }
+				.muted { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; fill: #64748b; }
+				.white { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; fill: #fff; }
+			</style>
+			<filter id="paper" x="-10%" y="-10%" width="120%" height="120%">
+				<feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0f172a" flood-opacity=".12"/>
+			</filter>
+		</defs>
+		<rect x="0" y="0" width="595" height="842" rx="0" fill="#fbfaf6" filter="url(#paper)"/>
+		<g class="text"><rect x="0" y="0" width="595" height="842" fill="#fbfaf6"/>
+<text x="297.5" y="74" class="strong" font-size="30" text-anchor="middle" fill="#111827">陈若宁</text>
+<text x="297.5" y="104" class="body" font-size="12" text-anchor="middle" fill="#64748b">用户运营 / 增长策略</text>
+<line x1="210" y1="130" x2="385" y2="130" stroke="#9a3412" stroke-width="1.5"/>
+
+		<text x="96" y="182" class="section-title" fill="#9a3412" >简介</text>
+		<line x1="96" y1="192" x2="500" y2="192" stroke="#9a3412" stroke-width="1.3" opacity=".55"/>
+		<text x="96" y="210" class="body" font-size="11">6 年互联网运营经验，擅长用户分层、活动策略和转化漏斗优化，能独立完成从策略到复盘。</text>
+	
+
+		<text x="96" y="280" class="section-title" fill="#9a3412" >经历时间轴</text>
+		<line x1="96" y1="290" x2="500" y2="290" stroke="#9a3412" stroke-width="1.3" opacity=".55"/>
+		
+					<text x="170" y="322" class="muted" font-size="10" text-anchor="end">2020 - 至今</text>
+					<circle cx="196" cy="318" r="4.5" fill="#fff" stroke="#9a3412" stroke-width="2"/>
+					<line x1="196" y1="326" x2="196" y2="416" stroke="#9a3412" stroke-width="1" opacity=".45"/>
+					<text x="218" y="322" class="strong" font-size="13">增长运营负责人</text>
+					<text x="218" y="340" class="muted" font-size="11" fill="#9a3412">小满科技</text>
+					
+				<circle cx="222" cy="360" r="2.4" fill="#9a3412"/>
+				<text x="232" y="364" class="body" font-size="10">会员转化率从 8.4% 提升至 13.2%</text>
+			
+				<circle cx="222" cy="383" r="2.4" fill="#9a3412"/>
+				<text x="232" y="387" class="body" font-size="10">搭建用户分层策略，沉默召回率提升 24%</text>
+			
+				<circle cx="222" cy="406" r="2.4" fill="#9a3412"/>
+				<text x="232" y="410" class="body" font-size="10">年度大促 GMV 同比增长 46%</text>
+			
+				
+					<text x="170" y="440" class="muted" font-size="10" text-anchor="end">2017 - 2020</text>
+					<circle cx="196" cy="436" r="4.5" fill="#fff" stroke="#9a3412" stroke-width="2"/>
+					<line x1="196" y1="444" x2="196" y2="534" stroke="#9a3412" stroke-width="1" opacity=".45"/>
+					<text x="218" y="440" class="strong" font-size="13">用户运营</text>
+					<text x="218" y="458" class="muted" font-size="11" fill="#9a3412">每日优鲜</text>
+					
+				<circle cx="222" cy="478" r="2.4" fill="#9a3412"/>
+				<text x="232" y="482" class="body" font-size="10">负责拉新活动和留存策略，月活提升 28%</text>
+			
+				<circle cx="222" cy="501" r="2.4" fill="#9a3412"/>
+				<text x="232" y="505" class="body" font-size="10">建立 A/B 测试流程，沉淀 18 个策略模板</text>
+			
+				
+	
+
+		<text x="96" y="626" class="section-title" fill="#9a3412" >技能</text>
+		<line x1="96" y1="636" x2="500" y2="636" stroke="#9a3412" stroke-width="1.3" opacity=".55"/>
+		
+				<rect x="96" y="654" width="56" height="20" rx="10" fill="#9a3412" opacity=".10" stroke="#9a3412" stroke-opacity=".25"/>
+				<text x="124" y="668" class="body" font-size="9.5" text-anchor="middle" fill="#9a3412">用户分层</text>
+			
+				<rect x="159" y="654" width="56" height="20" rx="10" fill="#9a3412" opacity=".10" stroke="#9a3412" stroke-opacity=".25"/>
+				<text x="187" y="668" class="body" font-size="9.5" text-anchor="middle" fill="#9a3412">活动策划</text>
+			
+				<rect x="222" y="654" width="48" height="20" rx="10" fill="#9a3412" opacity=".10" stroke="#9a3412" stroke-opacity=".25"/>
+				<text x="246" y="668" class="body" font-size="9.5" text-anchor="middle" fill="#9a3412">SQL</text>
+			
+				<rect x="96" y="681" width="76" height="20" rx="10" fill="#9a3412" opacity=".10" stroke="#9a3412" stroke-opacity=".25"/>
+				<text x="134" y="695" class="body" font-size="9.5" text-anchor="middle" fill="#9a3412">A/B 测试</text>
+			
+				<rect x="179" y="681" width="56" height="20" rx="10" fill="#9a3412" opacity=".10" stroke="#9a3412" stroke-opacity=".25"/>
+				<text x="207" y="695" class="body" font-size="9.5" text-anchor="middle" fill="#9a3412">增长模型</text>
+			
+				<rect x="242" y="681" width="48" height="20" rx="10" fill="#9a3412" opacity=".10" stroke="#9a3412" stroke-opacity=".25"/>
+				<text x="266" y="695" class="body" font-size="9.5" text-anchor="middle" fill="#9a3412">复盘</text>
+			
+	
+<text x="96" y="742" class="body" font-size="11">南京大学 / 市场营销 / 本科</text></g>
+	</svg>
