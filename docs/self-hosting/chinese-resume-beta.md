@@ -102,6 +102,7 @@ docker compose -f compose.yml --env-file .env.production config --quiet
 docker compose -f compose.yml --env-file .env.production up -d --build
 docker compose -f compose.yml --env-file .env.production ps
 curl -f http://127.0.0.1:3000/api/health
+APP_URL_OVERRIDE=https://resume.example.com pnpm verify:beta
 ```
 
 手工检查：

@@ -8,6 +8,7 @@ const chromiumPath =
 	process.env.PLAYWRIGHT_CHROMIUM_PATH ??
 	path.join(os.homedir(), "AppData", "Local", "ms-playwright", "chromium-1208", "chrome-win64", "chrome.exe");
 const screenshotPath = path.resolve("artifacts", "homepage-templates.png");
+const expectedFeaturedTemplates = ["通用一页", "企业简洁", "标准双栏", "ATS 极简", "资深单栏", "高管咨询"];
 
 const browser = await chromium.launch({
 	executablePath: chromiumPath,
@@ -34,12 +35,13 @@ try {
 	await page.goto(`${appUrl}/#templates`, { waitUntil: "domcontentloaded" });
 	await page.getByRole("heading", { name: "中文简历模板与风格" }).waitFor({ state: "visible", timeout: 15_000 });
 
-	const systemTemplate = page.locator('img[alt="通用一页"]');
-	await systemTemplate.first().waitFor({ state: "visible", timeout: 15_000 });
+	for (const templateName of expectedFeaturedTemplates) {
+		await page.locator(`img[alt="${templateName}"]`).first().waitFor({ state: "visible", timeout: 15_000 });
+	}
 
 	const onlineStyleCount = await page.locator('img[src*="/templates/online/"]').count();
-	if (onlineStyleCount === 0) {
-		throw new Error("Homepage did not render clean online style references.");
+	if (onlineStyleCount > 0) {
+		throw new Error(`Homepage rendered ${onlineStyleCount} online style reference images.`);
 	}
 
 	const collectionReferenceCount = await page.locator('img[src*="/templates/collection/"]').count();
@@ -65,7 +67,7 @@ try {
 			{
 				ok: true,
 				url: page.url(),
-				systemTemplateCount: await systemTemplate.count(),
+				featuredTemplateCount: expectedFeaturedTemplates.length,
 				onlineStyleCount,
 				collectionReferenceCount,
 				deferredReferenceCount,
