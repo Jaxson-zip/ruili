@@ -26,6 +26,7 @@ import { useFormBlocker } from "@/hooks/use-form-blocker";
 import { makeSectionItem } from "@/libs/resume/make-section-item";
 import { createSectionItem, updateSectionItem } from "@/libs/resume/section-actions";
 import { useAppForm, withForm } from "@/libs/tanstack-form";
+import { AiPolishDescriptionAction } from "./ai-polish-action";
 
 const formSchema = experienceItemSchema;
 
@@ -152,6 +153,12 @@ const ExperienceForm = withForm({
 	render: function ExperienceFormRenderer({ form }) {
 		const inlineLink = useStore(form.store, (s) => s.values.website.inlineLink);
 		const roles = useStore(form.store, (s) => s.values.roles);
+		const polishItem = useStore(form.store, (s) => ({
+			title: s.values.position,
+			organization: s.values.company,
+			period: s.values.period,
+			location: s.values.location,
+		}));
 		const hasRoles = roles.length > 0;
 
 		const handleReorderRoles = (newOrder: RoleItem[]) => {
@@ -274,6 +281,12 @@ const ExperienceForm = withForm({
 								<FormLabel>
 									<Trans>Description</Trans>
 								</FormLabel>
+								<AiPolishDescriptionAction
+									itemKind="experience"
+									item={polishItem}
+									descriptionHtml={field.state.value}
+									onDescriptionChange={(value) => field.handleChange(value)}
+								/>
 								<FormControl render={<RichInput value={field.state.value} onChange={(v) => field.handleChange(v)} />} />
 								<FormMessage errors={field.state.meta.errors} />
 							</FormItem>
@@ -299,6 +312,8 @@ const RoleFields = withForm({
 	},
 	render: function RoleFieldsRenderer({ form, role, index, onRemove }) {
 		const controls = useDragControls();
+		const company = useStore(form.store, (s) => s.values.company);
+		const location = useStore(form.store, (s) => s.values.location);
 
 		return (
 			<Reorder.Item
@@ -382,6 +397,17 @@ const RoleFields = withForm({
 								<FormLabel>
 									<Trans>Description</Trans>
 								</FormLabel>
+								<AiPolishDescriptionAction
+									itemKind="role"
+									item={{
+										title: role.position,
+										organization: company,
+										period: role.period,
+										location,
+									}}
+									descriptionHtml={field.state.value}
+									onDescriptionChange={(value) => field.handleChange(value)}
+								/>
 								<FormControl render={<RichInput value={field.state.value} onChange={(v) => field.handleChange(v)} />} />
 								<FormMessage errors={field.state.meta.errors} />
 							</FormItem>

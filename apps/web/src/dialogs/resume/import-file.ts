@@ -35,3 +35,58 @@ export function deriveImportedResumeName(data: ResumeData, fileName: string) {
 
 	return parsedName || fileNameWithoutExtension || undefined;
 }
+
+type AiImportReadinessInput = {
+	type: string;
+	isLoadingAiProviders: boolean;
+	hasAIProvider: boolean;
+	hasOcrProvider: boolean;
+};
+
+export type AiImportReadiness = {
+	blocked: boolean;
+	title: string;
+	description: string;
+	actionLabel?: string;
+};
+
+export function getAiImportReadiness(input: AiImportReadinessInput): AiImportReadiness | null {
+	if (!["docx", "pdf", "image"].includes(input.type)) return null;
+
+	if (input.isLoadingAiProviders) {
+		return {
+			blocked: true,
+			title: "正在检查 AI 配置",
+			description: "请稍候，系统正在确认是否有已测试通过的 AI Provider。",
+		};
+	}
+
+	if (!input.hasAIProvider) {
+		return {
+			blocked: true,
+			title: "需要先配置可用的 AI 模型",
+			description: "PDF、Word 和图片导入需要 LLM 解析内容。请在设置里添加并测试一个 AI Provider。",
+			actionLabel: "去配置 AI",
+		};
+	}
+
+	if (input.type === "image" && !input.hasOcrProvider) {
+		return {
+			blocked: true,
+			title: "图片导入还需要 OCR Provider",
+			description: "图片和扫描件需要先通过 OCR 识别文字，再交给 AI 结构化成简历。",
+			actionLabel: "去配置 OCR",
+		};
+	}
+
+	if (input.type === "pdf" && !input.hasOcrProvider) {
+		return {
+			blocked: false,
+			title: "扫描版 PDF 建议先配置 OCR",
+			description: "普通文本 PDF 可以直接尝试导入；如果 PDF 是截图或扫描件，请先配置 OCR，否则可能解析失败。",
+			actionLabel: "去配置 OCR",
+		};
+	}
+
+	return null;
+}

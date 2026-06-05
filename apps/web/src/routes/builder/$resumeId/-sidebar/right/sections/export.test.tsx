@@ -66,6 +66,7 @@ describe("ExportSectionBuilder", () => {
 		expect(screen.getByText("JSON")).toBeInTheDocument();
 		expect(screen.getByText("DOCX")).toBeInTheDocument();
 		expect(screen.getByText("PDF")).toBeInTheDocument();
+		expect(screen.getByText(/复杂双栏或强视觉模板请以 PDF 为准/)).toBeInTheDocument();
 	});
 
 	it("downloads a JSON blob when the JSON button is clicked", () => {

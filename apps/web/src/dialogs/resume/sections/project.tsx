@@ -22,6 +22,7 @@ import { useFormBlocker } from "@/hooks/use-form-blocker";
 import { makeSectionItem } from "@/libs/resume/make-section-item";
 import { createSectionItem, updateSectionItem } from "@/libs/resume/section-actions";
 import { useAppForm, withForm } from "@/libs/tanstack-form";
+import { AiPolishDescriptionAction } from "./ai-polish-action";
 
 const formSchema = projectItemSchema;
 
@@ -144,6 +145,11 @@ const ProjectForm = withForm({
 	defaultValues,
 	render: function ProjectFormRenderer({ form }) {
 		const inlineLink = useStore(form.store, (s) => s.values.website.inlineLink);
+		const polishItem = useStore(form.store, (s) => ({
+			title: s.values.name,
+			organization: s.values.website.label,
+			period: s.values.period,
+		}));
 
 		return (
 			<>
@@ -199,6 +205,12 @@ const ProjectForm = withForm({
 							<FormLabel>
 								<Trans>Description</Trans>
 							</FormLabel>
+							<AiPolishDescriptionAction
+								itemKind="project"
+								item={polishItem}
+								descriptionHtml={field.state.value}
+								onDescriptionChange={(value) => field.handleChange(value)}
+							/>
 							<FormControl render={<RichInput value={field.state.value} onChange={(v) => field.handleChange(v)} />} />
 							<FormMessage errors={field.state.meta.errors} />
 						</FormItem>

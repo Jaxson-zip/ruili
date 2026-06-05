@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { defaultResumeData } from "@reactive-resume/schema/resume/default";
 import {
 	deriveImportedResumeName,
+	getAiImportReadiness,
 	isImageResumeFile,
 	isJsonResumeFile,
 	isPdfResumeFile,
@@ -46,5 +47,43 @@ describe("resume import file helpers", () => {
 		data.basics.name = "";
 
 		expect(deriveImportedResumeName(data, "frontend-resume.docx")).toBe("frontend-resume");
+	});
+
+	it("blocks AI imports until the required provider setup is available", () => {
+		expect(
+			getAiImportReadiness({
+				type: "docx",
+				isLoadingAiProviders: false,
+				hasAIProvider: false,
+				hasOcrProvider: false,
+			}),
+		).toMatchObject({ blocked: true, title: "需要先配置可用的 AI 模型" });
+
+		expect(
+			getAiImportReadiness({
+				type: "image",
+				isLoadingAiProviders: false,
+				hasAIProvider: true,
+				hasOcrProvider: false,
+			}),
+		).toMatchObject({ blocked: true, title: "图片导入还需要 OCR Provider" });
+
+		expect(
+			getAiImportReadiness({
+				type: "pdf",
+				isLoadingAiProviders: false,
+				hasAIProvider: true,
+				hasOcrProvider: false,
+			}),
+		).toMatchObject({ blocked: false, title: "扫描版 PDF 建议先配置 OCR" });
+
+		expect(
+			getAiImportReadiness({
+				type: "json-resume-json",
+				isLoadingAiProviders: false,
+				hasAIProvider: false,
+				hasOcrProvider: false,
+			}),
+		).toBeNull();
 	});
 });

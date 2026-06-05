@@ -8,6 +8,18 @@
 - 建议 Beta：2 核 2G 起步。
 - 建议系统：Debian 12 / Ubuntu 22.04+ / 1Panel 或纯 Docker Compose。
 
+如果只能用 1 核 1G，务必先开启 2G 左右 Swap。PDF 导出会启动无头浏览器，和 AI/OCR 导入同时发生时容易触发 OOM。低配机器建议先限制内测人数，避免多人同时导出 PDF。
+
+Ubuntu / Debian 可以参考：
+
+```bash
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+```
+
 ## 生产环境变量
 
 不要直接使用 `.env.example` 启动生产服务。先复制一份：
@@ -87,6 +99,7 @@ docker compose -f compose.yml config
 - AI 简历分析输出中文。
 - 切换模板后内容不丢失。
 - PDF 导出非空白。
+- 1 核 1G 机器已开启 Swap，并测试连续导出 3 次 PDF。
 
 ## 开源署名
 

@@ -10,6 +10,7 @@ import { aiRequestRateLimit } from "../../middleware/rate-limit";
 import { aiProvidersService } from "../ai-providers/service";
 import { resumeService } from "../resume/service";
 import { createFileInputSchema } from "./file-input";
+import { polishedResumeItemOutputSchema, polishResumeItemInputSchema } from "./polish";
 import { aiService } from "./service";
 
 const pdfFileInputSchema = createFileInputSchema(["pdf"]);
@@ -315,6 +316,54 @@ export const aiRouter = {
 				if (error instanceof ZodError) {
 					throw new ORPCError("BAD_REQUEST", {
 						message: "Invalid resume analysis structure",
+						cause: flattenError(error),
+					});
+				}
+				throw error;
+			}
+		}),
+
+	polishResumeItem: protectedProcedure
+		.route({
+			method: "POST",
+			path: "/ai/polish-resume-item",
+			tags: ["AI"],
+			operationId: "polishResumeItem",
+			summary: "Polish one resume experience or project item",
+			description:
+				"Uses the configured AI provider to rewrite one work experience, project experience, or role description in Chinese. The model must preserve user-provided facts and can optionally align wording to a target JD. Requires authentication and AI credentials.",
+			successDescription: "The resume item was polished successfully.",
+		})
+		.input(
+			polishResumeItemInputSchema.extend({
+				aiProviderId: z.string().optional(),
+			}),
+		)
+		.output(polishedResumeItemOutputSchema)
+		.use(aiRequestRateLimit)
+		.errors({
+			BAD_GATEWAY: { message: "The AI provider returned an error or is unreachable.", status: 502 },
+			BAD_REQUEST: { message: "No tested AI provider is available or the AI returned invalid data.", status: 400 },
+		})
+		.handler(async ({ context, input }) => {
+			try {
+				const provider = await getRunnableProvider(context.user.id, input.aiProviderId);
+				return await aiService.polishResumeItem({
+					provider: provider.provider,
+					model: provider.model,
+					apiKey: provider.apiKey,
+					baseURL: provider.baseURL ?? "",
+					itemKind: input.itemKind,
+					item: input.item,
+					targetJobDescription: input.targetJobDescription,
+				});
+			} catch (error) {
+				if (isCredentialEncryptionUnavailable(error)) throwCredentialEncryptionUnavailable();
+				if (isInvalidAiBaseUrlError(error)) throwAiProviderConfigError();
+				if (isAiProviderGatewayError(error)) throwAiProviderGatewayError();
+				if (error instanceof ZodError) {
+					throw new ORPCError("BAD_REQUEST", {
+						message: "Invalid polished resume item structure",
 						cause: flattenError(error),
 					});
 				}

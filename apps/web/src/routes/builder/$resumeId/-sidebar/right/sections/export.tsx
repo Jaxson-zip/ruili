@@ -136,7 +136,7 @@ export function ExportSectionBuilder() {
 				<div className="flex flex-1 flex-col gap-y-1">
 					<h6 className="font-medium">DOCX</h6>
 					<p className="text-muted-foreground text-xs leading-normal">
-						按当前系统模板生成 Word 文档，方便在 Word/WPS 里继续微调。
+						生成可编辑的 Word 文档，适合微调文字；复杂双栏或强视觉模板请以 PDF 为准。
 					</p>
 				</div>
 			</Button>

@@ -4,6 +4,7 @@ import type { ResumeData } from "@reactive-resume/schema/resume/data";
 import type { ModelMessage, UIMessage } from "ai";
 import type { fileInputSchema } from "./file-input";
 import type { CloudOcrCredentials } from "./ocr";
+import type { PolishResumeItemInput } from "./polish";
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
@@ -35,6 +36,11 @@ import { supportsProviderNativeWebSearch } from "./capabilities";
 import { extractDocxTextFromBase64 } from "./docx-text";
 import { extractTextWithCloudOcr, shouldUseExtractedText } from "./ocr";
 import { extractPdfTextFromBase64 } from "./pdf-text";
+import {
+	buildPolishResumeItemMessages,
+	normalizePolishedResumeItemOutput,
+	polishedResumeItemOutputSchema,
+} from "./polish";
 import { resolveAiBaseUrl } from "./url-policy";
 
 const aiExtractionTemplate = buildAiExtractionTemplate();
@@ -389,11 +395,30 @@ async function analyzeResume(input: AnalyzeResumeInput): Promise<ResumeAnalysis>
 	return resumeAnalysisSchema.parse(result.output);
 }
 
+type PolishResumeItemServiceInput = z.infer<typeof aiCredentialsSchema> & PolishResumeItemInput;
+
+async function polishResumeItem(input: PolishResumeItemServiceInput) {
+	const model = getModel(input);
+
+	const result = await generateText({
+		model,
+		output: Output.object({ schema: polishedResumeItemOutputSchema }),
+		messages: buildPolishResumeItemMessages(input),
+	});
+
+	if (result.output == null) {
+		throw new Error("AI returned no polished resume item output.");
+	}
+
+	return normalizePolishedResumeItemOutput(result.output);
+}
+
 export const aiService = {
 	analyzeResume,
 	chat,
 	parseImage,
 	parseDocx,
 	parsePdf,
+	polishResumeItem,
 	testConnection,
 };

@@ -34,6 +34,7 @@ import { useAppForm } from "@/libs/tanstack-form";
 import { useDialogStore } from "../store";
 import {
 	deriveImportedResumeName,
+	getAiImportReadiness,
 	isImageResumeFile,
 	isJsonResumeFile,
 	isPdfResumeFile,
@@ -114,6 +115,7 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 	const { mutateAsync: importResume } = useMutation(orpc.resume.import.mutationOptions());
 	const { data: aiProviders, isLoading: isLoadingAiProviders } = useQuery(orpc.aiProviders.list.queryOptions());
 	const hasAIProvider = aiProviders?.some((provider) => provider.enabled && provider.testStatus === "success") ?? false;
+	const hasOcrProvider = Boolean(loadBrowserOcrProvider());
 
 	const form = useAppForm({
 		defaultValues: {
@@ -246,6 +248,13 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 	});
 
 	const type = useStore(form.store, (s) => s.values.type);
+	const importReadiness = getAiImportReadiness({
+		type,
+		isLoadingAiProviders,
+		hasAIProvider,
+		hasOcrProvider,
+	});
+	const isImportBlocked = importReadiness?.blocked ?? false;
 
 	const onSelectFile = () => {
 		if (!inputRef.current) return;
@@ -256,6 +265,11 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 		const file = e.target.files?.[0];
 		if (!file) return;
 		form.setFieldValue("file", file);
+	};
+
+	const goToIntegrations = () => {
+		closeDialog();
+		void navigate({ to: "/dashboard/settings/integrations" });
 	};
 
 	useFormBlocker(form);
@@ -363,6 +377,36 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 					)}
 				</form.Field>
 
+				{importReadiness ? (
+					<div
+						className={cn(
+							"rounded-md border p-3 text-sm",
+							importReadiness.blocked
+								? "border-amber-300 bg-amber-50 text-amber-950"
+								: "border-blue-200 bg-blue-50 text-blue-950",
+						)}
+					>
+						<div className="flex items-start justify-between gap-3">
+							<div className="space-y-1">
+								<p className="font-medium">{importReadiness.title}</p>
+								<p className="text-xs leading-normal opacity-85">{importReadiness.description}</p>
+							</div>
+
+							{importReadiness.actionLabel ? (
+								<Button
+									type="button"
+									size="sm"
+									variant="outline"
+									className="shrink-0 bg-background"
+									onClick={goToIntegrations}
+								>
+									{importReadiness.actionLabel}
+								</Button>
+							) : null}
+						</div>
+					</div>
+				) : null}
+
 				<form.Field key={type} name="file">
 					{(field) => (
 						<FormItem
@@ -396,7 +440,7 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 				</form.Field>
 
 				<DialogFooter>
-					<Button type="submit" disabled={!type || isImporting}>
+					<Button type="submit" disabled={!type || isImporting || isImportBlocked}>
 						{isImporting ? <Spinner /> : null}
 						{isImporting ? t`导入中...` : t`导入`}
 					</Button>
