@@ -1,8 +1,12 @@
+import { ORPCError } from "@orpc/client";
 import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
 import { generateId, generateRandomName } from "@reactive-resume/utils/string";
 import { protectedProcedure } from "../../context";
 import { resumeDto } from "../../dto/resume";
-import { resumeMutationRateLimit } from "../../middleware/rate-limit";
+import { aiRequestRateLimit, resumeMutationRateLimit } from "../../middleware/rate-limit";
+import { buildJobDerivedResumeName } from "../ai/derive-resume";
+import { aiService } from "../ai/service";
+import { aiProvidersService } from "../ai-providers/service";
 import { buildImportedResumeSlug, resolveImportedResumeLocale, resolveImportedResumeName } from "./import";
 import { resumeService } from "./service";
 
@@ -228,6 +232,60 @@ export const crudRouter = {
 				tags: input.tags ?? original.tags,
 				locale: context.locale,
 				data: original.data,
+			});
+		}),
+
+	deriveWithJob: protectedProcedure
+		.route({
+			method: "POST",
+			path: "/resumes/{id}/derive-with-job",
+			tags: ["Resumes", "AI"],
+			operationId: "deriveResumeWithJob",
+			summary: "Create a JD-tailored duplicate",
+			description:
+				"Creates a new resume duplicate adapted to a target job description. The original resume is not modified. Requires authentication and a tested AI provider.",
+			successDescription: "The ID of the generated resume duplicate.",
+		})
+		.input(resumeDto.deriveWithJob.input)
+		.use(resumeMutationRateLimit)
+		.use(aiRequestRateLimit)
+		.output(resumeDto.deriveWithJob.output)
+		.handler(async ({ context, input }) => {
+			const [original, provider] = await Promise.all([
+				resumeService.getById({ id: input.id, userId: context.user.id }),
+				input.aiProviderId
+					? aiProvidersService.getRunnableById({ id: input.aiProviderId, userId: context.user.id })
+					: aiProvidersService.getDefaultRunnable({ userId: context.user.id }),
+			]);
+
+			if (!provider) {
+				throw new ORPCError("BAD_REQUEST", { message: "No tested AI provider is available." });
+			}
+
+			const target = {
+				...(input.company ? { company: input.company } : {}),
+				...(input.roleTitle ? { roleTitle: input.roleTitle } : {}),
+			};
+
+			const derivedData = await aiService.deriveResumeForJob({
+				provider: provider.provider,
+				model: provider.model,
+				apiKey: provider.apiKey,
+				baseURL: provider.baseURL ?? "",
+				resumeData: original.data,
+				jdText: input.jdText,
+				...target,
+			});
+			const name = buildJobDerivedResumeName(original.name, target);
+			const slug = buildImportedResumeSlug(name, generateId());
+
+			return resumeService.create({
+				userId: context.user.id,
+				name,
+				slug,
+				tags: original.tags,
+				locale: context.locale,
+				data: derivedData,
 			});
 		}),
 

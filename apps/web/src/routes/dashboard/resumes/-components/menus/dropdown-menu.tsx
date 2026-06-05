@@ -6,6 +6,7 @@ import {
 	FolderOpenIcon,
 	LockSimpleIcon,
 	LockSimpleOpenIcon,
+	MagicWandIcon,
 	PencilSimpleLineIcon,
 	SparkleIcon,
 	TrashSimpleIcon,
@@ -43,6 +44,10 @@ export function ResumeDropdownMenu({ resume, children, ...props }: Props) {
 
 	const handleDuplicate = () => {
 		openDialog("resume.duplicate", resume);
+	};
+
+	const handleDeriveWithJob = () => {
+		openDialog("resume.deriveWithJob", { id: resume.id, name: resume.name });
 	};
 
 	const handleToggleLock = async () => {
@@ -115,6 +120,13 @@ export function ResumeDropdownMenu({ resume, children, ...props }: Props) {
 				<DropdownMenuItem onClick={handleDuplicate}>
 					<CopySimpleIcon />
 					<Trans comment="Resume card dropdown action to create a copy">复制简历</Trans>
+				</DropdownMenuItem>
+
+				<DropdownMenuItem onClick={handleDeriveWithJob}>
+					<MagicWandIcon />
+					<Trans comment="Resume card dropdown action to derive a tailored copy from a job description">
+						结合 JD 派生副本
+					</Trans>
 				</DropdownMenuItem>
 
 				<DropdownMenuItem onClick={handleToggleLock}>

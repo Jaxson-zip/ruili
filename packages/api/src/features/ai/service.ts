@@ -32,7 +32,9 @@ import {
 import { aiProviderSchema } from "@reactive-resume/ai/types";
 import { applyResumePatches } from "@reactive-resume/resume/patch";
 import { resumeAnalysisOutputSchema, resumeAnalysisSchema } from "@reactive-resume/schema/resume/analysis";
+import { resumeDataSchema } from "@reactive-resume/schema/resume/data";
 import { supportsProviderNativeWebSearch } from "./capabilities";
+import { buildDeriveResumeForJobMessages } from "./derive-resume";
 import { extractDocxTextFromBase64 } from "./docx-text";
 import { extractTextWithCloudOcr, shouldUseExtractedText } from "./ocr";
 import { extractPdfTextFromBase64 } from "./pdf-text";
@@ -413,9 +415,33 @@ async function polishResumeItem(input: PolishResumeItemServiceInput) {
 	return normalizePolishedResumeItemOutput(result.output);
 }
 
+type DeriveResumeForJobInput = z.infer<typeof aiCredentialsSchema> & {
+	resumeData: ResumeData;
+	jdText: string;
+	roleTitle?: string;
+	company?: string;
+};
+
+async function deriveResumeForJob(input: DeriveResumeForJobInput): Promise<ResumeData> {
+	const model = getModel(input);
+
+	const result = await generateText({
+		model,
+		output: Output.object({ schema: resumeDataSchema }),
+		messages: buildDeriveResumeForJobMessages(input),
+	});
+
+	if (result.output == null) {
+		throw new Error("AI returned no derived resume data output.");
+	}
+
+	return resumeDataSchema.parse(result.output);
+}
+
 export const aiService = {
 	analyzeResume,
 	chat,
+	deriveResumeForJob,
 	parseImage,
 	parseDocx,
 	parsePdf,

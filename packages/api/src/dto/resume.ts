@@ -165,6 +165,16 @@ export const resumeDto = {
 		output: z.string().describe("The ID of the duplicated resume."),
 	},
 
+	deriveWithJob: {
+		input: resumeSchema.pick({ id: true }).extend({
+			aiProviderId: z.string().optional(),
+			company: z.string().trim().max(120).optional(),
+			roleTitle: z.string().trim().max(120).optional(),
+			jdText: z.string().trim().min(20).max(20_000),
+		}),
+		output: z.string().describe("The ID of the AI-derived resume duplicate."),
+	},
+
 	delete: {
 		input: resumeSchema.pick({ id: true }),
 		output: z.void(),

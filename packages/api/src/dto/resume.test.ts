@@ -43,4 +43,17 @@ describe("resume DTO output validation", () => {
 		expect(publicResume.data.metadata.notes).toBe("");
 		expect(resumeDto.getBySlug.output.safeParse(publicResume).success).toBe(true);
 	});
+
+	it("accepts JD context for deriving a tailored duplicate", () => {
+		const result = resumeDto.deriveWithJob.input.parse({
+			id: "resume-1",
+			company: " 星河科技 ",
+			roleTitle: " 高级前端工程师 ",
+			jdText: "负责 B 端 SaaS、权限系统、React 性能优化，并参与跨团队协作。",
+		});
+
+		expect(result.company).toBe("星河科技");
+		expect(result.roleTitle).toBe("高级前端工程师");
+		expect(result.jdText).toContain("React");
+	});
 });
