@@ -46,7 +46,7 @@ export function WorkbenchToolbar({ resume }: Props) {
 
 		try {
 			await exportResumeDocx(resume);
-			toast.success("Word 已导出", { id });
+			toast.success("Word 已导出；这是方便二次编辑的文字版，正式投递建议使用 PDF。", { id });
 		} catch {
 			toast.error("Word 生成失败，请重试。", { id });
 		}

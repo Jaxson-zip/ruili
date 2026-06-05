@@ -22,13 +22,17 @@ echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 
 ## 生产环境变量
 
-不要直接使用 `.env.example` 启动生产服务。先复制一份：
+不要直接使用 `.env.example` 启动生产服务。推荐先用正式 HTTPS 域名生成一份生产环境变量：
 
 ```bash
-cp .env.example .env
+pnpm deploy:init --app-url https://resume.example.com --output .env.production
+pnpm deploy:check .env.production
+docker compose -f compose.yml --env-file .env.production config --quiet
 ```
 
-必须替换这些值：
+这个命令会自动生成强随机的 `POSTGRES_PASSWORD`、`AUTH_SECRET`、`ENCRYPTION_SECRET`、SeaweedFS / S3 密钥，并写好匹配的 `DATABASE_URL`。
+
+如果你手动从 `.env.example` 复制，必须替换这些值：
 
 - `APP_URL`: 必须是你的 HTTPS 域名，例如 `https://resume.example.com`
 - `AUTH_SECRET`: `openssl rand -hex 32`
@@ -62,10 +66,10 @@ OCR_POLL_INTERVAL_MS="1000"
 ## 启动
 
 ```bash
-pnpm deploy:check .env
-docker compose -f compose.yml --env-file .env config --quiet
-docker compose -f compose.yml up -d --build
-docker compose -f compose.yml ps
+pnpm deploy:check .env.production
+docker compose -f compose.yml --env-file .env.production config --quiet
+docker compose -f compose.yml --env-file .env.production up -d --build
+docker compose -f compose.yml --env-file .env.production ps
 ```
 
 只暴露 `3000` 给反向代理。Postgres、Redis、SeaweedFS 默认只在 Docker 网络内部通信，不应直接开放公网端口。
@@ -73,8 +77,8 @@ docker compose -f compose.yml ps
 启动后至少确认：
 
 ```bash
-docker compose -f compose.yml ps
-docker compose -f compose.yml logs --tail=120 reactive_resume
+docker compose -f compose.yml --env-file .env.production ps
+docker compose -f compose.yml --env-file .env.production logs --tail=120 reactive_resume
 curl -f http://127.0.0.1:3000/api/health
 ```
 
@@ -93,10 +97,10 @@ curl -f http://127.0.0.1:3000/api/health
 ## 上线前检查
 
 ```bash
-pnpm deploy:check .env
-docker compose -f compose.yml --env-file .env config --quiet
-docker compose -f compose.yml up -d --build
-docker compose -f compose.yml ps
+pnpm deploy:check .env.production
+docker compose -f compose.yml --env-file .env.production config --quiet
+docker compose -f compose.yml --env-file .env.production up -d --build
+docker compose -f compose.yml --env-file .env.production ps
 curl -f http://127.0.0.1:3000/api/health
 ```
 

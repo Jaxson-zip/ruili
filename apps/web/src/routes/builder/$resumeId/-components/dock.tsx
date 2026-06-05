@@ -70,6 +70,7 @@ export function BuilderDock({ pageLayout, onTogglePageLayout }: BuilderDockProps
 		try {
 			const blob = await buildDocx(resume.data);
 			downloadWithAnchor(blob, filename);
+			toast.success(t`DOCX 已导出；这是方便二次编辑的文字版，正式投递建议使用 PDF。`);
 		} catch {
 			toast.error(t`生成 DOCX 时出现问题，请重试。`);
 		}
