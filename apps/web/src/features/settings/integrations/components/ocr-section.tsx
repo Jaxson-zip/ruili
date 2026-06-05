@@ -34,14 +34,14 @@ export function OCRSettingsSection() {
 			provider: "azure-document-intelligence",
 		});
 		setSavedProvider(loadBrowserOcrProvider());
-		toast.success("OCR Provider 已保存到当前浏览器。");
+		toast.success("OCR 服务商已保存到当前浏览器。");
 	};
 
 	const onClear = () => {
 		clearBrowserOcrProvider();
 		setForm(emptyForm);
 		setSavedProvider(null);
-		toast.success("OCR Provider 已清除。");
+		toast.success("OCR 服务商已清除。");
 	};
 
 	return (
@@ -50,7 +50,7 @@ export function OCRSettingsSection() {
 				<div>
 					<div className="flex flex-wrap items-center gap-2">
 						<h2 className="font-semibold text-lg">
-							<Trans>OCR Provider</Trans>
+							<Trans>OCR 服务商</Trans>
 						</h2>
 						<Badge variant="secondary">Azure Document Intelligence</Badge>
 					</div>
@@ -62,7 +62,7 @@ export function OCRSettingsSection() {
 				<p className="flex items-center gap-2 text-sm">
 					{savedProvider ? <CheckCircleIcon className="text-emerald-600" /> : <XCircleIcon className="text-rose-600" />}
 					<span className={cn(savedProvider ? "text-emerald-700" : "text-muted-foreground")}>
-						{savedProvider ? <Trans>OCR ready</Trans> : <Trans>No OCR Provider</Trans>}
+						{savedProvider ? <Trans>OCR 已就绪</Trans> : <Trans>未配置 OCR 服务商</Trans>}
 					</span>
 				</p>
 			</div>
@@ -70,7 +70,7 @@ export function OCRSettingsSection() {
 			<div className="rounded-md border bg-card p-4">
 				<div className="grid gap-4 md:grid-cols-2">
 					<div className="space-y-2">
-						<Label htmlFor="ocr-endpoint">Endpoint</Label>
+						<Label htmlFor="ocr-endpoint">服务端点 (Endpoint)</Label>
 						<Input
 							id="ocr-endpoint"
 							type="url"
@@ -109,11 +109,11 @@ export function OCRSettingsSection() {
 				<div className="mt-4 flex flex-wrap justify-end gap-2">
 					<Button variant="outline" disabled={!savedProvider} onClick={onClear}>
 						<TrashIcon />
-						<Trans>Clear</Trans>
+						<Trans>清除</Trans>
 					</Button>
 					<Button disabled={!canSave} onClick={onSave}>
 						<KeyIcon />
-						<Trans>Save OCR Provider</Trans>
+						<Trans>保存 OCR 服务商</Trans>
 					</Button>
 				</div>
 			</div>

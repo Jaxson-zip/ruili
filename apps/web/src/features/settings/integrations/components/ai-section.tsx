@@ -167,8 +167,7 @@ function ProviderRow({ provider }: ProviderRowProps) {
 								{ id: provider.id, enabled },
 								{
 									onSuccess: () => void invalidate(),
-									onError: (error) =>
-										toast.error(getOrpcErrorMessage(error, { fallback: t`Failed to update provider.` })),
+									onError: (error) => toast.error(getOrpcErrorMessage(error, { fallback: t`更新 AI 服务商失败。` })),
 								},
 							)
 						}
@@ -185,14 +184,14 @@ function ProviderRow({ provider }: ProviderRowProps) {
 							{
 								onSuccess: (response) => {
 									if (response.testStatus === "success") {
-										toast.success(t`Provider connection verified.`);
+										toast.success(t`服务商连接已验证。`);
 									} else {
-										toast.error(response.testError ?? t`Could not verify provider connection.`);
+										toast.error(response.testError ?? t`无法验证服务商连接。`);
 									}
 									void invalidate();
 								},
 								onError: (error) => {
-									toast.error(getOrpcErrorMessage(error, { fallback: t`Could not verify provider connection.` }));
+									toast.error(getOrpcErrorMessage(error, { fallback: t`无法验证服务商连接。` }));
 									void invalidate();
 								},
 							},
@@ -212,14 +211,13 @@ function ProviderRow({ provider }: ProviderRowProps) {
 							{ id: provider.id },
 							{
 								onSuccess: () => void invalidate(),
-								onError: (error) =>
-									toast.error(getOrpcErrorMessage(error, { fallback: t`Failed to delete provider.` })),
+								onError: (error) => toast.error(getOrpcErrorMessage(error, { fallback: t`删除 AI 服务商失败。` })),
 							},
 						)
 					}
 				>
 					<TrashIcon />
-					<span className="sr-only">删除 AI Provider</span>
+					<span className="sr-only">删除 AI 服务商</span>
 				</Button>
 			</div>
 		</div>
@@ -252,7 +250,7 @@ function CreateProviderForm() {
 				<div className="grid size-8 place-items-center rounded-md bg-primary/10 text-primary">
 					<PlusIcon />
 				</div>
-				<h3 className="font-semibold">添加 AI Provider</h3>
+				<h3 className="font-semibold">添加 AI 服务商</h3>
 			</div>
 
 			<div className="mb-4 flex flex-wrap items-center gap-2">
@@ -266,17 +264,17 @@ function CreateProviderForm() {
 
 			<div className="grid gap-4 md:grid-cols-2">
 				<div className="space-y-2">
-					<Label htmlFor="ai-label">Label</Label>
+					<Label htmlFor="ai-label">名称</Label>
 					<Input
 						id="ai-label"
 						value={form.label}
 						onChange={(event) => setForm((current) => ({ ...current, label: event.target.value }))}
-						placeholder={t`Work OpenAI`}
+						placeholder={t`工作用 OpenAI`}
 					/>
 				</div>
 
 				<div className="space-y-2">
-					<Label htmlFor="ai-provider">Provider</Label>
+					<Label htmlFor="ai-provider">服务商</Label>
 					<Combobox
 						id="ai-provider"
 						value={form.provider}
@@ -290,7 +288,7 @@ function CreateProviderForm() {
 				</div>
 
 				<div className="space-y-2">
-					<Label htmlFor="ai-model">Model</Label>
+					<Label htmlFor="ai-model">模型</Label>
 					<Input
 						id="ai-model"
 						value={form.model}
@@ -303,7 +301,7 @@ function CreateProviderForm() {
 				</div>
 
 				<div className="space-y-2">
-					<Label htmlFor="ai-base-url">Base URL</Label>
+					<Label htmlFor="ai-base-url">接口地址 (Base URL)</Label>
 					<Input
 						id="ai-base-url"
 						type="url"
@@ -348,17 +346,17 @@ function CreateProviderForm() {
 							{
 								onSuccess: () => {
 									setForm(emptyForm);
-									toast.success(t`AI provider saved. Test it before use.`);
+									toast.success(t`AI 服务商已保存，使用前请先测试。`);
 									void queryClient.invalidateQueries({ queryKey: orpc.aiProviders.list.queryKey() });
 								},
 								onError: (error) =>
 									toast.error(
 										getOrpcErrorMessage(error, {
 											byCode: {
-												PRECONDITION_FAILED: t`AI providers require REDIS_URL and ENCRYPTION_SECRET to be configured.`,
-												BAD_REQUEST: t`Invalid AI provider configuration.`,
+												PRECONDITION_FAILED: t`需要配置 REDIS_URL 和 ENCRYPTION_SECRET 后才能使用 AI 服务商。`,
+												BAD_REQUEST: t`AI 服务商配置无效。`,
 											},
-											fallback: t`Failed to save AI provider.`,
+											fallback: t`保存 AI 服务商失败。`,
 										}),
 									),
 							},
@@ -366,7 +364,7 @@ function CreateProviderForm() {
 					}
 				>
 					{isPending ? <Spinner /> : <KeyIcon />}
-					保存 AI Provider
+					保存 AI 服务商
 				</Button>
 			</div>
 		</div>
@@ -382,7 +380,7 @@ export function AISettingsSection() {
 		<section className="grid gap-6">
 			<div className="flex items-center justify-between gap-4">
 				<div>
-					<h2 className="font-semibold text-lg">AI Providers</h2>
+					<h2 className="font-semibold text-lg">AI 模型服务商</h2>
 					<p className="text-muted-foreground text-sm">API Key 会在服务端加密保存，保存后不会再次显示。</p>
 				</div>
 
@@ -393,7 +391,7 @@ export function AISettingsSection() {
 						<XCircleIcon className="text-rose-600" />
 					)}
 					<span className={cn(hasUsableProvider ? "text-emerald-700" : "text-muted-foreground")}>
-						{hasUsableProvider ? "AI Agent ready" : "No tested Provider"}
+						{hasUsableProvider ? "AI 助手已就绪" : "未配置已测试的服务商"}
 					</span>
 				</p>
 			</div>
@@ -408,9 +406,9 @@ export function AISettingsSection() {
 					)}
 				>
 					{isConfigError ? (
-						<Trans>AI provider management is unavailable until REDIS_URL and ENCRYPTION_SECRET are configured.</Trans>
+						<Trans>需要配置 REDIS_URL 和 ENCRYPTION_SECRET 后才能管理 AI 服务商。</Trans>
 					) : (
-						<Trans>AI provider management is unavailable. Please try again.</Trans>
+						<Trans>AI 服务商管理暂不可用，请稍后重试。</Trans>
 					)}
 				</div>
 			) : null}
@@ -421,7 +419,7 @@ export function AISettingsSection() {
 				{isLoading ? (
 					<div className="flex items-center gap-2 text-muted-foreground text-sm">
 						<Spinner />
-						加载 Provider...
+						正在加载服务商...
 					</div>
 				) : null}
 
