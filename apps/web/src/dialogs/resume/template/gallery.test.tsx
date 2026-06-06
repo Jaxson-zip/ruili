@@ -130,6 +130,32 @@ describe("TemplateGalleryDialog", () => {
 		expect(draft.metadata.layout.pages[0]?.sidebar).toContain("skills");
 	});
 
+	it("switches horizontal collection templates back to a full-width layout", () => {
+		renderGallery();
+		const preview = screen.getByRole("img", { name: "深蓝横栏" });
+		const button = preview.closest("button") as HTMLButtonElement;
+		fireEvent.click(button);
+
+		expect(updateResumeData).toHaveBeenCalledTimes(1);
+		const recipe = updateResumeData.mock.calls[0]?.[0] as (draft: typeof sampleResumeData) => void;
+		const draft = structuredClone(sampleResumeData);
+		draft.metadata.layout = {
+			sidebarWidth: 35,
+			pages: [
+				{
+					fullWidth: false,
+					main: ["summary", "experience", "projects"],
+					sidebar: ["profiles", "skills", "education"],
+				},
+			],
+		};
+
+		recipe(draft);
+		expect(draft.metadata.template).toBe("collection003");
+		expect(draft.metadata.layout.pages[0]?.fullWidth).toBe(true);
+		expect(draft.metadata.layout.pages[0]?.sidebar).toEqual([]);
+	});
+
 	it("lets promoted collection references change the active template", () => {
 		renderGallery();
 		const preview = screen.getByRole("img", { name: "蓝色二维码栏" });

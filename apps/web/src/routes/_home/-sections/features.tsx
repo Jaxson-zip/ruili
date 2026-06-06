@@ -78,16 +78,15 @@ function FeatureCard({ icon: Icon, title, description }: FeatureCardProps) {
 	return (
 		<m.div
 			className={cn(
-				"group relative flex min-h-44 flex-col gap-4 overflow-hidden border-b bg-background p-5 transition-colors duration-200 will-change-[transform,opacity]",
-				"not-nth-[2n]:border-r lg:not-nth-[4n]:border-r",
-				"hover:bg-secondary/25",
+				"group relative flex min-h-40 flex-col gap-4 overflow-hidden rounded-md bg-secondary/10 p-5 transition-colors duration-200 will-change-[transform,opacity]",
+				"hover:bg-secondary/20",
 			)}
 			initial={{ opacity: 0, y: 14 }}
 			whileInView={{ opacity: 1, y: 0 }}
 			viewport={{ once: true, amount: 0.1 }}
 			transition={{ duration: 0.3, ease: "easeOut" }}
 		>
-			<div aria-hidden="true" className="inline-flex w-fit rounded-md border bg-secondary/30 p-2 text-muted-foreground">
+			<div aria-hidden="true" className="inline-flex w-fit rounded-md bg-secondary/40 p-2 text-muted-foreground">
 				<Icon size={22} weight="thin" />
 			</div>
 
@@ -120,7 +119,7 @@ export function Features() {
 				</p>
 			</m.div>
 
-			<div className="grid grid-cols-1 xs:grid-cols-2 border-t lg:grid-cols-4">
+			<div className="grid grid-cols-1 xs:grid-cols-2 gap-3 px-4 pb-4 md:px-8 lg:grid-cols-4">
 				{features.map((feature) => (
 					<FeatureCard key={feature.id} {...feature} />
 				))}

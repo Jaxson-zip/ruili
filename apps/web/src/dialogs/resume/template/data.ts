@@ -51,12 +51,12 @@ export const templates = {
 	},
 	collection003: {
 		name: "深蓝横栏",
-		audience: "适合需要头像、联系方式和技能侧栏的候选人",
-		description: msg`深蓝信息栏配合右侧时间轴正文，适合需要头像、联系方式和技能侧栏的中文简历。`,
+		audience: "适合需要头像、联系方式和清晰时间轴的候选人",
+		description: msg`深蓝横向信息栏配合时间轴正文，适合需要头像、联系方式和清晰经历顺序的中文简历。`,
 		imageUrl: "/templates/collection/003.jpg",
 		accentColor: "rgba(40, 82, 111, 1)",
 		tags: ["横栏", "深蓝", "时间轴", "信息密集"],
-		sidebarPosition: "left",
+		sidebarPosition: "none",
 	},
 	collection005: {
 		name: "深蓝侧栏",

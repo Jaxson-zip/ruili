@@ -1,95 +1,134 @@
 import type { Template } from "@reactive-resume/schema/templates";
 import { Trans } from "@lingui/react/macro";
 import { m } from "motion/react";
+import { useMemo } from "react";
 import { featuredTemplateIds, templates as systemTemplates } from "@/dialogs/resume/template/data";
 
 type SystemTemplatePreview = {
 	id: string;
 	name: string;
-	audience: string;
+	role: string;
 	imageUrl: string;
-	style: string;
+	source: string;
 };
 
 type TemplateItemProps = {
 	preview: SystemTemplatePreview;
-	index: number;
+	loading?: "eager" | "lazy";
+};
+
+type TemplateMarqueeItem = {
+	id: string;
+	preview: SystemTemplatePreview;
 };
 
 const createSystemTemplatePreviews = (templates: readonly Template[]): SystemTemplatePreview[] =>
 	templates.map((template) => ({
 		id: `system-${template}`,
 		name: systemTemplates[template].name,
-		audience: systemTemplates[template].audience,
+		role: systemTemplates[template].tags.slice(0, 3).join(" / "),
 		imageUrl: systemTemplates[template].imageUrl,
-		style: systemTemplates[template].tags.slice(0, 2).join(" · "),
+		source: "可导出 PDF",
 	}));
 
 const promotedTemplatePreviews = createSystemTemplatePreviews(featuredTemplateIds);
 
-function TemplateItem({ preview, index }: TemplateItemProps) {
+function TemplateItem({ preview, loading = "lazy" }: TemplateItemProps) {
 	return (
-		<m.article
-			className="group overflow-hidden rounded-md border border-zinc-200 bg-white text-zinc-950 shadow-black/5 shadow-sm"
-			initial={{ opacity: 0, y: 16 }}
-			whileInView={{ opacity: 1, y: 0 }}
-			viewport={{ once: true, margin: "-80px" }}
-			transition={{ duration: 0.28, delay: Math.min(index * 0.035, 0.2) }}
+		<m.div
+			className="group relative shrink-0 will-change-transform"
+			initial={{ scale: 1, zIndex: 10 }}
+			whileHover={{ y: -6, zIndex: 20 }}
+			whileTap={{ scale: 0.99 }}
+			transition={{ type: "spring", stiffness: 360, damping: 30 }}
 		>
-			<div className="aspect-page overflow-hidden border-zinc-200 border-b bg-white">
-				<img
-					src={preview.imageUrl}
-					alt={preview.name}
-					className="size-full object-contain transition-transform duration-300 group-hover:scale-[1.015]"
-					loading="lazy"
-				/>
-			</div>
-
-			<div className="space-y-2 p-3">
-				<div className="flex items-start justify-between gap-2">
-					<h3 className="line-clamp-1 font-semibold text-sm">{preview.name}</h3>
-					<span className="shrink-0 rounded border border-zinc-300 bg-zinc-50 px-1.5 py-0.5 text-[11px] text-zinc-600">
-						<Trans>可导出 PDF</Trans>
-					</span>
+			<div className="relative w-48 overflow-hidden rounded-md border bg-white shadow-sm transition-[border-color,box-shadow,transform] duration-200 group-hover:border-foreground/20 group-hover:shadow-lg sm:w-56 md:w-64">
+				<div className="aspect-page overflow-hidden bg-white">
+					<img src={preview.imageUrl} alt={preview.name} className="size-full object-contain" loading={loading} />
 				</div>
-				<p className="line-clamp-2 min-h-10 text-xs text-zinc-600 leading-relaxed">{preview.audience}</p>
-				<p className="text-[11px] text-zinc-500">{preview.style}</p>
+
+				<div className="border-t bg-background/95 p-3">
+					<p className="line-clamp-1 font-semibold text-sm">{preview.name}</p>
+					<p className="mt-1 line-clamp-1 text-muted-foreground text-xs">{preview.role}</p>
+					<p className="mt-1 text-[11px] text-muted-foreground">{preview.source}</p>
+				</div>
 			</div>
-		</m.article>
+		</m.div>
 	);
 }
 
-export function Templates() {
+type MarqueeRowProps = {
+	templates: TemplateMarqueeItem[];
+	direction: "left" | "right";
+	duration?: number;
+	eagerCount?: number;
+};
+
+function MarqueeRow({ templates, direction, duration = 40, eagerCount = 0 }: MarqueeRowProps) {
+	const animateX = direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"];
+
 	return (
-		<section
-			id="templates"
-			className="scroll-mt-24 border-t-0! bg-zinc-50 p-4 text-zinc-950 md:scroll-mt-28 md:p-8 xl:py-16 dark:bg-zinc-50 dark:text-zinc-950"
+		<m.div
+			className="flex gap-x-4 will-change-transform sm:gap-x-6"
+			animate={{ x: animateX }}
+			transition={{
+				x: {
+					repeat: Number.POSITIVE_INFINITY,
+					repeatType: "loop",
+					duration,
+					ease: "linear",
+				},
+			}}
 		>
+			{templates.map(({ id, preview }, index) => (
+				<TemplateItem key={id} preview={preview} loading={index < eagerCount ? "eager" : "lazy"} />
+			))}
+		</m.div>
+	);
+}
+
+const createMarqueeItems = (entries: SystemTemplatePreview[], rowId: string): TemplateMarqueeItem[] => [
+	...entries.map((preview) => ({ id: `${rowId}-${preview.id}-primary`, preview })),
+	...entries.map((preview) => ({ id: `${rowId}-${preview.id}-repeat`, preview })),
+];
+
+export function Templates() {
+	const { row1, row2 } = useMemo(() => {
+		const splitIndex = Math.ceil(promotedTemplatePreviews.length / 2);
+		const firstRowTemplates = promotedTemplatePreviews.slice(0, splitIndex);
+		const secondRowTemplates = promotedTemplatePreviews.slice(splitIndex);
+
+		return {
+			row1: createMarqueeItems(firstRowTemplates, "row1"),
+			row2: createMarqueeItems(secondRowTemplates, "row2"),
+		};
+	}, []);
+
+	return (
+		<section id="templates" className="scroll-mt-24 overflow-hidden border-t-0! p-4 md:scroll-mt-28 md:p-8 xl:py-16">
 			<m.div
-				className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between"
-				initial={{ opacity: 0, y: 18 }}
+				className="space-y-4 will-change-[transform,opacity]"
+				initial={{ opacity: 0, y: 20 }}
 				whileInView={{ opacity: 1, y: 0 }}
 				viewport={{ once: true }}
 				transition={{ duration: 0.35 }}
 			>
-				<div className="space-y-3">
-					<h2 className="font-semibold text-2xl tracking-tight md:text-4xl xl:text-5xl">
-						<Trans>中文简历模板</Trans>
-					</h2>
-					<p className="max-w-2xl text-zinc-600 leading-relaxed">
-						<Trans>挑选适合岗位的中文模板，预览图对应实际 PDF 导出效果，创建后可以继续替换内容。</Trans>
-					</p>
-				</div>
+				<h2 className="font-semibold text-2xl tracking-tight md:text-4xl xl:text-5xl">
+					<Trans>中文简历模板与风格</Trans>
+				</h2>
 
-				<p className="text-sm text-zinc-600">
-					<Trans>完整样张 · 可编辑 · 可导出</Trans>
+				<p className="max-w-2xl text-muted-foreground leading-relaxed">
+					<Trans>精选真实可导出的中文模板，优先展示更接近中文招聘习惯的版式。</Trans>
 				</p>
 			</m.div>
 
-			<div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-				{promotedTemplatePreviews.map((preview, index) => (
-					<TemplateItem key={preview.id} preview={preview} index={index} />
-				))}
+			<div className="relative -mx-4 mt-8 py-4 md:-mx-8">
+				<div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-16 bg-linear-to-r from-background to-transparent md:w-28" />
+				<div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-16 bg-linear-to-l from-background to-transparent md:w-28" />
+				<div className="flex min-h-[360px] flex-col gap-y-4 sm:min-h-[400px] sm:gap-y-5 md:min-h-[460px]">
+					<MarqueeRow templates={row1} direction="left" duration={58} eagerCount={4} />
+					<MarqueeRow templates={row2} direction="right" duration={64} eagerCount={4} />
+				</div>
 			</div>
 		</section>
 	);

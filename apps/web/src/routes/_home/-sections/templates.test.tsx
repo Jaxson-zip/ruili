@@ -19,25 +19,24 @@ const renderTemplates = () =>
 	);
 
 describe("Templates section", () => {
-	it("shows each launch template once instead of duplicating previews for a marquee", () => {
+	it("shows a two-row marquee backed by real launch templates", () => {
 		renderTemplates();
 
-		expect(screen.getByText("中文简历模板")).toBeInTheDocument();
-		expect(screen.getByText(/挑选适合岗位的中文模板/)).toBeInTheDocument();
-		expect(screen.getByText("完整样张 · 可编辑 · 可导出")).toBeInTheDocument();
+		expect(screen.getByText("中文简历模板与风格")).toBeInTheDocument();
+		expect(screen.getByText(/精选真实可导出的中文模板/)).toBeInTheDocument();
 
 		for (const template of featuredTemplateIds) {
 			const name = systemTemplates[template].name;
-			expect(screen.getAllByAltText(name)).toHaveLength(1);
+			expect(screen.getAllByAltText(name)).toHaveLength(2);
 		}
 
-		expect(screen.getAllByRole("img")).toHaveLength(featuredTemplateIds.length);
-		expect(screen.getAllByText("可导出 PDF")).toHaveLength(featuredTemplateIds.length);
+		expect(screen.getAllByRole("img")).toHaveLength(featuredTemplateIds.length * 2);
+		expect(screen.getAllByText("可导出 PDF")).toHaveLength(featuredTemplateIds.length * 2);
 
 		const exportableImageUrls = featuredTemplateIds.map((template) => systemTemplates[template].imageUrl);
 		expect(new Set(exportableImageUrls).size).toBe(exportableImageUrls.length);
 
-		expect(screen.getAllByAltText(systemTemplates.collection028.name)).toHaveLength(1);
+		expect(screen.getAllByAltText(systemTemplates.collection028.name)).toHaveLength(2);
 		expect(screen.queryByAltText(systemTemplates.collection019.name)).toBeNull();
 		expect(screen.queryByAltText(systemTemplates.collection026.name)).toBeNull();
 		expect(screen.queryByText("参考样式")).toBeNull();

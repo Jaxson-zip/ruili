@@ -74,6 +74,9 @@ describe("templates metadata", () => {
 		for (const [id, meta] of entries) {
 			expect(validPositions.has(meta.sidebarPosition), `${id}: ${meta.sidebarPosition}`).toBe(true);
 		}
+
+		expect(templates.collection003.sidebarPosition).toBe("none");
+		expect(templates.collection003.tags).toContain("横栏");
 	});
 
 	it("uses unique image URLs per template", () => {

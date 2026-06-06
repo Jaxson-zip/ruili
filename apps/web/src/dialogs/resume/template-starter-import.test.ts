@@ -47,4 +47,13 @@ describe("buildResumeStarterImportInput", () => {
 		expect(input.data.metadata.layout.pages[0]?.sidebar).toContain("skills");
 		expect(input.data.metadata.layout.pages[0]?.main).toContain("projects");
 	});
+
+	it("keeps horizontal collection templates full width so previews match the editor", () => {
+		const input = buildBlankTemplateImportInput("collection003", templates.collection003);
+
+		expect(input.name).toBe("深蓝横栏 空白简历");
+		expect(input.data.metadata.template).toBe("collection003");
+		expect(input.data.metadata.layout.pages[0]?.fullWidth).toBe(true);
+		expect(input.data.metadata.layout.pages[0]?.sidebar).toEqual([]);
+	});
 });

@@ -26,7 +26,7 @@ function RouteComponent() {
 			<Hero />
 
 			<div className="container mx-auto px-4 sm:px-6 lg:px-12">
-				<div className="border-border border-x [&>section:first-child]:border-t-0 [&>section]:border-border [&>section]:border-t">
+				<div>
 					<Features />
 					<Templates />
 					<Faq />

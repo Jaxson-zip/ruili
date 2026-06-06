@@ -191,7 +191,7 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 						</div>
 
 						<div className="grid max-h-[58svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-3">
-							{launchStarters.map((starter) => (
+							{launchStarters.map((starter, index) => (
 								<button
 									key={starter.id}
 									type="button"
@@ -205,6 +205,7 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 											template={starter.template}
 											label={starter.name}
 											imageUrl={getStarterPreviewImageUrl(starter)}
+											loading={index < 6 ? "eager" : "lazy"}
 										/>
 									</div>
 
@@ -245,7 +246,7 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 						</div>
 
 						<div className="grid max-h-[58svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-4">
-							{primaryTemplateIds.map((template) => {
+							{primaryTemplateIds.map((template, index) => {
 								const metadata = templates[template];
 
 								return (
@@ -257,7 +258,12 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 										onClick={() => onCreateFromTemplate(template)}
 									>
 										<div className="aspect-page overflow-hidden border-b bg-white">
-											<TemplateThumbnail template={template} label={metadata.name} imageUrl={metadata.imageUrl} />
+											<TemplateThumbnail
+												template={template}
+												label={metadata.name}
+												imageUrl={metadata.imageUrl}
+												loading={index < 8 ? "eager" : "lazy"}
+											/>
 										</div>
 
 										<div className="space-y-2 p-3">
