@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
 import { templates } from "./data";
-import { createRecommendedTemplateLayout } from "./layout";
+import { createRecommendedTemplateLayout, needsTemplateLayoutSync } from "./layout";
 
 const createImportedLikeData = () => {
 	const data = structuredClone(sampleResumeData);
@@ -52,6 +52,7 @@ describe("createRecommendedTemplateLayout", () => {
 
 		expect(page?.fullWidth).toBe(true);
 		expect(page?.sidebar).toEqual([]);
+		expect(page?.main.at(0)).toBe("profiles");
 		expect(page?.main).toContain("summary");
 		expect(page?.main).toContain("experience");
 		expect(page?.main).toContain("skills");
@@ -65,5 +66,31 @@ describe("createRecommendedTemplateLayout", () => {
 		expect(page?.sidebar).toEqual([]);
 		expect(page?.main).toContain("profiles");
 		expect(page?.main).toContain("skills");
+	});
+
+	it("flags stale sidebar data on no-sidebar templates", () => {
+		const data = createImportedLikeData();
+
+		expect(needsTemplateLayoutSync(data, templates.collection003)).toBe(true);
+		expect(needsTemplateLayoutSync(data, templates.collection005)).toBe(false);
+
+		data.metadata.layout = createRecommendedTemplateLayout(data, templates.collection003);
+		expect(needsTemplateLayoutSync(data, templates.collection003)).toBe(false);
+	});
+
+	it("flags stale single-column section order that leaves profile links at the end", () => {
+		const data = createImportedLikeData();
+		data.metadata.layout = {
+			sidebarWidth: 30,
+			pages: [
+				{
+					fullWidth: true,
+					main: ["summary", "experience", "education", "projects", "skills", "profiles"],
+					sidebar: [],
+				},
+			],
+		};
+
+		expect(needsTemplateLayoutSync(data, templates.collection021)).toBe(true);
 	});
 });

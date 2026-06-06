@@ -13,7 +13,6 @@ import { useRender } from "../../context";
 import { Image, Page, StyleSheet, View } from "../../renderer";
 import { CustomFieldContactItem, WebsiteContactItem } from "../shared/contact-item";
 import { TemplateProvider } from "../shared/context";
-import { filterSections } from "../shared/filtering";
 import { getTemplateMetrics } from "../shared/metrics";
 import { getTemplatePageMinHeightStyle, getTemplatePageSize } from "../shared/page-size";
 import { hasTemplatePicture } from "../shared/picture";
@@ -21,6 +20,7 @@ import { Heading, Icon, Link, Text } from "../shared/primitives";
 import { createRtlStyleHelpers } from "../shared/rtl";
 import { Section } from "../shared/sections";
 import { composeStyles, headerNameLineHeight, resolvePlacementColor } from "../shared/styles";
+import { resolveCollectionPageSections } from "./layout";
 
 type CollectionVariant = {
 	accent: string;
@@ -31,6 +31,7 @@ type CollectionVariant = {
 	headerMode?: "band" | "center" | "pill";
 	headingBackground: string;
 	headingMode: "bar" | "tag" | "line";
+	forceSingleColumn?: boolean;
 	id:
 		| "collection001"
 		| "collection002"
@@ -100,6 +101,7 @@ const variants = {
 	collection001: {
 		id: "collection001",
 		accent: "#2F6F7A",
+		forceSingleColumn: true,
 		headerBackground: "#F6FAFB",
 		headerForeground: "#244957",
 		headerMode: "pill",
@@ -109,6 +111,7 @@ const variants = {
 	collection002: {
 		id: "collection002",
 		accent: "#B98A3B",
+		forceSingleColumn: true,
 		headerBackground: "#FFFFFF",
 		headerForeground: "#2E3440",
 		headerMode: "center",
@@ -118,6 +121,7 @@ const variants = {
 	collection003: {
 		id: "collection003",
 		accent: "#28526F",
+		forceSingleColumn: true,
 		headerBackground: "#FFFFFF",
 		headerForeground: "#22313F",
 		headerMode: "band",
@@ -204,6 +208,8 @@ const variants = {
 	collection021: {
 		id: "collection021",
 		accent: "#3965A7",
+		density: "compact",
+		forceSingleColumn: true,
 		headerBackground: "#F7FAFF",
 		headerForeground: "#233B63",
 		headingBackground: "#EAF0FA",
@@ -246,6 +252,7 @@ const variants = {
 	collection027: {
 		id: "collection027",
 		accent: "#50B46B",
+		forceSingleColumn: true,
 		headerBackground: "#F8FCF9",
 		headerForeground: "#255C37",
 		headingBackground: "#EAF8EF",
@@ -293,9 +300,7 @@ const createCollectionPage =
 		const pageSize = getTemplatePageSize(metadata.page.format);
 		const pageMinHeightStyle = getTemplatePageMinHeightStyle(metadata.page.format);
 		const showHeader = pageIndex === 0;
-		const sidebarSections = filterSections(page.sidebar, data);
-		const mainSections = filterSections(page.main, data);
-		const hasSidebar = !page.fullWidth && sidebarSections.length > 0;
+		const { hasSidebar, mainSections, sidebarSections } = resolveCollectionPageSections({ data, page, variant });
 		const sidebarColumn = hasSidebar ? (
 			<View
 				style={composeStyles(styles.sidebarColumn, {

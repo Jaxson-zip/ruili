@@ -29,12 +29,12 @@ const sidebarSectionOrder = [
 	"references",
 ] as const;
 const singleColumnSectionOrder = [
+	"profiles",
 	"summary",
 	"experience",
 	"education",
 	"projects",
 	"skills",
-	"profiles",
 	"languages",
 	"certifications",
 	"awards",
@@ -74,6 +74,25 @@ function visibleCustomSections(data: ResumeData) {
 		.map((section) => section.id);
 }
 
+function uniqueVisibleLayoutSections(data: ResumeData, layout: Layout) {
+	const sections: string[] = [];
+	const seen = new Set<string>();
+
+	for (const page of layout.pages) {
+		for (const sectionId of [...page.main, ...page.sidebar]) {
+			if (seen.has(sectionId) || !hasVisibleSection(data, sectionId)) continue;
+			seen.add(sectionId);
+			sections.push(sectionId);
+		}
+	}
+
+	return sections;
+}
+
+function arraysEqual(first: string[], second: string[]) {
+	return first.length === second.length && first.every((value, index) => value === second[index]);
+}
+
 export function createRecommendedTemplateLayout(data: ResumeData, metadata: TemplateMetadata): Layout {
 	if (metadata.sidebarPosition === "none") {
 		return {
@@ -98,4 +117,13 @@ export function createRecommendedTemplateLayout(data: ResumeData, metadata: Temp
 			},
 		],
 	};
+}
+
+export function needsTemplateLayoutSync(data: ResumeData, metadata: TemplateMetadata): boolean {
+	if (metadata.sidebarPosition !== "none") return false;
+	if (data.metadata.layout.pages.some((page) => !page.fullWidth || page.sidebar.length > 0)) return true;
+
+	const recommended = createRecommendedTemplateLayout(data, metadata);
+
+	return !arraysEqual(uniqueVisibleLayoutSections(data, data.metadata.layout), recommended.pages[0]?.main ?? []);
 }

@@ -1,11 +1,13 @@
 import { useLingui } from "@lingui/react";
-import { SwapIcon } from "@phosphor-icons/react";
+import { InfoIcon, SwapIcon } from "@phosphor-icons/react";
+import { Alert, AlertDescription, AlertTitle } from "@reactive-resume/ui/components/alert";
 import { Badge } from "@reactive-resume/ui/components/badge";
 import { Button } from "@reactive-resume/ui/components/button";
 import { primaryTemplateIds, templates } from "@/dialogs/resume/template/data";
+import { createRecommendedTemplateLayout, needsTemplateLayoutSync } from "@/dialogs/resume/template/layout";
 import { TemplateThumbnail } from "@/dialogs/resume/template/thumbnail";
 import { useDialogStore } from "@/dialogs/store";
-import { useCurrentResume } from "@/features/resume/builder/draft";
+import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
 import { SectionBase } from "../shared/section-base";
 
 export function TemplateSectionBuilder() {
@@ -20,12 +22,20 @@ function TemplateSectionForm() {
 	const { i18n } = useLingui();
 	const openDialog = useDialogStore((state) => state.openDialog);
 	const resume = useCurrentResume();
+	const updateResumeData = useUpdateResumeData();
 	const template = resume.data.metadata.template;
 
 	const metadata = templates[template];
+	const shouldSyncLayout = needsTemplateLayoutSync(resume.data, metadata);
 
 	const onOpenTemplateGallery = () => {
 		openDialog("resume.template.gallery", undefined);
+	};
+
+	const onSyncTemplateLayout = () => {
+		updateResumeData((draft) => {
+			draft.metadata.layout = createRecommendedTemplateLayout(draft, metadata);
+		});
 	};
 
 	return (
@@ -57,6 +67,19 @@ function TemplateSectionForm() {
 						切换模板只调整版式、颜色和布局，正文内容会保留。
 					</p>
 				</div>
+
+				{shouldSyncLayout ? (
+					<Alert className="border-primary/30 bg-primary/5">
+						<InfoIcon className="size-4 text-primary" />
+						<AlertTitle>排版需要整理</AlertTitle>
+						<AlertDescription className="space-y-3">
+							<p>当前简历的栏位或模块顺序还不是这套模板的推荐排版。整理后预览和导出会更接近模板样张。</p>
+							<Button type="button" size="sm" variant="outline" className="w-fit" onClick={onSyncTemplateLayout}>
+								按当前模板整理排版
+							</Button>
+						</AlertDescription>
+					</Alert>
+				) : null}
 
 				<div className="flex flex-wrap gap-2.5">
 					{metadata.tags.map((tag) => (

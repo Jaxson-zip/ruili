@@ -1,6 +1,8 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
+import { resolveCollectionPageSections } from "./layout";
 
 const readCollectionSource = () =>
 	readFileSync(fileURLToPath(new URL("./CollectionPage.tsx", import.meta.url)), "utf8");
@@ -33,5 +35,44 @@ describe("CollectionPage variants", () => {
 		expect(source).toContain('alignItems: "stretch"');
 		expect(source).toContain('minHeight: "100%"');
 		expect(source).toContain('alignSelf: "stretch"');
+	});
+
+	it("merges stale sidebar content into the main flow for single-column collection templates", () => {
+		const page = {
+			fullWidth: false,
+			main: ["summary", "experience"],
+			sidebar: ["profiles", "skills"],
+		};
+
+		const sections = resolveCollectionPageSections({
+			data: sampleResumeData,
+			page,
+			variant: { forceSingleColumn: true },
+		});
+
+		expect(sections.hasSidebar).toBe(false);
+		expect(sections.sidebarSections).toEqual([]);
+		expect(sections.mainSections.at(0)).toBe("profiles");
+		expect(sections.mainSections).toContain("profiles");
+		expect(sections.mainSections).toContain("skills");
+	});
+
+	it("keeps sidebar content for two-column collection templates", () => {
+		const page = {
+			fullWidth: false,
+			main: ["summary", "experience"],
+			sidebar: ["profiles", "skills"],
+		};
+
+		const sections = resolveCollectionPageSections({
+			data: sampleResumeData,
+			page,
+			variant: {},
+		});
+
+		expect(sections.hasSidebar).toBe(true);
+		expect(sections.sidebarSections).toContain("profiles");
+		expect(sections.sidebarSections).toContain("skills");
+		expect(sections.mainSections).not.toContain("skills");
 	});
 });
