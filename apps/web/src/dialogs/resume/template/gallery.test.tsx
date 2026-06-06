@@ -1,6 +1,5 @@
 // @vitest-environment happy-dom
 
-import type { CollectionTemplateReference } from "./data";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { i18n } from "@lingui/core";
@@ -44,7 +43,7 @@ describe("TemplateGalleryDialog", () => {
 	it("renders the localized title and intro copy", () => {
 		renderGallery();
 		expect(screen.getByText("模板库")).toBeInTheDocument();
-		expect(screen.getByText(/首屏只推荐真实可导出的中文模板/)).toBeInTheDocument();
+		expect(screen.getByText(/只推荐真实可导出的中文模板/)).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "导入我的模板（JSON）" })).toBeInTheDocument();
 		expect(screen.getByLabelText("搜索模板")).toBeInTheDocument();
 	});
@@ -54,9 +53,11 @@ describe("TemplateGalleryDialog", () => {
 		const previews = screen.getAllByRole("img");
 		expect(previews).toHaveLength(Object.keys(templates).length + onlineStyleTemplateReferences.length);
 		expect(screen.getByText("精品可导出模板")).toBeInTheDocument();
-		expect(screen.getByText("风格参考（近似套用）")).toBeInTheDocument();
+		expect(screen.getByText("风格参考（不可直接套用）")).toBeInTheDocument();
 		expect(screen.getByText(`${onlineStyleTemplateReferences.length} 个`)).toBeInTheDocument();
 		expect(screen.getByRole("img", { name: onlineStyleTemplateReferences[0]?.name })).toBeInTheDocument();
+		expect(screen.getAllByText("仅参考")).toHaveLength(onlineStyleTemplateReferences.length);
+		expect(screen.queryByText("套用风格")).toBeNull();
 		expect(screen.queryByText(/待重做参考/)).toBeNull();
 		expect(screen.queryByText(/内部筛选/)).toBeNull();
 	});
@@ -114,29 +115,14 @@ describe("TemplateGalleryDialog", () => {
 		expect(draft.metadata.layout.pages[0]?.main).toContain("skills");
 	});
 
-	it("applies collection references as style presets without replacing resume content", () => {
+	it("keeps online style references read-only so static images cannot change the active template", () => {
 		renderGallery();
-		const reference: CollectionTemplateReference | undefined = onlineStyleTemplateReferences[0];
+		const reference = onlineStyleTemplateReferences[0];
 		if (!reference) throw new Error("Expected at least one online style reference.");
 
 		expect(screen.getByRole("img", { name: reference.name })).toBeInTheDocument();
-		fireEvent.click(screen.getByLabelText(`套用参考样式：${reference.name}`));
-
-		expect(updateResumeData).toHaveBeenCalledTimes(1);
-		const recipe = updateResumeData.mock.calls[0]?.[0] as (draft: typeof sampleResumeData) => void;
-		const draft = structuredClone(sampleResumeData);
-
-		recipe(draft);
-
-		expect(draft.metadata.template).toBe(reference.baseTemplate);
-		expect(draft.metadata.design.colors.primary).toBe(reference.accentColor);
-		if (reference.sidebarPosition === "none") {
-			expect(draft.metadata.layout.pages[0]?.fullWidth).toBe(true);
-			expect(draft.metadata.layout.pages[0]?.sidebar).toEqual([]);
-		} else {
-			expect(draft.metadata.layout.pages[0]?.fullWidth).toBe(false);
-			expect(draft.metadata.layout.pages[0]?.sidebar.length).toBeGreaterThan(0);
-		}
+		expect(screen.queryByLabelText(`套用参考样式：${reference.name}`)).toBeNull();
+		expect(updateResumeData).not.toHaveBeenCalled();
 	});
 
 	it("hides and restores system templates", () => {

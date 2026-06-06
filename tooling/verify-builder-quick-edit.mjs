@@ -192,6 +192,8 @@ try {
 	await templateDialog.getByLabel("搜索模板").fill("技术");
 	const stylePreview = templateDialog.getByRole("img", { name: "技术侧栏" });
 	await stylePreview.waitFor({ state: "visible", timeout: 10_000 });
+	await templateDialog.getByText("风格参考（不可直接套用）").waitFor({ state: "visible", timeout: 10_000 });
+	await templateDialog.getByText("仅参考").first().waitFor({ state: "visible", timeout: 10_000 });
 
 	for (const disallowedText of ["待重做参考", "内部筛选", "推荐参考样张", "更多参考样张"]) {
 		const count = await templateDialog.getByText(disallowedText).count();
@@ -200,9 +202,17 @@ try {
 		}
 	}
 
+	const collectionApplyButtonCount = await templateDialog.getByLabel("套用参考样式：技术侧栏").count();
+	if (collectionApplyButtonCount > 0) {
+		throw new Error("Template gallery still exposes a clickable collection reference style button.");
+	}
+
 	await fs.mkdir(path.dirname(templateGalleryScreenshotPath), { recursive: true });
 	await page.screenshot({ path: templateGalleryScreenshotPath, fullPage: false });
-	await templateDialog.getByLabel("套用参考样式：技术侧栏").click();
+	await templateDialog.getByLabel("搜索模板").fill("标准双栏");
+	const systemTemplatePreview = templateDialog.getByRole("img", { name: "标准双栏" });
+	await systemTemplatePreview.waitFor({ state: "visible", timeout: 10_000 });
+	await systemTemplatePreview.locator("xpath=ancestor::button[1]").click();
 	await templateDialog.waitFor({ state: "hidden", timeout: 10_000 });
 	await page.locator("h3").filter({ hasText: "标准双栏" }).waitFor({ state: "visible", timeout: 10_000 });
 	await page.waitForTimeout(500);
@@ -221,7 +231,7 @@ try {
 				ok: true,
 				email,
 				importedName,
-				appliedStyle: "技术侧栏",
+				referenceStyleObserved: "技术侧栏",
 				switchedTemplate: "标准双栏",
 				url: page.url(),
 				importFilePath,

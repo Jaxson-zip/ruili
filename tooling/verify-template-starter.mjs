@@ -14,11 +14,13 @@ const username = `template-${runId}`;
 const password = "Verify123!";
 const starterName = process.env.STARTER_NAME ?? "前端工程师成品样张";
 const collectionReferenceName = process.env.COLLECTION_REFERENCE_NAME;
-const expectedResumeName =
-	process.env.EXPECTED_RESUME_NAME ??
-	(collectionReferenceName ? `前端开发-中文投递版-${collectionReferenceName}` : "前端开发-中文投递版");
+const expectedResumeName = process.env.EXPECTED_RESUME_NAME ?? "前端开发-中文投递版";
 const expectedCandidateName = process.env.EXPECTED_CANDIDATE_NAME ?? "陈嘉铭";
 const screenshotPath = path.resolve("artifacts", "template-starter-builder.png");
+
+if (collectionReferenceName) {
+	throw new Error("Collection reference images are read-only and can no longer be used as starter templates.");
+}
 
 const browser = await chromium.launch({
 	executablePath: chromiumPath,
@@ -68,15 +70,20 @@ try {
 	const dialog = page.locator('[role="dialog"]');
 	await dialog.waitFor({ state: "visible", timeout: 15_000 });
 	await dialog.getByText("从成品模板开始").waitFor({ state: "visible", timeout: 10_000 });
-	await dialog.getByText("从推荐参考样张开始").waitFor({ state: "visible", timeout: 10_000 });
 	await dialog.getByText(starterName).waitFor({ state: "visible", timeout: 10_000 });
 	await dialog.getByText("或者从空白简历开始").waitFor({ state: "visible", timeout: 10_000 });
 
-	if (collectionReferenceName) {
-		await dialog.getByRole("button", { name: `套用开源参考样张：${collectionReferenceName}` }).click();
-	} else {
-		await dialog.getByRole("button", { name: new RegExp(starterName) }).click();
+	const referenceSectionCount = await dialog.getByText("从推荐参考样张开始").count();
+	if (referenceSectionCount > 0) {
+		throw new Error("Create dialog still exposes collection reference images as starter templates.");
 	}
+
+	const collectionStarterButtonCount = await dialog.getByRole("button", { name: /套用开源参考样张/ }).count();
+	if (collectionStarterButtonCount > 0) {
+		throw new Error("Create dialog still exposes clickable collection reference starter buttons.");
+	}
+
+	await dialog.getByRole("button", { name: new RegExp(starterName) }).click();
 	await page.waitForURL(/\/builder\/[^/]+$/, { timeout: 20_000 });
 	await page.locator("h2").filter({ hasText: expectedResumeName }).waitFor({ state: "visible", timeout: 10_000 });
 
@@ -113,7 +120,6 @@ try {
 				ok: true,
 				email,
 				starterName,
-				collectionReferenceName,
 				url: page.url(),
 				expectedResumeName,
 				expectedCandidateName,

@@ -102,22 +102,6 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 		closeDialog();
 	}
 
-	function onSelectCollectionReference(reference: CollectionTemplateReference) {
-		updateResumeData((draft) => {
-			const baseMetadata = templates[reference.baseTemplate];
-
-			draft.metadata.template = reference.baseTemplate;
-			draft.metadata.design.colors.primary = reference.accentColor;
-			draft.metadata.layout = createRecommendedTemplateLayout(draft, {
-				...baseMetadata,
-				sidebarPosition: reference.sidebarPosition,
-			});
-		});
-
-		toast.success(`已套用「${reference.name}」样式。`);
-		closeDialog();
-	}
-
 	function onSelectCustomTemplate(preset: CustomTemplatePreset) {
 		updateResumeData((draft) => {
 			draft.metadata = JSON.parse(JSON.stringify(preset.metadata));
@@ -196,7 +180,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 						<Trans>模板库</Trans>
 					</DialogTitle>
 					<DialogDescription className="leading-relaxed">
-						<Trans>首屏只推荐真实可导出的中文模板；风格参考放在后面，可近似套用但不替换正文内容。</Trans>
+						<Trans>只推荐真实可导出的中文模板；参考图只作为设计灵感，避免选择后进入不同模板。</Trans>
 					</DialogDescription>
 				</DialogHeader>
 
@@ -327,11 +311,11 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 
 					<section className="space-y-4">
 						<TemplateSectionHeader
-							title="风格参考（近似套用）"
+							title="风格参考（不可直接套用）"
 							badge={`${visibleOnlineStyles.length} 个`}
-							description="这些是参考样张，会映射到最接近的可导出模板；后续会逐个重做成真实模板。"
+							description="这些是设计灵感图，不会直接改变当前简历；后续要逐个重做成真实可导出的模板后再开放选择。"
 						/>
-						<CollectionReferenceGrid references={visibleOnlineStyles} onSelect={onSelectCollectionReference} />
+						<CollectionReferenceGrid references={visibleOnlineStyles} />
 					</section>
 
 					{resultCount === 0 ? (
@@ -365,14 +349,13 @@ function TemplateSectionHeader({ badge, description, title }: TemplateSectionHea
 
 type CollectionReferenceGridProps = {
 	references: readonly CollectionTemplateReference[];
-	onSelect: (reference: CollectionTemplateReference) => void;
 };
 
-function CollectionReferenceGrid({ references, onSelect }: CollectionReferenceGridProps) {
+function CollectionReferenceGrid({ references }: CollectionReferenceGridProps) {
 	return (
 		<div className="grid grid-cols-1 xs:grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
 			{references.map((reference) => (
-				<CollectionReferenceCard key={reference.id} reference={reference} onSelect={onSelect} />
+				<CollectionReferenceCard key={reference.id} reference={reference} />
 			))}
 		</div>
 	);
@@ -484,10 +467,9 @@ function CustomTemplateCard({ preset, onDelete, onSelect }: CustomTemplateCardPr
 
 type CollectionReferenceCardProps = {
 	reference: CollectionTemplateReference;
-	onSelect: (reference: CollectionTemplateReference) => void;
 };
 
-function CollectionReferenceCard({ reference, onSelect }: CollectionReferenceCardProps) {
+function CollectionReferenceCard({ reference }: CollectionReferenceCardProps) {
 	return (
 		<article className="overflow-hidden rounded-md border bg-background transition-colors hover:border-foreground/25">
 			<div className="block w-full p-2 text-left">
@@ -504,7 +486,7 @@ function CollectionReferenceCard({ reference, onSelect }: CollectionReferenceCar
 					<div className="flex items-start justify-between gap-2">
 						<h4 className="line-clamp-1 font-semibold text-sm">{reference.name}</h4>
 						<Badge variant="secondary" className="shrink-0">
-							可套用
+							仅参考
 						</Badge>
 					</div>
 					<p className="line-clamp-2 text-muted-foreground text-xs leading-relaxed">{reference.description}</p>
@@ -520,16 +502,9 @@ function CollectionReferenceCard({ reference, onSelect }: CollectionReferenceCar
 					))}
 				</div>
 
-				<Button
-					type="button"
-					variant="secondary"
-					size="xs"
-					className="shrink-0"
-					aria-label={`套用参考样式：${reference.name}`}
-					onClick={() => onSelect(reference)}
-				>
-					<Trans>套用风格</Trans>
-				</Button>
+				<Badge variant="outline" className="shrink-0 text-[11px]">
+					待重做为真实模板
+				</Badge>
 			</div>
 		</article>
 	);

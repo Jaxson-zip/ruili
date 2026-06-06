@@ -1,12 +1,11 @@
 import type { DialogProps } from "../store";
-import type { CollectionTemplateReference } from "./template/data";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { MagicWandIcon, PencilSimpleLineIcon, PlusIcon } from "@phosphor-icons/react";
 import { useStore } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { toast } from "sonner";
 import z from "zod";
 import { resumeTemplateStarters } from "@reactive-resume/schema/resume/starters";
@@ -36,17 +35,8 @@ import { getResumeErrorMessage } from "@/libs/error-message";
 import { orpc } from "@/libs/orpc/client";
 import { useAppForm, withForm } from "@/libs/tanstack-form";
 import { useDialogStore } from "../store";
-import {
-	additionalCollectionTemplateReferences,
-	deferredCollectionTemplateReferences,
-	recommendedCollectionTemplateReferences,
-} from "./template/data";
 import { TemplateThumbnail } from "./template/thumbnail";
-import {
-	buildCollectionReferenceStarterImportInput,
-	buildResumeStarterImportInput,
-	getStarterForCollectionReference,
-} from "./template-starter-import";
+import { buildResumeStarterImportInput } from "./template-starter-import";
 
 const formSchema = z.object({
 	id: z.string(),
@@ -71,8 +61,6 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 	const { mutate: createResume, isPending } = useMutation(orpc.resume.create.mutationOptions());
 	const { mutate: importStarter, isPending: isImportingStarter } = useMutation(orpc.resume.import.mutationOptions());
 	const isBusy = isPending || isImportingStarter;
-	const [showMoreReferenceStarters, setShowMoreReferenceStarters] = useState(false);
-	const moreReferenceStarters = [...additionalCollectionTemplateReferences, ...deferredCollectionTemplateReferences];
 
 	const form = useAppForm({
 		defaultValues: {
@@ -114,23 +102,6 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 		importStarter(input, {
 			onSuccess: (id) => {
 				toast.success(t`模板简历已创建`, { id: toastId });
-				closeDialog();
-				void navigate({ to: "/builder/$resumeId", params: { resumeId: id } });
-			},
-			onError: (error) => {
-				toast.error(getResumeErrorMessage(error), { id: toastId });
-			},
-		});
-	};
-
-	const onCreateFromCollectionReference = (reference: CollectionTemplateReference) => {
-		const input = buildCollectionReferenceStarterImportInput(reference, form.state.values.name);
-
-		const toastId = toast.loading(t`正在套用参考样张...`);
-
-		importStarter(input, {
-			onSuccess: (id) => {
-				toast.success(t`参考样张简历已创建`, { id: toastId });
 				closeDialog();
 				void navigate({ to: "/builder/$resumeId", params: { resumeId: id } });
 			},
@@ -207,52 +178,6 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 					</div>
 				</section>
 
-				<section className="space-y-3">
-					<div className="flex flex-col gap-1">
-						<h3 className="font-semibold text-sm">
-							<Trans>从推荐参考样张开始</Trans>
-							<span className="ms-2 text-muted-foreground">({recommendedCollectionTemplateReferences.length} 张)</span>
-						</h3>
-						<p className="text-muted-foreground text-sm">
-							<Trans>
-								这些是从开源参考图里先筛出来的克制样张。点击后会创建一份完整中文示例简历，并按参考图近似套用主色、单双栏和内容类型。
-							</Trans>
-						</p>
-					</div>
-
-					<CollectionStarterGrid
-						references={recommendedCollectionTemplateReferences}
-						disabled={isBusy}
-						onSelect={onCreateFromCollectionReference}
-					/>
-
-					<div className="rounded-md border border-dashed bg-secondary/20 px-4 py-3">
-						<div className="flex flex-wrap items-center justify-between gap-3">
-							<div className="space-y-1">
-								<h4 className="font-semibold text-sm">更多开源参考样张（{moreReferenceStarters.length} 张）</h4>
-								<p className="text-muted-foreground text-sm">普通参考和待重做样张仍然可以选，但不放进默认推荐区。</p>
-							</div>
-							<Button
-								type="button"
-								variant="outline"
-								size="sm"
-								onClick={() => setShowMoreReferenceStarters((visible) => !visible)}
-							>
-								{showMoreReferenceStarters ? "收起" : "查看"}
-							</Button>
-						</div>
-						{showMoreReferenceStarters ? (
-							<div className="mt-4">
-								<CollectionStarterGrid
-									references={moreReferenceStarters}
-									disabled={isBusy}
-									onSelect={onCreateFromCollectionReference}
-								/>
-							</div>
-						) : null}
-					</div>
-				</section>
-
 				<section className="space-y-4 rounded-md border bg-secondary/20 p-4">
 					<div className="flex flex-col gap-1">
 						<h3 className="font-semibold text-sm">
@@ -273,69 +198,6 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 				</DialogFooter>
 			</form>
 		</DialogContent>
-	);
-}
-
-type CollectionStarterGridProps = {
-	disabled?: boolean;
-	references: readonly CollectionTemplateReference[];
-	onSelect: (reference: CollectionTemplateReference) => void;
-};
-
-function CollectionStarterGrid({ disabled, references, onSelect }: CollectionStarterGridProps) {
-	return (
-		<div className="grid max-h-[48svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-			{references.map((reference) => (
-				<CollectionStarterCard key={reference.id} reference={reference} disabled={disabled} onSelect={onSelect} />
-			))}
-		</div>
-	);
-}
-
-type CollectionStarterCardProps = {
-	disabled?: boolean;
-	reference: CollectionTemplateReference;
-	onSelect: (reference: CollectionTemplateReference) => void;
-};
-
-function CollectionStarterCard({ disabled, reference, onSelect }: CollectionStarterCardProps) {
-	const starter = getStarterForCollectionReference(reference);
-
-	return (
-		<button
-			type="button"
-			disabled={disabled}
-			className="group overflow-hidden rounded-md border bg-background text-left transition-colors hover:border-foreground/30 disabled:cursor-not-allowed disabled:opacity-60"
-			aria-label={`套用开源参考样张：${reference.name}`}
-			onClick={() => onSelect(reference)}
-		>
-			<div className="aspect-page overflow-hidden border-b bg-white">
-				<img src={reference.imageUrl} alt={reference.name} className="size-full object-contain" loading="lazy" />
-			</div>
-
-			<div className="space-y-2 p-3">
-				<div className="flex items-start justify-between gap-2">
-					<h4 className="line-clamp-1 font-semibold text-sm">{reference.name}</h4>
-					<Badge variant={reference.review === "上线推荐" ? "default" : "secondary"} className="shrink-0 text-[11px]">
-						{reference.review}
-					</Badge>
-				</div>
-				<p className="line-clamp-2 min-h-10 text-muted-foreground text-xs leading-relaxed">{reference.description}</p>
-				<div className="flex flex-wrap gap-1">
-					<Badge variant="secondary" className="text-[11px]">
-						{starter.name.replace("成品样张", "")}
-					</Badge>
-					{reference.tags.slice(0, 2).map((tag) => (
-						<Badge key={tag} variant="secondary" className="text-[11px]">
-							{tag}
-						</Badge>
-					))}
-				</div>
-				<div className="pt-1 font-medium text-primary text-xs group-hover:underline">
-					<Trans>套用并替换内容</Trans>
-				</div>
-			</div>
-		</button>
 	);
 }
 
