@@ -20,6 +20,8 @@ describe("CreateResumeCard", () => {
 		render(<CreateResumeCard />);
 		expect(screen.getByText("创建简历")).toBeInTheDocument();
 		expect(screen.getByText("选样张或模板开始")).toBeInTheDocument();
+		expect(screen.getByAltText("前端工程师样张预览")).toBeInTheDocument();
+		expect(screen.getByAltText("中文模板预览")).toBeInTheDocument();
 	});
 
 	it("opens the resume.create dialog when clicked", () => {
@@ -38,6 +40,10 @@ describe("ImportResumeCard", () => {
 		render(<ImportResumeCard />);
 		expect(screen.getByText("导入已有简历")).toBeInTheDocument();
 		expect(screen.getByText("支持 Word / PDF / 图片 / JSON")).toBeInTheDocument();
+		expect(screen.getByText("PDF")).toBeInTheDocument();
+		expect(screen.getByText("Word")).toBeInTheDocument();
+		expect(screen.getByText("图片")).toBeInTheDocument();
+		expect(screen.getByText("JSON")).toBeInTheDocument();
 	});
 
 	it("opens the resume.import dialog when clicked", () => {
