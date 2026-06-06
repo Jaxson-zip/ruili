@@ -57,7 +57,8 @@ const email = `codex.preview.${runId}@example.com`;
 const username = `preview-${runId}`;
 const password = "Verify123!";
 const screenshotPath = path.resolve("artifacts", `${targetTemplateId}-preview-canvas.png`);
-const outputJpgPath = path.resolve("apps", "web", "public", "templates", "jpg", `${targetTemplateId}.jpg`);
+const defaultOutputJpgPath = path.resolve("apps", "web", "public", "templates", "jpg", `${targetTemplateId}.jpg`);
+const outputJpgPath = path.resolve(process.env.OUTPUT_JPG_PATH ?? defaultOutputJpgPath);
 
 const browser = await chromium.launch({
 	executablePath: chromiumPath,

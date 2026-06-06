@@ -141,15 +141,15 @@ describe("TemplateGalleryDialog", () => {
 
 	it("hides and restores system templates", () => {
 		renderGallery();
-		const hideButton = screen.getByLabelText("隐藏精选模板：通用一页");
+		const hideButton = screen.getByLabelText("隐藏精选模板：高管咨询");
 
 		fireEvent.click(hideButton as HTMLButtonElement);
 
-		expect(screen.queryByRole("img", { name: "通用一页" })).toBeNull();
+		expect(screen.queryByRole("img", { name: "高管咨询" })).toBeNull();
 		expect(screen.getByText("恢复全部")).toBeInTheDocument();
 
 		fireEvent.click(screen.getByText("恢复全部"));
 
-		expect(screen.getByRole("img", { name: "通用一页" })).toBeInTheDocument();
+		expect(screen.getByRole("img", { name: "高管咨询" })).toBeInTheDocument();
 	});
 });

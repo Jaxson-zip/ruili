@@ -20,6 +20,7 @@ import {
 import { m } from "motion/react";
 import { useMemo } from "react";
 import { cn } from "@reactive-resume/utils/style";
+import { featuredTemplateIds } from "@/dialogs/resume/template/data";
 
 type Feature = {
 	id: string;
@@ -71,7 +72,7 @@ const getFeatures = (): Feature[] => [
 		id: "templates",
 		icon: LayoutIcon,
 		title: t`中文模板预览`,
-		description: t`首批 3 套稳定模板已经换成中文样张，更容易判断版式是否适合投递。`,
+		description: t`首批 ${featuredTemplateIds.length} 套稳定模板已经换成中文样张，更容易判断版式是否适合投递。`,
 	},
 	{
 		id: "design",

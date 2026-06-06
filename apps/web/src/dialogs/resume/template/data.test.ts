@@ -60,7 +60,7 @@ describe("templates metadata", () => {
 
 	it("keeps featured templates unique and backed by system metadata", () => {
 		expect(new Set(featuredTemplateIds).size).toBe(featuredTemplateIds.length);
-		expect(featuredTemplateIds).toEqual(["ditto", "onyx", "scizor", "azurill"]);
+		expect(featuredTemplateIds).toEqual(["ditto", "scizor"]);
 
 		for (const id of featuredTemplateIds) {
 			expect(templates[id], id).toBeDefined();

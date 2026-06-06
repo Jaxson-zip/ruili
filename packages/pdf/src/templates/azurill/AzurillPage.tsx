@@ -146,9 +146,11 @@ const useAzurillTemplate = (): AzurillTemplate => {
 		const muted = "#4B5868";
 		const hairline = "#C8D1DD";
 		const softLine = "#E8ECF1";
-		const sidebarBackground = "#F1F5F9";
+		const sidebarBackground = "#17324D";
+		const sidebarForeground = "#F8FAFC";
+		const sidebarMuted = "#D5DFEA";
 		const headerSurface = "#FFFFFF";
-		const colors: TemplateColorRoles = { foreground, background, primary };
+		const colors: TemplateColorRoles = { foreground, background, primary, sidebarForeground, sidebarBackground };
 		const metrics = getTemplateMetrics(metadata.page);
 
 		const bodyText = {
@@ -241,7 +243,7 @@ const useAzurillTemplate = (): AzurillTemplate => {
 				color: primary,
 				fontSize: metadata.typography.heading.fontSize * 0.9,
 				backgroundColor: "#FFFFFF",
-				borderBottomWidth: 0.55,
+				borderBottomWidth: 0.7,
 				borderBottomColor: softLine,
 				borderLeftWidth: 3,
 				borderLeftColor: primary,
@@ -275,27 +277,24 @@ const useAzurillTemplate = (): AzurillTemplate => {
 			},
 			sidebarColumn: {
 				backgroundColor: sidebarBackground,
-				borderTopWidth: 3.2,
-				borderTopColor: primary,
-				borderLeftWidth: rtl ? 0 : 0.7,
-				borderLeftColor: hairline,
-				borderRightWidth: rtl ? 0.7 : 0,
-				borderRightColor: hairline,
-				paddingHorizontal: metrics.gapX(0.78),
-				paddingVertical: metrics.gapY(0.74),
+				borderTopWidth: 0,
+				borderLeftWidth: 0,
+				borderRightWidth: 0,
+				paddingHorizontal: metrics.gapX(0.82),
+				paddingVertical: metrics.gapY(0.82),
 			},
 			mainColumn: {
 				flex: 1,
-				paddingTop: metrics.gapY(0.06),
+				paddingTop: metrics.gapY(0.02),
 			},
 			header: {
 				flexDirection: r.row,
 				alignItems: "flex-start",
 				columnGap: metrics.gapX(0.8),
 				backgroundColor: headerSurface,
-				borderTopWidth: 4.2,
+				borderTopWidth: 4.8,
 				borderTopColor: primary,
-				borderBottomWidth: 1,
+				borderBottomWidth: 0.8,
 				borderBottomColor: hairline,
 				paddingHorizontal: metrics.gapX(0.62),
 				paddingTop: metrics.gapY(0.48),
@@ -338,8 +337,7 @@ const useAzurillTemplate = (): AzurillTemplate => {
 				flexDirection: r.row,
 				alignItems: "center",
 				columnGap: metrics.gapX(0.18),
-				borderBottomWidth: 0.35,
-				borderBottomColor: softLine,
+				borderBottomWidth: 0,
 				paddingBottom: metrics.gapY(0.06),
 				color: muted,
 			},
@@ -421,6 +419,14 @@ const useAzurillTemplate = (): AzurillTemplate => {
 				}),
 				heading: (context) => ({ ...baseStyles.heading, color: foregroundFor(context) }),
 				link: (context) => ({ ...baseStyles.link, color: foregroundFor(context) }),
+				small: (context) => ({
+					...baseStyles.small,
+					color: context.placement === "sidebar" ? sidebarMuted : muted,
+				}),
+				bold: (context) => ({
+					...baseStyles.bold,
+					color: foregroundFor(context),
+				}),
 				richParagraph: (context) => ({
 					...baseStyles.richParagraph,
 					color: foregroundFor(context),
@@ -439,8 +445,10 @@ const useAzurillTemplate = (): AzurillTemplate => {
 					...(context.placement === "sidebar"
 						? {
 								color: foregroundFor(context),
-								borderBottomColor: softLine,
-								paddingLeft: metrics.gapX(0.34),
+								borderLeftWidth: 0,
+								borderBottomColor: "#49637E",
+								paddingLeft: 0,
+								paddingBottom: metrics.gapY(0.2),
 								backgroundColor: "transparent",
 							}
 						: {}),

@@ -124,11 +124,10 @@ const useDittoTemplate = (): DittoTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const muted = "#3E4958";
-		const hairline = "#B8C0CC";
-		const softLine = "#E3E7ED";
-		const headerSurface = "#F5F7FA";
-		const itemSurface = "#FCFDFE";
+		const muted = "#475467";
+		const hairline = "#B7C0CC";
+		const softLine = "#ECEFF3";
+		const headerSurface = "#FFFFFF";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 
@@ -218,26 +217,25 @@ const useDittoTemplate = (): DittoTemplate => {
 			},
 			sectionHeading: {
 				color: foreground,
-				backgroundColor: "#FFFFFF",
-				borderLeftWidth: 3.2,
+				backgroundColor: "transparent",
+				borderLeftWidth: 0,
 				borderLeftColor: primary,
-				borderBottomWidth: 0.8,
-				borderBottomColor: hairline,
-				fontSize: metadata.typography.heading.fontSize * 0.9,
+				borderBottomWidth: 0.9,
+				borderBottomColor: "#1F2937",
+				fontSize: metadata.typography.heading.fontSize * 0.84,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
-				paddingLeft: metrics.gapX(0.42),
-				paddingBottom: metrics.gapY(0.2),
+				paddingLeft: 0,
+				paddingBottom: metrics.gapY(0.16),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(0.28),
+				rowGap: metrics.gapY(0.3),
 			},
 			item: {
-				rowGap: metrics.gapY(0.14),
-				backgroundColor: itemSurface,
+				rowGap: metrics.gapY(0.13),
 				borderBottomWidth: 0.35,
 				borderBottomColor: softLine,
-				paddingBottom: metrics.gapY(0.2),
+				paddingBottom: metrics.gapY(0.18),
 			},
 			levelContainer: {
 				width: "100%",
@@ -251,13 +249,13 @@ const useDittoTemplate = (): DittoTemplate => {
 			header: {
 				rowGap: metrics.gapY(0.36),
 				backgroundColor: headerSurface,
-				borderTopWidth: 4.2,
+				borderTopWidth: 3.6,
 				borderTopColor: primary,
 				borderLeftWidth: 0,
 				borderLeftColor: primary,
-				borderBottomWidth: 1,
+				borderBottomWidth: 0.8,
 				borderBottomColor: hairline,
-				paddingHorizontal: metrics.gapX(0.66),
+				paddingHorizontal: 0,
 				paddingTop: metrics.gapY(0.46),
 				paddingBottom: metrics.gapY(0.52),
 			},

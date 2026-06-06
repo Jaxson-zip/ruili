@@ -1,7 +1,7 @@
+import type { Template } from "@reactive-resume/schema/templates";
 import { Trans } from "@lingui/react/macro";
 import { m } from "motion/react";
 import { useMemo } from "react";
-import { featuredTemplateIds, templates } from "@/dialogs/resume/template/data";
 
 type SystemTemplatePreview = {
 	id: string;
@@ -20,17 +20,50 @@ type TemplateMarqueeItem = {
 	preview: SystemTemplatePreview;
 };
 
-const systemTemplatePreviews: SystemTemplatePreview[] = featuredTemplateIds.map((id) => {
-	const metadata = templates[id];
+const homepageTemplateSamples = [
+	{
+		id: "ditto-campus",
+		template: "ditto",
+		name: "ATS 极简 · 校招版",
+		role: "校招 / 网申 / 高兼容",
+		imageUrl: "/templates/jpg/homepage-ditto-campus.jpg",
+	},
+	{
+		id: "ditto-frontend",
+		template: "ditto",
+		name: "ATS 极简 · 技术版",
+		role: "前端 / 技术 / 一页投递",
+		imageUrl: "/templates/jpg/homepage-ditto-frontend.jpg",
+	},
+	{
+		id: "scizor-growth",
+		template: "scizor",
+		name: "高管咨询 · 运营版",
+		role: "运营 / 增长 / 业务成果",
+		imageUrl: "/templates/jpg/homepage-scizor-growth.jpg",
+	},
+	{
+		id: "scizor-product",
+		template: "scizor",
+		name: "高管咨询 · 产品版",
+		role: "产品 / 策略 / 项目推进",
+		imageUrl: "/templates/jpg/homepage-scizor-product.jpg",
+	},
+] as const satisfies Array<{
+	id: string;
+	template: Template;
+	name: string;
+	role: string;
+	imageUrl: string;
+}>;
 
-	return {
-		id: `system-${id}`,
-		name: metadata.name,
-		role: metadata.tags.slice(0, 2).join(" / "),
-		imageUrl: metadata.imageUrl,
-		source: "精选模板",
-	};
-});
+const systemTemplatePreviews: SystemTemplatePreview[] = homepageTemplateSamples.map((sample) => ({
+	id: `system-${sample.id}`,
+	name: sample.name,
+	role: sample.role,
+	imageUrl: sample.imageUrl,
+	source: "精选模板",
+}));
 
 const templatePreviews = systemTemplatePreviews;
 

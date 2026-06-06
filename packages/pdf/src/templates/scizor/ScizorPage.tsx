@@ -115,11 +115,10 @@ const useScizorTemplate = (): ScizorTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const secondaryText = "#4D5968";
-		const divider = "#C4CCD7";
-		const softLine = "#E5E9EF";
+		const secondaryText = "#475467";
+		const divider = "#B8C1CD";
+		const softLine = "#E7EBF0";
 		const headerSurface = "#FFFFFF";
-		const contactSurface = "#F4F6F9";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 		const bodyText = {
@@ -206,22 +205,22 @@ const useScizorTemplate = (): ScizorTemplate => {
 				rowGap: metrics.gapY(0.28),
 			},
 			sectionHeading: {
-				color: foreground,
-				fontSize: metadata.typography.heading.fontSize * 0.9,
+				color: primary,
+				fontSize: metadata.typography.heading.fontSize * 0.88,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
-				backgroundColor: "#F7F9FB",
+				backgroundColor: "transparent",
 				borderLeftWidth: 3,
 				borderLeftColor: primary,
 				borderTopWidth: 0,
-				borderBottomWidth: 0.45,
+				borderBottomWidth: 0.65,
 				borderBottomColor: softLine,
-				paddingLeft: metrics.gapX(0.38),
-				paddingTop: metrics.gapY(0.18),
-				paddingBottom: metrics.gapY(0.18),
+				paddingLeft: metrics.gapX(0.36),
+				paddingTop: 0,
+				paddingBottom: metrics.gapY(0.16),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(0.3),
+				rowGap: metrics.gapY(0.32),
 			},
 			item: {
 				rowGap: metrics.gapY(0.14),
@@ -243,11 +242,11 @@ const useScizorTemplate = (): ScizorTemplate => {
 				alignItems: "flex-start",
 				columnGap: metrics.gapX(1),
 				backgroundColor: headerSurface,
-				borderTopWidth: 4.6,
+				borderTopWidth: 5.2,
 				borderTopColor: primary,
-				borderBottomWidth: 1,
+				borderBottomWidth: 0.9,
 				borderBottomColor: divider,
-				paddingHorizontal: metrics.gapX(0.66),
+				paddingHorizontal: 0,
 				paddingTop: metrics.gapY(0.5),
 				paddingBottom: metrics.gapY(0.58),
 			},
@@ -279,9 +278,7 @@ const useScizorTemplate = (): ScizorTemplate => {
 				flexDirection: r.row,
 				alignItems: "center",
 				columnGap: metrics.gapX(1 / 6),
-				backgroundColor: contactSurface,
-				paddingHorizontal: metrics.gapX(0.28),
-				paddingVertical: metrics.gapY(0.08),
+				paddingVertical: metrics.gapY(0.04),
 				color: secondaryText,
 			},
 			picture: {
@@ -309,7 +306,7 @@ const useScizorTemplate = (): ScizorTemplate => {
 				...baseStyles,
 				sectionHeading: (context) => ({
 					...baseStyles.sectionHeading,
-					color: context.colors.foreground,
+					color: accentFor(context),
 					borderLeftColor: accentFor(context),
 					borderBottomColor: softLine,
 				}),

@@ -4,7 +4,7 @@ import { render, screen } from "@testing-library/react";
 import { beforeAll, describe, expect, it } from "vitest";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
-import { featuredTemplateIds, onlineStyleTemplateReferences, templates } from "@/dialogs/resume/template/data";
+import { onlineStyleTemplateReferences } from "@/dialogs/resume/template/data";
 import { Templates } from "./templates";
 
 beforeAll(() => {
@@ -25,8 +25,8 @@ describe("Templates section", () => {
 		expect(screen.getByText("中文简历模板与风格")).toBeInTheDocument();
 		expect(screen.getByText(/首页只展示真实可导出的首批精品模板/)).toBeInTheDocument();
 
-		for (const id of featuredTemplateIds) {
-			expect(screen.getAllByAltText(templates[id].name).length).toBeGreaterThan(0);
+		for (const name of ["ATS 极简 · 校招版", "ATS 极简 · 技术版", "高管咨询 · 运营版", "高管咨询 · 产品版"]) {
+			expect(screen.getAllByAltText(name).length).toBeGreaterThan(0);
 		}
 
 		for (const reference of onlineStyleTemplateReferences) {
