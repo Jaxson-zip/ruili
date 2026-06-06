@@ -64,12 +64,11 @@ try {
 	}
 
 	await page.goto(`${appUrl}/dashboard/resumes`, { waitUntil: "domcontentloaded" });
-	await page.getByText("选择模板创建").waitFor({ state: "visible", timeout: 15_000 });
-	await page.locator(".aspect-page").first().click();
+	await page.getByRole("button", { name: /选择模板创建/ }).click();
 
 	const dialog = page.locator('[role="dialog"]');
 	await dialog.waitFor({ state: "visible", timeout: 15_000 });
-	await dialog.getByText("从真实模板开始").waitFor({ state: "visible", timeout: 10_000 });
+	await dialog.getByText("从精选模板开始").waitFor({ state: "visible", timeout: 10_000 });
 	await dialog.getByText("从成品样张开始").waitFor({ state: "visible", timeout: 10_000 });
 	await dialog.getByText(starterName).waitFor({ state: "visible", timeout: 10_000 });
 	await dialog.getByText("或者从空白简历开始").waitFor({ state: "visible", timeout: 10_000 });

@@ -30,7 +30,16 @@ describe("Templates section", () => {
 		expect(screen.getByText(/第一排已经升级为真实可导出的中文模板/)).toBeInTheDocument();
 		expect(screen.getByText(/不会再强行套成别的模板/)).toBeInTheDocument();
 
-		for (const name of ["蓝色时间轴", "金色商务", "深蓝横栏", "深蓝侧栏"]) {
+		for (const name of [
+			"蓝色时间轴",
+			"金色商务",
+			"深蓝横栏",
+			"深蓝侧栏",
+			"浅蓝双栏",
+			"青蓝侧栏",
+			"蓝色标签",
+			"蓝色边框",
+		]) {
 			expect(screen.getAllByAltText(name).length).toBeGreaterThan(0);
 		}
 

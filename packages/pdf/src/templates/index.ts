@@ -8,6 +8,10 @@ import {
 	Collection002Page,
 	Collection003Page,
 	Collection005Page,
+	Collection016Page,
+	Collection020Page,
+	Collection021Page,
+	Collection024Page,
 } from "./collection/CollectionPage";
 import { DitgarPage } from "./ditgar/DitgarPage";
 import { DittoPage } from "./ditto/DittoPage";
@@ -29,6 +33,10 @@ export const templatePages = {
 	collection002: Collection002Page,
 	collection003: Collection003Page,
 	collection005: Collection005Page,
+	collection016: Collection016Page,
+	collection020: Collection020Page,
+	collection021: Collection021Page,
+	collection024: Collection024Page,
 	chikorita: ChikoritaPage,
 	ditgar: DitgarPage,
 	ditto: DittoPage,
@@ -56,6 +64,10 @@ export {
 	Collection002Page,
 	Collection003Page,
 	Collection005Page,
+	Collection016Page,
+	Collection020Page,
+	Collection021Page,
+	Collection024Page,
 	DitgarPage,
 	DittoPage,
 	GengarPage,

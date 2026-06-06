@@ -25,8 +25,7 @@ describe("CreateResumeCard", () => {
 	it("opens the resume.create dialog when clicked", () => {
 		render(<CreateResumeCard />);
 
-		const card = screen.getByText("选择模板创建").closest("div[class*='aspect-page']") as HTMLElement;
-		fireEvent.click(card);
+		fireEvent.click(screen.getByRole("button", { name: /选择模板创建/ }));
 
 		const state = useDialogStore.getState();
 		expect(state.open).toBe(true);
@@ -44,8 +43,7 @@ describe("ImportResumeCard", () => {
 	it("opens the resume.import dialog when clicked", () => {
 		render(<ImportResumeCard />);
 
-		const card = screen.getByText("导入已有简历").closest("div[class*='aspect-page']") as HTMLElement;
-		fireEvent.click(card);
+		fireEvent.click(screen.getByRole("button", { name: /导入已有简历/ }));
 
 		const state = useDialogStore.getState();
 		expect(state.open).toBe(true);

@@ -8,6 +8,7 @@ export function CreateResumeCard() {
 
 	return (
 		<BaseCard
+			asButton
 			title={t`选择模板创建`}
 			description={t`先选真实模板，再填写内容`}
 			onClick={() => openDialog("resume.create", undefined)}

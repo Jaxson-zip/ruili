@@ -24,10 +24,18 @@ describe("templatePages", () => {
 		expect(registry).toContain("Collection002Page");
 		expect(registry).toContain("Collection003Page");
 		expect(registry).toContain("Collection005Page");
+		expect(registry).toContain("Collection016Page");
+		expect(registry).toContain("Collection020Page");
+		expect(registry).toContain("Collection021Page");
+		expect(registry).toContain("Collection024Page");
 		expect(registry).toContain("collection001: Collection001Page");
 		expect(registry).toContain("collection002: Collection002Page");
 		expect(registry).toContain("collection003: Collection003Page");
 		expect(registry).toContain("collection005: Collection005Page");
+		expect(registry).toContain("collection016: Collection016Page");
+		expect(registry).toContain("collection020: Collection020Page");
+		expect(registry).toContain("collection021: Collection021Page");
+		expect(registry).toContain("collection024: Collection024Page");
 	});
 
 	it("uses the same fallback as invalid persisted template metadata", () => {

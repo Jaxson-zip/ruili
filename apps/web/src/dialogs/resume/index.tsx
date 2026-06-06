@@ -57,12 +57,6 @@ const defaultValues: FormValues = {
 	tags: [],
 };
 
-const primaryTemplateSet = new Set<Template>(primaryTemplateIds);
-const allTemplateIds = [
-	...primaryTemplateIds,
-	...(Object.keys(templates) as Template[]).filter((template) => !primaryTemplateSet.has(template)),
-] as const satisfies readonly Template[];
-
 export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 	const { i18n } = useLingui();
 	const navigate = useNavigate();
@@ -163,16 +157,16 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 				<section className="space-y-3">
 					<div className="flex flex-col gap-1">
 						<h3 className="font-semibold text-sm">
-							<Trans>从真实模板开始</Trans>
-							<span className="ms-2 text-muted-foreground">({allTemplateIds.length} 套)</span>
+							<Trans>从精选模板开始</Trans>
+							<span className="ms-2 text-muted-foreground">({primaryTemplateIds.length} 套)</span>
 						</h3>
 						<p className="text-muted-foreground text-sm">
-							<Trans>这里展示的是可实际生成和导出的模板；创建后内容为空，样式就是你选中的模板。</Trans>
+							<Trans>这里只放上线推荐模板；更多可导出模板可在进入编辑器后从模板库切换。</Trans>
 						</p>
 					</div>
 
 					<div className="grid max-h-[42svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-4">
-						{allTemplateIds.map((template) => {
+						{primaryTemplateIds.map((template) => {
 							const metadata = templates[template];
 
 							return (
@@ -251,7 +245,7 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 										))}
 									</div>
 									<p className="text-[11px] text-muted-foreground">
-										<Trans>实际生成：</Trans>
+										<Trans>推荐版式：</Trans>
 										{templates[starter.template].name}
 									</p>
 									<div className="pt-1 font-medium text-primary text-xs group-hover:underline">

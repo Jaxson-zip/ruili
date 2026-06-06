@@ -8,6 +8,7 @@ export function ImportResumeCard() {
 
 	return (
 		<BaseCard
+			asButton
 			title={t`导入已有简历`}
 			description={t`继续编辑已有版本`}
 			onClick={() => openDialog("resume.import", undefined)}

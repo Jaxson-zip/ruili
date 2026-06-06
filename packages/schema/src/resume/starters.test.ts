@@ -26,6 +26,24 @@ describe("resumeTemplateStarters", () => {
 		expect(new Set(names).size).toBe(names.length);
 	});
 
+	it("uses curated Chinese collection templates for all starter previews", () => {
+		const curatedTemplates = new Set([
+			"collection001",
+			"collection002",
+			"collection003",
+			"collection005",
+			"collection016",
+			"collection020",
+			"collection021",
+			"collection024",
+		]);
+
+		for (const starter of resumeTemplateStarters) {
+			expect(curatedTemplates.has(starter.template), starter.id).toBe(true);
+			expect(starter.data.metadata.template).toBe(starter.template);
+		}
+	});
+
 	it("does not leak frontend sample identity into other starters", () => {
 		const leakedFrontendTerms = ["陈嘉铭", "chenjiaming", "jiaming.dev", "字节跳动"];
 

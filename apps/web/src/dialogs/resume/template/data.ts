@@ -72,6 +72,38 @@ export const templates = {
 		tags: ["中文模板", "侧栏", "技术岗", "可导出"],
 		sidebarPosition: "left",
 	},
+	collection016: {
+		name: "浅蓝双栏",
+		description: msg`浅蓝信息栏配合右侧经历时间线，适合校招、实习、初级岗位和信息完整的中文简历。`,
+		imageUrl: "/templates/jpg/collection016.jpg",
+		accentColor: "rgba(79, 153, 207, 1)",
+		tags: ["中文模板", "浅蓝", "校招", "可导出"],
+		sidebarPosition: "left",
+	},
+	collection020: {
+		name: "青蓝侧栏",
+		description: msg`青蓝侧栏和清晰分区适合技术、数据和工程岗位，能突出技能与项目经历。`,
+		imageUrl: "/templates/jpg/collection020.jpg",
+		accentColor: "rgba(42, 151, 188, 1)",
+		tags: ["中文模板", "青蓝", "工程", "可导出"],
+		sidebarPosition: "left",
+	},
+	collection021: {
+		name: "蓝色标签",
+		description: msg`横向标签式标题让模块层次更清楚，适合产品、运营、职能和通用中文简历。`,
+		imageUrl: "/templates/jpg/collection021.jpg",
+		accentColor: "rgba(57, 101, 167, 1)",
+		tags: ["中文模板", "标签", "通用", "可导出"],
+		sidebarPosition: "none",
+	},
+	collection024: {
+		name: "蓝色边框",
+		description: msg`蓝色边框和左右分区更接近传统中文招聘模板，适合校招、技术和通用岗位。`,
+		imageUrl: "/templates/jpg/collection024.jpg",
+		accentColor: "rgba(47, 132, 189, 1)",
+		tags: ["中文模板", "边框", "双栏", "可导出"],
+		sidebarPosition: "left",
+	},
 	chikorita: {
 		name: "柔和双栏",
 		description: msg`更温和的双栏结构，适合市场、人力资源、客户成功和面向业务的岗位。`,
@@ -176,10 +208,10 @@ export const featuredTemplateIds = [
 	"collection002",
 	"collection003",
 	"collection005",
-	"azurill",
-	"onyx",
-	"ditto",
-	"scizor",
+	"collection016",
+	"collection020",
+	"collection021",
+	"collection024",
 ] as const satisfies Template[];
 
 export const primaryTemplateIds = featuredTemplateIds;
@@ -189,6 +221,10 @@ const promotedCollectionReferenceIds = new Set([
 	"collection-002",
 	"collection-003",
 	"collection-005",
+	"collection-016",
+	"collection-020",
+	"collection-021",
+	"collection-024",
 ]);
 
 export const onlineStyleTemplateReferences = [

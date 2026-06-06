@@ -104,7 +104,7 @@ try {
 		"utf8",
 	);
 
-	await page.locator(".aspect-page").nth(1).click();
+	await page.getByRole("button", { name: /导入已有简历/ }).click();
 
 	const dialog = page.locator('[role="dialog"]');
 	await dialog.waitFor({ state: "visible", timeout: 15_000 });

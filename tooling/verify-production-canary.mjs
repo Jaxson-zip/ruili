@@ -43,6 +43,10 @@ const expectedTemplateAssetPaths = [
 	"/templates/jpg/collection002.jpg",
 	"/templates/jpg/collection003.jpg",
 	"/templates/jpg/collection005.jpg",
+	"/templates/jpg/collection016.jpg",
+	"/templates/jpg/collection020.jpg",
+	"/templates/jpg/collection021.jpg",
+	"/templates/jpg/collection024.jpg",
 ];
 
 const fail = (message) => {

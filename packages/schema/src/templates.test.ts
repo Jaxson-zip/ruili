@@ -10,6 +10,10 @@ describe("templateSchema", () => {
 			"collection002",
 			"collection003",
 			"collection005",
+			"collection016",
+			"collection020",
+			"collection021",
+			"collection024",
 			"chikorita",
 			"ditgar",
 			"ditto",
@@ -49,8 +53,8 @@ describe("templateSchema", () => {
 		}
 	});
 
-	it("includes 19 templates", () => {
+	it("includes 23 templates", () => {
 		const validTemplates = templateSchema.options;
-		expect(validTemplates).toHaveLength(19);
+		expect(validTemplates).toHaveLength(23);
 	});
 });

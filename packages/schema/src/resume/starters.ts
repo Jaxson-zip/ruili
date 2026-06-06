@@ -108,7 +108,7 @@ const baseResumeTemplateStarters = [
 		resumeName: "前端开发-中文投递版",
 		description: "突出 React、TypeScript、工程化、项目成果和性能优化，适合前端/全栈/技术产品方向。",
 		tags: ["技术岗", "前端", "React", "项目成果"],
-		template: "azurill",
+		template: "collection005",
 		build: (data) => {
 			data.basics.name = "陈嘉铭";
 			data.basics.headline = "前端开发工程师 | React 与工程化方向";
@@ -149,7 +149,7 @@ const baseResumeTemplateStarters = [
 		resumeName: "产品经理-增长方向版",
 		description: "围绕需求拆解、数据分析、跨团队推进和业务指标表达，适合产品经理与商业产品岗位。",
 		tags: ["产品", "增长", "数据分析", "业务推进"],
-		template: "scizor",
+		template: "collection002",
 		build: (data) => {
 			const experience = first(data.sections.experience.items);
 			const education = first(data.sections.education.items);
@@ -234,7 +234,7 @@ const baseResumeTemplateStarters = [
 		resumeName: "应届生-校招投递版",
 		description: "用教育经历、实习、项目和技能补足工作经历，适合校招、实习和初级岗位。",
 		tags: ["校招", "实习", "应届生", "ATS"],
-		template: "ditto",
+		template: "collection016",
 		build: (data) => {
 			const experience = first(data.sections.experience.items);
 			const education = first(data.sections.education.items);
@@ -324,7 +324,7 @@ const baseResumeTemplateStarters = [
 		resumeName: "运营增长-业务投递版",
 		description: "强调活动策划、用户增长、数据复盘和跨部门执行，适合运营、市场和客户成功岗位。",
 		tags: ["运营", "增长", "活动策划", "数据复盘"],
-		template: "bronzor",
+		template: "collection020",
 		build: (data) => {
 			const experience = first(data.sections.experience.items);
 			const education = first(data.sections.education.items);
@@ -451,7 +451,7 @@ const starterVariants = [
 		resumeName: "前端开发-一页投递版",
 		description: "保留前端工程师完整内容，切换为更紧凑的一页横栏版式，适合网申和 PDF 投递。",
 		tags: ["技术岗", "前端", "一页版", "网申"],
-		template: "onyx",
+		template: "collection020",
 		primaryColor: "rgba(31, 58, 95, 1)",
 		main: ["summary", "experience", "projects", "education", "skills", "profiles"],
 		sidebar: [],
@@ -463,7 +463,7 @@ const starterVariants = [
 		resumeName: "前端开发-资深技术版",
 		description: "同一份前端内容切换为严肃单栏结构，更适合资深工程师、技术负责人和外企投递。",
 		tags: ["技术岗", "前端", "资深", "单栏"],
-		template: "lapras",
+		template: "collection024",
 		primaryColor: "rgba(37, 99, 135, 1)",
 		main: ["summary", "experience", "projects", "skills", "education", "profiles"],
 		sidebar: [],
@@ -475,7 +475,7 @@ const starterVariants = [
 		resumeName: "产品经理-简洁业务版",
 		description: "保留产品经理增长内容，切换为克制单栏样式，适合金融、B 端和咨询类产品岗位。",
 		tags: ["产品", "增长", "简洁", "B 端"],
-		template: "bronzor",
+		template: "collection021",
 		primaryColor: "rgba(49, 96, 87, 1)",
 		main: ["summary", "experience", "projects", "skills", "education", "profiles"],
 		sidebar: [],
@@ -487,7 +487,7 @@ const starterVariants = [
 		resumeName: "产品经理-一页成果版",
 		description: "更强调成果表达和模块分隔，适合把业务指标、项目结果和跨团队推进压到一页。",
 		tags: ["产品", "成果", "一页版", "指标"],
-		template: "onyx",
+		template: "collection003",
 		primaryColor: "rgba(55, 92, 132, 1)",
 		main: ["summary", "experience", "projects", "skills", "education", "profiles"],
 		sidebar: [],
@@ -499,7 +499,7 @@ const starterVariants = [
 		resumeName: "应届生-紧凑校招版",
 		description: "保留校招内容，切换为更紧凑的单栏样式，适合经历较少但需要重点突出的候选人。",
 		tags: ["校招", "实习", "紧凑", "ATS"],
-		template: "kakuna",
+		template: "collection016",
 		primaryColor: "rgba(37, 99, 235, 1)",
 		main: ["summary", "education", "experience", "projects", "skills", "languages", "profiles"],
 		sidebar: [],
@@ -507,11 +507,11 @@ const starterVariants = [
 	createStarterVariant({
 		baseId: "campus-student",
 		id: "campus-student-asian",
-		name: "应届生亚洲精简模板",
-		resumeName: "应届生-亚洲精简版",
+		name: "应届生横栏模板",
+		resumeName: "应届生-横栏校招版",
 		description: "行内标题更贴近中文简历习惯，适合投递实习、校招和初级开发岗位。",
 		tags: ["校招", "实习", "中文习惯", "单栏"],
-		template: "meowth",
+		template: "collection024",
 		primaryColor: "rgba(37, 99, 235, 1)",
 		main: ["summary", "education", "experience", "projects", "skills", "languages", "profiles"],
 		sidebar: [],
@@ -523,7 +523,7 @@ const starterVariants = [
 		resumeName: "运营增长-双栏投递版",
 		description: "保留运营增长内容，左侧放作品集、技能和教育，右侧突出活动成果和复盘。",
 		tags: ["运营", "增长", "双栏", "活动"],
-		template: "azurill",
+		template: "collection020",
 		primaryColor: "rgba(185, 84, 52, 1)",
 		main: ["summary", "experience", "projects"],
 		sidebar: ["profiles", "skills", "education"],
@@ -536,7 +536,7 @@ const starterVariants = [
 		resumeName: "运营增长-成果咨询版",
 		description: "更强调指标和成果表达，适合增长、市场、商业分析和咨询风格投递。",
 		tags: ["运营", "增长", "成果", "咨询"],
-		template: "scizor",
+		template: "collection021",
 		primaryColor: "rgba(185, 84, 52, 1)",
 		main: ["summary", "experience", "projects", "skills", "education", "profiles"],
 		sidebar: [],

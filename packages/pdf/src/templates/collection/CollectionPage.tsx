@@ -28,7 +28,15 @@ type CollectionVariant = {
 	headerForeground: string;
 	headingBackground: string;
 	headingMode: "bar" | "tag" | "line";
-	id: "collection001" | "collection002" | "collection003" | "collection005";
+	id:
+		| "collection001"
+		| "collection002"
+		| "collection003"
+		| "collection005"
+		| "collection016"
+		| "collection020"
+		| "collection021"
+		| "collection024";
 	sidebarBackground?: string;
 	sidebarForeground?: string;
 };
@@ -98,6 +106,44 @@ const variants = {
 		headingMode: "bar",
 		sidebarBackground: "#213A52",
 		sidebarForeground: "#F8FAFC",
+	},
+	collection016: {
+		id: "collection016",
+		accent: "#4F99CF",
+		headerBackground: "#FFFFFF",
+		headerForeground: "#1F4F70",
+		headingBackground: "#EAF5FC",
+		headingMode: "tag",
+		sidebarBackground: "#EAF5FC",
+		sidebarForeground: "#1F4F70",
+	},
+	collection020: {
+		id: "collection020",
+		accent: "#2A97BC",
+		headerBackground: "#FFFFFF",
+		headerForeground: "#1F4B61",
+		headingBackground: "#E7F5F9",
+		headingMode: "bar",
+		sidebarBackground: "#1F5F78",
+		sidebarForeground: "#F8FAFC",
+	},
+	collection021: {
+		id: "collection021",
+		accent: "#3965A7",
+		headerBackground: "#F7FAFF",
+		headerForeground: "#233B63",
+		headingBackground: "#EAF0FA",
+		headingMode: "tag",
+	},
+	collection024: {
+		id: "collection024",
+		accent: "#2F84BD",
+		headerBackground: "#FFFFFF",
+		headerForeground: "#1F4F70",
+		headingBackground: "#EAF5FC",
+		headingMode: "line",
+		sidebarBackground: "#EDF7FD",
+		sidebarForeground: "#1F4F70",
 	},
 } as const satisfies Record<CollectionVariant["id"], CollectionVariant>;
 
@@ -587,3 +633,7 @@ export const Collection001Page = createCollectionPage(variants.collection001);
 export const Collection002Page = createCollectionPage(variants.collection002);
 export const Collection003Page = createCollectionPage(variants.collection003);
 export const Collection005Page = createCollectionPage(variants.collection005);
+export const Collection016Page = createCollectionPage(variants.collection016);
+export const Collection020Page = createCollectionPage(variants.collection020);
+export const Collection021Page = createCollectionPage(variants.collection021);
+export const Collection024Page = createCollectionPage(variants.collection024);

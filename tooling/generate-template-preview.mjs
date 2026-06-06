@@ -102,8 +102,7 @@ try {
 	}
 
 	await page.goto(`${appUrl}/dashboard/resumes`, { waitUntil: "domcontentloaded" });
-	await page.getByText("选择模板创建").waitFor({ state: "visible", timeout: 15_000 });
-	await page.locator(".aspect-page").first().click();
+	await page.getByRole("button", { name: /选择模板创建/ }).click();
 
 	const createDialog = page.locator('[role="dialog"]');
 	await createDialog.waitFor({ state: "visible", timeout: 15_000 });

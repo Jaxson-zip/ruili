@@ -23,6 +23,10 @@ describe("templates metadata", () => {
 				"collection002",
 				"collection003",
 				"collection005",
+				"collection016",
+				"collection020",
+				"collection021",
+				"collection024",
 				"chikorita",
 				"ditgar",
 				"ditto",
@@ -69,11 +73,13 @@ describe("templates metadata", () => {
 			"collection002",
 			"collection003",
 			"collection005",
-			"azurill",
-			"onyx",
-			"ditto",
-			"scizor",
+			"collection016",
+			"collection020",
+			"collection021",
+			"collection024",
 		]);
+		expect(featuredTemplateIds).not.toContain("azurill");
+		expect(featuredTemplateIds).not.toContain("onyx");
 
 		for (const id of featuredTemplateIds) {
 			expect(templates[id], id).toBeDefined();
@@ -129,16 +135,16 @@ describe("templates metadata", () => {
 	});
 
 	it("splits collection references by launch readiness", () => {
-		expect(recommendedCollectionTemplateReferences).toHaveLength(4);
+		expect(recommendedCollectionTemplateReferences).toHaveLength(0);
 		expect(additionalCollectionTemplateReferences).toHaveLength(11);
 		expect(deferredCollectionTemplateReferences).toHaveLength(5);
 		expect([
 			...recommendedCollectionTemplateReferences,
 			...additionalCollectionTemplateReferences,
 			...deferredCollectionTemplateReferences,
-		]).toHaveLength(collectionTemplateReferences.length - 4);
+		]).toHaveLength(collectionTemplateReferences.length - 8);
 
-		for (const promotedId of ["001", "002", "003", "005"]) {
+		for (const promotedId of ["001", "002", "003", "005", "016", "020", "021", "024"]) {
 			expect(templates[`collection${promotedId}` as keyof typeof templates]).toBeDefined();
 			expect(
 				recommendedCollectionTemplateReferences.some((reference) => reference.id === `collection-${promotedId}`),

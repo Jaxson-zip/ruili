@@ -4,6 +4,7 @@ import { m } from "motion/react";
 import { useMemo } from "react";
 import {
 	additionalCollectionTemplateReferences,
+	featuredTemplateIds,
 	recommendedCollectionTemplateReferences,
 	templates as systemTemplates,
 } from "@/dialogs/resume/template/data";
@@ -25,17 +26,6 @@ type TemplateMarqueeItem = {
 	preview: SystemTemplatePreview;
 };
 
-const promotedTemplateIds = [
-	"collection001",
-	"collection002",
-	"collection003",
-	"collection005",
-] as const satisfies Array<
-	{
-		template: Template;
-	}["template"]
->;
-
 const createSystemTemplatePreviews = (templates: readonly Template[]): SystemTemplatePreview[] =>
 	templates.map((template) => ({
 		id: `system-${template}`,
@@ -45,7 +35,7 @@ const createSystemTemplatePreviews = (templates: readonly Template[]): SystemTem
 		source: "可导出 PDF",
 	}));
 
-const promotedTemplatePreviews = createSystemTemplatePreviews(promotedTemplateIds);
+const promotedTemplatePreviews = createSystemTemplatePreviews(featuredTemplateIds);
 
 const referenceTemplatePreviews: SystemTemplatePreview[] = [
 	...recommendedCollectionTemplateReferences,
