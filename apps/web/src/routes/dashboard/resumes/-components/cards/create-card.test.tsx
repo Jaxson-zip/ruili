@@ -19,7 +19,7 @@ describe("CreateResumeCard", () => {
 	it("renders the create-resume copy", () => {
 		render(<CreateResumeCard />);
 		expect(screen.getByText("创建简历")).toBeInTheDocument();
-		expect(screen.getByText("选择样张，再替换内容")).toBeInTheDocument();
+		expect(screen.getByText("选样张或模板开始")).toBeInTheDocument();
 	});
 
 	it("opens the resume.create dialog when clicked", () => {

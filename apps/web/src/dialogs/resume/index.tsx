@@ -42,6 +42,8 @@ import { primaryTemplateIds, templates } from "./template/data";
 import { TemplateThumbnail } from "./template/thumbnail";
 import { buildBlankTemplateImportInput, buildResumeStarterImportInput } from "./template-starter-import";
 
+type CreateMode = "starter" | "template" | "blank";
+
 const formSchema = z.object({
 	id: z.string(),
 	name: z.string().min(1).max(64),
@@ -92,7 +94,7 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 	});
 
 	const name = useStore(form.store, (s) => s.values.name);
-	const [showAdvancedCreateOptions, setShowAdvancedCreateOptions] = useState(false);
+	const [createMode, setCreateMode] = useState<CreateMode>("starter");
 	const launchStarters = getLaunchResumeTemplateStarters();
 
 	useEffect(() => {
@@ -143,7 +145,7 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 					<Trans>新建简历</Trans>
 				</DialogTitle>
 				<DialogDescription>
-					<Trans>先选一份接近目标岗位的成品样张，进去后直接改内容。</Trans>
+					<Trans>选择一份成品样张，或直接挑一套中文模板开始填写。</Trans>
 				</DialogDescription>
 			</DialogHeader>
 
@@ -155,70 +157,82 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 					void form.handleSubmit();
 				}}
 			>
-				<section className="space-y-3">
-					<div className="flex flex-col gap-1">
-						<h3 className="font-semibold text-sm">
-							<Trans>从成品样张开始</Trans>
-							<span className="ms-2 text-muted-foreground">({launchStarters.length} 套)</span>
-						</h3>
-						<p className="text-muted-foreground text-sm">
-							<Trans>默认只展示可直接投递的中文样张。空白模板放在下方高级入口。</Trans>
-						</p>
-					</div>
-
-					<div className="grid max-h-[58svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-3">
-						{launchStarters.map((starter) => (
-							<button
-								key={starter.id}
-								type="button"
-								data-starter-id={starter.id}
-								disabled={isBusy}
-								className="group overflow-hidden rounded-md border bg-background text-left transition-colors hover:border-foreground/30 disabled:cursor-not-allowed disabled:opacity-60"
-								onClick={() => onCreateFromStarter(starter)}
-							>
-								<div className="aspect-page overflow-hidden border-b bg-white">
-									<TemplateThumbnail
-										template={starter.template}
-										label={starter.name}
-										imageUrl={getStarterPreviewImageUrl(starter)}
-									/>
-								</div>
-
-								<div className="space-y-2 p-3">
-									<div className="flex items-start justify-between gap-2">
-										<h4 className="line-clamp-1 font-semibold text-sm">{starter.name}</h4>
-										<Badge variant="secondary" className="shrink-0 text-[11px]">
-											PDF
-										</Badge>
-									</div>
-									<p className="line-clamp-2 min-h-9 text-muted-foreground text-xs leading-relaxed">
-										{starter.description}
-									</p>
-									<div className="flex min-h-6 flex-wrap gap-1">
-										{starter.tags.slice(0, 3).map((tag) => (
-											<Badge key={tag} variant="secondary" className="text-[11px]">
-												{tag}
-											</Badge>
-										))}
-									</div>
-								</div>
-							</button>
-						))}
-					</div>
-				</section>
-
-				<div className="flex justify-center border-t pt-4">
-					<Button
-						type="button"
-						variant="ghost"
-						size="sm"
-						onClick={() => setShowAdvancedCreateOptions((visible) => !visible)}
-					>
-						{showAdvancedCreateOptions ? "收起空白创建入口" : "需要空白模板？展开高级入口"}
-					</Button>
+				<div className="grid grid-cols-1 gap-2 rounded-md border bg-secondary/20 p-1 sm:grid-cols-3">
+					<CreateModeButton
+						active={createMode === "starter"}
+						description={`${launchStarters.length} 份完整内容`}
+						label="成品样张"
+						onClick={() => setCreateMode("starter")}
+					/>
+					<CreateModeButton
+						active={createMode === "template"}
+						description={`${primaryTemplateIds.length} 套可导出模板`}
+						label="空白模板"
+						onClick={() => setCreateMode("template")}
+					/>
+					<CreateModeButton
+						active={createMode === "blank"}
+						description="自定义名称和链接"
+						label="空白简历"
+						onClick={() => setCreateMode("blank")}
+					/>
 				</div>
 
-				{showAdvancedCreateOptions ? (
+				{createMode === "starter" ? (
+					<section className="space-y-3">
+						<div className="flex flex-col gap-1">
+							<h3 className="font-semibold text-sm">
+								<Trans>从成品样张开始</Trans>
+								<span className="ms-2 text-muted-foreground">({launchStarters.length} 套)</span>
+							</h3>
+							<p className="text-muted-foreground text-sm">
+								<Trans>样张已经填好中文内容，适合先看完整效果，再替换成自己的经历。</Trans>
+							</p>
+						</div>
+
+						<div className="grid max-h-[58svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-3">
+							{launchStarters.map((starter) => (
+								<button
+									key={starter.id}
+									type="button"
+									data-starter-id={starter.id}
+									disabled={isBusy}
+									className="group overflow-hidden rounded-md border bg-background text-left transition-colors hover:border-foreground/30 disabled:cursor-not-allowed disabled:opacity-60"
+									onClick={() => onCreateFromStarter(starter)}
+								>
+									<div className="aspect-page overflow-hidden border-b bg-white">
+										<TemplateThumbnail
+											template={starter.template}
+											label={starter.name}
+											imageUrl={getStarterPreviewImageUrl(starter)}
+										/>
+									</div>
+
+									<div className="space-y-2 p-3">
+										<div className="flex items-start justify-between gap-2">
+											<h4 className="line-clamp-1 font-semibold text-sm">{starter.name}</h4>
+											<Badge variant="secondary" className="shrink-0 text-[11px]">
+												PDF
+											</Badge>
+										</div>
+										<p className="line-clamp-2 min-h-9 text-muted-foreground text-xs leading-relaxed">
+											{starter.description}
+										</p>
+										<div className="flex min-h-6 flex-wrap gap-1">
+											{starter.tags.slice(0, 3).map((tag) => (
+												<Badge key={tag} variant="secondary" className="text-[11px]">
+													{tag}
+												</Badge>
+											))}
+										</div>
+									</div>
+								</button>
+							))}
+						</div>
+					</section>
+				) : null}
+
+				{createMode === "template" ? (
 					<section className="space-y-3">
 						<div className="flex flex-col gap-1">
 							<h3 className="font-semibold text-sm">
@@ -226,11 +240,11 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 								<span className="ms-2 text-muted-foreground">({primaryTemplateIds.length} 套)</span>
 							</h3>
 							<p className="text-muted-foreground text-sm">
-								<Trans>只切换版式、颜色和布局；适合已经有内容、想从零填写的人。</Trans>
+								<Trans>先选版式，再进入编辑器填写内容；适合已经有简历内容的人。</Trans>
 							</p>
 						</div>
 
-						<div className="grid max-h-[34svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-4">
+						<div className="grid max-h-[58svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-4">
 							{primaryTemplateIds.map((template) => {
 								const metadata = templates[template];
 
@@ -274,11 +288,11 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 					</section>
 				) : null}
 
-				{showAdvancedCreateOptions ? (
+				{createMode === "blank" ? (
 					<section className="space-y-4 rounded-md border bg-secondary/20 p-4">
 						<div className="flex flex-col gap-1">
 							<h3 className="font-semibold text-sm">
-								<Trans>或者从空白简历开始</Trans>
+								<Trans>从空白简历开始</Trans>
 							</h3>
 							<p className="text-muted-foreground text-sm">
 								<Trans>输入名称后创建空白版本，后续仍可添加组件、切换模板和调整排版。</Trans>
@@ -289,7 +303,7 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 					</section>
 				) : null}
 
-				{showAdvancedCreateOptions ? (
+				{createMode === "blank" ? (
 					<DialogFooter>
 						<Button type="submit" disabled={isBusy}>
 							<Trans>创建空白简历</Trans>
@@ -298,6 +312,29 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 				) : null}
 			</form>
 		</DialogContent>
+	);
+}
+
+type CreateModeButtonProps = {
+	active: boolean;
+	description: string;
+	label: string;
+	onClick: () => void;
+};
+
+function CreateModeButton({ active, description, label, onClick }: CreateModeButtonProps) {
+	return (
+		<Button
+			type="button"
+			variant={active ? "secondary" : "ghost"}
+			className="h-auto justify-start px-3 py-2 text-left"
+			onClick={onClick}
+		>
+			<span className="flex flex-col items-start gap-0.5">
+				<span className="font-medium text-sm">{label}</span>
+				<span className="text-muted-foreground text-xs">{description}</span>
+			</span>
+		</Button>
 	);
 }
 
