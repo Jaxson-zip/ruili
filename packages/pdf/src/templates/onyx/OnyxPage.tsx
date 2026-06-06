@@ -248,7 +248,7 @@ const Header = ({ styles }: OnyxHeaderProps) => {
 
 			{contactEntries.length > 0 && (
 				<View style={styles.contactList}>
-					{contactEntries.map((entry, index) => (
+					{contactEntries.map((entry) => (
 						<View key={entry.id} style={styles.contactItem}>
 							{entry.url ? (
 								<PdfLink src={entry.url} style={styles.contactText}>
@@ -257,7 +257,6 @@ const Header = ({ styles }: OnyxHeaderProps) => {
 							) : (
 								<Text style={styles.contactText}>{entry.label}</Text>
 							)}
-							{index < contactEntries.length - 1 && <Text style={styles.contactDivider}>|</Text>}
 						</View>
 					))}
 				</View>
@@ -275,13 +274,17 @@ const useOnyxTemplate = (): OnyxTemplate => {
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
 		const softText = "#475467";
+		const mutedText = "#667085";
 		const hairline = "#E2E8F0";
-		const headerSurface = "#111827";
+		const headerSurface = "#0F172A";
 		const headerText = "#FFFFFF";
 		const headerMuted = "#DDE6F3";
-		const headerDivider = "#536174";
-		const sidebarBackground = "#F7F9FC";
-		const itemDivider = "#E8ECF2";
+		const sidebarBackground = "#F8FAFC";
+		const sectionTint = "#F3F6FA";
+		const projectSurface = "#F8FAFC";
+		const chipSurface = "#F4F7FB";
+		const chipBorder = "#D8E0EA";
+		const itemDivider = "#EDF1F5";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 
@@ -300,7 +303,7 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				backgroundColor: background,
 				paddingHorizontal: metrics.page.paddingHorizontal,
 				paddingVertical: metrics.page.paddingVertical,
-				rowGap: metrics.gapY(0.82),
+				rowGap: metrics.gapY(0.72),
 				fontFamily: metadata.typography.body.fontFamily,
 				fontSize: metadata.typography.body.fontSize,
 				lineHeight: Math.min(metadata.typography.body.lineHeight, 1.42),
@@ -372,26 +375,26 @@ const useOnyxTemplate = (): OnyxTemplate => {
 			},
 			sectionHeading: {
 				color: foreground,
-				backgroundColor: "transparent",
-				borderLeftWidth: 0,
+				backgroundColor: sectionTint,
+				borderLeftWidth: 2.4,
 				borderLeftColor: primary,
 				borderTopWidth: 0,
-				borderBottomWidth: 0.8,
-				borderBottomColor: "#202A37",
+				borderBottomWidth: 0,
+				borderBottomColor: "transparent",
 				fontSize: metadata.typography.heading.fontSize * 0.84,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
 				lineHeight: 1.22,
-				paddingLeft: 0,
-				paddingTop: 0,
-				paddingBottom: metrics.gapY(0.16),
+				paddingHorizontal: metrics.gapX(0.38),
+				paddingTop: metrics.gapY(0.12),
+				paddingBottom: metrics.gapY(0.12),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(0.34),
+				rowGap: metrics.gapY(0.38),
 			},
 			item: {
-				rowGap: metrics.gapY(0.13),
-				paddingBottom: metrics.gapY(0.2),
+				rowGap: metrics.gapY(0.14),
+				paddingBottom: metrics.gapY(0.18),
 			},
 			levelContainer: {
 				display: "none",
@@ -405,27 +408,27 @@ const useOnyxTemplate = (): OnyxTemplate => {
 			header: {
 				position: "relative",
 				alignItems: "flex-start",
-				rowGap: metrics.gapY(0.34),
+				rowGap: metrics.gapY(0.42),
 				backgroundColor: headerSurface,
-				borderBottomWidth: 2.4,
+				borderBottomWidth: 3.2,
 				borderBottomColor: primary,
-				paddingHorizontal: metrics.gapX(0.78),
-				paddingTop: metrics.gapY(0.58),
-				paddingBottom: metrics.gapY(0.62),
+				paddingHorizontal: metrics.gapX(0.92),
+				paddingTop: metrics.gapY(0.7),
+				paddingBottom: metrics.gapY(0.72),
 			},
 			headerIdentity: {
 				alignItems: "flex-start",
-				rowGap: metrics.gapY(0.1),
+				rowGap: metrics.gapY(0.14),
 			},
 			headerName: {
 				color: headerText,
-				fontSize: metadata.typography.heading.fontSize * 1.78,
+				fontSize: metadata.typography.heading.fontSize * 1.9,
 				lineHeight: headerNameLineHeight,
 				textAlign: "left",
 			},
 			headerHeadline: {
 				color: headerMuted,
-				fontSize: metadata.typography.body.fontSize * 1,
+				fontSize: metadata.typography.body.fontSize * 1.02,
 				textAlign: "left",
 			},
 			picture: {
@@ -447,38 +450,48 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				flexDirection: r.row,
 				flexWrap: "wrap",
 				justifyContent: "flex-start",
-				rowGap: metrics.gapY(0.16),
-				columnGap: metrics.gapX(0.34),
+				rowGap: metrics.gapY(0.18),
+				columnGap: metrics.gapX(0.28),
 			},
 			contactItem: {
 				flexDirection: r.row,
 				alignItems: "center",
-				columnGap: metrics.gapX(0.28),
-				paddingVertical: metrics.gapY(0.02),
+				backgroundColor: "#1D2939",
+				borderWidth: 0.45,
+				borderColor: "#344054",
+				borderRadius: 3,
+				paddingHorizontal: metrics.gapX(0.26),
+				paddingVertical: metrics.gapY(0.07),
 			},
 			contactText: {
 				color: headerMuted,
-				fontSize: metadata.typography.body.fontSize * 0.86,
+				fontSize: metadata.typography.body.fontSize * 0.82,
 				textDecoration: "none",
 			},
 			contactDivider: {
-				color: headerDivider,
+				display: "none",
 				fontSize: metadata.typography.body.fontSize * 0.82,
 			},
 			compactSkillList: {
 				flexDirection: r.row,
 				flexWrap: "wrap",
-				rowGap: metrics.gapY(0.2),
-				columnGap: metrics.gapX(0.72),
+				rowGap: metrics.gapY(0.18),
+				columnGap: metrics.gapX(0.42),
 				paddingTop: metrics.gapY(0.02),
 			},
 			compactSkillRow: {
-				width: "47%",
+				width: "48%",
+				backgroundColor: chipSurface,
+				borderWidth: 0.45,
+				borderColor: chipBorder,
+				borderRadius: 3,
+				paddingHorizontal: metrics.gapX(0.26),
+				paddingVertical: metrics.gapY(0.1),
 			},
 			compactSkillText: {
 				...bodyText,
 				color: foreground,
-				fontSize: metadata.typography.body.fontSize * 0.92,
+				fontSize: metadata.typography.body.fontSize * 0.88,
 			},
 			compactSkillName: {
 				fontWeight: metadata.typography.body.fontWeights.at(-1) ?? "600",
@@ -488,22 +501,37 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				flexDirection: r.row,
 				flexWrap: "wrap",
 				rowGap: metrics.gapY(0.18),
-				columnGap: metrics.gapX(0.72),
+				columnGap: metrics.gapX(0.42),
 				paddingTop: metrics.gapY(0.02),
 			},
 			compactProfileRow: {
-				width: "47%",
+				width: "48%",
+				backgroundColor: chipSurface,
+				borderWidth: 0.45,
+				borderColor: chipBorder,
+				borderRadius: 3,
+				paddingHorizontal: metrics.gapX(0.26),
+				paddingVertical: metrics.gapY(0.1),
 			},
 			compactProfileText: {
 				...bodyText,
 				color: foreground,
-				fontSize: metadata.typography.body.fontSize * 0.92,
+				fontSize: metadata.typography.body.fontSize * 0.88,
 			},
 			compactProjectItem: {
-				rowGap: metrics.gapY(0.1),
-				paddingBottom: metrics.gapY(0.28),
+				rowGap: metrics.gapY(0.14),
+				backgroundColor: projectSurface,
+				borderLeftWidth: 2.2,
+				borderLeftColor: primary,
+				borderTopWidth: 0.45,
+				borderTopColor: hairline,
+				borderRightWidth: 0.45,
+				borderRightColor: hairline,
 				borderBottomWidth: 0.45,
-				borderBottomColor: itemDivider,
+				borderBottomColor: hairline,
+				borderRadius: 3,
+				paddingHorizontal: metrics.gapX(0.42),
+				paddingVertical: metrics.gapY(0.28),
 			},
 			compactProjectTitle: {
 				...bodyText,
@@ -512,7 +540,7 @@ const useOnyxTemplate = (): OnyxTemplate => {
 			},
 			compactProjectLink: {
 				...bodyText,
-				color: softText,
+				color: mutedText,
 				fontSize: metadata.typography.body.fontSize * 0.86,
 			},
 			contentRow: {
