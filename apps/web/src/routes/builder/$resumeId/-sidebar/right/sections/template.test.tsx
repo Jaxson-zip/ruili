@@ -4,6 +4,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
+import { primaryTemplateIds } from "@/dialogs/resume/template/data";
 import { useDialogStore } from "@/dialogs/store";
 
 type SectionBaseProps = {
@@ -50,8 +51,10 @@ describe("TemplateSectionBuilder", () => {
 	it("explains that template switching keeps the current resume content", () => {
 		renderTemplate();
 
-		expect(screen.getByText("这里只切换当前简历的版式、颜色和布局，不会替换正文内容。")).toBeInTheDocument();
-		expect(screen.getByRole("button", { name: "更换模板" })).toBeInTheDocument();
+		expect(screen.getByText("当前模板")).toBeInTheDocument();
+		expect(screen.getByText(`${primaryTemplateIds.length} 套可选`)).toBeInTheDocument();
+		expect(screen.getByText("切换模板只调整版式、颜色和布局，正文内容会保留。")).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "浏览全部中文模板" })).toBeInTheDocument();
 	});
 
 	it("opens the template gallery dialog when the preview is clicked", () => {

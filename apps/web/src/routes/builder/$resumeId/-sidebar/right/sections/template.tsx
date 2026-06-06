@@ -2,7 +2,7 @@ import { useLingui } from "@lingui/react";
 import { SwapIcon } from "@phosphor-icons/react";
 import { Badge } from "@reactive-resume/ui/components/badge";
 import { Button } from "@reactive-resume/ui/components/button";
-import { templates } from "@/dialogs/resume/template/data";
+import { primaryTemplateIds, templates } from "@/dialogs/resume/template/data";
 import { TemplateThumbnail } from "@/dialogs/resume/template/thumbnail";
 import { useDialogStore } from "@/dialogs/store";
 import { useCurrentResume } from "@/features/resume/builder/draft";
@@ -29,11 +29,12 @@ function TemplateSectionForm() {
 	};
 
 	return (
-		<div className="flex @md:flex-row flex-col items-stretch gap-x-4 gap-y-2">
+		<div className="flex @md:flex-row flex-col items-stretch gap-x-4 gap-y-3">
 			<Button
 				variant="ghost"
 				onClick={onOpenTemplateGallery}
-				className="group/preview relative h-auto w-40 shrink-0 cursor-pointer p-0"
+				aria-label={`浏览全部中文模板，当前模板：${metadata.name}`}
+				className="group/preview relative h-auto w-40 shrink-0 cursor-pointer overflow-hidden rounded-md border bg-white p-0"
 			>
 				<div className="relative z-10 aspect-page size-full overflow-hidden rounded-md opacity-100 transition-opacity group-hover/preview:opacity-50">
 					<TemplateThumbnail template={template} label={metadata.name} imageUrl={metadata.imageUrl} />
@@ -46,10 +47,14 @@ function TemplateSectionForm() {
 
 			<div className="flex flex-1 flex-col gap-y-4 @md:pt-1 @md:pb-3">
 				<div className="space-y-1">
+					<div className="flex flex-wrap items-center gap-2">
+						<Badge variant="secondary">当前模板</Badge>
+						<Badge variant="outline">{primaryTemplateIds.length} 套可选</Badge>
+					</div>
 					<h3 className="font-semibold text-2xl tracking-tight">{metadata.name}</h3>
 					<p className="text-muted-foreground text-sm">{i18n.t(metadata.description)}</p>
 					<p className="text-muted-foreground text-xs leading-relaxed">
-						这里只切换当前简历的版式、颜色和布局，不会替换正文内容。
+						切换模板只调整版式、颜色和布局，正文内容会保留。
 					</p>
 				</div>
 
@@ -61,9 +66,9 @@ function TemplateSectionForm() {
 					))}
 				</div>
 
-				<Button variant="outline" size="sm" className="w-fit gap-2" onClick={onOpenTemplateGallery}>
+				<Button size="sm" className="w-fit gap-2" onClick={onOpenTemplateGallery}>
 					<SwapIcon className="size-4" />
-					更换模板
+					浏览全部中文模板
 				</Button>
 			</div>
 		</div>
