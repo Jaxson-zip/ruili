@@ -19,34 +19,27 @@ const renderTemplates = () =>
 	);
 
 describe("Templates section", () => {
-	it("shows only real exportable templates on the homepage", () => {
+	it("shows each launch template once instead of duplicating previews for a marquee", () => {
 		renderTemplates();
 
-		expect(screen.getByText("中文简历模板与风格")).toBeInTheDocument();
-		expect(screen.getByText(/精选真实可导出的中文模板/)).toBeInTheDocument();
-		expect(screen.getByText(/优先展示更接近中文招聘习惯的版式/)).toBeInTheDocument();
+		expect(screen.getByText("中文简历模板")).toBeInTheDocument();
+		expect(screen.getByText(/先保留这 8 套可导出模板/)).toBeInTheDocument();
 
 		for (const template of featuredTemplateIds) {
 			const name = systemTemplates[template].name;
-			expect(screen.getAllByAltText(name).length).toBeGreaterThan(0);
+			expect(screen.getAllByAltText(name)).toHaveLength(1);
 		}
 
-		const firstPreview = screen.getAllByRole("img")[0];
-		expect(firstPreview).toHaveAttribute("alt", "蓝色时间轴");
-		expect(screen.queryByText("可导出 PDF")).toBeNull();
-		expect(screen.getAllByText("适合技术、产品、运营的稳重一页投递").length).toBeGreaterThan(0);
-		expect(screen.getAllByText("适合财务、法务、行政等正式场景").length).toBeGreaterThan(0);
-		expect(screen.getAllByText("适合带项目链接或作品集入口的候选人").length).toBeGreaterThan(0);
-		expect(screen.getAllByText(/时间轴 · 稳重/).length).toBeGreaterThan(0);
-		expect(screen.queryByText("参考样式")).toBeNull();
-		expect(screen.queryByText("仅参考")).toBeNull();
-		expect(screen.queryByText("可套用相近版式")).toBeNull();
+		expect(screen.getAllByRole("img")).toHaveLength(featuredTemplateIds.length);
+		expect(screen.getAllByText("可导出 PDF")).toHaveLength(featuredTemplateIds.length);
 
 		const exportableImageUrls = featuredTemplateIds.map((template) => systemTemplates[template].imageUrl);
 		expect(new Set(exportableImageUrls).size).toBe(exportableImageUrls.length);
 
-		expect(screen.getAllByAltText(systemTemplates.collection028.name).length).toBeGreaterThan(0);
+		expect(screen.getAllByAltText(systemTemplates.collection028.name)).toHaveLength(1);
 		expect(screen.queryByAltText(systemTemplates.collection019.name)).toBeNull();
 		expect(screen.queryByAltText(systemTemplates.collection026.name)).toBeNull();
+		expect(screen.queryByText("参考样式")).toBeNull();
+		expect(screen.queryByText("仅参考")).toBeNull();
 	});
 });

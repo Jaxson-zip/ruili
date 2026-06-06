@@ -7,7 +7,7 @@ import { I18nProvider } from "@lingui/react";
 import { Prefooter } from "./prefooter";
 
 beforeAll(() => {
-	i18n.loadAndActivate({ locale: "en", messages: {} });
+	i18n.loadAndActivate({ locale: "zh", messages: {} });
 });
 
 const renderPrefooter = () =>
@@ -18,14 +18,12 @@ const renderPrefooter = () =>
 	);
 
 describe("Prefooter", () => {
-	it("renders the community tagline as a heading", () => {
+	it("renders a user-facing create-resume call to action", () => {
 		renderPrefooter();
-		expect(screen.getByText("从模板工具，走向中文简历优化助手。")).toBeInTheDocument();
-	});
 
-	it("renders the community-thanks paragraph", () => {
-		renderPrefooter();
-		expect(screen.getByText(/中文求职习惯/)).toBeInTheDocument();
+		expect(screen.getByText("从一份能投递的中文简历开始")).toBeInTheDocument();
+		expect(screen.getByText(/选择一份完整样张/)).toBeInTheDocument();
+		expect(screen.getByRole("link", { name: /开始创建简历/ })).toHaveAttribute("href", "/auth/login");
 	});
 
 	it("renders the decorative TextMaskEffect (svg)", () => {

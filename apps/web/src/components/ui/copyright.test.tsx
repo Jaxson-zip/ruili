@@ -10,7 +10,7 @@ vi.stubGlobal("__APP_VERSION__", "9.9.9");
 const { Copyright } = await import("./copyright");
 
 beforeAll(() => {
-	i18n.loadAndActivate({ locale: "en", messages: {} });
+	i18n.loadAndActivate({ locale: "zh", messages: {} });
 });
 
 const renderCopyright = (props?: React.ComponentProps<typeof Copyright>) =>
@@ -40,9 +40,12 @@ describe("Copyright", () => {
 		expect(link.getAttribute("href")).toBe("https://amruthpillai.com");
 	});
 
-	it("includes the app version string", () => {
+	it("keeps attribution compact and includes the app version", () => {
 		renderCopyright();
+
+		expect(screen.getByText(/锐历基于/)).toBeInTheDocument();
 		expect(screen.getByText("锐历 v9.9.9")).toBeInTheDocument();
+		expect(screen.queryByText(/上游项目遵循/)).toBeNull();
 	});
 
 	it("merges custom className into the wrapper", () => {

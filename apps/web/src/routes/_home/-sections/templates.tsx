@@ -1,7 +1,6 @@
 import type { Template } from "@reactive-resume/schema/templates";
 import { Trans } from "@lingui/react/macro";
 import { m } from "motion/react";
-import { useMemo } from "react";
 import { featuredTemplateIds, templates as systemTemplates } from "@/dialogs/resume/template/data";
 
 type SystemTemplatePreview = {
@@ -14,11 +13,7 @@ type SystemTemplatePreview = {
 
 type TemplateItemProps = {
 	preview: SystemTemplatePreview;
-};
-
-type TemplateMarqueeItem = {
-	id: string;
-	preview: SystemTemplatePreview;
+	index: number;
 };
 
 const createSystemTemplatePreviews = (templates: readonly Template[]): SystemTemplatePreview[] =>
@@ -32,99 +27,66 @@ const createSystemTemplatePreviews = (templates: readonly Template[]): SystemTem
 
 const promotedTemplatePreviews = createSystemTemplatePreviews(featuredTemplateIds);
 
-function TemplateItem({ preview }: TemplateItemProps) {
+function TemplateItem({ preview, index }: TemplateItemProps) {
 	return (
-		<m.div
-			className="group relative shrink-0 will-change-transform"
-			initial={{ scale: 1, zIndex: 10 }}
-			whileHover={{ y: -6, zIndex: 20 }}
-			whileTap={{ scale: 0.99 }}
-			transition={{ type: "spring", stiffness: 360, damping: 30 }}
+		<m.article
+			className="group overflow-hidden rounded-md border bg-background/70"
+			initial={{ opacity: 0, y: 16 }}
+			whileInView={{ opacity: 1, y: 0 }}
+			viewport={{ once: true, margin: "-80px" }}
+			transition={{ duration: 0.28, delay: Math.min(index * 0.035, 0.2) }}
 		>
-			<div className="relative w-48 overflow-hidden rounded-md border bg-white shadow-sm transition-[border-color,box-shadow,transform] duration-200 group-hover:border-foreground/20 group-hover:shadow-lg sm:w-56 md:w-64">
-				<div className="aspect-page overflow-hidden bg-white">
-					<img src={preview.imageUrl} alt={preview.name} className="size-full object-contain" loading="lazy" />
-				</div>
-
-				<div className="border-t bg-background/95 p-3">
-					<p className="line-clamp-1 font-semibold text-sm">{preview.name}</p>
-					<p className="mt-1 line-clamp-1 text-muted-foreground text-xs">{preview.audience}</p>
-					<p className="mt-1 line-clamp-1 text-[11px] text-muted-foreground">{preview.style}</p>
-				</div>
+			<div className="aspect-page overflow-hidden border-b bg-white">
+				<img
+					src={preview.imageUrl}
+					alt={preview.name}
+					className="size-full object-contain transition-transform duration-300 group-hover:scale-[1.015]"
+					loading="lazy"
+				/>
 			</div>
-		</m.div>
+
+			<div className="space-y-2 p-3">
+				<div className="flex items-start justify-between gap-2">
+					<h3 className="line-clamp-1 font-semibold text-sm">{preview.name}</h3>
+					<span className="shrink-0 rounded border px-1.5 py-0.5 text-[11px] text-muted-foreground">
+						<Trans>可导出 PDF</Trans>
+					</span>
+				</div>
+				<p className="line-clamp-2 min-h-10 text-muted-foreground text-xs leading-relaxed">{preview.audience}</p>
+				<p className="text-[11px] text-muted-foreground">{preview.style}</p>
+			</div>
+		</m.article>
 	);
 }
-
-type MarqueeRowProps = {
-	templates: TemplateMarqueeItem[];
-	direction: "left" | "right";
-	duration?: number;
-};
-
-function MarqueeRow({ templates, direction, duration = 40 }: MarqueeRowProps) {
-	const animateX = direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"];
-
-	return (
-		<m.div
-			className="flex gap-x-4 will-change-transform sm:gap-x-6"
-			animate={{ x: animateX }}
-			transition={{
-				x: {
-					repeat: Number.POSITIVE_INFINITY,
-					repeatType: "loop",
-					duration,
-					ease: "linear",
-				},
-			}}
-		>
-			{templates.map(({ id, preview }) => (
-				<TemplateItem key={id} preview={preview} />
-			))}
-		</m.div>
-	);
-}
-
-const createMarqueeItems = (entries: SystemTemplatePreview[], rowId: string): TemplateMarqueeItem[] => [
-	...entries.map((preview) => ({ id: `${rowId}-${preview.id}-primary`, preview })),
-	...entries.map((preview) => ({ id: `${rowId}-${preview.id}-repeat`, preview })),
-];
 
 export function Templates() {
-	const { row1, row2 } = useMemo(() => {
-		const splitIndex = Math.ceil(promotedTemplatePreviews.length / 2);
-		const firstRowTemplates = promotedTemplatePreviews.slice(0, splitIndex);
-		const secondRowTemplates = promotedTemplatePreviews.slice(splitIndex);
-
-		return {
-			row1: createMarqueeItems(firstRowTemplates, "row1"),
-			row2: createMarqueeItems(secondRowTemplates, "row2"),
-		};
-	}, []);
-
 	return (
-		<section id="templates" className="overflow-hidden border-t-0! p-4 md:p-8 xl:py-16">
+		<section id="templates" className="border-t-0! p-4 md:p-8 xl:py-16">
 			<m.div
-				className="space-y-4 will-change-[transform,opacity]"
-				initial={{ opacity: 0, y: 20 }}
+				className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between"
+				initial={{ opacity: 0, y: 18 }}
 				whileInView={{ opacity: 1, y: 0 }}
 				viewport={{ once: true }}
 				transition={{ duration: 0.35 }}
 			>
-				<h2 className="font-semibold text-2xl tracking-tight md:text-4xl xl:text-5xl">
-					<Trans>中文简历模板与风格</Trans>
-				</h2>
+				<div className="space-y-3">
+					<h2 className="font-semibold text-2xl tracking-tight md:text-4xl xl:text-5xl">
+						<Trans>中文简历模板</Trans>
+					</h2>
+					<p className="max-w-2xl text-muted-foreground leading-relaxed">
+						<Trans>先保留这 8 套可导出模板，全部使用中文样张，优先保证预览和实际 PDF 效果一致。</Trans>
+					</p>
+				</div>
 
-				<p className="max-w-2xl text-muted-foreground leading-relaxed">
-					<Trans>精选真实可导出的中文模板，优先展示更接近中文招聘习惯的版式。</Trans>
+				<p className="text-muted-foreground text-sm">
+					<Trans>模板少一点，但每一套都能直接拿去改。</Trans>
 				</p>
 			</m.div>
 
-			<div className="relative mt-8 py-4">
-				<div className="flex min-h-[360px] flex-col gap-y-4 sm:min-h-[400px] sm:gap-y-5 md:min-h-[460px]">
-					<MarqueeRow templates={row1} direction="left" duration={58} />
-					<MarqueeRow templates={row2} direction="right" duration={64} />
-				</div>
+			<div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+				{promotedTemplatePreviews.map((preview, index) => (
+					<TemplateItem key={preview.id} preview={preview} index={index} />
+				))}
 			</div>
 		</section>
 	);

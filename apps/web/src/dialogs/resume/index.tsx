@@ -1,3 +1,4 @@
+import type { resumeTemplateStarters } from "@reactive-resume/schema/resume/starters";
 import type { Template } from "@reactive-resume/schema/templates";
 import type { DialogProps } from "../store";
 import { t } from "@lingui/core/macro";
@@ -10,7 +11,6 @@ import { useNavigate, useParams } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import z from "zod";
-import { resumeTemplateStarters } from "@reactive-resume/schema/resume/starters";
 import { Badge } from "@reactive-resume/ui/components/badge";
 import { Button } from "@reactive-resume/ui/components/button";
 import {
@@ -37,7 +37,7 @@ import { getResumeErrorMessage } from "@/libs/error-message";
 import { orpc } from "@/libs/orpc/client";
 import { useAppForm, withForm } from "@/libs/tanstack-form";
 import { useDialogStore } from "../store";
-import { getStarterPreviewImageUrl } from "./starter-preview";
+import { getLaunchResumeTemplateStarters, getStarterPreviewImageUrl } from "./starter-preview";
 import { primaryTemplateIds, templates } from "./template/data";
 import { TemplateThumbnail } from "./template/thumbnail";
 import { buildBlankTemplateImportInput, buildResumeStarterImportInput } from "./template-starter-import";
@@ -93,6 +93,7 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 
 	const name = useStore(form.store, (s) => s.values.name);
 	const [showAdvancedCreateOptions, setShowAdvancedCreateOptions] = useState(false);
+	const launchStarters = getLaunchResumeTemplateStarters();
 
 	useEffect(() => {
 		form.setFieldValue("slug", slugify(name));
@@ -135,16 +136,14 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 	};
 
 	return (
-		<DialogContent className="lg:max-w-6xl">
+		<DialogContent className="lg:max-w-5xl">
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PlusIcon />
 					<Trans>新建简历</Trans>
 				</DialogTitle>
 				<DialogDescription>
-					<Trans>
-						建议先套用带中文内容的成品样张，确认完整 PDF 效果后再替换成自己的经历；也可以创建空白模板从零填写。
-					</Trans>
+					<Trans>选一个接近目标岗位的中文样张，创建后直接替换内容。</Trans>
 				</DialogDescription>
 			</DialogHeader>
 
@@ -160,15 +159,15 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 					<div className="flex flex-col gap-1">
 						<h3 className="font-semibold text-sm">
 							<Trans>从成品样张开始</Trans>
-							<span className="ms-2 text-muted-foreground">({resumeTemplateStarters.length} 套)</span>
+							<span className="ms-2 text-muted-foreground">({launchStarters.length} 套)</span>
 						</h3>
 						<p className="text-muted-foreground text-sm">
-							<Trans>带中文候选人内容，创建后能直接看到完整 PDF 版式，再逐项替换为自己的信息。</Trans>
+							<Trans>先选一份完整中文样张，进去替换内容。想从零开始，可以展开空白模板入口。</Trans>
 						</p>
 					</div>
 
-					<div className="grid max-h-[42svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-4">
-						{resumeTemplateStarters.map((starter) => (
+					<div className="grid max-h-[58svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-3">
+						{launchStarters.map((starter) => (
 							<button
 								key={starter.id}
 								type="button"

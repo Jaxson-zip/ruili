@@ -18,14 +18,14 @@ afterEach(() => {
 describe("CreateResumeCard", () => {
 	it("renders the create-resume copy", () => {
 		render(<CreateResumeCard />);
-		expect(screen.getByText("从样张开始")).toBeInTheDocument();
-		expect(screen.getByText("先看完整效果，再替换内容")).toBeInTheDocument();
+		expect(screen.getByText("创建简历")).toBeInTheDocument();
+		expect(screen.getByText("选择样张，再替换内容")).toBeInTheDocument();
 	});
 
 	it("opens the resume.create dialog when clicked", () => {
 		render(<CreateResumeCard />);
 
-		fireEvent.click(screen.getByRole("button", { name: /从样张开始/ }));
+		fireEvent.click(screen.getByRole("button", { name: /创建简历/ }));
 
 		const state = useDialogStore.getState();
 		expect(state.open).toBe(true);

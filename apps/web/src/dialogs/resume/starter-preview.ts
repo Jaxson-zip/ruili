@@ -28,6 +28,21 @@ export const starterPreviewImageUrls = Object.fromEntries(
 
 export const starterPreviewImageIds = starterPreviewIds;
 
+export const launchStarterIds = [
+	"frontend-engineer",
+	"product-manager",
+	"campus-student",
+	"growth-operations",
+	"frontend-engineer-one-page",
+	"product-manager-clean",
+] as const satisfies readonly StarterPreviewId[];
+
+export function getLaunchResumeTemplateStarters() {
+	const launchIds = new Set<string>(launchStarterIds);
+
+	return resumeTemplateStarters.filter((starter) => launchIds.has(starter.id));
+}
+
 export function getStarterPreviewImageUrl(starter: Pick<ResumeTemplateStarter, "id" | "template">) {
 	if (starter.id in starterPreviewImageUrls) {
 		return starterPreviewImageUrls[starter.id as StarterPreviewId];

@@ -7,7 +7,7 @@ import { I18nProvider } from "@lingui/react";
 
 vi.stubGlobal("__APP_VERSION__", "9.9.9");
 
-i18n.loadAndActivate({ locale: "en", messages: {} });
+i18n.loadAndActivate({ locale: "zh", messages: {} });
 
 const { Footer } = await import("./footer");
 

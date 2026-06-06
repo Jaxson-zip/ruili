@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { resumeTemplateStarters } from "@reactive-resume/schema/resume/starters";
-import { getMissingStarterPreviewIds, getStarterPreviewImageUrl, starterPreviewImageUrls } from "./starter-preview";
+import {
+	getLaunchResumeTemplateStarters,
+	getMissingStarterPreviewIds,
+	getStarterPreviewImageUrl,
+	launchStarterIds,
+	starterPreviewImageUrls,
+} from "./starter-preview";
 import { templates } from "./template/data";
 
 describe("starter preview images", () => {
@@ -27,5 +33,21 @@ describe("starter preview images", () => {
 		expect(getStarterPreviewImageUrl(resumeTemplateStarters[3])).not.toBe(
 			getStarterPreviewImageUrl(resumeTemplateStarters[4]),
 		);
+	});
+
+	it("keeps the default create flow focused on a small launch set", () => {
+		const launchStarters = getLaunchResumeTemplateStarters();
+
+		expect(launchStarterIds).toEqual([
+			"frontend-engineer",
+			"product-manager",
+			"campus-student",
+			"growth-operations",
+			"frontend-engineer-one-page",
+			"product-manager-clean",
+		]);
+		expect(launchStarters).toHaveLength(6);
+		expect(launchStarters.map((starter) => starter.id)).toEqual(launchStarterIds);
+		expect(new Set(launchStarters.map((starter) => starter.template)).size).toBeGreaterThanOrEqual(5);
 	});
 });

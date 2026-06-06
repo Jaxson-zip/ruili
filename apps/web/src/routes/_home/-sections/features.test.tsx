@@ -19,12 +19,16 @@ const renderFeatures = () =>
 	);
 
 describe("Features section", () => {
-	it("describes the launch template count honestly", () => {
+	it("keeps the homepage capabilities focused on the resume workflow", () => {
 		renderFeatures();
 
+		expect(screen.getByText("核心能力")).toBeInTheDocument();
+		expect(screen.getByText(/选样张、改内容、看预览、导出 PDF/)).toBeInTheDocument();
 		expect(
-			screen.getByText(`首批 ${featuredTemplateIds.length} 套稳定模板已经换成中文样张，更容易判断版式是否适合投递。`),
+			screen.getByText(`首批 ${featuredTemplateIds.length} 套可导出模板使用中文样张，方便判断是否适合投递。`),
 		).toBeInTheDocument();
-		expect(screen.queryByText(/12\+/)).toBeNull();
+		expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(8);
+		expect(screen.queryByText("API 自动化")).toBeNull();
+		expect(screen.queryByText("账户体系")).toBeNull();
 	});
 });
