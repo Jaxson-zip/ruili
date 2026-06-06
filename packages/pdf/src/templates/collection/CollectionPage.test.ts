@@ -14,4 +14,16 @@ describe("CollectionPage variants", () => {
 		expect(source).toContain('variant.sidebarSide === "right" ? mainColumn : sidebarColumn');
 		expect(source).toContain('variant.sidebarSide === "right" ? sidebarColumn : mainColumn');
 	});
+
+	it("assigns distinct visual treatments to polished collection variants", () => {
+		const source = readCollectionSource();
+
+		expect(source).toContain('visualTreatment?: "timelineStrip" | "leftBlock" | "contactBand"');
+		expect(source).toContain('visualTreatment: "timelineStrip"');
+		expect(source).toContain('visualTreatment: "leftBlock"');
+		expect(source).toContain('visualTreatment: "contactBand"');
+		expect(source).toContain('const isTimelineStrip = variant.visualTreatment === "timelineStrip"');
+		expect(source).toContain('const isLeftBlock = variant.visualTreatment === "leftBlock"');
+		expect(source).toContain('const isContactBand = variant.visualTreatment === "contactBand"');
+	});
 });

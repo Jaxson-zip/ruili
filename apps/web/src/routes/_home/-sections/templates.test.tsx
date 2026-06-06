@@ -33,7 +33,11 @@ describe("Templates section", () => {
 
 		const firstPreview = screen.getAllByRole("img")[0];
 		expect(firstPreview).toHaveAttribute("alt", "蓝色时间轴");
-		expect(screen.getAllByText("可导出 PDF").length).toBeGreaterThan(0);
+		expect(screen.queryByText("可导出 PDF")).toBeNull();
+		expect(screen.getAllByText("适合技术、产品、运营的稳重一页投递").length).toBeGreaterThan(0);
+		expect(screen.getAllByText("适合财务、法务、行政等正式场景").length).toBeGreaterThan(0);
+		expect(screen.getAllByText("适合带项目链接或作品集入口的候选人").length).toBeGreaterThan(0);
+		expect(screen.getAllByText(/时间轴 · 稳重/).length).toBeGreaterThan(0);
 		expect(screen.queryByText("参考样式")).toBeNull();
 		expect(screen.queryByText("仅参考")).toBeNull();
 		expect(screen.queryByText("可套用相近版式")).toBeNull();

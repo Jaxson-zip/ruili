@@ -53,14 +53,29 @@ describe("templates metadata", () => {
 		);
 	});
 
-	it("provides a name, description, image, and tags for every template", () => {
+	it("provides a name, audience, recommendation, image, and tags for every template", () => {
 		for (const [id, meta] of entries) {
 			expect(meta.name, id).toBeTruthy();
+			expect(meta.audience, id).toBeTruthy();
+			expect(meta.audience, id).not.toMatch(/中文模板|可导出/);
 			expect(meta.description, id).toBeDefined();
 			expect(meta.imageUrl, id).toMatch(/^\/templates\/(jpg|collection|online)\/.+\.(jpg|svg)$/);
 			expect(Array.isArray(meta.tags), id).toBe(true);
-			expect(meta.tags.length, id).toBeGreaterThan(0);
+			expect(meta.tags.length, id).toBeGreaterThanOrEqual(3);
+			expect(meta.tags, id).not.toContain("中文模板");
+			expect(meta.tags, id).not.toContain("可导出");
 		}
+	});
+
+	it("keeps featured template positioning specific enough to compare options", () => {
+		for (const id of featuredTemplateIds) {
+			expect(templates[id].audience, id).toMatch(/适合/);
+			expect(templates[id].tags.slice(0, 3).join(" "), id).not.toMatch(/中文模板|可导出/);
+		}
+
+		expect(templates.collection001.audience).toBe("适合技术、产品、运营的稳重一页投递");
+		expect(templates.collection018.audience).toBe("适合财务、法务、行政等正式场景");
+		expect(templates.collection028.audience).toBe("适合带项目链接或作品集入口的候选人");
 	});
 
 	it("uses a recognized sidebar position for every template", () => {
@@ -138,9 +153,9 @@ describe("templates metadata", () => {
 	});
 
 	it("promotes the stronger Chinese collection references into real selectable templates", () => {
-		expect(templates.collection019.imageUrl).toBe("/templates/collection/019.jpg");
-		expect(templates.collection026.imageUrl).toBe("/templates/collection/026.jpg");
-		expect(templates.collection028.imageUrl).toBe("/templates/collection/028.jpg");
+		expect(templates.collection019.imageUrl).toBe("/templates/jpg/collection019.jpg");
+		expect(templates.collection026.imageUrl).toBe("/templates/jpg/collection026.jpg");
+		expect(templates.collection028.imageUrl).toBe("/templates/jpg/collection028.jpg");
 		expect(featuredTemplateIds).toEqual(expect.arrayContaining(["collection019", "collection026", "collection028"]));
 		expect(additionalCollectionTemplateReferences.map((reference) => reference.id)).not.toEqual(
 			expect.arrayContaining(["collection-019", "collection-026", "collection-028"]),

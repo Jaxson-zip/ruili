@@ -7,9 +7,9 @@ import { featuredTemplateIds, templates as systemTemplates } from "@/dialogs/res
 type SystemTemplatePreview = {
 	id: string;
 	name: string;
-	role: string;
+	audience: string;
 	imageUrl: string;
-	source: string;
+	style: string;
 };
 
 type TemplateItemProps = {
@@ -25,9 +25,9 @@ const createSystemTemplatePreviews = (templates: readonly Template[]): SystemTem
 	templates.map((template) => ({
 		id: `system-${template}`,
 		name: systemTemplates[template].name,
-		role: systemTemplates[template].tags.slice(0, 3).join(" / "),
+		audience: systemTemplates[template].audience,
 		imageUrl: systemTemplates[template].imageUrl,
-		source: "可导出 PDF",
+		style: systemTemplates[template].tags.slice(0, 2).join(" · "),
 	}));
 
 const promotedTemplatePreviews = createSystemTemplatePreviews(featuredTemplateIds);
@@ -48,8 +48,8 @@ function TemplateItem({ preview }: TemplateItemProps) {
 
 				<div className="border-t bg-background/95 p-3">
 					<p className="line-clamp-1 font-semibold text-sm">{preview.name}</p>
-					<p className="mt-1 line-clamp-1 text-muted-foreground text-xs">{preview.role}</p>
-					<p className="mt-1 text-[11px] text-muted-foreground">{preview.source}</p>
+					<p className="mt-1 line-clamp-1 text-muted-foreground text-xs">{preview.audience}</p>
+					<p className="mt-1 line-clamp-1 text-[11px] text-muted-foreground">{preview.style}</p>
 				</div>
 			</div>
 		</m.div>

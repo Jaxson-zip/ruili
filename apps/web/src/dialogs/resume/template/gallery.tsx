@@ -152,15 +152,27 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 			.map((template) => [template, templates[template]] as const)
 			.filter(([template]) => !hiddenSystemTemplates.includes(template));
 	const visiblePrimaryTemplates = getVisibleTemplates(primaryTemplateIds).filter(([, metadata]) =>
-		matchesTemplateFilter([metadata.name, ...metadata.tags], activeFilter, searchQuery),
+		matchesTemplateFilter(
+			[metadata.name, metadata.audience, metadata.description.message, ...metadata.tags],
+			activeFilter,
+			searchQuery,
+		),
 	);
 	const visibleSecondaryTemplates = getVisibleTemplates(secondaryTemplateIds).filter(([, metadata]) =>
-		matchesTemplateFilter([metadata.name, ...metadata.tags], activeFilter, searchQuery),
+		matchesTemplateFilter(
+			[metadata.name, metadata.audience, metadata.description.message, ...metadata.tags],
+			activeFilter,
+			searchQuery,
+		),
 	);
 	const visibleCustomPresets = customPresets.filter((preset) => {
 		const baseTemplate = templates[preset.metadata.template];
 
-		return matchesTemplateFilter([preset.name, baseTemplate.name, ...baseTemplate.tags], activeFilter, searchQuery);
+		return matchesTemplateFilter(
+			[preset.name, baseTemplate.name, baseTemplate.audience, baseTemplate.description.message, ...baseTemplate.tags],
+			activeFilter,
+			searchQuery,
+		);
 	});
 	const resultCount = visiblePrimaryTemplates.length + visibleSecondaryTemplates.length + visibleCustomPresets.length;
 
@@ -357,7 +369,7 @@ function SystemTemplateCard({ id, metadata, isActive, onDelete, onSelect }: Syst
 					<TemplateThumbnail template={id} label={metadata.name} imageUrl={metadata.imageUrl} />
 				</div>
 
-				<div className="min-h-24 space-y-2 px-1 pt-3 pb-2">
+				<div className="min-h-32 space-y-2 px-1 pt-3 pb-2">
 					<div className="flex items-start justify-between gap-2">
 						<h4 className="line-clamp-1 font-semibold text-sm">{metadata.name}</h4>
 						{isActive ? (
@@ -366,13 +378,14 @@ function SystemTemplateCard({ id, metadata, isActive, onDelete, onSelect }: Syst
 							</Badge>
 						) : null}
 					</div>
+					<p className="line-clamp-1 font-medium text-[11px] text-foreground/80 leading-relaxed">{metadata.audience}</p>
 					<p className="line-clamp-2 text-muted-foreground text-xs leading-relaxed">{i18n.t(metadata.description)}</p>
 				</div>
 			</button>
 
 			<div className="flex min-h-12 items-center justify-between gap-2 border-t px-3 py-2">
 				<div className="flex min-w-0 flex-wrap gap-1.5">
-					{metadata.tags.slice(0, 2).map((tag) => (
+					{metadata.tags.slice(0, 3).map((tag) => (
 						<Badge key={tag} variant="secondary" className="max-w-24 truncate text-[11px]">
 							{tag}
 						</Badge>

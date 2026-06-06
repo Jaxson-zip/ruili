@@ -65,6 +65,17 @@ describe("TemplateGalleryDialog", () => {
 		expect(screen.queryByText(/内部筛选/)).toBeNull();
 	});
 
+	it("renders audience, style tags, and recommendation copy on template cards", () => {
+		renderGallery();
+
+		const card = screen.getByRole("img", { name: "蓝色时间轴" }).closest("article") as HTMLElement;
+
+		expect(card).toHaveTextContent("适合技术、产品、运营的稳重一页投递");
+		expect(card).toHaveTextContent("时间轴");
+		expect(card).toHaveTextContent("稳重");
+		expect(card).toHaveTextContent("参考传统中文招聘模板");
+	});
+
 	it("separates primary templates from the remaining exportable templates", () => {
 		renderGallery();
 

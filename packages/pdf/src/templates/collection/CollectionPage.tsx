@@ -54,6 +54,7 @@ type CollectionVariant = {
 	sidebarBackground?: string;
 	sidebarForeground?: string;
 	sidebarSide?: "left" | "right";
+	visualTreatment?: "timelineStrip" | "leftBlock" | "contactBand";
 };
 
 type CollectionStyles = Omit<TemplateStyleSlots, "page"> & {
@@ -188,6 +189,7 @@ const variants = {
 		sidebarBackground: "#EDF7FD",
 		sidebarForeground: "#1F4F70",
 		sidebarSide: "right",
+		visualTreatment: "timelineStrip",
 	},
 	collection020: {
 		id: "collection020",
@@ -239,6 +241,7 @@ const variants = {
 		referenceStyle: "darkOrange",
 		sidebarBackground: "#2F3740",
 		sidebarForeground: "#F8FAFC",
+		visualTreatment: "leftBlock",
 	},
 	collection027: {
 		id: "collection027",
@@ -261,6 +264,7 @@ const variants = {
 		sectionFrame: "boxed",
 		sidebarBackground: "#6BA4CD",
 		sidebarForeground: "#F8FAFC",
+		visualTreatment: "contactBand",
 	},
 	collection029: {
 		id: "collection029",
@@ -296,7 +300,7 @@ const createCollectionPage =
 			<View
 				style={composeStyles(styles.sidebarColumn, {
 					flexBasis: `${metadata.layout.sidebarWidth}%`,
-					rowGap: metrics.sectionGap * 0.82,
+					rowGap: metrics.sectionGap * (variant.visualTreatment === "contactBand" ? 0.72 : 0.82),
 				})}
 			>
 				{showHeader && variant.referenceStyle !== "blueBlocks" && <SidebarHeader styles={styles} variant={variant} />}
@@ -308,7 +312,11 @@ const createCollectionPage =
 			</View>
 		) : null;
 		const mainColumn = (
-			<View style={composeStyles(styles.mainColumn, { rowGap: metrics.sectionGap })}>
+			<View
+				style={composeStyles(styles.mainColumn, {
+					rowGap: metrics.sectionGap * (variant.visualTreatment === "timelineStrip" ? 0.76 : 1),
+				})}
+			>
 				{mainSections.map((section) => (
 					<Section key={section} section={section} placement="main" />
 				))}
@@ -460,14 +468,21 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 		const isDarkOrange = variant.referenceStyle === "darkOrange";
 		const isQrSidebar = variant.referenceStyle === "qrSidebar";
 		const isBoxed = variant.sectionFrame === "boxed";
+		const isTimelineStrip = variant.visualTreatment === "timelineStrip";
+		const isLeftBlock = variant.visualTreatment === "leftBlock";
+		const isContactBand = variant.visualTreatment === "contactBand";
 		const sectionHeadingMainPaddingLeft =
 			variant.headingMode === "tag" ? metrics.gapX(0.42) : variant.headingMode === "bar" ? metrics.gapX(0.38) : 0;
 
 		const bodyText = {
 			fontFamily: metadata.typography.body.fontFamily,
-			fontSize: isCompact ? metadata.typography.body.fontSize * 0.94 : metadata.typography.body.fontSize,
+			fontSize: isTimelineStrip
+				? metadata.typography.body.fontSize * 0.92
+				: isCompact
+					? metadata.typography.body.fontSize * 0.94
+					: metadata.typography.body.fontSize,
 			fontWeight: metadata.typography.body.fontWeights[0] ?? "400",
-			lineHeight: Math.min(metadata.typography.body.lineHeight, isCompact ? 1.34 : 1.42),
+			lineHeight: Math.min(metadata.typography.body.lineHeight, isTimelineStrip ? 1.28 : isCompact ? 1.34 : 1.42),
 			color: foreground,
 			...r.text,
 		} satisfies Style;
@@ -586,14 +601,14 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 			},
 			section: {
 				flexDirection: "column",
-				rowGap: metrics.gapY(isCompact ? 0.2 : 0.28),
+				rowGap: metrics.gapY(isTimelineStrip ? 0.16 : isCompact ? 0.2 : 0.28),
 			},
 			sectionHeading: {
 				...sectionHeadingBase,
 				...headingVariant,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(isCompact ? 0.24 : 0.34),
+				rowGap: metrics.gapY(isTimelineStrip ? 0.18 : isCompact ? 0.24 : 0.34),
 			},
 			item: {
 				rowGap: metrics.gapY(isCompact ? 0.1 : 0.13),
@@ -698,9 +713,9 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 				transform: `rotate(${picture.rotation}deg)`,
 			},
 			sidebarHeader: {
-				alignItems: "center",
-				rowGap: metrics.gapY(isQrSidebar ? 0.32 : 0.26),
-				paddingBottom: metrics.gapY(variant.fullBleedSidebar ? 0.64 : 0.44),
+				alignItems: isContactBand ? "stretch" : "center",
+				rowGap: metrics.gapY(isContactBand ? 0.24 : isQrSidebar ? 0.32 : 0.26),
+				paddingBottom: metrics.gapY(isContactBand ? 0.52 : variant.fullBleedSidebar ? 0.64 : 0.44),
 				borderBottomWidth: 0.6,
 				borderBottomColor: isDarkOrange ? "#535B64" : variant.sidebarForeground ? "#45617A" : subtle,
 			},
@@ -729,13 +744,18 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 			},
 			sidebarContactList: {
 				width: "100%",
-				rowGap: metrics.gapY(0.12),
+				rowGap: metrics.gapY(isContactBand ? 0.1 : 0.12),
+				backgroundColor: isContactBand ? "#5A94BB" : "transparent",
+				borderLeftWidth: isContactBand ? 3 : 0,
+				borderLeftColor: "#F8FAFC",
+				paddingHorizontal: isContactBand ? metrics.gapX(0.3) : 0,
+				paddingVertical: isContactBand ? metrics.gapY(0.22) : 0,
 			},
 			sidebarContactItem: {
 				flexDirection: r.row,
 				alignItems: "center",
 				columnGap: metrics.gapX(0.16),
-				color: sidebarMuted,
+				color: isContactBand ? "#FFFFFF" : sidebarMuted,
 			},
 			sidebarQrWrap: {
 				width: "100%",
@@ -752,11 +772,11 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 				paddingBottom: metrics.gapY(0.12),
 			},
 			sidebarQrBox: {
-				width: 76,
-				height: 76,
+				width: isContactBand ? 68 : 76,
+				height: isContactBand ? 68 : 76,
 				alignSelf: "center",
 				backgroundColor: "#FFFFFF",
-				padding: 7,
+				padding: isContactBand ? 6 : 7,
 			},
 			sidebarQrGrid: {
 				flexDirection: "row",
@@ -780,23 +800,23 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 				position: "absolute",
 				top: 0,
 				bottom: 0,
-				left: 6.5,
-				width: 1,
+				left: isTimelineStrip ? 4.5 : 6.5,
+				width: isTimelineStrip ? 1.4 : 1,
 				backgroundColor: primary,
 			},
 			item: {
 				flexDirection: "row",
-				columnGap: metrics.gapX(0.42),
+				columnGap: metrics.gapX(isTimelineStrip ? 0.3 : 0.42),
 				position: "relative",
 			},
 			marker: {
-				width: 14,
+				width: isTimelineStrip ? 10 : 14,
 				alignItems: "center",
 			},
 			dot: {
-				width: 7,
-				height: 7,
-				marginTop: 8,
+				width: isTimelineStrip ? 5 : 7,
+				height: isTimelineStrip ? 5 : 7,
+				marginTop: isTimelineStrip ? 7 : 8,
 				borderRadius: 999,
 				borderWidth: 1.2,
 				borderColor: primary,
@@ -869,6 +889,15 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 					borderBottomColor: context.placement === "sidebar" ? (isDarkOrange ? "#535B64" : "#45617A") : primary,
 					backgroundColor:
 						context.placement === "sidebar" || isDarkOrange || isBoxed ? "transparent" : variant.headingBackground,
+					...(context.placement === "main" && isLeftBlock
+						? {
+								backgroundColor: variant.headingBackground,
+								borderBottomWidth: 0,
+								borderLeftWidth: 5,
+								paddingLeft: metrics.gapX(0.5),
+								paddingTop: metrics.gapY(0.16),
+							}
+						: {}),
 					fontSize:
 						context.placement === "main" && (isDarkOrange || isBoxed)
 							? metadata.typography.heading.fontSize * 1.05
@@ -882,6 +911,14 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 				item: (context) => ({
 					...baseStyles.item,
 					borderBottomColor: context.placement === "sidebar" ? (isDarkOrange ? "#535B64" : "#45617A") : subtle,
+					...(context.placement === "main" && isLeftBlock
+						? {
+								borderBottomWidth: 0.2,
+								borderLeftWidth: 2,
+								borderLeftColor: primary,
+								paddingLeft: metrics.gapX(0.36),
+							}
+						: {}),
 				}),
 				splitRow: (context) => ({
 					...baseStyles.splitRow,
