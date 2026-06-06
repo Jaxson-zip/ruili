@@ -46,10 +46,10 @@ const renderChecklist = () =>
 	);
 
 describe("ReplacementChecklistSection", () => {
-	it("renders template replacement items with completion status", () => {
+	it("renders content check items with completion status", () => {
 		renderChecklist();
 
-		expect(screen.getByRole("region", { name: "替换清单" })).toBeInTheDocument();
+		expect(screen.getByRole("region", { name: "内容检查" })).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: /基本信息/ })).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: /工作经历/ })).toHaveTextContent("2 项");
 		expect(screen.getByRole("button", { name: /技能清单/ })).toHaveTextContent("3 项");

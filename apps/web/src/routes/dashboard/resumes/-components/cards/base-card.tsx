@@ -1,6 +1,5 @@
 import { Badge } from "@reactive-resume/ui/components/badge";
 import { cn } from "@reactive-resume/utils/style";
-import { CometCard } from "@/components/animation/comet-card";
 
 type BaseCardProps = {
 	asButton?: boolean;
@@ -24,7 +23,7 @@ export function BaseCard({
 	onClick,
 }: BaseCardProps) {
 	const cardClassName = cn(
-		"relative flex aspect-page size-full overflow-hidden rounded-md bg-popover text-left text-foreground shadow transition-shadow hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+		"relative flex aspect-page size-full overflow-hidden rounded-md border bg-popover text-left text-foreground shadow-sm transition-colors hover:border-foreground/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
 		className,
 	);
 	const content = (
@@ -46,17 +45,17 @@ export function BaseCard({
 		</>
 	);
 
+	if (asButton) {
+		return (
+			<button type="button" className={cardClassName} data-testid={testId} onClick={onClick}>
+				{content}
+			</button>
+		);
+	}
+
 	return (
-		<CometCard translateDepth={3} rotateDepth={6}>
-			{asButton ? (
-				<button type="button" className={cardClassName} data-testid={testId} onClick={onClick}>
-					{content}
-				</button>
-			) : (
-				<div className={cardClassName} data-testid={testId}>
-					{content}
-				</div>
-			)}
-		</CometCard>
+		<div className={cardClassName} data-testid={testId}>
+			{content}
+		</div>
 	);
 }

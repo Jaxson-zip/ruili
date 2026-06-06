@@ -147,9 +147,9 @@ export function ExportSectionBuilder() {
 					<FileDocIcon className="mt-0.5 size-6 shrink-0" />
 					<div className="min-w-0 flex-1 space-y-3">
 						<div className="space-y-1">
-							<h6 className="font-medium">DOCX 模板 Beta</h6>
+							<h6 className="font-medium">Word 模板导出</h6>
 							<p className="text-muted-foreground text-xs leading-normal">
-								上传带占位符的 Word 模板，用当前简历内容生成新的 Word 文件。
+								上传带占位符的 Word 模板，用当前简历内容生成可编辑文档。
 							</p>
 						</div>
 

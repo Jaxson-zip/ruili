@@ -139,7 +139,12 @@ describe("templates metadata", () => {
 		}
 	});
 
-	it("promotes the stronger Chinese collection references into real selectable templates", () => {
+	it("uses the shared collection preview assets for launch templates", () => {
+		for (const id of primaryTemplateIds) {
+			const numericId = id.replace("collection", "");
+			expect(templates[id].imageUrl).toBe(`/templates/collection/${numericId}.jpg`);
+		}
+
 		expect(templates.collection019.imageUrl).toBe("/templates/collection/019.jpg");
 		expect(templates.collection026.imageUrl).toBe("/templates/collection/026.jpg");
 		expect(templates.collection028.imageUrl).toBe("/templates/collection/028.jpg");

@@ -43,9 +43,9 @@ describe("TemplateGalleryDialog", () => {
 	it("renders the localized title and intro copy", () => {
 		renderGallery();
 		expect(screen.getByText("模板库")).toBeInTheDocument();
-		expect(screen.getByText(/这里展示的模板都可以直接切换并导出 PDF/)).toBeInTheDocument();
-		expect(screen.getByText("Word 模板保留原样式")).toBeInTheDocument();
-		expect(screen.getByRole("button", { name: "导入排版预设（仅 JSON）" })).toBeInTheDocument();
+		expect(screen.getByText(/选择一套适合岗位的中文模板/)).toBeInTheDocument();
+		expect(screen.queryByText("Word 模板保留原样式")).toBeNull();
+		expect(screen.queryByRole("button", { name: "导入排版预设（仅 JSON）" })).toBeNull();
 		expect(screen.getByLabelText("搜索模板")).toBeInTheDocument();
 	});
 
@@ -53,7 +53,7 @@ describe("TemplateGalleryDialog", () => {
 		renderGallery();
 		const previews = screen.getAllByRole("img");
 		expect(previews).toHaveLength(primaryTemplateIds.length);
-		expect(screen.getByText("精品可导出模板")).toBeInTheDocument();
+		expect(screen.getByText("中文简历模板")).toBeInTheDocument();
 		expect(screen.queryByText("外部模板参考（待制作）")).toBeNull();
 		expect(screen.queryByText("线上风格灵感（仅参考）")).toBeNull();
 		expect(screen.getByRole("img", { name: "蓝色二维码栏" })).toBeInTheDocument();
@@ -63,6 +63,7 @@ describe("TemplateGalleryDialog", () => {
 		expect(screen.queryByText("仅参考")).toBeNull();
 		expect(screen.queryByText(/待重做参考/)).toBeNull();
 		expect(screen.queryByText(/内部筛选/)).toBeNull();
+		expect(screen.queryByText("隐藏")).toBeNull();
 	});
 
 	it("renders audience, style tags, and recommendation copy on template cards", () => {
@@ -79,7 +80,7 @@ describe("TemplateGalleryDialog", () => {
 	it("keeps the launch gallery focused on real exportable templates", () => {
 		renderGallery();
 
-		expect(screen.getByText("精品可导出模板")).toBeInTheDocument();
+		expect(screen.getByText("中文简历模板")).toBeInTheDocument();
 		expect(screen.getAllByText(`${primaryTemplateIds.length} 个`).length).toBeGreaterThan(0);
 		expect(screen.queryByText("更多可导出模板")).toBeNull();
 		expect(screen.getByRole("img", { name: "深灰蓝栏" })).toBeInTheDocument();
@@ -143,17 +144,11 @@ describe("TemplateGalleryDialog", () => {
 		expect(draft.metadata.design.colors.primary).toBe(templates.collection028.accentColor);
 	});
 
-	it("hides and restores system templates", () => {
+	it("does not expose system template management controls to end users", () => {
 		renderGallery();
-		const hideButton = screen.getByLabelText("隐藏精选模板：金色商务");
-
-		fireEvent.click(hideButton as HTMLButtonElement);
-
-		expect(screen.queryByRole("img", { name: "金色商务" })).toBeNull();
-		expect(screen.getByText("恢复全部")).toBeInTheDocument();
-
-		fireEvent.click(screen.getByText("恢复全部"));
 
 		expect(screen.getByRole("img", { name: "金色商务" })).toBeInTheDocument();
+		expect(screen.queryByLabelText("隐藏精选模板：金色商务")).toBeNull();
+		expect(screen.queryByText("恢复全部")).toBeNull();
 	});
 });

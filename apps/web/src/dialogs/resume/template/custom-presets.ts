@@ -1,7 +1,5 @@
 import type { Metadata } from "@reactive-resume/schema/resume/data";
-import type { Template } from "@reactive-resume/schema/templates";
 import { metadataSchema, resumeDataSchema } from "@reactive-resume/schema/resume/data";
-import { templateSchema } from "@reactive-resume/schema/templates";
 
 export type CustomTemplatePreset = {
 	id: string;
@@ -16,7 +14,6 @@ type ImportedTemplatePreset = {
 };
 
 const storageKey = "ruili.custom-template-presets";
-const hiddenSystemTemplatesStorageKey = "ruili.hidden-system-templates";
 
 function getStorage() {
 	if (typeof window === "undefined") return null;
@@ -125,25 +122,4 @@ export function createCustomTemplatePreset(input: ImportedTemplatePreset): Custo
 		createdAt: new Date().toISOString(),
 		metadata: cloneMetadata(input.metadata),
 	};
-}
-
-export function loadHiddenSystemTemplates(storage = getStorage()): Template[] {
-	if (!storage) return [];
-
-	try {
-		const raw = storage.getItem(hiddenSystemTemplatesStorageKey);
-		if (!raw) return [];
-
-		const parsed = JSON.parse(raw);
-		if (!Array.isArray(parsed)) return [];
-
-		return parsed.filter((item): item is Template => templateSchema.safeParse(item).success);
-	} catch {
-		return [];
-	}
-}
-
-export function saveHiddenSystemTemplates(templates: Template[], storage = getStorage()) {
-	if (!storage) return;
-	storage.setItem(hiddenSystemTemplatesStorageKey, JSON.stringify(Array.from(new Set(templates))));
 }

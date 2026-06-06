@@ -5,10 +5,8 @@ import { defaultResumeData } from "@reactive-resume/schema/resume/default";
 import {
 	createCustomTemplatePreset,
 	loadCustomTemplatePresets,
-	loadHiddenSystemTemplates,
 	parseTemplatePresetJson,
 	saveCustomTemplatePresets,
-	saveHiddenSystemTemplates,
 } from "./custom-presets";
 
 describe("custom template presets", () => {
@@ -48,11 +46,5 @@ describe("custom template presets", () => {
 		expect(loaded).toHaveLength(1);
 		expect(loaded[0]?.name).toBe("保存模板");
 		expect(loaded[0]?.metadata.template).toBe(defaultResumeData.metadata.template);
-	});
-
-	it("saves and loads hidden system templates", () => {
-		saveHiddenSystemTemplates(["onyx", "ditto", "unknown" as never], window.localStorage);
-
-		expect(loadHiddenSystemTemplates(window.localStorage)).toEqual(["onyx", "ditto"]);
 	});
 });

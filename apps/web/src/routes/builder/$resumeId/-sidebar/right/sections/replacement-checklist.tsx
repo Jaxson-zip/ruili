@@ -71,13 +71,13 @@ export function ReplacementChecklistSection() {
 	];
 
 	return (
-		<section aria-label={t`替换清单`} className="space-y-3 rounded-md border bg-secondary/20 p-3">
+		<section aria-label={t`内容检查`} className="space-y-3 rounded-md border bg-secondary/20 p-3">
 			<div className="space-y-1">
 				<h2 className="font-semibold text-xl tracking-tight">
-					<Trans>替换清单</Trans>
+					<Trans>内容检查</Trans>
 				</h2>
 				<p className="text-muted-foreground text-sm leading-relaxed">
-					<Trans>按模块替换模板内容。新增、删除和排序继续使用左侧模块列表。</Trans>
+					<Trans>确认核心模块是否已经填写完整，点击条目可以快速定位到对应内容。</Trans>
 				</p>
 			</div>
 

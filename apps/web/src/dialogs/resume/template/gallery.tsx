@@ -4,15 +4,8 @@ import type { CustomTemplatePreset } from "./custom-presets";
 import type { TemplateMetadata } from "./data";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
-import {
-	ClockCounterClockwiseIcon,
-	EyeSlashIcon,
-	MagnifyingGlassIcon,
-	SlideshowIcon,
-	TrashSimpleIcon,
-	UploadSimpleIcon,
-} from "@phosphor-icons/react";
-import { useEffect, useRef, useState } from "react";
+import { MagnifyingGlassIcon, SlideshowIcon, TrashSimpleIcon } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@reactive-resume/ui/components/badge";
 import { Button } from "@reactive-resume/ui/components/button";
@@ -22,14 +15,7 @@ import { ScrollArea } from "@reactive-resume/ui/components/scroll-area";
 import { cn } from "@reactive-resume/utils/style";
 import { useDialogStore } from "@/dialogs/store";
 import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
-import {
-	createCustomTemplatePreset,
-	loadCustomTemplatePresets,
-	loadHiddenSystemTemplates,
-	parseTemplatePresetJson,
-	saveCustomTemplatePresets,
-	saveHiddenSystemTemplates,
-} from "./custom-presets";
+import { loadCustomTemplatePresets, saveCustomTemplatePresets } from "./custom-presets";
 import { primaryTemplateIds, templates } from "./data";
 import { createRecommendedTemplateLayout } from "./layout";
 import { TemplateThumbnail } from "./thumbnail";
@@ -68,25 +54,17 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 	const resume = useCurrentResume();
 	const selectedTemplate = resume.data.metadata.template;
 	const updateResumeData = useUpdateResumeData();
-	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const [customPresets, setCustomPresets] = useState<CustomTemplatePreset[]>([]);
-	const [hiddenSystemTemplates, setHiddenSystemTemplates] = useState<Template[]>([]);
 	const [activeFilter, setActiveFilter] = useState<TemplateFilterId>("all");
 	const [searchQuery, setSearchQuery] = useState("");
 
 	useEffect(() => {
 		setCustomPresets(loadCustomTemplatePresets());
-		setHiddenSystemTemplates(loadHiddenSystemTemplates());
 	}, []);
 
 	function persistCustomPresets(nextPresets: CustomTemplatePreset[]) {
 		setCustomPresets(nextPresets);
 		saveCustomTemplatePresets(nextPresets);
-	}
-
-	function persistHiddenSystemTemplates(nextTemplates: Template[]) {
-		setHiddenSystemTemplates(nextTemplates);
-		saveHiddenSystemTemplates(nextTemplates);
 	}
 
 	function onSelectTemplate(template: Template) {
@@ -115,40 +93,8 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 		toast.success("模板已删除。");
 	}
 
-	function onHideSystemTemplate(template: Template) {
-		if (hiddenSystemTemplates.includes(template)) return;
-		persistHiddenSystemTemplates([...hiddenSystemTemplates, template]);
-		toast.success("模板已隐藏。");
-	}
-
-	function onRestoreSystemTemplates() {
-		persistHiddenSystemTemplates([]);
-		toast.success("模板已恢复。");
-	}
-
-	async function onImportTemplate(event: React.ChangeEvent<HTMLInputElement>) {
-		const file = event.target.files?.[0];
-		event.target.value = "";
-		if (!file) return;
-
-		try {
-			const text = await file.text();
-			const imported = parseTemplatePresetJson(text, file.name);
-			const preset = createCustomTemplatePreset(imported);
-			persistCustomPresets([preset, ...customPresets]);
-			toast.success("模板已导入。");
-		} catch (error) {
-			toast.error(error instanceof Error ? error.message : "模板导入失败。");
-		}
-	}
-
-	const hiddenSystemTemplateCount = allSystemTemplateIds.filter((template) =>
-		hiddenSystemTemplates.includes(template),
-	).length;
 	const getVisibleTemplates = (templateIds: readonly Template[]) =>
-		templateIds
-			.map((template) => [template, templates[template]] as const)
-			.filter(([template]) => !hiddenSystemTemplates.includes(template));
+		templateIds.map((template) => [template, templates[template]] as const);
 	const visiblePrimaryTemplates = getVisibleTemplates(primaryTemplateIds).filter(([, metadata]) =>
 		matchesTemplateFilter(
 			[metadata.name, metadata.audience, metadata.description.message, ...metadata.tags],
@@ -176,13 +122,11 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 						<Trans>模板库</Trans>
 					</DialogTitle>
 					<DialogDescription className="leading-relaxed">
-						<Trans>
-							这里展示的模板都可以直接切换并导出 PDF。上传已有简历请回到“导入已有简历”，这里的 JSON 只用于导入排版预设。
-						</Trans>
+						<Trans>选择一套适合岗位的中文模板，切换后会保留当前简历内容，并按模板重新整理排版。</Trans>
 					</DialogDescription>
 				</DialogHeader>
 
-				<div className="grid gap-3 md:grid-cols-[minmax(240px,1fr)_auto]">
+				<div className="grid gap-3">
 					<div className="relative">
 						<MagnifyingGlassIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
 						<Input
@@ -192,19 +136,6 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 							value={searchQuery}
 							onChange={(event) => setSearchQuery(event.target.value)}
 						/>
-					</div>
-
-					<div className="flex flex-wrap items-center gap-2">
-						{hiddenSystemTemplates.length > 0 ? (
-							<Button variant="ghost" size="sm" className="gap-2" onClick={onRestoreSystemTemplates}>
-								<ClockCounterClockwiseIcon className="size-4" />
-								<Trans>恢复全部</Trans>
-							</Button>
-						) : null}
-						<Button variant="outline" size="sm" className="gap-2" onClick={() => fileInputRef.current?.click()}>
-							<UploadSimpleIcon className="size-4" />
-							<Trans>导入排版预设（仅 JSON）</Trans>
-						</Button>
 					</div>
 				</div>
 
@@ -224,12 +155,10 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 				</div>
 
 				<div className="flex flex-wrap gap-2 text-xs">
-					<Badge variant="secondary">可导出模板 {allSystemTemplateIds.length - hiddenSystemTemplateCount} 个</Badge>
+					<Badge variant="secondary">可导出模板 {allSystemTemplateIds.length} 个</Badge>
 					<Badge variant="secondary">可切换模板 {primaryTemplateIds.length} 个</Badge>
 					<Badge variant="secondary">保留简历内容</Badge>
-					<Badge variant="secondary">Word 模板保留原样式</Badge>
 				</div>
-				<input ref={fileInputRef} hidden type="file" accept="application/json,.json" onChange={onImportTemplate} />
 			</div>
 
 			<ScrollArea className="max-h-[72svh]">
@@ -256,13 +185,9 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 
 					<section className="space-y-4">
 						<TemplateSectionHeader
-							title="精品可导出模板"
+							title="中文简历模板"
 							badge={`${visiblePrimaryTemplates.length} 个`}
-							description={
-								hiddenSystemTemplateCount > 0
-									? `已隐藏 ${hiddenSystemTemplateCount} 个系统模板，可在右上角恢复。`
-									: "这里保留真实可导出的中文模板，预览效果和 PDF 导出保持一致。"
-							}
+							description="预览图对应实际 PDF 导出效果，点击模板即可套用到当前简历。"
 						/>
 						<div className="grid grid-cols-1 xs:grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
 							{visiblePrimaryTemplates.map(([template, metadata]) => (
@@ -271,16 +196,10 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 									metadata={metadata}
 									id={template}
 									isActive={template === selectedTemplate}
-									onDelete={onHideSystemTemplate}
 									onSelect={onSelectTemplate}
 								/>
 							))}
 						</div>
-						{visiblePrimaryTemplates.length === 0 ? (
-							<div className="rounded-md border border-dashed bg-secondary/20 px-4 py-8 text-center text-muted-foreground text-sm">
-								<Trans>精品模板已全部隐藏，可点击右上角恢复全部。</Trans>
-							</div>
-						) : null}
 					</section>
 
 					{resultCount === 0 ? (
@@ -316,11 +235,10 @@ type SystemTemplateCardProps = {
 	id: Template;
 	isActive?: boolean;
 	metadata: TemplateMetadata;
-	onDelete: (template: Template) => void;
 	onSelect: (template: Template) => void;
 };
 
-function SystemTemplateCard({ id, metadata, isActive, onDelete, onSelect }: SystemTemplateCardProps) {
+function SystemTemplateCard({ id, metadata, isActive, onSelect }: SystemTemplateCardProps) {
 	const { i18n } = useLingui();
 
 	return (
@@ -349,25 +267,12 @@ function SystemTemplateCard({ id, metadata, isActive, onDelete, onSelect }: Syst
 				</div>
 			</button>
 
-			<div className="flex min-h-12 items-center justify-between gap-2 border-t px-3 py-2">
-				<div className="flex min-w-0 flex-wrap gap-1.5">
-					{metadata.tags.slice(0, 3).map((tag) => (
-						<Badge key={tag} variant="secondary" className="max-w-24 truncate text-[11px]">
-							{tag}
-						</Badge>
-					))}
-				</div>
-
-				<Button
-					size="sm"
-					variant="ghost"
-					className="h-8 shrink-0 gap-1.5 px-2 text-xs"
-					aria-label={`隐藏精选模板：${metadata.name}`}
-					onClick={() => onDelete(id)}
-				>
-					<EyeSlashIcon className="size-3.5" />
-					<Trans>隐藏</Trans>
-				</Button>
+			<div className="flex min-h-12 flex-wrap items-center gap-1.5 border-t px-3 py-2">
+				{metadata.tags.slice(0, 3).map((tag) => (
+					<Badge key={tag} variant="secondary" className="max-w-24 truncate text-[11px]">
+						{tag}
+					</Badge>
+				))}
 			</div>
 		</article>
 	);

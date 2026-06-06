@@ -66,6 +66,8 @@ describe("ExportSectionBuilder", () => {
 		expect(screen.getByText("JSON")).toBeInTheDocument();
 		expect(screen.getByText("DOCX")).toBeInTheDocument();
 		expect(screen.getByText("PDF")).toBeInTheDocument();
+		expect(screen.getByText("Word 模板导出")).toBeInTheDocument();
+		expect(screen.queryByText(/Beta/)).toBeNull();
 		expect(screen.getByText(/复杂双栏或强视觉模板请以 PDF 为准/)).toBeInTheDocument();
 	});
 
