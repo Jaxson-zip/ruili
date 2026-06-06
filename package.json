@@ -23,6 +23,7 @@
 		"build": "turbo run build",
 		"doctor": "turbo run doctor",
 		"check": "biome check --write --unsafe .",
+		"deploy:backup": "node tooling/production-backup.mjs",
 		"deploy:check": "node tooling/check-production-env.mjs",
 		"deploy:init": "node tooling/create-production-env.mjs",
 		"db:generate": "turbo run db:generate --filter=@reactive-resume/db",

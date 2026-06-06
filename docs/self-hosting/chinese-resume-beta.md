@@ -140,3 +140,74 @@ APP_URL_OVERRIDE=https://resume.example.com pnpm verify:beta
 - 不要删除仓库根目录 `LICENSE` 中的 MIT License 和上游 copyright。
 - 不要移除 README、页脚或关于页里的 Reactive Resume attribution/link。
 - 不要使用“官方版”“官方合作”“上游背书”等容易暗示 Reactive Resume/原作者认可或背书的表述。
+
+## 备份与恢复
+
+正式开放给真实用户前，至少要跑通一次备份计划，并确认备份目录能被安全复制到另一台机器或对象存储。锐历的核心状态分三部分：
+
+- Postgres：账号、简历结构化数据、分享配置等。
+- SeaweedFS/S3：头像、上传文件、导入文件、导出相关对象。
+- Redis：队列/缓存/临时流数据。Redis 不是最核心的长期数据，但备份它可以减少异常恢复后的状态丢失。
+
+先 dry-run 看计划：
+
+```bash
+pnpm deploy:backup --env-file .env.production
+```
+
+确认输出目录和 Docker Compose 项目名无误后再执行：
+
+```bash
+pnpm deploy:backup --env-file .env.production --output backups/ruili-$(date +%Y%m%d-%H%M%S) --execute
+```
+
+备份目录会包含：
+
+- `postgres.dump`：`pg_dump --format=custom` 生成的数据库备份。
+- `redis-dump.rdb`：Redis RDB 快照。
+- `seaweedfs-data.tgz`：SeaweedFS Docker volume 归档。
+- `.env.production`：默认会复制一份环境变量快照，里面有生产密钥，必须当作机密文件保存。若你已在密码管理器里保存密钥，可以加 `--exclude-env`。
+- `manifest.json`：备份元数据。
+
+建议策略：
+
+- 每次上线前手动备份一次。
+- Beta 期间每天至少备份一次，保留最近 7 天。
+- 把备份复制到 VPS 之外的位置，例如另一台机器、对象存储或加密网盘。
+- 备份目录里有密钥和用户数据，不要提交到 GitHub，也不要放进公开可访问目录。
+
+恢复时先进入维护窗口，停止公网流量和写入，再按这个顺序处理：
+
+```bash
+docker compose -f compose.yml --env-file .env.production down
+docker compose -f compose.yml --env-file .env.production up -d postgres redis seaweedfs
+```
+
+恢复 Postgres：
+
+```bash
+cat backups/ruili-YYYYMMDD-HHMMSS/postgres.dump | docker compose -f compose.yml --env-file .env.production exec -T postgres pg_restore --clean --if-exists -U postgres -d postgres
+```
+
+恢复 Redis：
+
+```bash
+docker compose -f compose.yml --env-file .env.production stop redis
+docker cp backups/ruili-YYYYMMDD-HHMMSS/redis-dump.rdb reactive_resume-redis-1:/data/dump.rdb
+docker compose -f compose.yml --env-file .env.production up -d redis
+```
+
+恢复 SeaweedFS 前请确认 Docker Compose 项目名仍是 `reactive_resume`。如果你改过 `COMPOSE_PROJECT_NAME`，volume 名也会变化：
+
+```bash
+docker run --rm -v reactive_resume_seaweedfs_data:/data -v "$PWD/backups/ruili-YYYYMMDD-HHMMSS:/backup" busybox sh -c 'rm -rf /data/* && tar -xzf /backup/seaweedfs-data.tgz -C /data'
+```
+
+恢复完成后启动全量服务并重新验收：
+
+```bash
+docker compose -f compose.yml --env-file .env.production up -d
+curl -f http://127.0.0.1:3000/api/health
+pnpm verify:production --url https://resume.example.com
+APP_URL_OVERRIDE=https://resume.example.com pnpm verify:beta
+```
