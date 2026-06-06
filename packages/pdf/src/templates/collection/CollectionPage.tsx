@@ -24,7 +24,7 @@ import { resolveCollectionPageSections } from "./layout";
 
 type CollectionVariant = {
 	accent: string;
-	density?: "compact" | "normal";
+	density?: "compact" | "normal" | "tight";
 	fullBleedSidebar?: boolean;
 	headerBackground: string;
 	headerForeground: string;
@@ -208,7 +208,7 @@ const variants = {
 	collection021: {
 		id: "collection021",
 		accent: "#3965A7",
-		density: "compact",
+		density: "tight",
 		forceSingleColumn: true,
 		headerBackground: "#F7FAFF",
 		headerForeground: "#233B63",
@@ -469,7 +469,8 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 		const sidebarMuted = variant.sidebarForeground ? "#C8D5E2" : muted;
 		const colors: TemplateColorRoles = { foreground, background, primary, sidebarForeground, sidebarBackground };
 		const metrics = getTemplateMetrics(metadata.page);
-		const isCompact = variant.density === "compact";
+		const isCompact = variant.density === "compact" || variant.density === "tight";
+		const isTight = variant.density === "tight";
 		const isDarkOrange = variant.referenceStyle === "darkOrange";
 		const isQrSidebar = variant.referenceStyle === "qrSidebar";
 		const isBoxed = variant.sectionFrame === "boxed";
@@ -483,11 +484,16 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 			fontFamily: metadata.typography.body.fontFamily,
 			fontSize: isTimelineStrip
 				? metadata.typography.body.fontSize * 0.92
-				: isCompact
-					? metadata.typography.body.fontSize * 0.94
-					: metadata.typography.body.fontSize,
+				: isTight
+					? metadata.typography.body.fontSize * 0.88
+					: isCompact
+						? metadata.typography.body.fontSize * 0.94
+						: metadata.typography.body.fontSize,
 			fontWeight: metadata.typography.body.fontWeights[0] ?? "400",
-			lineHeight: Math.min(metadata.typography.body.lineHeight, isTimelineStrip ? 1.28 : isCompact ? 1.34 : 1.42),
+			lineHeight: Math.min(
+				metadata.typography.body.lineHeight,
+				isTimelineStrip ? 1.28 : isTight ? 1.24 : isCompact ? 1.34 : 1.42,
+			),
 			color: foreground,
 			...r.text,
 		} satisfies Style;
@@ -537,8 +543,8 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 				color: foreground,
 				backgroundColor: background,
 				paddingHorizontal: metrics.page.paddingHorizontal,
-				paddingVertical: metrics.page.paddingVertical,
-				rowGap: metrics.gapY(0.72),
+				paddingVertical: isTight ? metrics.page.paddingVertical * 0.72 : metrics.page.paddingVertical,
+				rowGap: metrics.gapY(isTight ? 0.34 : 0.72),
 				fontFamily: metadata.typography.body.fontFamily,
 				fontSize: bodyText.fontSize,
 				lineHeight: bodyText.lineHeight,
@@ -613,13 +619,13 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 				...headingVariant,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(isTimelineStrip ? 0.18 : isCompact ? 0.24 : 0.34),
+				rowGap: metrics.gapY(isTimelineStrip ? 0.18 : isTight ? 0.14 : isCompact ? 0.24 : 0.34),
 			},
 			item: {
-				rowGap: metrics.gapY(isCompact ? 0.1 : 0.13),
+				rowGap: metrics.gapY(isTight ? 0.06 : isCompact ? 0.1 : 0.13),
 				borderBottomWidth: 0.35,
 				borderBottomColor: subtle,
-				paddingBottom: metrics.gapY(isCompact ? 0.12 : 0.18),
+				paddingBottom: metrics.gapY(isTight ? 0.07 : isCompact ? 0.12 : 0.18),
 			},
 			levelContainer: {
 				width: "100%",
@@ -643,13 +649,13 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 			},
 			mainColumn: {
 				flex: 1,
-				rowGap: metrics.gapY(isCompact ? 0.52 : 0.7),
+				rowGap: metrics.gapY(isTight ? 0.32 : isCompact ? 0.52 : 0.7),
 			},
 			header: {
 				flexDirection: r.row,
 				flexWrap: "wrap",
 				alignItems: "flex-start",
-				rowGap: metrics.gapY(0.28),
+				rowGap: metrics.gapY(isTight ? 0.16 : 0.28),
 				columnGap: metrics.gapX(0.8),
 				backgroundColor: variant.referenceStyle === "blueBlocks" ? primary : variant.headerBackground,
 				borderTopWidth: variant.headerMode === "band" ? 8 : variant.headingMode === "line" ? 5 : 0,
@@ -657,8 +663,8 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 				borderBottomWidth: variant.referenceStyle === "blueBlocks" ? 0 : 2,
 				borderBottomColor: primary,
 				paddingHorizontal: metrics.gapX(variant.referenceStyle === "blueBlocks" ? 1.0 : 0.7),
-				paddingTop: metrics.gapY(variant.referenceStyle === "blueBlocks" ? 1.0 : 0.52),
-				paddingBottom: metrics.gapY(variant.referenceStyle === "blueBlocks" ? 0.92 : 0.54),
+				paddingTop: metrics.gapY(variant.referenceStyle === "blueBlocks" ? 1.0 : isTight ? 0.3 : 0.52),
+				paddingBottom: metrics.gapY(variant.referenceStyle === "blueBlocks" ? 0.92 : isTight ? 0.3 : 0.54),
 			},
 			headerBadge: {
 				width: "100%",
@@ -688,7 +694,7 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 			},
 			headerName: {
 				color: variant.referenceStyle === "blueBlocks" ? "#FFFFFF" : variant.headerForeground,
-				fontSize: metadata.typography.heading.fontSize * 1.76,
+				fontSize: metadata.typography.heading.fontSize * (isTight ? 1.48 : 1.76),
 				lineHeight: headerNameLineHeight,
 			},
 			headerHeadline: {
