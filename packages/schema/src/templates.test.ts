@@ -6,6 +6,10 @@ describe("templateSchema", () => {
 		const validTemplates = [
 			"azurill",
 			"bronzor",
+			"collection001",
+			"collection002",
+			"collection003",
+			"collection005",
 			"chikorita",
 			"ditgar",
 			"ditto",
@@ -45,8 +49,8 @@ describe("templateSchema", () => {
 		}
 	});
 
-	it("includes 14 templates", () => {
+	it("includes 19 templates", () => {
 		const validTemplates = templateSchema.options;
-		expect(validTemplates).toHaveLength(15);
+		expect(validTemplates).toHaveLength(19);
 	});
 });

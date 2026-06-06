@@ -87,6 +87,10 @@ interface TemplateConfig {
 const TEMPLATE_CONFIGS: Record<Template, TemplateConfig> = {
 	azurill: { sidebarSide: "left", sidebarBackground: "none", headerPosition: "full-width" },
 	bronzor: { sidebarSide: "right", sidebarBackground: "none", headerPosition: "full-width" },
+	collection001: { sidebarSide: "none", sidebarBackground: "none", headerPosition: "full-width" },
+	collection002: { sidebarSide: "none", sidebarBackground: "none", headerPosition: "full-width" },
+	collection003: { sidebarSide: "left", sidebarBackground: "solid", headerPosition: "main-only" },
+	collection005: { sidebarSide: "left", sidebarBackground: "solid", headerPosition: "main-only" },
 	chikorita: { sidebarSide: "right", sidebarBackground: "solid", headerPosition: "main-only" },
 	ditgar: { sidebarSide: "left", sidebarBackground: "tint", headerPosition: "sidebar-only" },
 	ditto: { sidebarSide: "left", sidebarBackground: "none", headerPosition: "full-width" },

@@ -8,8 +8,8 @@ export function CreateResumeCard() {
 
 	return (
 		<BaseCard
-			title={t`从成品模板开始`}
-			description={t`先套中文样张，再替换内容`}
+			title={t`选择模板创建`}
+			description={t`先选真实模板，再填写内容`}
 			onClick={() => openDialog("resume.create", undefined)}
 		>
 			<div className="absolute inset-0 flex items-center justify-center">

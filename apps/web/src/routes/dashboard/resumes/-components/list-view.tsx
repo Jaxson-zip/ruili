@@ -47,11 +47,11 @@ export function ListView({ resumes }: ListViewProps) {
 				>
 					<PlusIcon />
 					<div className="min-w-80 truncate">
-						<Trans>从成品模板开始</Trans>
+						<Trans>选择模板创建</Trans>
 					</div>
 
 					<p className="text-xs opacity-60">
-						<Trans>先套中文样张，再替换内容</Trans>
+						<Trans>先选真实模板，再填写内容</Trans>
 					</p>
 				</Button>
 			</m.div>

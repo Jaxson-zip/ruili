@@ -3,6 +3,10 @@ import z from "zod";
 export const templateSchema = z.enum([
 	"azurill",
 	"bronzor",
+	"collection001",
+	"collection002",
+	"collection003",
+	"collection005",
 	"chikorita",
 	"ditgar",
 	"ditto",

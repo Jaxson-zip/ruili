@@ -19,6 +19,10 @@ describe("templates metadata", () => {
 			[
 				"azurill",
 				"bronzor",
+				"collection001",
+				"collection002",
+				"collection003",
+				"collection005",
 				"chikorita",
 				"ditgar",
 				"ditto",
@@ -60,7 +64,16 @@ describe("templates metadata", () => {
 
 	it("keeps featured templates unique and backed by system metadata", () => {
 		expect(new Set(featuredTemplateIds).size).toBe(featuredTemplateIds.length);
-		expect(featuredTemplateIds).toEqual(["ditto", "scizor"]);
+		expect(featuredTemplateIds).toEqual([
+			"collection001",
+			"collection002",
+			"collection003",
+			"collection005",
+			"azurill",
+			"onyx",
+			"ditto",
+			"scizor",
+		]);
 
 		for (const id of featuredTemplateIds) {
 			expect(templates[id], id).toBeDefined();
@@ -84,7 +97,7 @@ describe("templates metadata", () => {
 		}
 	});
 
-	it("exposes every downloaded collection reference as a selectable style reference", () => {
+	it("keeps downloaded collection references available for promotion or style reference", () => {
 		expect(collectionTemplateReferences).toHaveLength(24);
 		expect(new Set(collectionTemplateReferences.map((reference) => reference.id)).size).toBe(
 			collectionTemplateReferences.length,
@@ -116,14 +129,21 @@ describe("templates metadata", () => {
 	});
 
 	it("splits collection references by launch readiness", () => {
-		expect(recommendedCollectionTemplateReferences).toHaveLength(8);
+		expect(recommendedCollectionTemplateReferences).toHaveLength(4);
 		expect(additionalCollectionTemplateReferences).toHaveLength(11);
 		expect(deferredCollectionTemplateReferences).toHaveLength(5);
 		expect([
 			...recommendedCollectionTemplateReferences,
 			...additionalCollectionTemplateReferences,
 			...deferredCollectionTemplateReferences,
-		]).toHaveLength(collectionTemplateReferences.length);
+		]).toHaveLength(collectionTemplateReferences.length - 4);
+
+		for (const promotedId of ["001", "002", "003", "005"]) {
+			expect(templates[`collection${promotedId}` as keyof typeof templates]).toBeDefined();
+			expect(
+				recommendedCollectionTemplateReferences.some((reference) => reference.id === `collection-${promotedId}`),
+			).toBe(false);
+		}
 
 		for (const reference of recommendedCollectionTemplateReferences) {
 			expect(reference.review).toBe("上线推荐");

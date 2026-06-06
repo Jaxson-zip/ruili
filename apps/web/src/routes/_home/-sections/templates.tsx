@@ -2,6 +2,11 @@ import type { Template } from "@reactive-resume/schema/templates";
 import { Trans } from "@lingui/react/macro";
 import { m } from "motion/react";
 import { useMemo } from "react";
+import {
+	additionalCollectionTemplateReferences,
+	recommendedCollectionTemplateReferences,
+	templates as systemTemplates,
+} from "@/dialogs/resume/template/data";
 
 type SystemTemplatePreview = {
 	id: string;
@@ -20,74 +25,58 @@ type TemplateMarqueeItem = {
 	preview: SystemTemplatePreview;
 };
 
-const homepageTemplateSamples = [
+const promotedTemplateIds = [
+	"collection001",
+	"collection002",
+	"collection003",
+	"collection005",
+] as const satisfies Array<
 	{
-		id: "ditto-campus",
-		template: "ditto",
-		name: "ATS 极简 · 校招版",
-		role: "校招 / 网申 / 高兼容",
-		imageUrl: "/templates/jpg/homepage-ditto-campus.jpg",
-	},
-	{
-		id: "ditto-frontend",
-		template: "ditto",
-		name: "ATS 极简 · 技术版",
-		role: "前端 / 技术 / 一页投递",
-		imageUrl: "/templates/jpg/homepage-ditto-frontend.jpg",
-	},
-	{
-		id: "scizor-growth",
-		template: "scizor",
-		name: "高管咨询 · 运营版",
-		role: "运营 / 增长 / 业务成果",
-		imageUrl: "/templates/jpg/homepage-scizor-growth.jpg",
-	},
-	{
-		id: "scizor-product",
-		template: "scizor",
-		name: "高管咨询 · 产品版",
-		role: "产品 / 策略 / 项目推进",
-		imageUrl: "/templates/jpg/homepage-scizor-product.jpg",
-	},
-] as const satisfies Array<{
-	id: string;
-	template: Template;
-	name: string;
-	role: string;
-	imageUrl: string;
-}>;
+		template: Template;
+	}["template"]
+>;
 
-const systemTemplatePreviews: SystemTemplatePreview[] = homepageTemplateSamples.map((sample) => ({
-	id: `system-${sample.id}`,
-	name: sample.name,
-	role: sample.role,
-	imageUrl: sample.imageUrl,
-	source: "精选模板",
+const createSystemTemplatePreviews = (templates: readonly Template[]): SystemTemplatePreview[] =>
+	templates.map((template) => ({
+		id: `system-${template}`,
+		name: systemTemplates[template].name,
+		role: systemTemplates[template].tags.slice(0, 3).join(" / "),
+		imageUrl: systemTemplates[template].imageUrl,
+		source: "可导出 PDF",
+	}));
+
+const promotedTemplatePreviews = createSystemTemplatePreviews(promotedTemplateIds);
+
+const referenceTemplatePreviews: SystemTemplatePreview[] = [
+	...recommendedCollectionTemplateReferences,
+	...additionalCollectionTemplateReferences,
+].map((reference) => ({
+	id: `reference-${reference.id}`,
+	name: reference.name,
+	role: reference.tags.slice(0, 3).join(" / "),
+	imageUrl: reference.imageUrl,
+	source: "待制作真实模板",
 }));
-
-const templatePreviews = systemTemplatePreviews;
 
 function TemplateItem({ preview }: TemplateItemProps) {
 	return (
 		<m.div
 			className="group relative shrink-0 will-change-transform"
 			initial={{ scale: 1, zIndex: 10 }}
-			whileHover={{ scale: 1.05, zIndex: 20 }}
+			whileHover={{ y: -6, zIndex: 20 }}
 			whileTap={{ scale: 0.99 }}
-			transition={{ type: "spring", stiffness: 320, damping: 26 }}
+			transition={{ type: "spring", stiffness: 360, damping: 30 }}
 		>
-			<div className="relative aspect-page w-48 overflow-hidden rounded-md border border-white/10 bg-white shadow-[0_20px_70px_rgba(0,0,0,0.28)] transition-all duration-300 group-hover:shadow-[0_28px_90px_rgba(0,0,0,0.38)] sm:w-56 md:w-64 lg:w-72">
-				<img src={preview.imageUrl} alt={preview.name} className="size-full object-cover" loading="lazy" />
-
-				<div className="absolute inset-0 bg-linear-to-t from-black/72 via-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
-				<div className="absolute inset-x-0 bottom-0 translate-y-full p-4 transition-transform duration-300 group-hover:translate-y-0">
-					<p className="font-semibold text-white drop-shadow-lg">{preview.name}</p>
-					<p className="mt-1 text-white/75 text-xs">{preview.role}</p>
-					<p className="mt-2 text-[11px] text-white/55">{preview.source}</p>
+			<div className="relative w-48 overflow-hidden rounded-md border bg-white shadow-sm transition-[border-color,box-shadow,transform] duration-200 group-hover:border-foreground/20 group-hover:shadow-lg sm:w-56 md:w-64">
+				<div className="aspect-page overflow-hidden bg-white">
+					<img src={preview.imageUrl} alt={preview.name} className="size-full object-contain" loading="lazy" />
 				</div>
 
-				<div className="pointer-events-none absolute inset-0 -translate-x-full rotate-12 bg-linear-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+				<div className="border-t bg-background/95 p-3">
+					<p className="line-clamp-1 font-semibold text-sm">{preview.name}</p>
+					<p className="mt-1 line-clamp-1 text-muted-foreground text-xs">{preview.role}</p>
+					<p className="mt-1 text-[11px] text-muted-foreground">{preview.source}</p>
+				</div>
 			</div>
 		</m.div>
 	);
@@ -129,12 +118,9 @@ const createMarqueeItems = (entries: SystemTemplatePreview[], rowId: string): Te
 
 export function Templates() {
 	const { row1, row2 } = useMemo(() => {
-		const offset = Math.ceil(templatePreviews.length / 2);
-		const secondRowPreviews = [...templatePreviews.slice(offset), ...templatePreviews.slice(0, offset)];
-
 		return {
-			row1: createMarqueeItems(templatePreviews, "row1"),
-			row2: createMarqueeItems(secondRowPreviews, "row2"),
+			row1: createMarqueeItems(promotedTemplatePreviews, "row1"),
+			row2: createMarqueeItems(referenceTemplatePreviews, "row2"),
 		};
 	}, []);
 
@@ -152,12 +138,12 @@ export function Templates() {
 				</h2>
 
 				<p className="max-w-2xl text-muted-foreground leading-relaxed">
-					<Trans>首页只展示真实可导出的首批精品模板，预览效果和 PDF 导出保持一致。</Trans>
+					<Trans>第一排已经升级为真实可导出的中文模板；第二排是待制作样张，不会再强行套成别的模板。</Trans>
 				</p>
 			</m.div>
 
-			<div className="relative mt-8 -rotate-3 py-8 sm:-rotate-4 lg:mt-0 lg:-rotate-5">
-				<div className="flex min-h-[280px] flex-col gap-y-4 sm:min-h-[320px] sm:gap-y-6 md:min-h-[380px] lg:min-h-[420px]">
+			<div className="relative mt-8 py-4">
+				<div className="flex min-h-[360px] flex-col gap-y-4 sm:min-h-[400px] sm:gap-y-5 md:min-h-[460px]">
 					<MarqueeRow templates={row1} direction="left" duration={58} />
 					<MarqueeRow templates={row2} direction="right" duration={64} />
 				</div>

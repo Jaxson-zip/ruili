@@ -6,11 +6,11 @@ import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import {
 	ClockCounterClockwiseIcon,
-	DownloadSimpleIcon,
 	EyeSlashIcon,
 	MagnifyingGlassIcon,
 	SlideshowIcon,
 	TrashSimpleIcon,
+	UploadSimpleIcon,
 } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -30,7 +30,7 @@ import {
 	saveCustomTemplatePresets,
 	saveHiddenSystemTemplates,
 } from "./custom-presets";
-import { onlineStyleTemplateReferences, primaryTemplateIds, templates } from "./data";
+import { collectionTemplateReferences, onlineStyleTemplateReferences, primaryTemplateIds, templates } from "./data";
 import { createRecommendedTemplateLayout } from "./layout";
 import { TemplateThumbnail } from "./thumbnail";
 
@@ -165,11 +165,18 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 	const visibleOnlineStyles = onlineStyleTemplateReferences.filter((reference) =>
 		matchesTemplateFilter([reference.name, reference.description, ...reference.tags], activeFilter, searchQuery),
 	);
+	const promotedReferenceIds = new Set(["collection-001", "collection-002", "collection-003", "collection-005"]);
+	const visibleReferenceTemplates = collectionTemplateReferences.filter(
+		(reference) =>
+			!promotedReferenceIds.has(reference.id) &&
+			matchesTemplateFilter([reference.name, reference.description, ...reference.tags], activeFilter, searchQuery),
+	);
 	const resultCount =
 		visiblePrimaryTemplates.length +
 		visibleSecondaryTemplates.length +
 		visibleCustomPresets.length +
-		visibleOnlineStyles.length;
+		visibleOnlineStyles.length +
+		visibleReferenceTemplates.length;
 
 	return (
 		<DialogContent className="lg:max-w-6xl">
@@ -180,7 +187,10 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 						<Trans>模板库</Trans>
 					</DialogTitle>
 					<DialogDescription className="leading-relaxed">
-						<Trans>只推荐真实可导出的中文模板；参考图只作为设计灵感，避免选择后进入不同模板。</Trans>
+						<Trans>
+							真实 PDF 模板可直接切换；外部参考图只用于挑选后续制作方向；Word 模板可在导出面板上传占位符
+							DOCX，并保留原样式填充文字。
+						</Trans>
 					</DialogDescription>
 				</DialogHeader>
 
@@ -204,8 +214,8 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 							</Button>
 						) : null}
 						<Button variant="outline" size="sm" className="gap-2" onClick={() => fileInputRef.current?.click()}>
-							<DownloadSimpleIcon className="size-4" />
-							<Trans>导入我的模板（JSON）</Trans>
+							<UploadSimpleIcon className="size-4" />
+							<Trans>导入排版预设（JSON）</Trans>
 						</Button>
 					</div>
 				</div>
@@ -229,6 +239,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 					<Badge variant="secondary">可导出模板 {allSystemTemplateIds.length - hiddenSystemTemplateCount} 个</Badge>
 					<Badge variant="secondary">首批主推 {primaryTemplateIds.length} 个</Badge>
 					<Badge variant="secondary">保留简历内容</Badge>
+					<Badge variant="secondary">Word 模板保留原样式</Badge>
 				</div>
 				<input ref={fileInputRef} hidden type="file" accept="application/json,.json" onChange={onImportTemplate} />
 			</div>
@@ -311,7 +322,16 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 
 					<section className="space-y-4">
 						<TemplateSectionHeader
-							title="风格参考（不可直接套用）"
+							title="外部模板参考（待制作）"
+							badge={`${visibleReferenceTemplates.length} 个`}
+							description="这些样式还没有对应的可编辑 PDF 组件或 DOCX 源文件，不再强行套用系统模板；后续会按用户选择优先做成真实模板。"
+						/>
+						<CollectionReferenceGrid references={visibleReferenceTemplates} />
+					</section>
+
+					<section className="space-y-4">
+						<TemplateSectionHeader
+							title="线上风格灵感（仅参考）"
 							badge={`${visibleOnlineStyles.length} 个`}
 							description="这些是设计灵感图，不会直接改变当前简历；后续要逐个重做成真实可导出的模板后再开放选择。"
 						/>
@@ -490,6 +510,7 @@ function CollectionReferenceCard({ reference }: CollectionReferenceCardProps) {
 						</Badge>
 					</div>
 					<p className="line-clamp-2 text-muted-foreground text-xs leading-relaxed">{reference.description}</p>
+					<p className="text-[11px] text-muted-foreground">后续制作成真实可选模板后开放使用</p>
 				</div>
 			</div>
 
@@ -503,7 +524,7 @@ function CollectionReferenceCard({ reference }: CollectionReferenceCardProps) {
 				</div>
 
 				<Badge variant="outline" className="shrink-0 text-[11px]">
-					待重做为真实模板
+					待制作真实模板
 				</Badge>
 			</div>
 		</article>

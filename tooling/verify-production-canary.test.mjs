@@ -9,10 +9,10 @@ const expectedTemplateAssetPaths = [
 	"/templates/jpg/scizor.jpg",
 	"/templates/jpg/onyx.jpg",
 	"/templates/jpg/azurill.jpg",
-	"/templates/jpg/homepage-ditto-campus.jpg",
-	"/templates/jpg/homepage-ditto-frontend.jpg",
-	"/templates/jpg/homepage-scizor-growth.jpg",
-	"/templates/jpg/homepage-scizor-product.jpg",
+	"/templates/jpg/collection001.jpg",
+	"/templates/jpg/collection002.jpg",
+	"/templates/jpg/collection003.jpg",
+	"/templates/jpg/collection005.jpg",
 ];
 
 let server;

@@ -40,6 +40,38 @@ export const templates = {
 		tags: ["简洁", "专业", "金融", "咨询"],
 		sidebarPosition: "none",
 	},
+	collection001: {
+		name: "蓝色时间轴",
+		description: msg`参考传统中文招聘模板的蓝绿色分隔与时间轴结构，适合技术、产品和运营岗位的一页投递。`,
+		imageUrl: "/templates/jpg/collection001.jpg",
+		accentColor: "rgba(47, 111, 122, 1)",
+		tags: ["中文模板", "时间轴", "蓝绿色", "可导出"],
+		sidebarPosition: "none",
+	},
+	collection002: {
+		name: "金色商务",
+		description: msg`用金色标题线和稳重单栏结构承载经历，适合商务、咨询、金融和管理岗位。`,
+		imageUrl: "/templates/jpg/collection002.jpg",
+		accentColor: "rgba(185, 138, 59, 1)",
+		tags: ["中文模板", "商务", "金色", "可导出"],
+		sidebarPosition: "none",
+	},
+	collection003: {
+		name: "深蓝横栏",
+		description: msg`深蓝信息栏配合右侧时间轴正文，适合需要头像、联系方式和技能侧栏的中文简历。`,
+		imageUrl: "/templates/jpg/collection003.jpg",
+		accentColor: "rgba(40, 82, 111, 1)",
+		tags: ["中文模板", "深蓝侧栏", "时间轴", "可导出"],
+		sidebarPosition: "left",
+	},
+	collection005: {
+		name: "深蓝侧栏",
+		description: msg`深色左侧栏突出个人信息与技能，右侧保留清晰经历区块，适合技术、项目和数据岗位。`,
+		imageUrl: "/templates/jpg/collection005.jpg",
+		accentColor: "rgba(49, 93, 125, 1)",
+		tags: ["中文模板", "侧栏", "技术岗", "可导出"],
+		sidebarPosition: "left",
+	},
 	chikorita: {
 		name: "柔和双栏",
 		description: msg`更温和的双栏结构，适合市场、人力资源、客户成功和面向业务的岗位。`,
@@ -80,6 +112,7 @@ export const templates = {
 		name: "实习紧凑",
 		description: msg`单栏紧凑排版，适合实习、初级岗位和经历较少但需要重点突出的候选人。`,
 		imageUrl: "/templates/jpg/kakuna.jpg",
+		accentColor: "rgba(37, 99, 235, 1)",
 		tags: ["单栏", "实习", "初级岗位", "紧凑"],
 		sidebarPosition: "none",
 	},
@@ -102,6 +135,7 @@ export const templates = {
 		name: "亚洲精简",
 		description: msg`行内标题更贴近中日韩简历习惯，适合希望保持简洁和高信息密度的候选人。`,
 		imageUrl: "/templates/jpg/meowth.jpg",
+		accentColor: "rgba(37, 99, 235, 1)",
 		tags: ["单栏", "亚洲风格", "ATS 友好", "紧凑"],
 		sidebarPosition: "none",
 	},
@@ -137,9 +171,25 @@ export const templates = {
 	},
 } as const satisfies Record<Template, TemplateMetadata>;
 
-export const featuredTemplateIds = ["ditto", "scizor"] as const satisfies Template[];
+export const featuredTemplateIds = [
+	"collection001",
+	"collection002",
+	"collection003",
+	"collection005",
+	"azurill",
+	"onyx",
+	"ditto",
+	"scizor",
+] as const satisfies Template[];
 
 export const primaryTemplateIds = featuredTemplateIds;
+
+const promotedCollectionReferenceIds = new Set([
+	"collection-001",
+	"collection-002",
+	"collection-003",
+	"collection-005",
+]);
 
 export const onlineStyleTemplateReferences = [
 	{
@@ -500,7 +550,7 @@ export const collectionTemplateReferences = [
 ] as const satisfies CollectionTemplateReference[];
 
 export const recommendedCollectionTemplateReferences = collectionTemplateReferences.filter(
-	(reference) => reference.review === "上线推荐",
+	(reference) => reference.review === "上线推荐" && !promotedCollectionReferenceIds.has(reference.id),
 );
 
 export const additionalCollectionTemplateReferences = collectionTemplateReferences.filter(

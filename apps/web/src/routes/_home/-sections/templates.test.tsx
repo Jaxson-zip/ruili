@@ -4,7 +4,11 @@ import { render, screen } from "@testing-library/react";
 import { beforeAll, describe, expect, it } from "vitest";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
-import { onlineStyleTemplateReferences } from "@/dialogs/resume/template/data";
+import {
+	additionalCollectionTemplateReferences,
+	onlineStyleTemplateReferences,
+	recommendedCollectionTemplateReferences,
+} from "@/dialogs/resume/template/data";
 import { Templates } from "./templates";
 
 beforeAll(() => {
@@ -19,20 +23,32 @@ const renderTemplates = () =>
 	);
 
 describe("Templates section", () => {
-	it("shows only real exportable featured templates on the homepage", () => {
+	it("shows exportable templates and curated reference styles on the homepage", () => {
 		renderTemplates();
 
 		expect(screen.getByText("中文简历模板与风格")).toBeInTheDocument();
-		expect(screen.getByText(/首页只展示真实可导出的首批精品模板/)).toBeInTheDocument();
+		expect(screen.getByText(/第一排已经升级为真实可导出的中文模板/)).toBeInTheDocument();
+		expect(screen.getByText(/不会再强行套成别的模板/)).toBeInTheDocument();
 
-		for (const name of ["ATS 极简 · 校招版", "ATS 极简 · 技术版", "高管咨询 · 运营版", "高管咨询 · 产品版"]) {
+		for (const name of ["蓝色时间轴", "金色商务", "深蓝横栏", "深蓝侧栏"]) {
 			expect(screen.getAllByAltText(name).length).toBeGreaterThan(0);
 		}
+
+		for (const reference of recommendedCollectionTemplateReferences.slice(0, 3)) {
+			expect(screen.getAllByAltText(reference.name).length).toBeGreaterThan(0);
+		}
+		for (const reference of additionalCollectionTemplateReferences.slice(0, 3)) {
+			expect(screen.getAllByAltText(reference.name).length).toBeGreaterThan(0);
+		}
+
+		const firstPreview = screen.getAllByRole("img")[0];
+		expect(firstPreview).toHaveAttribute("alt", "蓝色时间轴");
+		expect(screen.getAllByText("可导出 PDF").length).toBeGreaterThan(0);
+		expect(screen.getAllByText("待制作真实模板").length).toBeGreaterThan(0);
+		expect(screen.queryByText("可套用相近版式")).toBeNull();
 
 		for (const reference of onlineStyleTemplateReferences) {
 			expect(screen.queryByAltText(reference.name)).toBeNull();
 		}
-
-		expect(screen.queryByAltText("014 彩色技能栏")).toBeNull();
 	});
 });

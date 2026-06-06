@@ -1,5 +1,7 @@
+import type { Template } from "@reactive-resume/schema/templates";
 import type { DialogProps } from "../store";
 import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import { MagicWandIcon, PencilSimpleLineIcon, PlusIcon } from "@phosphor-icons/react";
 import { useStore } from "@tanstack/react-form";
@@ -35,8 +37,9 @@ import { getResumeErrorMessage } from "@/libs/error-message";
 import { orpc } from "@/libs/orpc/client";
 import { useAppForm, withForm } from "@/libs/tanstack-form";
 import { useDialogStore } from "../store";
+import { primaryTemplateIds, templates } from "./template/data";
 import { TemplateThumbnail } from "./template/thumbnail";
-import { buildResumeStarterImportInput } from "./template-starter-import";
+import { buildBlankTemplateImportInput, buildResumeStarterImportInput } from "./template-starter-import";
 
 const formSchema = z.object({
 	id: z.string(),
@@ -54,7 +57,14 @@ const defaultValues: FormValues = {
 	tags: [],
 };
 
+const primaryTemplateSet = new Set<Template>(primaryTemplateIds);
+const allTemplateIds = [
+	...primaryTemplateIds,
+	...(Object.keys(templates) as Template[]).filter((template) => !primaryTemplateSet.has(template)),
+] as const satisfies readonly Template[];
+
 export function CreateResumeDialog(_: DialogProps<"resume.create">) {
+	const { i18n } = useLingui();
 	const navigate = useNavigate();
 	const closeDialog = useDialogStore((state) => state.closeDialog);
 
@@ -111,6 +121,23 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 		});
 	};
 
+	const onCreateFromTemplate = (template: Template) => {
+		const input = buildBlankTemplateImportInput(template, templates[template], form.state.values.name);
+
+		const toastId = toast.loading(t`正在创建模板简历...`);
+
+		importStarter(input, {
+			onSuccess: (id) => {
+				toast.success(t`模板简历已创建`, { id: toastId });
+				closeDialog();
+				void navigate({ to: "/builder/$resumeId", params: { resumeId: id } });
+			},
+			onError: (error) => {
+				toast.error(getResumeErrorMessage(error), { id: toastId });
+			},
+		});
+	};
+
 	return (
 		<DialogContent className="lg:max-w-6xl">
 			<DialogHeader>
@@ -120,7 +147,7 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 				</DialogTitle>
 				<DialogDescription>
 					<Trans>
-						可以从空白简历开始，也可以直接套用带中文示例内容的成品样张；进入编辑器后再打开模板库，则只会更换当前内容的版式和颜色。
+						可以先选一个真实可导出的模板创建空白简历，也可以套用带中文示例内容的成品样张；进入编辑器后仍可继续切换模板。
 					</Trans>
 				</DialogDescription>
 			</DialogHeader>
@@ -136,15 +163,69 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 				<section className="space-y-3">
 					<div className="flex flex-col gap-1">
 						<h3 className="font-semibold text-sm">
-							<Trans>从成品模板开始</Trans>
-							<span className="ms-2 text-muted-foreground">({resumeTemplateStarters.length} 套)</span>
+							<Trans>从真实模板开始</Trans>
+							<span className="ms-2 text-muted-foreground">({allTemplateIds.length} 套)</span>
 						</h3>
 						<p className="text-muted-foreground text-sm">
-							<Trans>模板里已经有完整中文内容和排版，进入后只需要把姓名、经历、项目和技能替换成自己的。</Trans>
+							<Trans>这里展示的是可实际生成和导出的模板；创建后内容为空，样式就是你选中的模板。</Trans>
 						</p>
 					</div>
 
-					<div className="grid max-h-[48svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-4">
+					<div className="grid max-h-[42svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-4">
+						{allTemplateIds.map((template) => {
+							const metadata = templates[template];
+
+							return (
+								<button
+									key={template}
+									type="button"
+									disabled={isBusy}
+									className="group overflow-hidden rounded-md border bg-background text-left transition-colors hover:border-foreground/30 disabled:cursor-not-allowed disabled:opacity-60"
+									onClick={() => onCreateFromTemplate(template)}
+								>
+									<div className="aspect-page overflow-hidden border-b bg-white">
+										<TemplateThumbnail template={template} label={metadata.name} />
+									</div>
+
+									<div className="space-y-2 p-3">
+										<div className="flex items-start justify-between gap-2">
+											<h4 className="line-clamp-1 font-semibold text-sm">{metadata.name}</h4>
+											<Badge variant="secondary" className="shrink-0 text-[11px]">
+												PDF
+											</Badge>
+										</div>
+										<p className="line-clamp-2 min-h-10 text-muted-foreground text-xs leading-relaxed">
+											{i18n.t(metadata.description)}
+										</p>
+										<div className="flex flex-wrap gap-1">
+											{metadata.tags.slice(0, 3).map((tag) => (
+												<Badge key={tag} variant="secondary" className="text-[11px]">
+													{tag}
+												</Badge>
+											))}
+										</div>
+										<div className="pt-1 font-medium text-primary text-xs group-hover:underline">
+											<Trans>用此模板创建空白简历</Trans>
+										</div>
+									</div>
+								</button>
+							);
+						})}
+					</div>
+				</section>
+
+				<section className="space-y-3">
+					<div className="flex flex-col gap-1">
+						<h3 className="font-semibold text-sm">
+							<Trans>从成品样张开始</Trans>
+							<span className="ms-2 text-muted-foreground">({resumeTemplateStarters.length} 套)</span>
+						</h3>
+						<p className="text-muted-foreground text-sm">
+							<Trans>这些是带中文候选人内容的示例，适合想先看完整填写效果再替换内容的用户。</Trans>
+						</p>
+					</div>
+
+					<div className="grid max-h-[34svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-4">
 						{resumeTemplateStarters.map((starter) => (
 							<button
 								key={starter.id}
@@ -169,8 +250,12 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 											</Badge>
 										))}
 									</div>
+									<p className="text-[11px] text-muted-foreground">
+										<Trans>实际生成：</Trans>
+										{templates[starter.template].name}
+									</p>
 									<div className="pt-1 font-medium text-primary text-xs group-hover:underline">
-										<Trans>套用并替换内容</Trans>
+										<Trans>套用样张并替换内容</Trans>
 									</div>
 								</div>
 							</button>

@@ -18,14 +18,14 @@ afterEach(() => {
 describe("CreateResumeCard", () => {
 	it("renders the create-resume copy", () => {
 		render(<CreateResumeCard />);
-		expect(screen.getByText("从成品模板开始")).toBeInTheDocument();
-		expect(screen.getByText("先套中文样张，再替换内容")).toBeInTheDocument();
+		expect(screen.getByText("选择模板创建")).toBeInTheDocument();
+		expect(screen.getByText("先选真实模板，再填写内容")).toBeInTheDocument();
 	});
 
 	it("opens the resume.create dialog when clicked", () => {
 		render(<CreateResumeCard />);
 
-		const card = screen.getByText("从成品模板开始").closest("div[class*='aspect-page']") as HTMLElement;
+		const card = screen.getByText("选择模板创建").closest("div[class*='aspect-page']") as HTMLElement;
 		fireEvent.click(card);
 
 		const state = useDialogStore.getState();
