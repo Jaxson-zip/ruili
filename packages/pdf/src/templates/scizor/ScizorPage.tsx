@@ -115,10 +115,11 @@ const useScizorTemplate = (): ScizorTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const muted = "#4D5968";
-		const divider = "#D2D8E0";
-		const softLine = "#E7EBF0";
-		const headerSurface = "#FAFAF8";
+		const secondaryText = "#4D5968";
+		const divider = "#C4CCD7";
+		const softLine = "#E5E9EF";
+		const headerSurface = "#FFFFFF";
+		const contactSurface = "#F4F6F9";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 		const bodyText = {
@@ -136,7 +137,7 @@ const useScizorTemplate = (): ScizorTemplate => {
 				backgroundColor: background,
 				paddingHorizontal: metrics.page.paddingHorizontal,
 				paddingVertical: metrics.page.paddingVertical,
-				rowGap: metrics.headerGap * 0.85,
+				rowGap: metrics.headerGap * 0.78,
 				fontFamily: metadata.typography.body.fontFamily,
 				fontSize: metadata.typography.body.fontSize,
 				lineHeight: metadata.typography.body.lineHeight,
@@ -166,7 +167,7 @@ const useScizorTemplate = (): ScizorTemplate => {
 			},
 			small: {
 				fontSize: metadata.typography.body.fontSize * 0.875,
-				color: muted,
+				color: secondaryText,
 			},
 			bold: {
 				fontWeight: metadata.typography.body.fontWeights.at(-1) ?? "700",
@@ -202,25 +203,31 @@ const useScizorTemplate = (): ScizorTemplate => {
 			},
 			section: {
 				flexDirection: "column",
-				rowGap: metrics.gapY(0.31),
+				rowGap: metrics.gapY(0.28),
 			},
 			sectionHeading: {
 				color: foreground,
 				fontSize: metadata.typography.heading.fontSize * 0.9,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
-				borderLeftWidth: 2.6,
+				backgroundColor: "#F7F9FB",
+				borderLeftWidth: 3,
 				borderLeftColor: primary,
+				borderTopWidth: 0,
 				borderBottomWidth: 0.45,
 				borderBottomColor: softLine,
-				paddingLeft: metrics.gapX(0.36),
-				paddingBottom: metrics.gapY(0.16),
+				paddingLeft: metrics.gapX(0.38),
+				paddingTop: metrics.gapY(0.18),
+				paddingBottom: metrics.gapY(0.18),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(0.32),
+				rowGap: metrics.gapY(0.3),
 			},
 			item: {
-				rowGap: metrics.gapY(0.13),
+				rowGap: metrics.gapY(0.14),
+				borderBottomWidth: 0.35,
+				borderBottomColor: softLine,
+				paddingBottom: metrics.gapY(0.2),
 			},
 			levelContainer: {
 				width: "100%",
@@ -236,13 +243,13 @@ const useScizorTemplate = (): ScizorTemplate => {
 				alignItems: "flex-start",
 				columnGap: metrics.gapX(1),
 				backgroundColor: headerSurface,
-				borderLeftWidth: 3.2,
-				borderLeftColor: primary,
-				borderBottomWidth: 0.65,
+				borderTopWidth: 4.6,
+				borderTopColor: primary,
+				borderBottomWidth: 1,
 				borderBottomColor: divider,
-				paddingHorizontal: metrics.gapX(0.58),
-				paddingTop: metrics.gapY(0.42),
-				paddingBottom: metrics.gapY(0.52),
+				paddingHorizontal: metrics.gapX(0.66),
+				paddingTop: metrics.gapY(0.5),
+				paddingBottom: metrics.gapY(0.58),
 			},
 			headerIdentity: {
 				flex: 1,
@@ -251,26 +258,31 @@ const useScizorTemplate = (): ScizorTemplate => {
 			},
 			headerName: {
 				color: foreground,
-				fontSize: metadata.typography.heading.fontSize * 1.54,
+				fontSize: metadata.typography.heading.fontSize * 1.82,
 				lineHeight: headerNameLineHeight,
 			},
 			headerNameRule: {
-				display: "none",
+				width: 78,
+				height: 3,
+				backgroundColor: primary,
 			},
 			headerHeadline: {
-				color: muted,
+				color: secondaryText,
 			},
 			headerContactRow: {
 				flexDirection: r.row,
 				flexWrap: "wrap",
-				rowGap: metrics.gapY(0.125),
-				columnGap: metrics.gapX(0.55),
+				rowGap: metrics.gapY(0.16),
+				columnGap: metrics.gapX(0.38),
 			},
 			headerContactItem: {
 				flexDirection: r.row,
 				alignItems: "center",
 				columnGap: metrics.gapX(1 / 6),
-				color: muted,
+				backgroundColor: contactSurface,
+				paddingHorizontal: metrics.gapX(0.28),
+				paddingVertical: metrics.gapY(0.08),
+				color: secondaryText,
 			},
 			picture: {
 				width: Math.min(picture.size, 58),

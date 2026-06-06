@@ -275,12 +275,14 @@ const useOnyxTemplate = (): OnyxTemplate => {
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
 		const softText = "#5C6878";
-		const hairline = "#D6DCE5";
-		const headerSurface = "#202A37";
+		const hairline = "#CFD6E0";
+		const headerSurface = "#182230";
 		const headerText = "#FFFFFF";
-		const headerMuted = "#D9E0EA";
-		const headerDivider = "#778394";
-		const sidebarBackground = "#F9FAFC";
+		const headerMuted = "#E6ECF4";
+		const headerDivider = "#627184";
+		const headerChip = "#243144";
+		const sidebarBackground = "#F5F7FA";
+		const itemDivider = "#E8ECF2";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 
@@ -299,7 +301,7 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				backgroundColor: background,
 				paddingHorizontal: metrics.page.paddingHorizontal,
 				paddingVertical: metrics.page.paddingVertical,
-				rowGap: metrics.gapY(0.95),
+				rowGap: metrics.gapY(0.82),
 				fontFamily: metadata.typography.body.fontFamily,
 				fontSize: metadata.typography.body.fontSize,
 				lineHeight: Math.min(metadata.typography.body.lineHeight, 1.42),
@@ -371,23 +373,26 @@ const useOnyxTemplate = (): OnyxTemplate => {
 			},
 			sectionHeading: {
 				color: foreground,
-				borderLeftWidth: 2.4,
+				backgroundColor: "#F7F9FC",
+				borderLeftWidth: 3,
 				borderLeftColor: primary,
+				borderTopWidth: 0,
 				borderBottomWidth: 0.45,
 				borderBottomColor: hairline,
 				fontSize: metadata.typography.heading.fontSize * 0.9,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
 				lineHeight: 1.22,
-				paddingLeft: metrics.gapX(0.36),
-				paddingBottom: metrics.gapY(0.16),
+				paddingLeft: metrics.gapX(0.38),
+				paddingTop: metrics.gapY(0.18),
+				paddingBottom: metrics.gapY(0.18),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
 				rowGap: metrics.gapY(0.32),
 			},
 			item: {
-				rowGap: metrics.gapY(0.13),
-				paddingBottom: metrics.gapY(0.12),
+				rowGap: metrics.gapY(0.15),
+				paddingBottom: metrics.gapY(0.22),
 			},
 			levelContainer: {
 				display: "none",
@@ -401,12 +406,12 @@ const useOnyxTemplate = (): OnyxTemplate => {
 			header: {
 				position: "relative",
 				alignItems: "flex-start",
-				rowGap: metrics.gapY(0.28),
+				rowGap: metrics.gapY(0.36),
 				backgroundColor: headerSurface,
 				borderBottomWidth: 0,
-				paddingHorizontal: metrics.gapX(0.72),
-				paddingTop: metrics.gapY(0.52),
-				paddingBottom: metrics.gapY(0.58),
+				paddingHorizontal: metrics.gapX(0.82),
+				paddingTop: metrics.gapY(0.62),
+				paddingBottom: metrics.gapY(0.7),
 			},
 			headerIdentity: {
 				alignItems: "flex-start",
@@ -414,13 +419,13 @@ const useOnyxTemplate = (): OnyxTemplate => {
 			},
 			headerName: {
 				color: headerText,
-				fontSize: metadata.typography.heading.fontSize * 1.56,
+				fontSize: metadata.typography.heading.fontSize * 1.78,
 				lineHeight: headerNameLineHeight,
 				textAlign: "left",
 			},
 			headerHeadline: {
 				color: headerMuted,
-				fontSize: metadata.typography.body.fontSize * 0.96,
+				fontSize: metadata.typography.body.fontSize * 1,
 				textAlign: "left",
 			},
 			picture: {
@@ -442,13 +447,16 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				flexDirection: r.row,
 				flexWrap: "wrap",
 				justifyContent: "flex-start",
-				rowGap: metrics.gapY(0.1),
-				columnGap: metrics.gapX(0.3),
+				rowGap: metrics.gapY(0.16),
+				columnGap: metrics.gapX(0.34),
 			},
 			contactItem: {
 				flexDirection: r.row,
 				alignItems: "center",
-				columnGap: metrics.gapX(0.3),
+				columnGap: metrics.gapX(0.28),
+				backgroundColor: headerChip,
+				paddingHorizontal: metrics.gapX(0.28),
+				paddingVertical: metrics.gapY(0.08),
 			},
 			contactText: {
 				color: headerMuted,
@@ -494,10 +502,10 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				fontSize: metadata.typography.body.fontSize * 0.92,
 			},
 			compactProjectItem: {
-				rowGap: metrics.gapY(0.08),
-				paddingBottom: metrics.gapY(0.24),
-				borderBottomWidth: 0.35,
-				borderBottomColor: hairline,
+				rowGap: metrics.gapY(0.1),
+				paddingBottom: metrics.gapY(0.28),
+				borderBottomWidth: 0.45,
+				borderBottomColor: itemDivider,
 			},
 			compactProjectTitle: {
 				...bodyText,
@@ -524,8 +532,8 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				borderLeftColor: hairline,
 				borderRightWidth: rtl ? 0.8 : 0,
 				borderRightColor: hairline,
-				paddingHorizontal: metrics.gapX(0.7),
-				paddingVertical: metrics.gapY(0.65),
+				paddingHorizontal: metrics.gapX(0.74),
+				paddingVertical: metrics.gapY(0.72),
 			},
 		});
 
@@ -555,7 +563,7 @@ const useOnyxTemplate = (): OnyxTemplate => {
 				item: (context) => ({
 					...baseStyles.item,
 					...(context.placement === "main"
-						? { borderBottomWidth: 0.25, borderBottomColor: "#EDF0F4" }
+						? { borderBottomWidth: 0.35, borderBottomColor: itemDivider }
 						: { paddingBottom: 0 }),
 				}),
 				splitRow: (context) => ({

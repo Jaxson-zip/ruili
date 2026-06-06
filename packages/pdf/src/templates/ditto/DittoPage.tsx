@@ -125,9 +125,10 @@ const useDittoTemplate = (): DittoTemplate => {
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
 		const muted = "#3E4958";
-		const hairline = "#CBD2DC";
-		const softLine = "#E7EBF0";
-		const headerSurface = "#FAFBFC";
+		const hairline = "#B8C0CC";
+		const softLine = "#E3E7ED";
+		const headerSurface = "#F5F7FA";
+		const itemSurface = "#FCFDFE";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
 
@@ -146,7 +147,7 @@ const useDittoTemplate = (): DittoTemplate => {
 				backgroundColor: background,
 				paddingHorizontal: metrics.page.paddingHorizontal,
 				paddingVertical: metrics.page.paddingVertical,
-				rowGap: metrics.headerGap * 0.66,
+				rowGap: metrics.headerGap * 0.72,
 				fontFamily: metadata.typography.body.fontFamily,
 				fontSize: metadata.typography.body.fontSize,
 				lineHeight: metadata.typography.body.lineHeight,
@@ -217,21 +218,26 @@ const useDittoTemplate = (): DittoTemplate => {
 			},
 			sectionHeading: {
 				color: foreground,
-				borderLeftWidth: 2.2,
+				backgroundColor: "#FFFFFF",
+				borderLeftWidth: 3.2,
 				borderLeftColor: primary,
-				borderBottomWidth: 0.45,
-				borderBottomColor: softLine,
+				borderBottomWidth: 0.8,
+				borderBottomColor: hairline,
 				fontSize: metadata.typography.heading.fontSize * 0.9,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
-				paddingLeft: metrics.gapX(0.34),
-				paddingBottom: metrics.gapY(0.16),
+				paddingLeft: metrics.gapX(0.42),
+				paddingBottom: metrics.gapY(0.2),
 				textAlign: r.sectionHeadingTextAlign,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(0.32),
+				rowGap: metrics.gapY(0.28),
 			},
 			item: {
-				rowGap: metrics.gapY(0.12),
+				rowGap: metrics.gapY(0.14),
+				backgroundColor: itemSurface,
+				borderBottomWidth: 0.35,
+				borderBottomColor: softLine,
+				paddingBottom: metrics.gapY(0.2),
 			},
 			levelContainer: {
 				width: "100%",
@@ -243,15 +249,17 @@ const useDittoTemplate = (): DittoTemplate => {
 				backgroundColor: primary,
 			},
 			header: {
-				rowGap: metrics.gapY(0.3),
+				rowGap: metrics.gapY(0.36),
 				backgroundColor: headerSurface,
-				borderLeftWidth: 3,
+				borderTopWidth: 4.2,
+				borderTopColor: primary,
+				borderLeftWidth: 0,
 				borderLeftColor: primary,
-				borderBottomWidth: 0.65,
+				borderBottomWidth: 1,
 				borderBottomColor: hairline,
-				paddingHorizontal: metrics.gapX(0.52),
-				paddingTop: metrics.gapY(0.38),
-				paddingBottom: metrics.gapY(0.46),
+				paddingHorizontal: metrics.gapX(0.66),
+				paddingTop: metrics.gapY(0.46),
+				paddingBottom: metrics.gapY(0.52),
 			},
 			headerTop: {
 				flexDirection: r.row,
@@ -265,13 +273,13 @@ const useDittoTemplate = (): DittoTemplate => {
 				rowGap: metrics.gapY(0.18),
 			},
 			headerName: {
-				fontSize: metadata.typography.heading.fontSize * 1.5,
+				fontSize: metadata.typography.heading.fontSize * 1.72,
 				lineHeight: headerNameLineHeight,
 				color: foreground,
 			},
 			headerHeadline: {
 				color: muted,
-				fontSize: metadata.typography.body.fontSize * 1.02,
+				fontSize: metadata.typography.body.fontSize * 1.05,
 			},
 			picture: {
 				width: Math.min(picture.size, 48),
@@ -288,8 +296,11 @@ const useDittoTemplate = (): DittoTemplate => {
 			contactList: {
 				flexDirection: r.row,
 				flexWrap: "wrap",
-				rowGap: metrics.gapY(0.12),
-				columnGap: metrics.gapX(0.62),
+				rowGap: metrics.gapY(0.16),
+				columnGap: metrics.gapX(0.72),
+				borderTopWidth: 0.45,
+				borderTopColor: softLine,
+				paddingTop: metrics.gapY(0.28),
 			},
 			contactItem: {
 				flexDirection: r.row,
@@ -298,7 +309,7 @@ const useDittoTemplate = (): DittoTemplate => {
 				color: muted,
 			},
 			sectionGroup: {
-				rowGap: metrics.sectionGap * 0.86,
+				rowGap: metrics.sectionGap * 0.78,
 			},
 			sidebarGroup: {
 				borderTopWidth: 0.7,

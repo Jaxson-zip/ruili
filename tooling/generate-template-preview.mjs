@@ -29,6 +29,13 @@ const starterNames = {
 	product: "产品经理成品样张",
 };
 
+const defaultStarterByTemplate = {
+	azurill: "product",
+	ditto: "campus",
+	onyx: "frontend",
+	scizor: "growth",
+};
+
 function getRequiredName(names, id, label) {
 	const name = names[id];
 	if (!name) throw new Error(`Unknown ${label}: ${id}`);
@@ -43,7 +50,7 @@ const chromiumPath =
 
 const targetTemplateId = process.env.TEMPLATE_ID ?? "onyx";
 const targetTemplateName = process.env.TEMPLATE_NAME ?? getRequiredName(templateNames, targetTemplateId, "TEMPLATE_ID");
-const starterId = process.env.STARTER_ID ?? "frontend";
+const starterId = process.env.STARTER_ID ?? defaultStarterByTemplate[targetTemplateId] ?? "frontend";
 const starterName = process.env.STARTER_NAME ?? getRequiredName(starterNames, starterId, "STARTER_ID");
 const runId = Date.now();
 const email = `codex.preview.${runId}@example.com`;
