@@ -25,10 +25,13 @@ echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 不要直接使用 `.env.example` 启动生产服务。推荐先用正式 HTTPS 域名生成一份生产环境变量：
 
 ```bash
+pnpm deploy:runbook --app-url https://resume.example.com --output docs/self-hosting/generated-vps-runbook.md
 pnpm deploy:init --app-url https://resume.example.com --output .env.production
 pnpm deploy:check .env.production
 docker compose -f compose.yml --env-file .env.production config --quiet
 ```
+
+`deploy:runbook` 会按你的域名生成一份不含密钥的 VPS 首次上线清单，包含 DNS、防火墙、Caddy/Nginx 反代示例、上线验收、备份、更新和回滚命令。真正的 `.env.production` 仍然用 `deploy:init` 在部署机器上生成。
 
 这个命令会自动生成强随机的 `POSTGRES_PASSWORD`、`AUTH_SECRET`、`ENCRYPTION_SECRET`、SeaweedFS / S3 密钥，并写好匹配的 `DATABASE_URL`。
 

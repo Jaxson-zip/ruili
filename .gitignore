@@ -38,6 +38,10 @@ coverage
 reports
 artifacts
 
+# Deployment Outputs
+backups
+docs/self-hosting/generated-vps-runbook.md
+
 # Cache
 tmp
 temp
