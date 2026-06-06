@@ -10,7 +10,6 @@ import { BuilderDock } from "./dock";
 import { DEFAULT_BUILDER_PREVIEW_PAGE_LAYOUT, getNextBuilderPreviewPageLayout } from "./page-layout";
 import { getBuilderPreviewInitialScale } from "./preview-scale";
 import { BuilderQuickEditPanel } from "./quick-edit-panel";
-import { BuilderQuickEditRail } from "./quick-edit-rail";
 
 export function PreviewPage() {
 	const [pageLayout, setPageLayout] = useState(DEFAULT_BUILDER_PREVIEW_PAGE_LAYOUT);
@@ -35,7 +34,6 @@ export function PreviewPage() {
 						<BuilderClickableResumePreview showPageNumbers pageLayout={pageLayout} />
 					</TransformComponent>
 
-					<BuilderQuickEditRail />
 					<BuilderQuickEditPanel />
 
 					<BuilderDock

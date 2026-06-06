@@ -627,9 +627,11 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 			},
 			contentRow: {
 				flexDirection: r.row,
-				alignItems: "flex-start",
+				alignItems: "stretch",
+				minHeight: "100%",
 			},
 			sidebarColumn: {
+				alignSelf: "stretch",
 				backgroundColor: sidebarBackground,
 				paddingHorizontal: metrics.gapX(0.78),
 				paddingVertical: metrics.gapY(0.88),

@@ -110,6 +110,9 @@ const baseResumeTemplateStarters = [
 		tags: ["技术岗", "前端", "React", "项目成果"],
 		template: "collection005",
 		build: (data) => {
+			const experience = first(data.sections.experience.items);
+			const project = first(data.sections.projects.items);
+
 			data.basics.name = "陈嘉铭";
 			data.basics.headline = "前端开发工程师 | React 与工程化方向";
 			data.basics.email = "jiaming.chen@example.com";
@@ -137,8 +140,61 @@ const baseResumeTemplateStarters = [
 					label: "juejin.cn/user/chenjiaming",
 				},
 			]);
+			data.summary.content =
+				"<p><strong>5 年前端开发经验，长期负责 B 端产品、组件体系和前端工程化建设</strong>。熟悉 React、TypeScript、TanStack Query、可视化和复杂表单场景，能够从业务目标出发拆解需求，推动设计、后端和测试协作交付。关注页面性能、可维护性、工程规范和用户体验，习惯用数据指标复盘交付结果。</p>";
+			data.sections.experience.items = [
+				{
+					...experience,
+					company: "字节跳动",
+					position: "前端开发工程师",
+					location: "上海",
+					period: "2022 年 3 月 - 至今",
+					description:
+						"<ul><li><p>负责内容运营后台核心模块，使用 React、TypeScript 和 TanStack Query 搭建可复用的数据录入、审核和发布流程</p></li><li><p>主导组件抽象和表单校验规范，将同类页面开发周期缩短 35%，减少重复代码和线上回归问题</p></li><li><p>优化首屏资源加载、权限预取和列表虚拟滚动，核心页面 LCP 降低 42%，千级数据滚动保持稳定</p></li><li><p>与产品、设计、后端和测试协作推进需求评审，沉淀接口契约、灰度发布和前端自测清单</p></li></ul>",
+				},
+				{
+					...experience,
+					id: "frontend-experience-ctrip",
+					company: "携程旅行",
+					position: "前端开发工程师",
+					location: "上海",
+					period: "2020 年 6 月 - 2022 年 2 月",
+					description:
+						"<ul><li><p>参与酒店供应链管理后台开发，负责列表检索、批量操作、权限控制和数据可视化模块</p></li><li><p>封装通用筛选器、表格操作和异常提示组件，支撑 10+ 个业务页面复用</p></li><li><p>配合后端完善接口字段校验与错误提示，降低运营同学误操作成本，并沉淀监控告警处理流程</p></li></ul>",
+				},
+			];
+			data.sections.projects.items = [
+				{
+					...project,
+					id: "frontend-project-component-platform",
+					name: "企业级组件库与表单平台",
+					period: "2023 - 至今",
+					description:
+						"<ul><li><p>负责 React 组件库、表单引擎、校验规则和主题能力建设，支撑运营后台 40+ 页面复用</p></li><li><p>通过统一交互状态、错误提示和埋点规范，将新页面交付周期缩短 35%，表单线上问题下降 28%</p></li></ul>",
+				},
+				{
+					...project,
+					id: "frontend-project-data-dashboard",
+					name: "内容运营数据工作台",
+					period: "2022 - 2023",
+					description:
+						"<ul><li><p>使用 TypeScript、TanStack Query 和 ECharts 搭建多维筛选、趋势分析和异常归因页面</p></li><li><p>优化接口缓存、权限预取和虚拟滚动，核心报表首屏加载时间从 3.8s 降至 1.9s</p></li></ul>",
+				},
+				{
+					...project,
+					id: "frontend-project-engineering",
+					name: "前端工程化与质量体系",
+					period: "2021 - 2022",
+					description:
+						"<ul><li><p>落地 ESLint、Vitest、Storybook 与发布检查清单，覆盖组件回归、接口联调和灰度验证流程</p></li><li><p>推动公共 hooks、权限指令和请求封装沉淀，减少重复实现并提升新人接手效率</p></li></ul>",
+				},
+			];
 			setOnePageLayout(data, ["summary", "experience", "projects"], ["profiles", "skills", "education"], 30);
 			data.metadata.design.colors.primary = "rgba(31, 58, 95, 1)";
+			data.metadata.typography.body.fontSize = 10.4;
+			data.metadata.typography.body.lineHeight = 1.42;
+			data.metadata.typography.heading.fontSize = 12.6;
+			data.metadata.typography.heading.lineHeight = 1.34;
 			data.metadata.typography.body.fontFamily = "Noto Sans SC";
 			data.metadata.typography.heading.fontFamily = "Noto Sans SC";
 		},
@@ -451,8 +507,8 @@ const starterVariants = [
 		resumeName: "前端开发-一页投递版",
 		description: "保留前端工程师完整内容，切换为更紧凑的一页横栏版式，适合网申和 PDF 投递。",
 		tags: ["技术岗", "前端", "一页版", "网申"],
-		template: "collection020",
-		primaryColor: "rgba(31, 58, 95, 1)",
+		template: "collection026",
+		primaryColor: "rgba(232, 137, 43, 1)",
 		main: ["summary", "experience", "projects", "education", "skills", "profiles"],
 		sidebar: [],
 	}),

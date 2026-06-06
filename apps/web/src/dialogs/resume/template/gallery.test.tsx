@@ -57,8 +57,8 @@ describe("TemplateGalleryDialog", () => {
 		expect(screen.queryByText("外部模板参考（待制作）")).toBeNull();
 		expect(screen.queryByText("线上风格灵感（仅参考）")).toBeNull();
 		expect(screen.getByRole("img", { name: "蓝色二维码栏" })).toBeInTheDocument();
-		expect(screen.queryByRole("img", { name: "蓝色块面" })).toBeNull();
-		expect(screen.queryByRole("img", { name: "深灰橙色" })).toBeNull();
+		expect(screen.getByRole("img", { name: "蓝色块面" })).toBeInTheDocument();
+		expect(screen.getByRole("img", { name: "深灰橙色" })).toBeInTheDocument();
 		expect(screen.queryByRole("button", { name: "套用相近版式：001 蓝色时间轴" })).toBeNull();
 		expect(screen.queryByText("仅参考")).toBeNull();
 		expect(screen.queryByText(/待重做参考/)).toBeNull();
@@ -76,13 +76,13 @@ describe("TemplateGalleryDialog", () => {
 		expect(card).toHaveTextContent("参考传统中文招聘模板");
 	});
 
-	it("keeps the launch gallery focused on curated templates", () => {
+	it("keeps the launch gallery focused on real exportable templates", () => {
 		renderGallery();
 
 		expect(screen.getByText("精品可导出模板")).toBeInTheDocument();
 		expect(screen.getAllByText(`${primaryTemplateIds.length} 个`).length).toBeGreaterThan(0);
 		expect(screen.queryByText("更多可导出模板")).toBeNull();
-		expect(screen.queryByRole("img", { name: "深灰蓝栏" })).toBeNull();
+		expect(screen.getByRole("img", { name: "深灰蓝栏" })).toBeInTheDocument();
 	});
 
 	it("filters templates and styles with search", () => {

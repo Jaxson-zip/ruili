@@ -65,6 +65,19 @@ describe("resumeTemplateStarters", () => {
 		}
 	});
 
+	it("keeps the default frontend starter dense enough for a one-page launch sample", () => {
+		const frontendStarter = resumeTemplateStarters.find((starter) => starter.id === "frontend-engineer");
+
+		expect(frontendStarter).toBeDefined();
+		expect(frontendStarter?.data.sections.experience.items).toHaveLength(2);
+		expect(frontendStarter?.data.sections.projects.items.length).toBeGreaterThanOrEqual(3);
+		for (const project of frontendStarter?.data.sections.projects.items ?? []) {
+			expect(project.description).toContain("<ul>");
+			expect(project.description).toContain("<li>");
+		}
+		expect(frontendStarter?.data.metadata.layout.pages[0]?.main).toEqual(["summary", "experience", "projects"]);
+	});
+
 	it("does not leak frontend sample identity into other starters", () => {
 		const leakedFrontendTerms = ["陈嘉铭", "chenjiaming", "jiaming.dev", "字节跳动"];
 

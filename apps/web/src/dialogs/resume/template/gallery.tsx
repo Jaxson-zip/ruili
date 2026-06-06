@@ -145,19 +145,11 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 	const hiddenSystemTemplateCount = allSystemTemplateIds.filter((template) =>
 		hiddenSystemTemplates.includes(template),
 	).length;
-	const secondaryTemplateIds = [] as const satisfies readonly Template[];
 	const getVisibleTemplates = (templateIds: readonly Template[]) =>
 		templateIds
 			.map((template) => [template, templates[template]] as const)
 			.filter(([template]) => !hiddenSystemTemplates.includes(template));
 	const visiblePrimaryTemplates = getVisibleTemplates(primaryTemplateIds).filter(([, metadata]) =>
-		matchesTemplateFilter(
-			[metadata.name, metadata.audience, metadata.description.message, ...metadata.tags],
-			activeFilter,
-			searchQuery,
-		),
-	);
-	const visibleSecondaryTemplates = getVisibleTemplates(secondaryTemplateIds).filter(([, metadata]) =>
 		matchesTemplateFilter(
 			[metadata.name, metadata.audience, metadata.description.message, ...metadata.tags],
 			activeFilter,
@@ -173,7 +165,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 			searchQuery,
 		);
 	});
-	const resultCount = visiblePrimaryTemplates.length + visibleSecondaryTemplates.length + visibleCustomPresets.length;
+	const resultCount = visiblePrimaryTemplates.length + visibleCustomPresets.length;
 
 	return (
 		<DialogContent className="lg:max-w-6xl">
@@ -233,7 +225,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 
 				<div className="flex flex-wrap gap-2 text-xs">
 					<Badge variant="secondary">可导出模板 {allSystemTemplateIds.length - hiddenSystemTemplateCount} 个</Badge>
-					<Badge variant="secondary">首批主推 {primaryTemplateIds.length} 个</Badge>
+					<Badge variant="secondary">可切换模板 {primaryTemplateIds.length} 个</Badge>
 					<Badge variant="secondary">保留简历内容</Badge>
 					<Badge variant="secondary">Word 模板保留原样式</Badge>
 				</div>
@@ -269,7 +261,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 							description={
 								hiddenSystemTemplateCount > 0
 									? `已隐藏 ${hiddenSystemTemplateCount} 个系统模板，可在右上角恢复。`
-									: "首批上线只主推真实可导出的模板，预览效果和 PDF 导出保持一致。"
+									: "这里保留真实可导出的中文模板，预览效果和 PDF 导出保持一致。"
 							}
 						/>
 						<div className="grid grid-cols-1 xs:grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">

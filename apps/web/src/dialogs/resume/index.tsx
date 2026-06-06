@@ -143,7 +143,7 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 					<Trans>新建简历</Trans>
 				</DialogTitle>
 				<DialogDescription>
-					<Trans>选一个接近目标岗位的中文样张，创建后直接替换内容。</Trans>
+					<Trans>先选一份接近目标岗位的成品样张，进去后直接改内容。</Trans>
 				</DialogDescription>
 			</DialogHeader>
 
@@ -162,7 +162,7 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 							<span className="ms-2 text-muted-foreground">({launchStarters.length} 套)</span>
 						</h3>
 						<p className="text-muted-foreground text-sm">
-							<Trans>先选一份完整中文样张，进去替换内容。想从零开始，可以展开空白模板入口。</Trans>
+							<Trans>默认只展示可直接投递的中文样张。空白模板放在下方高级入口。</Trans>
 						</p>
 					</div>
 
@@ -185,23 +185,21 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 								</div>
 
 								<div className="space-y-2 p-3">
-									<h4 className="line-clamp-1 font-semibold text-sm">{starter.name}</h4>
-									<p className="line-clamp-2 min-h-10 text-muted-foreground text-xs leading-relaxed">
+									<div className="flex items-start justify-between gap-2">
+										<h4 className="line-clamp-1 font-semibold text-sm">{starter.name}</h4>
+										<Badge variant="secondary" className="shrink-0 text-[11px]">
+											PDF
+										</Badge>
+									</div>
+									<p className="line-clamp-2 min-h-9 text-muted-foreground text-xs leading-relaxed">
 										{starter.description}
 									</p>
-									<div className="flex flex-wrap gap-1">
+									<div className="flex min-h-6 flex-wrap gap-1">
 										{starter.tags.slice(0, 3).map((tag) => (
 											<Badge key={tag} variant="secondary" className="text-[11px]">
 												{tag}
 											</Badge>
 										))}
-									</div>
-									<p className="text-[11px] text-muted-foreground">
-										<Trans>推荐版式：</Trans>
-										{templates[starter.template].name}
-									</p>
-									<div className="pt-1 font-medium text-primary text-xs group-hover:underline">
-										<Trans>套用样张并替换内容</Trans>
 									</div>
 								</div>
 							</button>

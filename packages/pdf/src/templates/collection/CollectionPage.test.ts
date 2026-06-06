@@ -26,4 +26,12 @@ describe("CollectionPage variants", () => {
 		expect(source).toContain('const isLeftBlock = variant.visualTreatment === "leftBlock"');
 		expect(source).toContain('const isContactBand = variant.visualTreatment === "contactBand"');
 	});
+
+	it("stretches sidebars to the page height so rendered PDFs match their previews", () => {
+		const source = readCollectionSource();
+
+		expect(source).toContain('alignItems: "stretch"');
+		expect(source).toContain('minHeight: "100%"');
+		expect(source).toContain('alignSelf: "stretch"');
+	});
 });
