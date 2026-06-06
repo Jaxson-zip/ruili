@@ -21,6 +21,9 @@ describe("CollectionPage variants", () => {
 		const source = readCollectionSource();
 
 		expect(source).toContain('visualTreatment?: "timelineStrip" | "leftBlock" | "contactBand"');
+		expect(source).toMatch(/collection007:[\s\S]*density: "compact"[\s\S]*sectionFrame: "boxed"/);
+		expect(source).toMatch(/collection018:[\s\S]*sidebarBackground: "#F3F4F6"/);
+		expect(source).toMatch(/collection020:[\s\S]*visualTreatment: "timelineStrip"/);
 		expect(source).toContain('visualTreatment: "timelineStrip"');
 		expect(source).toContain('visualTreatment: "leftBlock"');
 		expect(source).toContain('visualTreatment: "contactBand"');
@@ -33,10 +36,16 @@ describe("CollectionPage variants", () => {
 		const source = readCollectionSource();
 
 		expect(source).toContain('pageFrame?: "blueBorder"');
+		expect(source).toContain('headerMode?: "band" | "center" | "infoTable" | "pill" | "solidBand"');
+		expect(source).toMatch(/collection001:[\s\S]*headerMode: "infoTable"/);
+		expect(source).toMatch(/collection003:[\s\S]*headerMode: "solidBand"/);
+		expect(source).toMatch(/collection027:[\s\S]*headerMode: "infoTable"/);
 		expect(source).toMatch(/collection024:[\s\S]*pageFrame: "blueBorder"/);
 		expect(source).toMatch(/collection022:[\s\S]*visualTreatment: "timelineStrip"/);
 		expect(source).toMatch(/collection029:[\s\S]*referenceStyle: "qrSidebar"/);
 		expect(source).toContain('const hasBluePageFrame = variant.pageFrame === "blueBorder"');
+		expect(source).toContain('const isInfoTableHeader = variant.headerMode === "infoTable"');
+		expect(source).toContain('const isSolidBandHeader = variant.headerMode === "solidBand"');
 	});
 
 	it("stretches sidebars to the page height so rendered PDFs match their previews", () => {

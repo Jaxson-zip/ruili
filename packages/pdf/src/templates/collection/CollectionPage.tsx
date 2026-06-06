@@ -28,7 +28,7 @@ type CollectionVariant = {
 	fullBleedSidebar?: boolean;
 	headerBackground: string;
 	headerForeground: string;
-	headerMode?: "band" | "center" | "pill";
+	headerMode?: "band" | "center" | "infoTable" | "pill" | "solidBand";
 	headingBackground: string;
 	headingMode: "bar" | "tag" | "line";
 	forceSingleColumn?: boolean;
@@ -105,7 +105,7 @@ const variants = {
 		forceSingleColumn: true,
 		headerBackground: "#F6FAFB",
 		headerForeground: "#244957",
-		headerMode: "pill",
+		headerMode: "infoTable",
 		headingBackground: "#E9F2F4",
 		headingMode: "tag",
 	},
@@ -123,9 +123,9 @@ const variants = {
 		id: "collection003",
 		accent: "#28526F",
 		forceSingleColumn: true,
-		headerBackground: "#FFFFFF",
-		headerForeground: "#22313F",
-		headerMode: "band",
+		headerBackground: "#28526F",
+		headerForeground: "#FFFFFF",
+		headerMode: "solidBand",
 		headingBackground: "#EEF4F8",
 		headingMode: "bar",
 		sidebarBackground: "#15314D",
@@ -144,10 +144,12 @@ const variants = {
 	collection007: {
 		id: "collection007",
 		accent: "#1E91BE",
+		density: "compact",
 		headerBackground: "#FFFFFF",
 		headerForeground: "#22313F",
 		headingBackground: "#E7F6FB",
 		headingMode: "bar",
+		sectionFrame: "boxed",
 		sidebarBackground: "#37414C",
 		sidebarForeground: "#F8FAFC",
 	},
@@ -180,8 +182,8 @@ const variants = {
 		headerForeground: "#2F3842",
 		headingBackground: "#EEF0F2",
 		headingMode: "line",
-		sidebarBackground: "#33404F",
-		sidebarForeground: "#F8FAFC",
+		sidebarBackground: "#F3F4F6",
+		sidebarForeground: "#2F3842",
 	},
 	collection019: {
 		id: "collection019",
@@ -208,6 +210,7 @@ const variants = {
 		sidebarBackground: "#1F5F78",
 		sidebarForeground: "#F8FAFC",
 		fullBleedSidebar: true,
+		visualTreatment: "timelineStrip",
 	},
 	collection021: {
 		id: "collection021",
@@ -262,6 +265,7 @@ const variants = {
 		forceSingleColumn: true,
 		headerBackground: "#F8FCF9",
 		headerForeground: "#255C37",
+		headerMode: "infoTable",
 		headingBackground: "#EAF8EF",
 		headingMode: "tag",
 	},
@@ -355,14 +359,16 @@ const createCollectionPage =
 const FullHeader = ({ styles, variant }: HeaderProps) => {
 	const { basics, picture } = useRender();
 	const hasPicture = hasTemplatePicture(picture);
+	const badgeTitle =
+		variant.id === "collection001" || variant.headerMode === "pill"
+			? "\u6c42\u804c\u7b80\u5386"
+			: "\u4e2a\u4eba\u7b80\u5386";
 
 	return (
 		<View style={styles.header}>
-			{variant.headerMode ? (
+			{variant.headerMode && variant.headerMode !== "solidBand" ? (
 				<View style={styles.headerBadge}>
-					<Text style={styles.headerBadgeTitle}>
-						{variant.headerMode === "center" ? "\u4e2a\u4eba\u7b80\u5386" : "\u6c42\u804c\u7b80\u5386"}
-					</Text>
+					<Text style={styles.headerBadgeTitle}>{badgeTitle}</Text>
 					<Text style={styles.headerBadgeCaption}>PERSONAL RESUME</Text>
 				</View>
 			) : null}
@@ -486,6 +492,9 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 		const isTimelineStrip = variant.visualTreatment === "timelineStrip";
 		const isLeftBlock = variant.visualTreatment === "leftBlock";
 		const isContactBand = variant.visualTreatment === "contactBand";
+		const isInfoTableHeader = variant.headerMode === "infoTable";
+		const isSolidBandHeader = variant.headerMode === "solidBand";
+		const isDarkHeader = variant.referenceStyle === "blueBlocks" || isSolidBandHeader;
 		const sectionHeadingMainPaddingLeft =
 			variant.headingMode === "tag" ? metrics.gapX(0.42) : variant.headingMode === "bar" ? metrics.gapX(0.38) : 0;
 
@@ -666,34 +675,66 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 				flexDirection: r.row,
 				flexWrap: "wrap",
 				alignItems: "flex-start",
-				rowGap: metrics.gapY(isTight ? 0.16 : 0.28),
+				rowGap: metrics.gapY(isInfoTableHeader ? 0.2 : isTight ? 0.16 : 0.28),
 				columnGap: metrics.gapX(0.8),
-				backgroundColor: variant.referenceStyle === "blueBlocks" ? primary : variant.headerBackground,
-				borderTopWidth: variant.headerMode === "band" ? 8 : variant.headingMode === "line" ? 5 : 0,
+				backgroundColor: isDarkHeader ? primary : variant.headerBackground,
+				borderTopWidth: isSolidBandHeader
+					? 0
+					: variant.headerMode === "band"
+						? 8
+						: variant.headingMode === "line"
+							? 5
+							: 0,
 				borderTopColor: variant.referenceStyle === "blueBlocks" ? primary : primary,
-				borderBottomWidth: variant.referenceStyle === "blueBlocks" ? 0 : 2,
+				borderBottomWidth: isDarkHeader ? 0 : isInfoTableHeader ? 1.2 : 2,
 				borderBottomColor: primary,
 				paddingHorizontal: metrics.gapX(variant.referenceStyle === "blueBlocks" ? 1.0 : 0.7),
-				paddingTop: metrics.gapY(variant.referenceStyle === "blueBlocks" ? 1.0 : isTight ? 0.3 : 0.52),
-				paddingBottom: metrics.gapY(variant.referenceStyle === "blueBlocks" ? 0.92 : isTight ? 0.3 : 0.54),
+				paddingTop: metrics.gapY(
+					variant.referenceStyle === "blueBlocks"
+						? 1.0
+						: isSolidBandHeader
+							? 0.74
+							: isInfoTableHeader
+								? 0.34
+								: isTight
+									? 0.3
+									: 0.52,
+				),
+				paddingBottom: metrics.gapY(
+					variant.referenceStyle === "blueBlocks"
+						? 0.92
+						: isSolidBandHeader
+							? 0.74
+							: isInfoTableHeader
+								? 0.34
+								: isTight
+									? 0.3
+									: 0.54,
+				),
 			},
 			headerBadge: {
 				width: "100%",
 				alignItems: variant.headerMode === "center" ? "center" : "flex-start",
-				backgroundColor: variant.headerMode === "pill" ? primary : "transparent",
-				borderRadius: variant.headerMode === "pill" ? 14 : 0,
-				paddingHorizontal: variant.headerMode === "pill" ? metrics.gapX(0.58) : 0,
-				paddingVertical: variant.headerMode === "pill" ? metrics.gapY(0.12) : 0,
+				backgroundColor: variant.headerMode === "infoTable" || variant.headerMode === "pill" ? primary : "transparent",
+				borderRadius: variant.headerMode === "infoTable" || variant.headerMode === "pill" ? 14 : 0,
+				paddingHorizontal: variant.headerMode === "infoTable" || variant.headerMode === "pill" ? metrics.gapX(0.58) : 0,
+				paddingVertical: variant.headerMode === "infoTable" || variant.headerMode === "pill" ? metrics.gapY(0.12) : 0,
 			},
 			headerBadgeTitle: {
-				color: variant.headerMode === "pill" || variant.referenceStyle === "blueBlocks" ? "#FFFFFF" : primary,
+				color:
+					variant.headerMode === "infoTable" || variant.headerMode === "pill" || variant.referenceStyle === "blueBlocks"
+						? "#FFFFFF"
+						: primary,
 				fontFamily: metadata.typography.heading.fontFamily,
 				fontSize: metadata.typography.heading.fontSize * 1.05,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
 				lineHeight: 1.1,
 			},
 			headerBadgeCaption: {
-				color: variant.headerMode === "pill" || variant.referenceStyle === "blueBlocks" ? "#DCEEEF" : muted,
+				color:
+					variant.headerMode === "infoTable" || variant.headerMode === "pill" || variant.referenceStyle === "blueBlocks"
+						? "#DCEEEF"
+						: muted,
 				fontSize: metadata.typography.body.fontSize * 0.64,
 				letterSpacing: 0,
 				lineHeight: 1.1,
@@ -704,12 +745,12 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 				rowGap: metrics.gapY(0.16),
 			},
 			headerName: {
-				color: variant.referenceStyle === "blueBlocks" ? "#FFFFFF" : variant.headerForeground,
-				fontSize: metadata.typography.heading.fontSize * (isTight ? 1.48 : 1.76),
+				color: isDarkHeader ? "#FFFFFF" : variant.headerForeground,
+				fontSize: metadata.typography.heading.fontSize * (isSolidBandHeader ? 1.88 : isTight ? 1.48 : 1.76),
 				lineHeight: headerNameLineHeight,
 			},
 			headerHeadline: {
-				color: variant.referenceStyle === "blueBlocks" ? "#EAF5FC" : muted,
+				color: isDarkHeader ? "#EAF5FC" : muted,
 			},
 			headerContactRow: {
 				flexDirection: r.row,
@@ -717,21 +758,34 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 				rowGap: metrics.gapY(0.14),
 				columnGap: metrics.gapX(0.32),
 				width: "100%",
+				backgroundColor: isInfoTableHeader ? variant.headingBackground : "transparent",
+				borderTopWidth: isInfoTableHeader ? 0.7 : 0,
+				borderTopColor: isInfoTableHeader ? primary : "transparent",
+				borderBottomWidth: isInfoTableHeader ? 0.45 : 0,
+				borderBottomColor: isInfoTableHeader ? subtle : "transparent",
+				paddingHorizontal: isInfoTableHeader ? metrics.gapX(0.34) : 0,
+				paddingVertical: isInfoTableHeader ? metrics.gapY(0.16) : 0,
 			},
 			headerContactItem: {
 				flexDirection: r.row,
 				alignItems: "center",
 				columnGap: metrics.gapX(0.16),
-				color: variant.referenceStyle === "blueBlocks" ? "#EAF5FC" : muted,
+				color: isDarkHeader ? "#EAF5FC" : isInfoTableHeader ? variant.headerForeground : muted,
 			},
 			picture: {
-				width: Math.min(picture.size, variant.referenceStyle === "blueBlocks" ? 74 : 54),
-				height: Math.min(picture.size, variant.referenceStyle === "blueBlocks" ? 74 : 54),
+				width: Math.min(
+					picture.size,
+					variant.referenceStyle === "blueBlocks" ? 74 : isSolidBandHeader ? 62 : isInfoTableHeader ? 64 : 54,
+				),
+				height: Math.min(
+					picture.size,
+					variant.referenceStyle === "blueBlocks" ? 74 : isSolidBandHeader ? 62 : isInfoTableHeader ? 64 : 54,
+				),
 				objectFit: "cover",
 				aspectRatio: picture.aspectRatio,
 				borderRadius: Math.min(picture.borderRadius, 4),
-				borderColor: variant.referenceStyle === "blueBlocks" ? "#D8E8F4" : rgbaStringToHex(picture.borderColor),
-				borderWidth: variant.referenceStyle === "blueBlocks" ? 2 : picture.borderWidth,
+				borderColor: isDarkHeader ? "#D8E8F4" : isInfoTableHeader ? primary : rgbaStringToHex(picture.borderColor),
+				borderWidth: isDarkHeader || isInfoTableHeader ? 1.4 : picture.borderWidth,
 				shadowColor: rgbaStringToHex(picture.shadowColor),
 				shadowWidth: picture.shadowWidth,
 				transform: `rotate(${picture.rotation}deg)`,
