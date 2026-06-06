@@ -29,6 +29,16 @@ describe("CollectionPage variants", () => {
 		expect(source).toContain('const isContactBand = variant.visualTreatment === "contactBand"');
 	});
 
+	it("keeps traditional collection previews backed by visible PDF treatments", () => {
+		const source = readCollectionSource();
+
+		expect(source).toContain('pageFrame?: "blueBorder"');
+		expect(source).toMatch(/collection024:[\s\S]*pageFrame: "blueBorder"/);
+		expect(source).toMatch(/collection022:[\s\S]*visualTreatment: "timelineStrip"/);
+		expect(source).toMatch(/collection029:[\s\S]*referenceStyle: "qrSidebar"/);
+		expect(source).toContain('const hasBluePageFrame = variant.pageFrame === "blueBorder"');
+	});
+
 	it("stretches sidebars to the page height so rendered PDFs match their previews", () => {
 		const source = readCollectionSource();
 

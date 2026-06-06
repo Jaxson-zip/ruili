@@ -68,14 +68,31 @@ describe("createRecommendedTemplateLayout", () => {
 		expect(page?.main).toContain("skills");
 	});
 
-	it("flags stale sidebar data on no-sidebar templates", () => {
+	it("flags stale layout data when the selected template uses a different column structure", () => {
 		const data = createImportedLikeData();
 
 		expect(needsTemplateLayoutSync(data, templates.collection003)).toBe(true);
-		expect(needsTemplateLayoutSync(data, templates.collection005)).toBe(false);
+		expect(needsTemplateLayoutSync(data, templates.collection005)).toBe(true);
 
 		data.metadata.layout = createRecommendedTemplateLayout(data, templates.collection003);
 		expect(needsTemplateLayoutSync(data, templates.collection003)).toBe(false);
+	});
+
+	it("flags stale single-column starters on two-column collection templates", () => {
+		const data = createImportedLikeData();
+		data.metadata.layout = {
+			sidebarWidth: 30,
+			pages: [
+				{
+					fullWidth: true,
+					main: ["summary", "experience", "projects", "skills", "education", "profiles"],
+					sidebar: [],
+				},
+			],
+		};
+
+		expect(needsTemplateLayoutSync(data, templates.collection024)).toBe(true);
+		expect(needsTemplateLayoutSync(data, templates.collection026)).toBe(true);
 	});
 
 	it("flags stale single-column section order that leaves profile links at the end", () => {

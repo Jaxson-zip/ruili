@@ -32,6 +32,7 @@ type CollectionVariant = {
 	headingBackground: string;
 	headingMode: "bar" | "tag" | "line";
 	forceSingleColumn?: boolean;
+	pageFrame?: "blueBorder";
 	id:
 		| "collection001"
 		| "collection002"
@@ -159,6 +160,7 @@ const variants = {
 		headingMode: "tag",
 		sidebarBackground: "#EAF5FC",
 		sidebarForeground: "#1F4F70",
+		visualTreatment: "timelineStrip",
 	},
 	collection017: {
 		id: "collection017",
@@ -169,6 +171,7 @@ const variants = {
 		headingMode: "tag",
 		sidebarBackground: "#F1F8EF",
 		sidebarForeground: "#2F5F36",
+		visualTreatment: "leftBlock",
 	},
 	collection018: {
 		id: "collection018",
@@ -204,6 +207,7 @@ const variants = {
 		headingMode: "bar",
 		sidebarBackground: "#1F5F78",
 		sidebarForeground: "#F8FAFC",
+		fullBleedSidebar: true,
 	},
 	collection021: {
 		id: "collection021",
@@ -224,6 +228,7 @@ const variants = {
 		headingMode: "bar",
 		sidebarBackground: "#EAF8EF",
 		sidebarForeground: "#255C37",
+		visualTreatment: "timelineStrip",
 	},
 	collection024: {
 		id: "collection024",
@@ -232,8 +237,10 @@ const variants = {
 		headerForeground: "#1F4F70",
 		headingBackground: "#EAF5FC",
 		headingMode: "line",
+		pageFrame: "blueBorder",
 		sidebarBackground: "#EDF7FD",
 		sidebarForeground: "#1F4F70",
+		visualTreatment: "timelineStrip",
 	},
 	collection026: {
 		id: "collection026",
@@ -280,6 +287,7 @@ const variants = {
 		headerForeground: "#214D6A",
 		headingBackground: "#E9F6FD",
 		headingMode: "bar",
+		referenceStyle: "qrSidebar",
 		sidebarBackground: "#EDF8FE",
 		sidebarForeground: "#214D6A",
 	},
@@ -474,6 +482,7 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 		const isDarkOrange = variant.referenceStyle === "darkOrange";
 		const isQrSidebar = variant.referenceStyle === "qrSidebar";
 		const isBoxed = variant.sectionFrame === "boxed";
+		const hasBluePageFrame = variant.pageFrame === "blueBorder";
 		const isTimelineStrip = variant.visualTreatment === "timelineStrip";
 		const isLeftBlock = variant.visualTreatment === "leftBlock";
 		const isContactBand = variant.visualTreatment === "contactBand";
@@ -544,6 +553,8 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 				backgroundColor: background,
 				paddingHorizontal: metrics.page.paddingHorizontal,
 				paddingVertical: isTight ? metrics.page.paddingVertical * 0.72 : metrics.page.paddingVertical,
+				borderWidth: hasBluePageFrame ? 1.4 : 0,
+				borderColor: primary,
 				rowGap: metrics.gapY(isTight ? 0.34 : 0.72),
 				fontFamily: metadata.typography.body.fontFamily,
 				fontSize: bodyText.fontSize,

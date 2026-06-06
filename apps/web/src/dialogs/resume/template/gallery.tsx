@@ -187,7 +187,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 						<TemplateSectionHeader
 							title="中文简历模板"
 							badge={`${visiblePrimaryTemplates.length} 个`}
-							description="预览图对应实际 PDF 导出效果，点击模板即可套用到当前简历。"
+							description="预览图展示模板方向，点击后会整理当前简历排版，以编辑器预览和导出结果为准。"
 						/>
 						<div className="grid grid-cols-1 xs:grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
 							{visiblePrimaryTemplates.map(([template, metadata]) => (

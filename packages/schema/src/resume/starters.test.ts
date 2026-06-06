@@ -65,6 +65,32 @@ describe("resumeTemplateStarters", () => {
 		}
 	});
 
+	it("keeps two-column collection starters in a two-column layout", () => {
+		const twoColumnTemplates = new Set([
+			"collection005",
+			"collection007",
+			"collection016",
+			"collection017",
+			"collection018",
+			"collection019",
+			"collection020",
+			"collection022",
+			"collection024",
+			"collection026",
+			"collection028",
+			"collection029",
+		]);
+
+		for (const starter of resumeTemplateStarters.filter((starter) => twoColumnTemplates.has(starter.template))) {
+			const page = starter.data.metadata.layout.pages[0];
+			expect(page?.fullWidth, starter.id).toBe(false);
+			expect(page?.sidebar.length, starter.id).toBeGreaterThan(0);
+			expect(starter.name, starter.id).not.toContain("单栏");
+			expect(starter.description, starter.id).not.toContain("单栏");
+			expect(starter.tags, starter.id).not.toContain("单栏");
+		}
+	});
+
 	it("keeps the default frontend starter dense enough for a one-page launch sample", () => {
 		const frontendStarter = resumeTemplateStarters.find((starter) => starter.id === "frontend-engineer");
 

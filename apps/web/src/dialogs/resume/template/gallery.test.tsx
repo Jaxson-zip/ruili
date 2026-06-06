@@ -81,6 +81,8 @@ describe("TemplateGalleryDialog", () => {
 		renderGallery();
 
 		expect(screen.getByText("中文简历模板")).toBeInTheDocument();
+		expect(screen.queryByText(/预览图对应实际 PDF 导出效果/)).toBeNull();
+		expect(screen.getByText(/以编辑器预览和导出结果为准/)).toBeInTheDocument();
 		expect(screen.getAllByText(`${primaryTemplateIds.length} 个`).length).toBeGreaterThan(0);
 		expect(screen.queryByText("更多可导出模板")).toBeNull();
 		expect(screen.getByRole("img", { name: "深灰蓝栏" })).toBeInTheDocument();

@@ -89,6 +89,10 @@ function uniqueVisibleLayoutSections(data: ResumeData, layout: Layout) {
 	return sections;
 }
 
+function visibleLayoutSections(data: ResumeData, sectionIds: readonly string[]) {
+	return sectionIds.filter((sectionId) => hasVisibleSection(data, sectionId));
+}
+
 function arraysEqual(first: string[], second: string[]) {
 	return first.length === second.length && first.every((value, index) => value === second[index]);
 }
@@ -120,10 +124,23 @@ export function createRecommendedTemplateLayout(data: ResumeData, metadata: Temp
 }
 
 export function needsTemplateLayoutSync(data: ResumeData, metadata: TemplateMetadata): boolean {
-	if (metadata.sidebarPosition !== "none") return false;
-	if (data.metadata.layout.pages.some((page) => !page.fullWidth || page.sidebar.length > 0)) return true;
+	if (metadata.sidebarPosition === "none") {
+		if (data.metadata.layout.pages.some((page) => !page.fullWidth || page.sidebar.length > 0)) return true;
 
-	const recommended = createRecommendedTemplateLayout(data, metadata);
+		const recommended = createRecommendedTemplateLayout(data, metadata);
 
-	return !arraysEqual(uniqueVisibleLayoutSections(data, data.metadata.layout), recommended.pages[0]?.main ?? []);
+		return !arraysEqual(uniqueVisibleLayoutSections(data, data.metadata.layout), recommended.pages[0]?.main ?? []);
+	}
+
+	if (data.metadata.layout.pages.length !== 1) return true;
+
+	const current = data.metadata.layout.pages[0];
+	const recommended = createRecommendedTemplateLayout(data, metadata).pages[0];
+	if (!current || !recommended) return true;
+	if (current.fullWidth !== recommended.fullWidth) return true;
+
+	return (
+		!arraysEqual(visibleLayoutSections(data, current.main), recommended.main) ||
+		!arraysEqual(visibleLayoutSections(data, current.sidebar), recommended.sidebar)
+	);
 }
