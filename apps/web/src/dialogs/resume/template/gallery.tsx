@@ -36,6 +36,12 @@ import { TemplateThumbnail } from "./thumbnail";
 
 const allSystemTemplateIds = Object.keys(templates) as Template[];
 
+const sidebarPositionLabels = {
+	left: "左侧栏",
+	none: "单栏",
+	right: "右侧栏",
+} satisfies Record<TemplateMetadata["sidebarPosition"], string>;
+
 const templateFilterOptions = [
 	{ id: "all", label: "全部", keywords: [] },
 	{ id: "tech", label: "技术", keywords: ["技术", "开发", "工程", "数据", "前端", "后端"] },
@@ -250,7 +256,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 								badge={`${visibleCustomPresets.length} 个`}
 								description="你导入或保存过的排版方案；这里只保存模板、布局、颜色和字体，不导入简历正文。"
 							/>
-							<div className="grid grid-cols-1 xs:grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+							<div className="grid grid-cols-1 xs:grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
 								{visibleCustomPresets.map((preset) => (
 									<CustomTemplateCard
 										key={preset.id}
@@ -273,7 +279,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 									: "首批上线只主推真实可导出的模板，预览效果和 PDF 导出保持一致。"
 							}
 						/>
-						<div className="grid grid-cols-1 xs:grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+						<div className="grid grid-cols-1 xs:grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
 							{visiblePrimaryTemplates.map(([template, metadata]) => (
 								<SystemTemplateCard
 									key={template}
@@ -298,7 +304,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 							badge={`${visibleSecondaryTemplates.length} 个`}
 							description="仍可导出，但不是首批主推；适合后续逐个打磨后再放到首页。"
 						/>
-						<div className="grid grid-cols-1 xs:grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+						<div className="grid grid-cols-1 xs:grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
 							{visibleSecondaryTemplates.map(([template, metadata]) => (
 								<SystemTemplateCard
 									key={template}
@@ -369,7 +375,7 @@ function SystemTemplateCard({ id, metadata, isActive, onDelete, onSelect }: Syst
 					<TemplateThumbnail template={id} label={metadata.name} imageUrl={metadata.imageUrl} />
 				</div>
 
-				<div className="min-h-32 space-y-2 px-1 pt-3 pb-2">
+				<div className="min-h-40 space-y-2 px-1 pt-3 pb-2">
 					<div className="flex items-start justify-between gap-2">
 						<h4 className="line-clamp-1 font-semibold text-sm">{metadata.name}</h4>
 						{isActive ? (
@@ -380,12 +386,28 @@ function SystemTemplateCard({ id, metadata, isActive, onDelete, onSelect }: Syst
 					</div>
 					<p className="line-clamp-1 font-medium text-[11px] text-foreground/80 leading-relaxed">{metadata.audience}</p>
 					<p className="line-clamp-2 text-muted-foreground text-xs leading-relaxed">{i18n.t(metadata.description)}</p>
+					<div className="grid grid-cols-2 gap-1.5 text-[11px] text-foreground/80">
+						<span className="rounded-sm bg-secondary/55 px-2 py-1">
+							布局：{sidebarPositionLabels[metadata.sidebarPosition]}
+						</span>
+						<span className="rounded-sm bg-secondary/55 px-2 py-1">PDF 可导出</span>
+						<span className="rounded-sm bg-secondary/55 px-2 py-1">系统模板</span>
+						<span className="rounded-sm bg-secondary/55 px-2 py-1">{metadata.tags.length} 个标签</span>
+					</div>
+					<div
+						className={cn(
+							"rounded-sm px-2 py-1.5 text-center font-medium text-xs",
+							isActive ? "bg-primary text-primary-foreground" : "bg-foreground text-background",
+						)}
+					>
+						{isActive ? <Trans>正在使用</Trans> : <Trans>使用模板</Trans>}
+					</div>
 				</div>
 			</button>
 
 			<div className="flex min-h-12 items-center justify-between gap-2 border-t px-3 py-2">
 				<div className="flex min-w-0 flex-wrap gap-1.5">
-					{metadata.tags.slice(0, 3).map((tag) => (
+					{metadata.tags.slice(0, 4).map((tag) => (
 						<Badge key={tag} variant="secondary" className="max-w-24 truncate text-[11px]">
 							{tag}
 						</Badge>
@@ -423,11 +445,22 @@ function CustomTemplateCard({ preset, onDelete, onSelect }: CustomTemplateCardPr
 					<TemplateThumbnail template={preset.metadata.template} label={preset.name} imageUrl={baseTemplate.imageUrl} />
 				</div>
 
-				<div className="min-h-24 space-y-2 px-1 pt-3 pb-2">
+				<div className="min-h-36 space-y-2 px-1 pt-3 pb-2">
 					<h4 className="line-clamp-1 font-semibold text-sm">{preset.name}</h4>
 					<p className="line-clamp-2 text-muted-foreground text-xs leading-relaxed">
 						基于「{baseTemplate.name}」保存的排版预设
 					</p>
+					<div className="grid grid-cols-2 gap-1.5 text-[11px] text-foreground/80">
+						<span className="rounded-sm bg-secondary/55 px-2 py-1">
+							布局：{sidebarPositionLabels[baseTemplate.sidebarPosition]}
+						</span>
+						<span className="rounded-sm bg-secondary/55 px-2 py-1">PDF 可导出</span>
+						<span className="rounded-sm bg-secondary/55 px-2 py-1">我的模板</span>
+						<span className="rounded-sm bg-secondary/55 px-2 py-1">保留排版</span>
+					</div>
+					<div className="rounded-sm bg-foreground px-2 py-1.5 text-center font-medium text-background text-xs">
+						<Trans>使用模板</Trans>
+					</div>
 				</div>
 			</button>
 

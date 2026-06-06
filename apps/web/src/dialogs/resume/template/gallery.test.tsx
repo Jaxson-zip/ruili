@@ -74,6 +74,10 @@ describe("TemplateGalleryDialog", () => {
 		expect(card).toHaveTextContent("时间轴");
 		expect(card).toHaveTextContent("稳重");
 		expect(card).toHaveTextContent("参考传统中文招聘模板");
+		expect(card).toHaveTextContent("布局：单栏");
+		expect(card).toHaveTextContent("PDF 可导出");
+		expect(card).toHaveTextContent("系统模板");
+		expect(card).toHaveTextContent("使用模板");
 	});
 
 	it("separates primary templates from the remaining exportable templates", () => {

@@ -54,7 +54,7 @@ type CollectionVariant = {
 	sidebarBackground?: string;
 	sidebarForeground?: string;
 	sidebarSide?: "left" | "right";
-	visualTreatment?: "timelineStrip" | "leftBlock" | "contactBand";
+	visualTreatment?: "timelineStrip" | "leftBlock" | "contactBand" | "sidebarRail" | "softCards" | "topRule";
 };
 
 type CollectionStyles = Omit<TemplateStyleSlots, "page"> & {
@@ -155,6 +155,7 @@ const variants = {
 		headingMode: "tag",
 		sidebarBackground: "#EAF5FC",
 		sidebarForeground: "#1F4F70",
+		visualTreatment: "sidebarRail",
 	},
 	collection017: {
 		id: "collection017",
@@ -165,6 +166,7 @@ const variants = {
 		headingMode: "tag",
 		sidebarBackground: "#F1F8EF",
 		sidebarForeground: "#2F5F36",
+		visualTreatment: "softCards",
 	},
 	collection018: {
 		id: "collection018",
@@ -208,6 +210,7 @@ const variants = {
 		headerForeground: "#233B63",
 		headingBackground: "#EAF0FA",
 		headingMode: "tag",
+		visualTreatment: "topRule",
 	},
 	collection022: {
 		id: "collection022",
@@ -471,6 +474,9 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 		const isTimelineStrip = variant.visualTreatment === "timelineStrip";
 		const isLeftBlock = variant.visualTreatment === "leftBlock";
 		const isContactBand = variant.visualTreatment === "contactBand";
+		const isSidebarRail = variant.visualTreatment === "sidebarRail";
+		const isSoftCards = variant.visualTreatment === "softCards";
+		const isTopRule = variant.visualTreatment === "topRule";
 		const sectionHeadingMainPaddingLeft =
 			variant.headingMode === "tag" ? metrics.gapX(0.42) : variant.headingMode === "bar" ? metrics.gapX(0.38) : 0;
 
@@ -601,20 +607,20 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 			},
 			section: {
 				flexDirection: "column",
-				rowGap: metrics.gapY(isTimelineStrip ? 0.16 : isCompact ? 0.2 : 0.28),
+				rowGap: metrics.gapY(isTimelineStrip ? 0.16 : isSoftCards || isTopRule ? 0.22 : isCompact ? 0.2 : 0.28),
 			},
 			sectionHeading: {
 				...sectionHeadingBase,
 				...headingVariant,
 			},
 			sectionItems: {
-				rowGap: metrics.gapY(isTimelineStrip ? 0.18 : isCompact ? 0.24 : 0.34),
+				rowGap: metrics.gapY(isTimelineStrip ? 0.18 : isSoftCards ? 0.24 : isTopRule ? 0.28 : isCompact ? 0.24 : 0.34),
 			},
 			item: {
 				rowGap: metrics.gapY(isCompact ? 0.1 : 0.13),
 				borderBottomWidth: 0.35,
 				borderBottomColor: subtle,
-				paddingBottom: metrics.gapY(isCompact ? 0.12 : 0.18),
+				paddingBottom: metrics.gapY(isTopRule ? 0.14 : isCompact ? 0.12 : 0.18),
 			},
 			levelContainer: {
 				width: "100%",
@@ -631,12 +637,14 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 			},
 			sidebarColumn: {
 				backgroundColor: sidebarBackground,
-				paddingHorizontal: metrics.gapX(0.78),
-				paddingVertical: metrics.gapY(0.88),
+				borderLeftWidth: isSidebarRail ? 5 : 0,
+				borderLeftColor: isSidebarRail ? primary : "transparent",
+				paddingHorizontal: metrics.gapX(isSidebarRail ? 0.64 : 0.78),
+				paddingVertical: metrics.gapY(isSidebarRail ? 0.78 : 0.88),
 			},
 			mainColumn: {
 				flex: 1,
-				rowGap: metrics.gapY(isCompact ? 0.52 : 0.7),
+				rowGap: metrics.gapY(isSoftCards ? 0.46 : isTopRule ? 0.56 : isCompact ? 0.52 : 0.7),
 			},
 			header: {
 				flexDirection: r.row,
@@ -645,13 +653,13 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 				rowGap: metrics.gapY(0.28),
 				columnGap: metrics.gapX(0.8),
 				backgroundColor: variant.referenceStyle === "blueBlocks" ? primary : variant.headerBackground,
-				borderTopWidth: variant.headerMode === "band" ? 8 : variant.headingMode === "line" ? 5 : 0,
+				borderTopWidth: isTopRule ? 4 : variant.headerMode === "band" ? 8 : variant.headingMode === "line" ? 5 : 0,
 				borderTopColor: variant.referenceStyle === "blueBlocks" ? primary : primary,
-				borderBottomWidth: variant.referenceStyle === "blueBlocks" ? 0 : 2,
+				borderBottomWidth: variant.referenceStyle === "blueBlocks" ? 0 : isTopRule ? 0.8 : 2,
 				borderBottomColor: primary,
 				paddingHorizontal: metrics.gapX(variant.referenceStyle === "blueBlocks" ? 1.0 : 0.7),
-				paddingTop: metrics.gapY(variant.referenceStyle === "blueBlocks" ? 1.0 : 0.52),
-				paddingBottom: metrics.gapY(variant.referenceStyle === "blueBlocks" ? 0.92 : 0.54),
+				paddingTop: metrics.gapY(variant.referenceStyle === "blueBlocks" ? 1.0 : isTopRule ? 0.44 : 0.52),
+				paddingBottom: metrics.gapY(variant.referenceStyle === "blueBlocks" ? 0.92 : isTopRule ? 0.46 : 0.54),
 			},
 			headerBadge: {
 				width: "100%",
@@ -713,9 +721,11 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 				transform: `rotate(${picture.rotation}deg)`,
 			},
 			sidebarHeader: {
-				alignItems: isContactBand ? "stretch" : "center",
+				alignItems: isContactBand || isSidebarRail ? "stretch" : "center",
 				rowGap: metrics.gapY(isContactBand ? 0.24 : isQrSidebar ? 0.32 : 0.26),
-				paddingBottom: metrics.gapY(isContactBand ? 0.52 : variant.fullBleedSidebar ? 0.64 : 0.44),
+				paddingBottom: metrics.gapY(
+					isContactBand ? 0.52 : isSidebarRail ? 0.36 : variant.fullBleedSidebar ? 0.64 : 0.44,
+				),
 				borderBottomWidth: 0.6,
 				borderBottomColor: isDarkOrange ? "#535B64" : variant.sidebarForeground ? "#45617A" : subtle,
 			},
@@ -735,12 +745,12 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 				color: sidebarForeground,
 				fontSize: metadata.typography.heading.fontSize * 1.2,
 				lineHeight: 1.2,
-				textAlign: "center",
+				textAlign: isSidebarRail ? "left" : "center",
 			},
 			sidebarHeadline: {
 				color: sidebarMuted,
 				fontSize: metadata.typography.body.fontSize * 0.88,
-				textAlign: "center",
+				textAlign: isSidebarRail ? "left" : "center",
 			},
 			sidebarContactList: {
 				width: "100%",
@@ -880,6 +890,16 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 								paddingBottom: metrics.gapY(0.38),
 							}
 						: {}),
+					...(context.placement === "main" && isSoftCards
+						? {
+								backgroundColor: variant.headingBackground,
+								borderWidth: 0.6,
+								borderColor: "#CFE7C9",
+								paddingHorizontal: metrics.gapX(0.42),
+								paddingTop: metrics.gapY(0.26),
+								paddingBottom: metrics.gapY(0.3),
+							}
+						: {}),
 				}),
 				sectionHeading: (context) => ({
 					...baseStyles.sectionHeading,
@@ -898,15 +918,58 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 								paddingTop: metrics.gapY(0.16),
 							}
 						: {}),
+					...(context.placement === "sidebar" && isSidebarRail
+						? {
+								backgroundColor: "#D7ECF8",
+								borderBottomWidth: 0,
+								borderLeftWidth: 3,
+								paddingTop: metrics.gapY(0.1),
+							}
+						: {}),
+					...(context.placement === "main" && isSoftCards
+						? {
+								backgroundColor: "transparent",
+								borderBottomWidth: 0,
+								borderLeftWidth: 0,
+								borderTopWidth: 0,
+								color: primary,
+								paddingHorizontal: 0,
+								paddingTop: 0,
+							}
+						: {}),
+					...(context.placement === "main" && isTopRule
+						? {
+								backgroundColor: "transparent",
+								borderBottomWidth: 0,
+								borderLeftWidth: 0,
+								borderTopWidth: 2.4,
+								paddingTop: metrics.gapY(0.14),
+							}
+						: {}),
 					fontSize:
 						context.placement === "main" && (isDarkOrange || isBoxed)
 							? metadata.typography.heading.fontSize * 1.05
-							: baseStyles.sectionHeading.fontSize,
+							: context.placement === "main" && isTopRule
+								? metadata.typography.heading.fontSize * 0.98
+								: baseStyles.sectionHeading.fontSize,
 					paddingBottom:
-						context.placement === "main" && (isDarkOrange || isBoxed)
-							? metrics.gapY(0.18)
-							: headingVariant.paddingBottom,
-					paddingLeft: context.placement === "sidebar" ? 0 : sectionHeadingMainPaddingLeft,
+						context.placement === "main" && isTopRule
+							? metrics.gapY(0.1)
+							: context.placement === "main" && isSoftCards
+								? metrics.gapY(0.06)
+								: context.placement === "main" && (isDarkOrange || isBoxed)
+									? metrics.gapY(0.18)
+									: headingVariant.paddingBottom,
+					paddingLeft:
+						context.placement === "sidebar"
+							? isSidebarRail
+								? metrics.gapX(0.24)
+								: 0
+							: isLeftBlock
+								? metrics.gapX(0.5)
+								: isSoftCards || isTopRule
+									? 0
+									: sectionHeadingMainPaddingLeft,
 				}),
 				item: (context) => ({
 					...baseStyles.item,
@@ -917,6 +980,18 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 								borderLeftWidth: 2,
 								borderLeftColor: primary,
 								paddingLeft: metrics.gapX(0.36),
+							}
+						: {}),
+					...(context.placement === "main" && isSoftCards
+						? {
+								borderBottomWidth: 0,
+								paddingBottom: metrics.gapY(0.08),
+							}
+						: {}),
+					...(context.placement === "main" && isTopRule
+						? {
+								borderBottomWidth: 0.5,
+								paddingBottom: metrics.gapY(0.16),
 							}
 						: {}),
 				}),
