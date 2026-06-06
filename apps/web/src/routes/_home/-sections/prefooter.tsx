@@ -21,7 +21,7 @@ export function Prefooter() {
 					</h2>
 
 					<p className="text-muted-foreground leading-relaxed">
-						<Trans>选择一份完整样张，替换成自己的经历，确认预览后导出 PDF。后续再按不同岗位复制版本。</Trans>
+						<Trans>选择一份完整样张，替换成自己的经历，确认预览后导出 PDF，并按不同岗位保存多个版本。</Trans>
 					</p>
 
 					<a

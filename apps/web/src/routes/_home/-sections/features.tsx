@@ -64,13 +64,13 @@ const getFeatures = (): Feature[] => [
 		id: "templates",
 		icon: PaletteIcon,
 		title: t`中文模板`,
-		description: t`首批 ${featuredTemplateIds.length} 套可导出模板使用中文样张，方便判断是否适合投递。`,
+		description: t`${featuredTemplateIds.length} 套精选模板使用中文样张预览，方便判断是否适合投递。`,
 	},
 	{
 		id: "ai-optimization",
 		icon: DotsThreeIcon,
 		title: t`AI 优化入口`,
-		description: t`接入模型服务后，可继续扩展岗位匹配、经历改写和关键词检查。`,
+		description: t`接入模型服务后，可以生成岗位匹配、经历改写和关键词检查建议。`,
 	},
 ];
 

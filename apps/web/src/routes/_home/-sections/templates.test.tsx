@@ -23,7 +23,8 @@ describe("Templates section", () => {
 		renderTemplates();
 
 		expect(screen.getByText("中文简历模板")).toBeInTheDocument();
-		expect(screen.getByText(/先保留这 8 套可导出模板/)).toBeInTheDocument();
+		expect(screen.getByText(/挑选适合岗位的中文模板/)).toBeInTheDocument();
+		expect(screen.getByText("完整样张 · 可编辑 · 可导出")).toBeInTheDocument();
 
 		for (const template of featuredTemplateIds) {
 			const name = systemTemplates[template].name;
@@ -41,5 +42,6 @@ describe("Templates section", () => {
 		expect(screen.queryByAltText(systemTemplates.collection026.name)).toBeNull();
 		expect(screen.queryByText("参考样式")).toBeNull();
 		expect(screen.queryByText("仅参考")).toBeNull();
+		expect(screen.queryByText(/先保留/)).toBeNull();
 	});
 });

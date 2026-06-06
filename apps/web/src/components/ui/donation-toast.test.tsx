@@ -132,4 +132,17 @@ describe("DonationToast", () => {
 		expect(window.open).toHaveBeenCalledWith("https://github.com/Jaxson-zip/ruili", "_blank", "noopener,noreferrer");
 		expect(toastMock.toast.dismiss).toHaveBeenCalledWith("source-toast");
 	});
+
+	it("describes source availability without portfolio or fork wording", () => {
+		render(<DonationToast />);
+
+		act(() => {
+			vi.advanceTimersByTime(SHOW_TOAST_DELAY_MS);
+		});
+		renderCustomToast();
+
+		expect(screen.getByText(/源码和许可证说明已公开/)).toBeInTheDocument();
+		expect(screen.queryByText(/二开项目/)).toBeNull();
+		expect(screen.queryByText(/作品集案例/)).toBeNull();
+	});
 });

@@ -62,7 +62,7 @@ function SourceToastCard({ onDismiss, onOpenSource }: SourceToastCardProps) {
 						<Trans>锐历源码已开放</Trans>
 					</p>
 					<p className="text-pretty text-muted-foreground text-xs">
-						<Trans>这是一个中文简历产品二开项目，你可以查看源码、继续改造或作为作品集案例展示。</Trans>
+						<Trans>锐历基于 MIT 开源项目构建，源码和许可证说明已公开，方便你了解部署与使用边界。</Trans>
 					</p>
 				</div>
 			</div>

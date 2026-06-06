@@ -74,12 +74,12 @@ export function Templates() {
 						<Trans>中文简历模板</Trans>
 					</h2>
 					<p className="max-w-2xl text-muted-foreground leading-relaxed">
-						<Trans>先保留这 8 套可导出模板，全部使用中文样张，优先保证预览和实际 PDF 效果一致。</Trans>
+						<Trans>挑选适合岗位的中文模板，预览图对应实际 PDF 导出效果，创建后可以继续替换内容。</Trans>
 					</p>
 				</div>
 
 				<p className="text-muted-foreground text-sm">
-					<Trans>模板少一点，但每一套都能直接拿去改。</Trans>
+					<Trans>完整样张 · 可编辑 · 可导出</Trans>
 				</p>
 			</m.div>
 

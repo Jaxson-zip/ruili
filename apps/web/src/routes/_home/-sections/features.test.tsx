@@ -25,10 +25,11 @@ describe("Features section", () => {
 		expect(screen.getByText("核心能力")).toBeInTheDocument();
 		expect(screen.getByText(/选样张、改内容、看预览、导出 PDF/)).toBeInTheDocument();
 		expect(
-			screen.getByText(`首批 ${featuredTemplateIds.length} 套可导出模板使用中文样张，方便判断是否适合投递。`),
+			screen.getByText(`${featuredTemplateIds.length} 套精选模板使用中文样张预览，方便判断是否适合投递。`),
 		).toBeInTheDocument();
 		expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(8);
 		expect(screen.queryByText("API 自动化")).toBeNull();
 		expect(screen.queryByText("账户体系")).toBeNull();
+		expect(screen.queryByText(/首批/)).toBeNull();
 	});
 });

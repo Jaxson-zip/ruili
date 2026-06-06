@@ -78,7 +78,7 @@ function PrivacyRoute() {
 						<div>
 							<h2 className="font-semibold text-2xl tracking-tight">自托管与部署方责任</h2>
 							<p className="mt-4 text-foreground/72 leading-7">
-								锐历是基于开源项目二次开发的产品。上线前，部署方需要为自己的实例补齐正式的隐私政策、服务条款、联系方式和数据删除流程。
+								锐历是基于开源项目构建的产品。每个公开服务实例都应提供对应的隐私政策、服务条款、联系方式和数据删除流程。
 							</p>
 						</div>
 
