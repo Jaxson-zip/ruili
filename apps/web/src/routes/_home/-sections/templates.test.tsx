@@ -23,7 +23,9 @@ describe("Templates section", () => {
 		renderTemplates();
 
 		expect(screen.getByText("中文简历模板与风格")).toBeInTheDocument();
-		expect(screen.getByText(/精选真实可导出的中文模板/)).toBeInTheDocument();
+		expect(screen.getByText(/首批可切换的中文模板/)).toBeInTheDocument();
+		expect(screen.getByText(/最终以编辑器预览和导出结果为准/)).toBeInTheDocument();
+		expect(screen.queryByText(/精选真实可导出/)).toBeNull();
 
 		for (const template of primaryTemplateIds) {
 			const name = systemTemplates[template].name;

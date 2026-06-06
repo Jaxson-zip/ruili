@@ -42,10 +42,22 @@ describe("CollectionPage variants", () => {
 		expect(source).toMatch(/collection027:[\s\S]*headerMode: "infoTable"/);
 		expect(source).toMatch(/collection024:[\s\S]*pageFrame: "blueBorder"/);
 		expect(source).toMatch(/collection022:[\s\S]*visualTreatment: "timelineStrip"/);
-		expect(source).toMatch(/collection029:[\s\S]*referenceStyle: "qrSidebar"/);
+		expect(source).toMatch(/collection029:[\s\S]*referenceStyle: "portfolioSidebar"/);
 		expect(source).toContain('const hasBluePageFrame = variant.pageFrame === "blueBorder"');
 		expect(source).toContain('const isInfoTableHeader = variant.headerMode === "infoTable"');
 		expect(source).toContain('const isSolidBandHeader = variant.headerMode === "solidBand"');
+	});
+
+	it("uses real portfolio links instead of decorative fake QR grids", () => {
+		const source = readCollectionSource();
+
+		expect(source).toMatch(/collection028:[\s\S]*referenceStyle: "portfolioSidebar"/);
+		expect(source).toMatch(/collection029:[\s\S]*referenceStyle: "portfolioSidebar"/);
+		expect(source).toContain("const SidebarPortfolioLink");
+		expect(source).toContain("basics.website.url");
+		expect(source).toContain("<Link src={basics.website.url}");
+		expect(source).not.toContain("qrCells");
+		expect(source).not.toContain("Array.from({ length: 25 })");
 	});
 
 	it("stretches sidebars to the page height so rendered PDFs match their previews", () => {

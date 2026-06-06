@@ -51,7 +51,7 @@ type CollectionVariant = {
 		| "collection027"
 		| "collection028"
 		| "collection029";
-	referenceStyle?: "blueBlocks" | "darkOrange" | "qrSidebar";
+	referenceStyle?: "blueBlocks" | "darkOrange" | "portfolioSidebar";
 	sectionFrame?: "boxed" | "plain";
 	sidebarBackground?: string;
 	sidebarForeground?: string;
@@ -80,11 +80,11 @@ type CollectionStyles = Omit<TemplateStyleSlots, "page"> & {
 	sidebarHeadline: Style;
 	sidebarContactList: Style;
 	sidebarContactItem: Style;
-	sidebarQrBox: Style;
-	sidebarQrCell: Style;
-	sidebarQrGrid: Style;
-	sidebarQrTitle: Style;
-	sidebarQrWrap: Style;
+	sidebarPortfolioBox: Style;
+	sidebarPortfolioLabel: Style;
+	sidebarPortfolioTitle: Style;
+	sidebarPortfolioUrl: Style;
+	sidebarPortfolioWrap: Style;
 };
 
 type CollectionTemplate = {
@@ -278,7 +278,7 @@ const variants = {
 		headerForeground: "#1F4F70",
 		headingBackground: "#EAF5FC",
 		headingMode: "line",
-		referenceStyle: "qrSidebar",
+		referenceStyle: "portfolioSidebar",
 		sectionFrame: "boxed",
 		sidebarBackground: "#6BA4CD",
 		sidebarForeground: "#F8FAFC",
@@ -291,7 +291,7 @@ const variants = {
 		headerForeground: "#214D6A",
 		headingBackground: "#E9F6FD",
 		headingMode: "bar",
-		referenceStyle: "qrSidebar",
+		referenceStyle: "portfolioSidebar",
 		sidebarBackground: "#EDF8FE",
 		sidebarForeground: "#214D6A",
 	},
@@ -441,29 +441,26 @@ const SidebarHeader = ({ styles, variant }: HeaderProps) => {
 					<CustomFieldContactItem key={field.id} field={field} style={styles.sidebarContactItem} />
 				))}
 			</View>
-			{variant.referenceStyle === "qrSidebar" ? <SidebarQr styles={styles} /> : null}
+			{variant.referenceStyle === "portfolioSidebar" ? <SidebarPortfolioLink styles={styles} /> : null}
 		</View>
 	);
 };
 
-const SidebarQr = ({ styles }: Pick<HeaderProps, "styles">) => {
-	const qrCells = [0, 1, 2, 4, 6, 8, 9, 11, 12, 14, 16, 18, 20, 22, 24];
+const SidebarPortfolioLink = ({ styles }: Pick<HeaderProps, "styles">) => {
+	const { basics } = useRender();
+
+	if (!basics.website.url) return null;
+
+	const websiteText = basics.website.label || basics.website.url;
 
 	return (
-		<View style={styles.sidebarQrWrap}>
-			<Text style={styles.sidebarQrTitle}>{"\u4f5c\u54c1\u5165\u53e3"}</Text>
-			<View style={styles.sidebarQrBox}>
-				<View style={styles.sidebarQrGrid}>
-					{Array.from({ length: 25 }).map((_, index) => (
-						<View
-							key={`qr-${index}`}
-							style={composeStyles(styles.sidebarQrCell, {
-								backgroundColor: qrCells.includes(index) ? "#111827" : "#FFFFFF",
-							})}
-						/>
-					))}
-				</View>
-			</View>
+		<View style={styles.sidebarPortfolioWrap}>
+			<Text style={styles.sidebarPortfolioTitle}>{"\u4f5c\u54c1\u5165\u53e3"}</Text>
+			<Link src={basics.website.url} style={styles.sidebarPortfolioBox}>
+				<Icon name="globe" />
+				<Text style={styles.sidebarPortfolioLabel}>{websiteText}</Text>
+				<Text style={styles.sidebarPortfolioUrl}>{basics.website.url}</Text>
+			</Link>
 		</View>
 	);
 };
@@ -486,7 +483,7 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 		const isCompact = variant.density === "compact" || variant.density === "tight";
 		const isTight = variant.density === "tight";
 		const isDarkOrange = variant.referenceStyle === "darkOrange";
-		const isQrSidebar = variant.referenceStyle === "qrSidebar";
+		const isPortfolioSidebar = variant.referenceStyle === "portfolioSidebar";
 		const isBoxed = variant.sectionFrame === "boxed";
 		const hasBluePageFrame = variant.pageFrame === "blueBorder";
 		const isTimelineStrip = variant.visualTreatment === "timelineStrip";
@@ -792,7 +789,7 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 			},
 			sidebarHeader: {
 				alignItems: isContactBand ? "stretch" : "center",
-				rowGap: metrics.gapY(isContactBand ? 0.24 : isQrSidebar ? 0.32 : 0.26),
+				rowGap: metrics.gapY(isContactBand ? 0.24 : isPortfolioSidebar ? 0.32 : 0.26),
 				paddingBottom: metrics.gapY(isContactBand ? 0.52 : variant.fullBleedSidebar ? 0.64 : 0.44),
 				borderBottomWidth: 0.6,
 				borderBottomColor: isDarkOrange ? "#535B64" : variant.sidebarForeground ? "#45617A" : subtle,
@@ -802,7 +799,7 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 				height: Math.min(picture.size, variant.fullBleedSidebar ? 86 : 62),
 				objectFit: "cover",
 				aspectRatio: picture.aspectRatio,
-				borderRadius: isQrSidebar ? 2 : 4,
+				borderRadius: isPortfolioSidebar ? 2 : 4,
 				borderColor: isDarkOrange ? "#F8FAFC" : primary,
 				borderWidth: variant.fullBleedSidebar ? 2 : 1.2,
 				shadowColor: rgbaStringToHex(picture.shadowColor),
@@ -835,12 +832,12 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 				columnGap: metrics.gapX(0.16),
 				color: isContactBand ? "#FFFFFF" : sidebarMuted,
 			},
-			sidebarQrWrap: {
+			sidebarPortfolioWrap: {
 				width: "100%",
 				rowGap: metrics.gapY(0.18),
 				marginTop: metrics.gapY(0.28),
 			},
-			sidebarQrTitle: {
+			sidebarPortfolioTitle: {
 				color: sidebarForeground,
 				fontFamily: metadata.typography.heading.fontFamily,
 				fontSize: metadata.typography.heading.fontSize * 0.88,
@@ -849,24 +846,27 @@ const useCollectionTemplate = (variant: CollectionVariant): CollectionTemplate =
 				borderBottomColor: "#F8FAFC",
 				paddingBottom: metrics.gapY(0.12),
 			},
-			sidebarQrBox: {
-				width: isContactBand ? 68 : 76,
-				height: isContactBand ? 68 : 76,
-				alignSelf: "center",
-				backgroundColor: "#FFFFFF",
-				padding: isContactBand ? 6 : 7,
-			},
-			sidebarQrGrid: {
-				flexDirection: "row",
-				flexWrap: "wrap",
+			sidebarPortfolioBox: {
 				width: "100%",
-				height: "100%",
+				rowGap: metrics.gapY(0.12),
+				backgroundColor: "#FFFFFF",
+				borderLeftWidth: 3,
+				borderLeftColor: primary,
+				paddingHorizontal: metrics.gapX(0.32),
+				paddingVertical: metrics.gapY(0.24),
+				textDecoration: "none",
 			},
-			sidebarQrCell: {
-				width: "20%",
-				height: "20%",
-				borderWidth: 0.5,
-				borderColor: "#FFFFFF",
+			sidebarPortfolioLabel: {
+				color: "#1F4F70",
+				fontFamily: metadata.typography.heading.fontFamily,
+				fontSize: metadata.typography.body.fontSize * 0.92,
+				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
+				lineHeight: 1.18,
+			},
+			sidebarPortfolioUrl: {
+				color: "#506477",
+				fontSize: metadata.typography.body.fontSize * 0.76,
+				lineHeight: 1.22,
 			},
 		});
 

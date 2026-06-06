@@ -56,7 +56,7 @@ describe("TemplateGalleryDialog", () => {
 		expect(screen.getByText("中文简历模板")).toBeInTheDocument();
 		expect(screen.queryByText("外部模板参考（待制作）")).toBeNull();
 		expect(screen.queryByText("线上风格灵感（仅参考）")).toBeNull();
-		expect(screen.getByRole("img", { name: "蓝色二维码栏" })).toBeInTheDocument();
+		expect(screen.getByRole("img", { name: "蓝色作品入口" })).toBeInTheDocument();
 		expect(screen.getByRole("img", { name: "蓝色块面" })).toBeInTheDocument();
 		expect(screen.getByRole("img", { name: "深灰橙色" })).toBeInTheDocument();
 		expect(screen.queryByRole("button", { name: "套用相近版式：001 蓝色时间轴" })).toBeNull();
@@ -160,7 +160,7 @@ describe("TemplateGalleryDialog", () => {
 
 	it("lets promoted collection references change the active template", () => {
 		renderGallery();
-		const preview = screen.getByRole("img", { name: "蓝色二维码栏" });
+		const preview = screen.getByRole("img", { name: "蓝色作品入口" });
 		const button = preview.closest("button") as HTMLButtonElement;
 		fireEvent.click(button);
 

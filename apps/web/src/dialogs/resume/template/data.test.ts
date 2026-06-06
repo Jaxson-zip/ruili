@@ -69,6 +69,16 @@ describe("templates metadata", () => {
 		expect(templates.collection028.audience).toBe("适合带项目链接或作品集入口的候选人");
 	});
 
+	it("does not advertise QR codes before PDF export renders real scannable QR codes", () => {
+		for (const id of ["collection028", "collection029"] as const) {
+			const metadata = templates[id];
+			const visibleCopy = [metadata.name, metadata.audience, metadata.description.message, ...metadata.tags].join(" ");
+
+			expect(visibleCopy, id).not.toMatch(/二维码|扫码|QR/i);
+			expect(visibleCopy, id).toMatch(/作品|链接|入口/);
+		}
+	});
+
 	it("uses a recognized sidebar position for every template", () => {
 		const validPositions = new Set(["left", "right", "none"]);
 		for (const [id, meta] of entries) {

@@ -118,7 +118,7 @@ export function Templates() {
 				</h2>
 
 				<p className="max-w-2xl text-muted-foreground leading-relaxed">
-					<Trans>精选真实可导出的中文模板，优先展示更接近中文招聘习惯的版式。</Trans>
+					<Trans>首批可切换的中文模板，预览图展示风格方向，最终以编辑器预览和导出结果为准。</Trans>
 				</p>
 			</m.div>
 

@@ -12,7 +12,7 @@ import {
 } from "@phosphor-icons/react";
 import { m } from "motion/react";
 import { cn } from "@reactive-resume/utils/style";
-import { featuredTemplateIds } from "@/dialogs/resume/template/data";
+import { primaryTemplateIds } from "@/dialogs/resume/template/data";
 
 type Feature = {
 	id: string;
@@ -64,7 +64,7 @@ const getFeatures = (): Feature[] => [
 		id: "templates",
 		icon: PaletteIcon,
 		title: t`中文模板`,
-		description: t`${featuredTemplateIds.length} 套精选模板使用中文样张预览，方便判断是否适合投递。`,
+		description: t`${primaryTemplateIds.length} 套可切换模板使用中文样张预览，方便判断是否适合投递。`,
 	},
 	{
 		id: "ai-optimization",
