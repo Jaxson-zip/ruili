@@ -34,6 +34,17 @@ const usage = `用法：
   --timeout-ms     单个网络请求超时时间，默认 15000。
 `;
 
+const expectedTemplateAssetPaths = [
+	"/templates/jpg/ditto.jpg",
+	"/templates/jpg/scizor.jpg",
+	"/templates/jpg/onyx.jpg",
+	"/templates/jpg/azurill.jpg",
+	"/templates/jpg/homepage-ditto-campus.jpg",
+	"/templates/jpg/homepage-ditto-frontend.jpg",
+	"/templates/jpg/homepage-scizor-growth.jpg",
+	"/templates/jpg/homepage-scizor-product.jpg",
+];
+
 const fail = (message) => {
 	console.error(message);
 	process.exit(1);
@@ -117,12 +128,12 @@ async function main() {
 	});
 
 	await record(checks, "template assets", async () => {
-		for (const template of ["ditto", "onyx", "scizor"]) {
-			const { response, bytes } = await fetchBinary(`/templates/jpg/${template}.jpg`);
+		for (const assetPath of expectedTemplateAssetPaths) {
+			const { response, bytes } = await fetchBinary(assetPath);
 			const contentType = response.headers.get("content-type") ?? "";
 
-			if (!contentType.includes("image/")) throw new Error(`${template}.jpg content-type is ${contentType}`);
-			if (bytes.length < 10_000) throw new Error(`${template}.jpg looks too small (${bytes.length} bytes)`);
+			if (!contentType.includes("image/")) throw new Error(`${assetPath} content-type is ${contentType}`);
+			if (bytes.length < 10_000) throw new Error(`${assetPath} looks too small (${bytes.length} bytes)`);
 		}
 	});
 
