@@ -23,10 +23,19 @@ describe("templates metadata", () => {
 				"collection002",
 				"collection003",
 				"collection005",
+				"collection007",
 				"collection016",
+				"collection017",
+				"collection018",
+				"collection019",
 				"collection020",
 				"collection021",
+				"collection022",
 				"collection024",
+				"collection026",
+				"collection027",
+				"collection028",
+				"collection029",
 				"chikorita",
 				"ditgar",
 				"ditto",
@@ -48,7 +57,7 @@ describe("templates metadata", () => {
 		for (const [id, meta] of entries) {
 			expect(meta.name, id).toBeTruthy();
 			expect(meta.description, id).toBeDefined();
-			expect(meta.imageUrl, id).toBe(`/templates/jpg/${id}.jpg`);
+			expect(meta.imageUrl, id).toMatch(/^\/templates\/(jpg|collection|online)\/.+\.(jpg|svg)$/);
 			expect(Array.isArray(meta.tags), id).toBe(true);
 			expect(meta.tags.length, id).toBeGreaterThan(0);
 		}
@@ -73,10 +82,19 @@ describe("templates metadata", () => {
 			"collection002",
 			"collection003",
 			"collection005",
+			"collection007",
 			"collection016",
+			"collection017",
+			"collection018",
+			"collection019",
 			"collection020",
 			"collection021",
+			"collection022",
 			"collection024",
+			"collection026",
+			"collection027",
+			"collection028",
+			"collection029",
 		]);
 		expect(featuredTemplateIds).not.toContain("azurill");
 		expect(featuredTemplateIds).not.toContain("onyx");
@@ -119,7 +137,17 @@ describe("templates metadata", () => {
 		}
 	});
 
-	it("exposes clean online style references for homepage and template gallery", () => {
+	it("promotes the stronger Chinese collection references into real selectable templates", () => {
+		expect(templates.collection019.imageUrl).toBe("/templates/collection/019.jpg");
+		expect(templates.collection026.imageUrl).toBe("/templates/collection/026.jpg");
+		expect(templates.collection028.imageUrl).toBe("/templates/collection/028.jpg");
+		expect(featuredTemplateIds).toEqual(expect.arrayContaining(["collection019", "collection026", "collection028"]));
+		expect(additionalCollectionTemplateReferences.map((reference) => reference.id)).not.toEqual(
+			expect.arrayContaining(["collection-019", "collection-026", "collection-028"]),
+		);
+	});
+
+	it("exposes remaining clean online style references for future production", () => {
 		expect(onlineStyleTemplateReferences).toHaveLength(8);
 		expect(new Set(onlineStyleTemplateReferences.map((reference) => reference.id)).size).toBe(
 			onlineStyleTemplateReferences.length,
@@ -136,15 +164,33 @@ describe("templates metadata", () => {
 
 	it("splits collection references by launch readiness", () => {
 		expect(recommendedCollectionTemplateReferences).toHaveLength(0);
-		expect(additionalCollectionTemplateReferences).toHaveLength(11);
+		expect(additionalCollectionTemplateReferences).toHaveLength(2);
 		expect(deferredCollectionTemplateReferences).toHaveLength(5);
 		expect([
 			...recommendedCollectionTemplateReferences,
 			...additionalCollectionTemplateReferences,
 			...deferredCollectionTemplateReferences,
-		]).toHaveLength(collectionTemplateReferences.length - 8);
+		]).toHaveLength(collectionTemplateReferences.length - 17);
 
-		for (const promotedId of ["001", "002", "003", "005", "016", "020", "021", "024"]) {
+		for (const promotedId of [
+			"001",
+			"002",
+			"003",
+			"005",
+			"007",
+			"016",
+			"017",
+			"018",
+			"019",
+			"020",
+			"021",
+			"022",
+			"024",
+			"026",
+			"027",
+			"028",
+			"029",
+		]) {
 			expect(templates[`collection${promotedId}` as keyof typeof templates]).toBeDefined();
 			expect(
 				recommendedCollectionTemplateReferences.some((reference) => reference.id === `collection-${promotedId}`),

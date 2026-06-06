@@ -1,7 +1,7 @@
 import type { Template } from "@reactive-resume/schema/templates";
 import type { DialogProps } from "@/dialogs/store";
 import type { CustomTemplatePreset } from "./custom-presets";
-import type { CollectionTemplateReference, TemplateMetadata } from "./data";
+import type { TemplateMetadata } from "./data";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -30,7 +30,7 @@ import {
 	saveCustomTemplatePresets,
 	saveHiddenSystemTemplates,
 } from "./custom-presets";
-import { collectionTemplateReferences, onlineStyleTemplateReferences, primaryTemplateIds, templates } from "./data";
+import { primaryTemplateIds, templates } from "./data";
 import { createRecommendedTemplateLayout } from "./layout";
 import { TemplateThumbnail } from "./thumbnail";
 
@@ -162,21 +162,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 
 		return matchesTemplateFilter([preset.name, baseTemplate.name, ...baseTemplate.tags], activeFilter, searchQuery);
 	});
-	const visibleOnlineStyles = onlineStyleTemplateReferences.filter((reference) =>
-		matchesTemplateFilter([reference.name, reference.description, ...reference.tags], activeFilter, searchQuery),
-	);
-	const promotedReferenceIds = new Set(["collection-001", "collection-002", "collection-003", "collection-005"]);
-	const visibleReferenceTemplates = collectionTemplateReferences.filter(
-		(reference) =>
-			!promotedReferenceIds.has(reference.id) &&
-			matchesTemplateFilter([reference.name, reference.description, ...reference.tags], activeFilter, searchQuery),
-	);
-	const resultCount =
-		visiblePrimaryTemplates.length +
-		visibleSecondaryTemplates.length +
-		visibleCustomPresets.length +
-		visibleOnlineStyles.length +
-		visibleReferenceTemplates.length;
+	const resultCount = visiblePrimaryTemplates.length + visibleSecondaryTemplates.length + visibleCustomPresets.length;
 
 	return (
 		<DialogContent className="lg:max-w-6xl">
@@ -188,8 +174,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 					</DialogTitle>
 					<DialogDescription className="leading-relaxed">
 						<Trans>
-							真实 PDF 模板可直接切换；外部参考图只用于挑选后续制作方向；Word 模板可在导出面板上传占位符
-							DOCX，并保留原样式填充文字。
+							这里展示的模板都可以直接切换并导出 PDF。上传已有简历请回到“导入已有简历”，这里的 JSON 只用于导入排版预设。
 						</Trans>
 					</DialogDescription>
 				</DialogHeader>
@@ -215,7 +200,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 						) : null}
 						<Button variant="outline" size="sm" className="gap-2" onClick={() => fileInputRef.current?.click()}>
 							<UploadSimpleIcon className="size-4" />
-							<Trans>导入排版预设（JSON）</Trans>
+							<Trans>导入排版预设（仅 JSON）</Trans>
 						</Button>
 					</div>
 				</div>
@@ -251,7 +236,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 							<TemplateSectionHeader
 								title="我的模板"
 								badge={`${visibleCustomPresets.length} 个`}
-								description="你导入或保存过的排版方案；只保存模板、布局、颜色和字体。"
+								description="你导入或保存过的排版方案；这里只保存模板、布局、颜色和字体，不导入简历正文。"
 							/>
 							<div className="grid grid-cols-1 xs:grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
 								{visibleCustomPresets.map((preset) => (
@@ -320,24 +305,6 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 						) : null}
 					</section>
 
-					<section className="space-y-4">
-						<TemplateSectionHeader
-							title="外部模板参考（待制作）"
-							badge={`${visibleReferenceTemplates.length} 个`}
-							description="这些样式还没有对应的可编辑 PDF 组件或 DOCX 源文件，不再强行套用系统模板；后续会按用户选择优先做成真实模板。"
-						/>
-						<CollectionReferenceGrid references={visibleReferenceTemplates} />
-					</section>
-
-					<section className="space-y-4">
-						<TemplateSectionHeader
-							title="线上风格灵感（仅参考）"
-							badge={`${visibleOnlineStyles.length} 个`}
-							description="这些是设计灵感图，不会直接改变当前简历；后续要逐个重做成真实可导出的模板后再开放选择。"
-						/>
-						<CollectionReferenceGrid references={visibleOnlineStyles} />
-					</section>
-
 					{resultCount === 0 ? (
 						<div className="rounded-md border border-dashed bg-secondary/20 px-4 py-10 text-center text-muted-foreground text-sm">
 							<Trans>没有找到匹配的模板，可以换个关键词或选择“全部”。</Trans>
@@ -367,20 +334,6 @@ function TemplateSectionHeader({ badge, description, title }: TemplateSectionHea
 	);
 }
 
-type CollectionReferenceGridProps = {
-	references: readonly CollectionTemplateReference[];
-};
-
-function CollectionReferenceGrid({ references }: CollectionReferenceGridProps) {
-	return (
-		<div className="grid grid-cols-1 xs:grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
-			{references.map((reference) => (
-				<CollectionReferenceCard key={reference.id} reference={reference} />
-			))}
-		</div>
-	);
-}
-
 type SystemTemplateCardProps = {
 	id: Template;
 	isActive?: boolean;
@@ -401,7 +354,7 @@ function SystemTemplateCard({ id, metadata, isActive, onDelete, onSelect }: Syst
 		>
 			<button type="button" className="block w-full p-2 text-left outline-none" onClick={() => onSelect(id)}>
 				<div className="aspect-page overflow-hidden rounded-sm border bg-white shadow-sm">
-					<TemplateThumbnail template={id} label={metadata.name} />
+					<TemplateThumbnail template={id} label={metadata.name} imageUrl={metadata.imageUrl} />
 				</div>
 
 				<div className="min-h-24 space-y-2 px-1 pt-3 pb-2">
@@ -454,7 +407,7 @@ function CustomTemplateCard({ preset, onDelete, onSelect }: CustomTemplateCardPr
 		<article className="overflow-hidden rounded-md border bg-background transition-colors hover:border-foreground/25">
 			<button type="button" className="block w-full p-2 text-left outline-none" onClick={() => onSelect(preset)}>
 				<div className="aspect-page overflow-hidden rounded-sm border bg-white shadow-sm">
-					<TemplateThumbnail template={preset.metadata.template} label={preset.name} />
+					<TemplateThumbnail template={preset.metadata.template} label={preset.name} imageUrl={baseTemplate.imageUrl} />
 				</div>
 
 				<div className="min-h-24 space-y-2 px-1 pt-3 pb-2">
@@ -480,52 +433,6 @@ function CustomTemplateCard({ preset, onDelete, onSelect }: CustomTemplateCardPr
 					<TrashSimpleIcon className="size-3.5" />
 					<Trans>删除</Trans>
 				</Button>
-			</div>
-		</article>
-	);
-}
-
-type CollectionReferenceCardProps = {
-	reference: CollectionTemplateReference;
-};
-
-function CollectionReferenceCard({ reference }: CollectionReferenceCardProps) {
-	return (
-		<article className="overflow-hidden rounded-md border bg-background transition-colors hover:border-foreground/25">
-			<div className="block w-full p-2 text-left">
-				<div className="aspect-page overflow-hidden rounded-sm border bg-white shadow-sm">
-					<img
-						src={reference.imageUrl}
-						alt={reference.name}
-						className="size-full bg-white object-contain"
-						loading="lazy"
-					/>
-				</div>
-
-				<div className="min-h-28 space-y-2 px-1 pt-3 pb-2">
-					<div className="flex items-start justify-between gap-2">
-						<h4 className="line-clamp-1 font-semibold text-sm">{reference.name}</h4>
-						<Badge variant="secondary" className="shrink-0">
-							仅参考
-						</Badge>
-					</div>
-					<p className="line-clamp-2 text-muted-foreground text-xs leading-relaxed">{reference.description}</p>
-					<p className="text-[11px] text-muted-foreground">后续制作成真实可选模板后开放使用</p>
-				</div>
-			</div>
-
-			<div className="flex min-h-12 items-center justify-between gap-2 border-t px-3 py-2">
-				<div className="flex min-w-0 flex-wrap gap-1.5">
-					{reference.tags.slice(0, 2).map((tag) => (
-						<Badge key={tag} variant="secondary" className="max-w-24 truncate text-[11px]">
-							{tag}
-						</Badge>
-					))}
-				</div>
-
-				<Badge variant="outline" className="shrink-0 text-[11px]">
-					待制作真实模板
-				</Badge>
 			</div>
 		</article>
 	);

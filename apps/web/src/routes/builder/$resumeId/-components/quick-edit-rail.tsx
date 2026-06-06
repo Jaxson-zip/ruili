@@ -29,7 +29,10 @@ export function BuilderQuickEditRail() {
 	];
 
 	return (
-		<nav aria-label={t`快速编辑`} className="pointer-events-none fixed inset-x-3 top-20 z-30 flex justify-center">
+		<nav
+			aria-label={t`快速编辑`}
+			className="pointer-events-none fixed inset-x-3 top-20 z-30 hidden justify-center sm:flex"
+		>
 			<div className="pointer-events-auto flex max-w-[min(56rem,calc(100vw-1.5rem))] items-center gap-1 overflow-x-auto rounded-lg border bg-popover/95 p-1 shadow-lg backdrop-blur">
 				<span className="hidden shrink-0 border-e px-2 font-medium text-muted-foreground text-xs sm:block">
 					{t`快速编辑`}

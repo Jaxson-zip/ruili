@@ -72,6 +72,14 @@ export const templates = {
 		tags: ["中文模板", "侧栏", "技术岗", "可导出"],
 		sidebarPosition: "left",
 	},
+	collection007: {
+		name: "深灰蓝栏",
+		description: msg`深灰信息栏搭配蓝色模块标题，信息密度高，适合技术、数据、设计和项目型中文简历。`,
+		imageUrl: "/templates/jpg/collection007.jpg",
+		accentColor: "rgba(30, 145, 190, 1)",
+		tags: ["中文模板", "深灰", "侧栏", "可导出"],
+		sidebarPosition: "left",
+	},
 	collection016: {
 		name: "浅蓝双栏",
 		description: msg`浅蓝信息栏配合右侧经历时间线，适合校招、实习、初级岗位和信息完整的中文简历。`,
@@ -79,6 +87,30 @@ export const templates = {
 		accentColor: "rgba(79, 153, 207, 1)",
 		tags: ["中文模板", "浅蓝", "校招", "可导出"],
 		sidebarPosition: "left",
+	},
+	collection017: {
+		name: "绿色侧栏",
+		description: msg`绿色模块层级清楚，视觉温和但不空，适合运营、行政、职能和业务支持岗位。`,
+		imageUrl: "/templates/jpg/collection017.jpg",
+		accentColor: "rgba(88, 165, 62, 1)",
+		tags: ["中文模板", "绿色", "职能", "可导出"],
+		sidebarPosition: "left",
+	},
+	collection018: {
+		name: "灰色信息栏",
+		description: msg`灰色信息栏更克制稳重，适合财务、行政、法务、传统行业和正式投递场景。`,
+		imageUrl: "/templates/jpg/collection018.jpg",
+		accentColor: "rgba(82, 91, 102, 1)",
+		tags: ["中文模板", "灰色", "稳重", "可导出"],
+		sidebarPosition: "left",
+	},
+	collection019: {
+		name: "蓝色块面",
+		description: msg`蓝色块面和传统信息区更接近常见中文招聘模板，适合校招、职能和传统行业投递。`,
+		imageUrl: "/templates/collection/019.jpg",
+		accentColor: "rgba(75, 147, 190, 1)",
+		tags: ["中文模板", "蓝色", "块面", "可导出"],
+		sidebarPosition: "right",
 	},
 	collection020: {
 		name: "青蓝侧栏",
@@ -96,12 +128,52 @@ export const templates = {
 		tags: ["中文模板", "标签", "通用", "可导出"],
 		sidebarPosition: "none",
 	},
+	collection022: {
+		name: "绿色时间轴",
+		description: msg`绿色时间线和侧栏组合，模块区分清楚，适合运营、市场、职能和成长路径明确的候选人。`,
+		imageUrl: "/templates/jpg/collection022.jpg",
+		accentColor: "rgba(48, 177, 89, 1)",
+		tags: ["中文模板", "绿色", "时间轴", "可导出"],
+		sidebarPosition: "left",
+	},
 	collection024: {
 		name: "蓝色边框",
 		description: msg`蓝色边框和左右分区更接近传统中文招聘模板，适合校招、技术和通用岗位。`,
 		imageUrl: "/templates/jpg/collection024.jpg",
 		accentColor: "rgba(47, 132, 189, 1)",
 		tags: ["中文模板", "边框", "双栏", "可导出"],
+		sidebarPosition: "left",
+	},
+	collection026: {
+		name: "深灰橙色",
+		description: msg`深灰侧栏配橙色强调，信息层级强，适合项目型、设计型和技术型中文简历。`,
+		imageUrl: "/templates/collection/026.jpg",
+		accentColor: "rgba(232, 137, 43, 1)",
+		tags: ["中文模板", "深灰", "橙色", "可导出"],
+		sidebarPosition: "left",
+	},
+	collection027: {
+		name: "绿色横栏",
+		description: msg`绿色横栏较传统但层级明确，适合网申、校招和需要一页高密度展示的通用投递。`,
+		imageUrl: "/templates/jpg/collection027.jpg",
+		accentColor: "rgba(80, 180, 107, 1)",
+		tags: ["中文模板", "绿色", "单栏", "可导出"],
+		sidebarPosition: "none",
+	},
+	collection028: {
+		name: "蓝色二维码栏",
+		description: msg`蓝色侧栏适合放头像、联系方式和作品入口，适合有项目链接或作品集的候选人。`,
+		imageUrl: "/templates/collection/028.jpg",
+		accentColor: "rgba(76, 139, 191, 1)",
+		tags: ["中文模板", "蓝色", "二维码栏", "可导出"],
+		sidebarPosition: "left",
+	},
+	collection029: {
+		name: "细蓝侧栏",
+		description: msg`细蓝侧栏和项目分区明显，适合技术、项目、工程和需要展示作品入口的候选人。`,
+		imageUrl: "/templates/jpg/collection029.jpg",
+		accentColor: "rgba(40, 150, 215, 1)",
+		tags: ["中文模板", "蓝色", "项目", "可导出"],
 		sidebarPosition: "left",
 	},
 	chikorita: {
@@ -208,23 +280,41 @@ export const featuredTemplateIds = [
 	"collection002",
 	"collection003",
 	"collection005",
+	"collection007",
 	"collection016",
+	"collection017",
+	"collection018",
+	"collection019",
 	"collection020",
 	"collection021",
+	"collection022",
 	"collection024",
+	"collection026",
+	"collection027",
+	"collection028",
+	"collection029",
 ] as const satisfies Template[];
 
 export const primaryTemplateIds = featuredTemplateIds;
 
-const promotedCollectionReferenceIds = new Set([
+export const promotedCollectionReferenceIds = new Set([
 	"collection-001",
 	"collection-002",
 	"collection-003",
 	"collection-005",
+	"collection-007",
 	"collection-016",
+	"collection-017",
+	"collection-018",
+	"collection-019",
 	"collection-020",
 	"collection-021",
+	"collection-022",
 	"collection-024",
+	"collection-026",
+	"collection-027",
+	"collection-028",
+	"collection-029",
 ]);
 
 export const onlineStyleTemplateReferences = [
@@ -590,9 +680,15 @@ export const recommendedCollectionTemplateReferences = collectionTemplateReferen
 );
 
 export const additionalCollectionTemplateReferences = collectionTemplateReferences.filter(
-	(reference) => reference.review === "可参考",
+	(reference) => reference.review === "可参考" && !promotedCollectionReferenceIds.has(reference.id),
 );
 
 export const deferredCollectionTemplateReferences = collectionTemplateReferences.filter(
 	(reference) => reference.review === "待重做",
 );
+
+export const homepageTemplateReferencePreviews = [
+	...recommendedCollectionTemplateReferences,
+	...additionalCollectionTemplateReferences,
+	...onlineStyleTemplateReferences,
+] as const;

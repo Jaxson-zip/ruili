@@ -70,4 +70,15 @@ describe("buildDocument", () => {
 		data.metadata.typography.heading.fontFamily = "";
 		expect(() => buildDocument(data)).not.toThrow();
 	});
+
+	it.each([
+		"collection019",
+		"collection026",
+		"collection028",
+	] as const)("exports the promoted Chinese collection template %s to docx", (template) => {
+		const data = structuredClone(sampleResumeData);
+		data.metadata.template = template;
+
+		expect(buildDocument(data)).toBeInstanceOf(Document);
+	});
 });

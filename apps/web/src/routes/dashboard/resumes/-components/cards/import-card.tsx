@@ -10,7 +10,7 @@ export function ImportResumeCard() {
 		<BaseCard
 			asButton
 			title={t`导入已有简历`}
-			description={t`继续编辑已有版本`}
+			description={t`支持 Word / PDF / 图片 / JSON`}
 			onClick={() => openDialog("resume.import", undefined)}
 		>
 			<div className="absolute inset-0 flex items-center justify-center">

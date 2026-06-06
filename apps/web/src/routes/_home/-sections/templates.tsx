@@ -2,12 +2,7 @@ import type { Template } from "@reactive-resume/schema/templates";
 import { Trans } from "@lingui/react/macro";
 import { m } from "motion/react";
 import { useMemo } from "react";
-import {
-	additionalCollectionTemplateReferences,
-	featuredTemplateIds,
-	recommendedCollectionTemplateReferences,
-	templates as systemTemplates,
-} from "@/dialogs/resume/template/data";
+import { featuredTemplateIds, templates as systemTemplates } from "@/dialogs/resume/template/data";
 
 type SystemTemplatePreview = {
 	id: string;
@@ -36,17 +31,6 @@ const createSystemTemplatePreviews = (templates: readonly Template[]): SystemTem
 	}));
 
 const promotedTemplatePreviews = createSystemTemplatePreviews(featuredTemplateIds);
-
-const referenceTemplatePreviews: SystemTemplatePreview[] = [
-	...recommendedCollectionTemplateReferences,
-	...additionalCollectionTemplateReferences,
-].map((reference) => ({
-	id: `reference-${reference.id}`,
-	name: reference.name,
-	role: reference.tags.slice(0, 3).join(" / "),
-	imageUrl: reference.imageUrl,
-	source: "待制作真实模板",
-}));
 
 function TemplateItem({ preview }: TemplateItemProps) {
 	return (
@@ -108,9 +92,13 @@ const createMarqueeItems = (entries: SystemTemplatePreview[], rowId: string): Te
 
 export function Templates() {
 	const { row1, row2 } = useMemo(() => {
+		const splitIndex = Math.ceil(promotedTemplatePreviews.length / 2);
+		const firstRowTemplates = promotedTemplatePreviews.slice(0, splitIndex);
+		const secondRowTemplates = promotedTemplatePreviews.slice(splitIndex);
+
 		return {
-			row1: createMarqueeItems(promotedTemplatePreviews, "row1"),
-			row2: createMarqueeItems(referenceTemplatePreviews, "row2"),
+			row1: createMarqueeItems(firstRowTemplates, "row1"),
+			row2: createMarqueeItems(secondRowTemplates, "row2"),
 		};
 	}, []);
 
@@ -128,7 +116,7 @@ export function Templates() {
 				</h2>
 
 				<p className="max-w-2xl text-muted-foreground leading-relaxed">
-					<Trans>第一排已经升级为真实可导出的中文模板；第二排是待制作样张，不会再强行套成别的模板。</Trans>
+					<Trans>精选真实可导出的中文模板，优先展示更接近中文招聘习惯的版式。</Trans>
 				</p>
 			</m.div>
 

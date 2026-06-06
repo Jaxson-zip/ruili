@@ -113,7 +113,7 @@ export function BuilderQuickEditPanel() {
 		<section
 			aria-label={t`快速编辑：${title}`}
 			data-testid="builder-quick-edit-panel"
-			className="fixed top-[8.25rem] z-30 max-h-[calc(100svh-10rem)] w-[min(22rem,calc(100vw-2rem))] overflow-y-auto rounded-lg border bg-popover/95 p-3 shadow-xl backdrop-blur"
+			className="fixed top-[8.25rem] z-30 hidden max-h-[calc(100svh-10rem)] w-[min(22rem,calc(100vw-2rem))] overflow-y-auto rounded-lg border bg-popover/95 p-3 shadow-xl backdrop-blur sm:block"
 			style={{ right: `calc(${rightSidebarWidth}% + 1rem)` }}
 		>
 			<div className="mb-3 flex items-center justify-between gap-3">

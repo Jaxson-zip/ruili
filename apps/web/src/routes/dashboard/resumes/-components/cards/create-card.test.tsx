@@ -18,14 +18,14 @@ afterEach(() => {
 describe("CreateResumeCard", () => {
 	it("renders the create-resume copy", () => {
 		render(<CreateResumeCard />);
-		expect(screen.getByText("选择模板创建")).toBeInTheDocument();
-		expect(screen.getByText("先选真实模板，再填写内容")).toBeInTheDocument();
+		expect(screen.getByText("从样张开始")).toBeInTheDocument();
+		expect(screen.getByText("先看完整效果，再替换内容")).toBeInTheDocument();
 	});
 
 	it("opens the resume.create dialog when clicked", () => {
 		render(<CreateResumeCard />);
 
-		fireEvent.click(screen.getByRole("button", { name: /选择模板创建/ }));
+		fireEvent.click(screen.getByRole("button", { name: /从样张开始/ }));
 
 		const state = useDialogStore.getState();
 		expect(state.open).toBe(true);
@@ -37,7 +37,7 @@ describe("ImportResumeCard", () => {
 	it("renders the import-resume copy", () => {
 		render(<ImportResumeCard />);
 		expect(screen.getByText("导入已有简历")).toBeInTheDocument();
-		expect(screen.getByText("继续编辑已有版本")).toBeInTheDocument();
+		expect(screen.getByText("支持 Word / PDF / 图片 / JSON")).toBeInTheDocument();
 	});
 
 	it("opens the resume.import dialog when clicked", () => {

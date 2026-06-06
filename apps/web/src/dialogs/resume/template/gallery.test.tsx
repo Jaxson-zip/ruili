@@ -7,7 +7,7 @@ import { I18nProvider } from "@lingui/react";
 import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
 import { Dialog } from "@reactive-resume/ui/components/dialog";
 import { useDialogStore } from "@/dialogs/store";
-import { collectionTemplateReferences, onlineStyleTemplateReferences, primaryTemplateIds, templates } from "./data";
+import { primaryTemplateIds, templates } from "./data";
 
 const updateResumeData = vi.hoisted(() => vi.fn());
 
@@ -43,31 +43,24 @@ describe("TemplateGalleryDialog", () => {
 	it("renders the localized title and intro copy", () => {
 		renderGallery();
 		expect(screen.getByText("模板库")).toBeInTheDocument();
-		expect(screen.getByText(/真实 PDF 模板可直接切换/)).toBeInTheDocument();
-		expect(screen.getByText(/保留原样式填充文字/)).toBeInTheDocument();
+		expect(screen.getByText(/这里展示的模板都可以直接切换并导出 PDF/)).toBeInTheDocument();
 		expect(screen.getByText("Word 模板保留原样式")).toBeInTheDocument();
-		expect(screen.getByRole("button", { name: "导入排版预设（JSON）" })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "导入排版预设（仅 JSON）" })).toBeInTheDocument();
 		expect(screen.getByLabelText("搜索模板")).toBeInTheDocument();
 	});
 
-	it("renders exportable templates and online styles by default", () => {
+	it("renders only exportable templates by default", () => {
 		renderGallery();
-		const promotedReferenceIds = new Set(["collection-001", "collection-002", "collection-003", "collection-005"]);
-		const referenceCount = collectionTemplateReferences.filter(
-			(reference) => !promotedReferenceIds.has(reference.id),
-		).length;
 		const previews = screen.getAllByRole("img");
-		expect(previews).toHaveLength(
-			Object.keys(templates).length + referenceCount + onlineStyleTemplateReferences.length,
-		);
+		expect(previews).toHaveLength(Object.keys(templates).length);
 		expect(screen.getByText("精品可导出模板")).toBeInTheDocument();
-		expect(screen.getByText("外部模板参考（待制作）")).toBeInTheDocument();
-		expect(screen.getByText("线上风格灵感（仅参考）")).toBeInTheDocument();
-		expect(screen.getAllByText(`${referenceCount} 个`).length).toBeGreaterThan(0);
-		expect(screen.getAllByText(`${onlineStyleTemplateReferences.length} 个`).length).toBeGreaterThan(0);
-		expect(screen.getByRole("img", { name: onlineStyleTemplateReferences[0]?.name })).toBeInTheDocument();
+		expect(screen.queryByText("外部模板参考（待制作）")).toBeNull();
+		expect(screen.queryByText("线上风格灵感（仅参考）")).toBeNull();
+		expect(screen.getByRole("img", { name: "蓝色块面" })).toBeInTheDocument();
+		expect(screen.getByRole("img", { name: "深灰橙色" })).toBeInTheDocument();
+		expect(screen.getByRole("img", { name: "蓝色二维码栏" })).toBeInTheDocument();
 		expect(screen.queryByRole("button", { name: "套用相近版式：001 蓝色时间轴" })).toBeNull();
-		expect(screen.getAllByText("仅参考").length).toBeGreaterThanOrEqual(onlineStyleTemplateReferences.length);
+		expect(screen.queryByText("仅参考")).toBeNull();
 		expect(screen.queryByText(/待重做参考/)).toBeNull();
 		expect(screen.queryByText(/内部筛选/)).toBeNull();
 	});
@@ -83,9 +76,9 @@ describe("TemplateGalleryDialog", () => {
 
 	it("filters templates and styles with search", () => {
 		renderGallery();
-		fireEvent.change(screen.getByLabelText("搜索模板"), { target: { value: "HR" } });
+		fireEvent.change(screen.getByLabelText("搜索模板"), { target: { value: "ATS" } });
 
-		expect(screen.getByRole("img", { name: "HR 清爽" })).toBeInTheDocument();
+		expect(screen.getByRole("img", { name: "ATS 极简" })).toBeInTheDocument();
 		expect(screen.queryByRole("img", { name: "技术侧栏" })).toBeNull();
 	});
 
@@ -125,24 +118,18 @@ describe("TemplateGalleryDialog", () => {
 		expect(draft.metadata.layout.pages[0]?.main).toContain("skills");
 	});
 
-	it("keeps online style references read-only so static images cannot change the active template", () => {
+	it("lets promoted collection references change the active template", () => {
 		renderGallery();
-		const reference = onlineStyleTemplateReferences[0];
-		if (!reference) throw new Error("Expected at least one online style reference.");
+		const preview = screen.getByRole("img", { name: "蓝色二维码栏" });
+		const button = preview.closest("button") as HTMLButtonElement;
+		fireEvent.click(button);
 
-		expect(screen.getByRole("img", { name: reference.name })).toBeInTheDocument();
-		expect(screen.queryByLabelText(`套用参考样式：${reference.name}`)).toBeNull();
-		expect(updateResumeData).not.toHaveBeenCalled();
-	});
-
-	it("keeps non-promoted collection references read-only", () => {
-		renderGallery();
-		const reference = collectionTemplateReferences.find((reference) => reference.id === "collection-016");
-		if (!reference) throw new Error("Expected at least one collection reference.");
-
-		expect(screen.getByRole("img", { name: reference.name })).toBeInTheDocument();
-		expect(screen.queryByRole("button", { name: `套用相近版式：${reference.name}` })).toBeNull();
-		expect(updateResumeData).not.toHaveBeenCalled();
+		expect(updateResumeData).toHaveBeenCalledTimes(1);
+		const recipe = updateResumeData.mock.calls[0]?.[0] as (draft: typeof sampleResumeData) => void;
+		const draft = structuredClone(sampleResumeData);
+		recipe(draft);
+		expect(draft.metadata.template).toBe("collection028");
+		expect(draft.metadata.design.colors.primary).toBe(templates.collection028.accentColor);
 	});
 
 	it("hides and restores system templates", () => {

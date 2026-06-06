@@ -32,15 +32,36 @@ describe("resumeTemplateStarters", () => {
 			"collection002",
 			"collection003",
 			"collection005",
+			"collection007",
 			"collection016",
+			"collection017",
+			"collection018",
+			"collection019",
 			"collection020",
 			"collection021",
+			"collection022",
 			"collection024",
+			"collection026",
+			"collection027",
+			"collection028",
+			"collection029",
 		]);
 
 		for (const starter of resumeTemplateStarters) {
 			expect(curatedTemplates.has(starter.template), starter.id).toBe(true);
 			expect(starter.data.metadata.template).toBe(starter.template);
+		}
+	});
+
+	it("includes filled starter samples for the preferred visual collection templates", () => {
+		const startersByTemplate = new Map(resumeTemplateStarters.map((starter) => [starter.template, starter]));
+
+		for (const template of ["collection019", "collection026", "collection028"] as const) {
+			const starter = startersByTemplate.get(template);
+			expect(starter, template).toBeDefined();
+			expect(starter?.data.basics.name, template).not.toBe("");
+			expect(starter?.data.summary.content, template).not.toBe("");
+			expect(starter?.data.metadata.layout.pages[0]?.fullWidth, template).toBe(false);
 		}
 	});
 

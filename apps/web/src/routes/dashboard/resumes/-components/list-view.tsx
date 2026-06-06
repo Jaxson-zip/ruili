@@ -76,7 +76,7 @@ export function ListView({ resumes }: ListViewProps) {
 					</div>
 
 					<p className="text-xs opacity-60">
-						<Trans>继续编辑已有版本</Trans>
+						<Trans>支持 Word / PDF / 图片 / JSON</Trans>
 					</p>
 				</Button>
 			</m.div>
