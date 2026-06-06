@@ -7,7 +7,7 @@ import { MagicWandIcon, PencilSimpleLineIcon, PlusIcon } from "@phosphor-icons/r
 import { useStore } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import z from "zod";
 import { resumeTemplateStarters } from "@reactive-resume/schema/resume/starters";
@@ -37,6 +37,7 @@ import { getResumeErrorMessage } from "@/libs/error-message";
 import { orpc } from "@/libs/orpc/client";
 import { useAppForm, withForm } from "@/libs/tanstack-form";
 import { useDialogStore } from "../store";
+import { getStarterPreviewImageUrl } from "./starter-preview";
 import { primaryTemplateIds, templates } from "./template/data";
 import { TemplateThumbnail } from "./template/thumbnail";
 import { buildBlankTemplateImportInput, buildResumeStarterImportInput } from "./template-starter-import";
@@ -91,6 +92,7 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 	});
 
 	const name = useStore(form.store, (s) => s.values.name);
+	const [showAdvancedCreateOptions, setShowAdvancedCreateOptions] = useState(false);
 
 	useEffect(() => {
 		form.setFieldValue("slug", slugify(name));
@@ -141,7 +143,7 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 				</DialogTitle>
 				<DialogDescription>
 					<Trans>
-						可以先选一个真实可导出的模板创建空白简历，也可以套用带中文示例内容的成品样张；进入编辑器后仍可继续切换模板。
+						建议先套用带中文内容的成品样张，确认完整 PDF 效果后再替换成自己的经历；也可以创建空白模板从零填写。
 					</Trans>
 				</DialogDescription>
 			</DialogHeader>
@@ -157,79 +159,30 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 				<section className="space-y-3">
 					<div className="flex flex-col gap-1">
 						<h3 className="font-semibold text-sm">
-							<Trans>从精选模板开始</Trans>
-							<span className="ms-2 text-muted-foreground">({primaryTemplateIds.length} 套)</span>
-						</h3>
-						<p className="text-muted-foreground text-sm">
-							<Trans>这里只放上线推荐模板；更多可导出模板可在进入编辑器后从模板库切换。</Trans>
-						</p>
-					</div>
-
-					<div className="grid max-h-[42svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-4">
-						{primaryTemplateIds.map((template) => {
-							const metadata = templates[template];
-
-							return (
-								<button
-									key={template}
-									type="button"
-									disabled={isBusy}
-									className="group overflow-hidden rounded-md border bg-background text-left transition-colors hover:border-foreground/30 disabled:cursor-not-allowed disabled:opacity-60"
-									onClick={() => onCreateFromTemplate(template)}
-								>
-									<div className="aspect-page overflow-hidden border-b bg-white">
-										<TemplateThumbnail template={template} label={metadata.name} />
-									</div>
-
-									<div className="space-y-2 p-3">
-										<div className="flex items-start justify-between gap-2">
-											<h4 className="line-clamp-1 font-semibold text-sm">{metadata.name}</h4>
-											<Badge variant="secondary" className="shrink-0 text-[11px]">
-												PDF
-											</Badge>
-										</div>
-										<p className="line-clamp-2 min-h-10 text-muted-foreground text-xs leading-relaxed">
-											{i18n.t(metadata.description)}
-										</p>
-										<div className="flex flex-wrap gap-1">
-											{metadata.tags.slice(0, 3).map((tag) => (
-												<Badge key={tag} variant="secondary" className="text-[11px]">
-													{tag}
-												</Badge>
-											))}
-										</div>
-										<div className="pt-1 font-medium text-primary text-xs group-hover:underline">
-											<Trans>用此模板创建空白简历</Trans>
-										</div>
-									</div>
-								</button>
-							);
-						})}
-					</div>
-				</section>
-
-				<section className="space-y-3">
-					<div className="flex flex-col gap-1">
-						<h3 className="font-semibold text-sm">
 							<Trans>从成品样张开始</Trans>
 							<span className="ms-2 text-muted-foreground">({resumeTemplateStarters.length} 套)</span>
 						</h3>
 						<p className="text-muted-foreground text-sm">
-							<Trans>这些是带中文候选人内容的示例，适合想先看完整填写效果再替换内容的用户。</Trans>
+							<Trans>带中文候选人内容，创建后能直接看到完整 PDF 版式，再逐项替换为自己的信息。</Trans>
 						</p>
 					</div>
 
-					<div className="grid max-h-[34svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-4">
+					<div className="grid max-h-[42svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-4">
 						{resumeTemplateStarters.map((starter) => (
 							<button
 								key={starter.id}
 								type="button"
+								data-starter-id={starter.id}
 								disabled={isBusy}
 								className="group overflow-hidden rounded-md border bg-background text-left transition-colors hover:border-foreground/30 disabled:cursor-not-allowed disabled:opacity-60"
 								onClick={() => onCreateFromStarter(starter)}
 							>
 								<div className="aspect-page overflow-hidden border-b bg-white">
-									<TemplateThumbnail template={starter.template} label={starter.name} />
+									<TemplateThumbnail
+										template={starter.template}
+										label={starter.name}
+										imageUrl={getStarterPreviewImageUrl(starter)}
+									/>
 								</div>
 
 								<div className="space-y-2 p-3">
@@ -257,24 +210,95 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 					</div>
 				</section>
 
-				<section className="space-y-4 rounded-md border bg-secondary/20 p-4">
-					<div className="flex flex-col gap-1">
-						<h3 className="font-semibold text-sm">
-							<Trans>或者从空白简历开始</Trans>
-						</h3>
-						<p className="text-muted-foreground text-sm">
-							<Trans>输入名称后创建空白版本，后续仍可添加组件、切换模板和调整排版。</Trans>
-						</p>
-					</div>
-
-					<ResumeForm form={form} />
-				</section>
-
-				<DialogFooter>
-					<Button type="submit" disabled={isBusy}>
-						<Trans>创建空白简历</Trans>
+				<div className="flex justify-center border-t pt-4">
+					<Button
+						type="button"
+						variant="ghost"
+						size="sm"
+						onClick={() => setShowAdvancedCreateOptions((visible) => !visible)}
+					>
+						{showAdvancedCreateOptions ? "收起空白创建入口" : "需要空白模板？展开高级入口"}
 					</Button>
-				</DialogFooter>
+				</div>
+
+				{showAdvancedCreateOptions ? (
+					<section className="space-y-3">
+						<div className="flex flex-col gap-1">
+							<h3 className="font-semibold text-sm">
+								<Trans>从空白模板开始</Trans>
+								<span className="ms-2 text-muted-foreground">({primaryTemplateIds.length} 套)</span>
+							</h3>
+							<p className="text-muted-foreground text-sm">
+								<Trans>只切换版式、颜色和布局；适合已经有内容、想从零填写的人。</Trans>
+							</p>
+						</div>
+
+						<div className="grid max-h-[34svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-4">
+							{primaryTemplateIds.map((template) => {
+								const metadata = templates[template];
+
+								return (
+									<button
+										key={template}
+										type="button"
+										disabled={isBusy}
+										className="group overflow-hidden rounded-md border bg-background text-left transition-colors hover:border-foreground/30 disabled:cursor-not-allowed disabled:opacity-60"
+										onClick={() => onCreateFromTemplate(template)}
+									>
+										<div className="aspect-page overflow-hidden border-b bg-white">
+											<TemplateThumbnail template={template} label={metadata.name} imageUrl={metadata.imageUrl} />
+										</div>
+
+										<div className="space-y-2 p-3">
+											<div className="flex items-start justify-between gap-2">
+												<h4 className="line-clamp-1 font-semibold text-sm">{metadata.name}</h4>
+												<Badge variant="secondary" className="shrink-0 text-[11px]">
+													PDF
+												</Badge>
+											</div>
+											<p className="line-clamp-2 min-h-10 text-muted-foreground text-xs leading-relaxed">
+												{i18n.t(metadata.description)}
+											</p>
+											<div className="flex flex-wrap gap-1">
+												{metadata.tags.slice(0, 3).map((tag) => (
+													<Badge key={tag} variant="secondary" className="text-[11px]">
+														{tag}
+													</Badge>
+												))}
+											</div>
+											<div className="pt-1 font-medium text-primary text-xs group-hover:underline">
+												<Trans>创建空白简历</Trans>
+											</div>
+										</div>
+									</button>
+								);
+							})}
+						</div>
+					</section>
+				) : null}
+
+				{showAdvancedCreateOptions ? (
+					<section className="space-y-4 rounded-md border bg-secondary/20 p-4">
+						<div className="flex flex-col gap-1">
+							<h3 className="font-semibold text-sm">
+								<Trans>或者从空白简历开始</Trans>
+							</h3>
+							<p className="text-muted-foreground text-sm">
+								<Trans>输入名称后创建空白版本，后续仍可添加组件、切换模板和调整排版。</Trans>
+							</p>
+						</div>
+
+						<ResumeForm form={form} />
+					</section>
+				) : null}
+
+				{showAdvancedCreateOptions ? (
+					<DialogFooter>
+						<Button type="submit" disabled={isBusy}>
+							<Trans>创建空白简历</Trans>
+						</Button>
+					</DialogFooter>
+				) : null}
 			</form>
 		</DialogContent>
 	);

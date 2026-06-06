@@ -8,11 +8,21 @@ type BaseCardProps = {
 	description: string;
 	tags?: string[];
 	className?: string;
+	testId?: string;
 	children?: React.ReactNode;
 	onClick?: React.MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
 };
 
-export function BaseCard({ asButton = false, title, description, tags, className, children, onClick }: BaseCardProps) {
+export function BaseCard({
+	asButton = false,
+	title,
+	description,
+	tags,
+	className,
+	testId,
+	children,
+	onClick,
+}: BaseCardProps) {
 	const cardClassName = cn(
 		"relative flex aspect-page size-full overflow-hidden rounded-md bg-popover text-left text-foreground shadow transition-shadow hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
 		className,
@@ -39,11 +49,13 @@ export function BaseCard({ asButton = false, title, description, tags, className
 	return (
 		<CometCard translateDepth={3} rotateDepth={6}>
 			{asButton ? (
-				<button type="button" className={cardClassName} onClick={onClick}>
+				<button type="button" className={cardClassName} data-testid={testId} onClick={onClick}>
 					{content}
 				</button>
 			) : (
-				<div className={cardClassName}>{content}</div>
+				<div className={cardClassName} data-testid={testId}>
+					{content}
+				</div>
 			)}
 		</CometCard>
 	);

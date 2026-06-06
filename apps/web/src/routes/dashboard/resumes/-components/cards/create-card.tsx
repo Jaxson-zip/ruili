@@ -9,8 +9,9 @@ export function CreateResumeCard() {
 	return (
 		<BaseCard
 			asButton
-			title={t`选择模板创建`}
-			description={t`先选真实模板，再填写内容`}
+			testId="create-resume-from-starter"
+			title={t`从样张开始`}
+			description={t`先看完整效果，再替换内容`}
 			onClick={() => openDialog("resume.create", undefined)}
 		>
 			<div className="absolute inset-0 flex items-center justify-center">
