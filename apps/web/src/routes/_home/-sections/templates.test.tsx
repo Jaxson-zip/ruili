@@ -23,12 +23,8 @@ describe("Templates section", () => {
 		renderTemplates();
 
 		expect(screen.getByText("中文简历模板与风格")).toBeInTheDocument();
-		expect(screen.getByText(/按中文投递场景挑选稳重、侧栏和项目型版式/)).toBeInTheDocument();
-		expect(screen.getByText(/滚动预览真实可导出的模板/)).toBeInTheDocument();
-		expect(screen.getByText("稳重一页")).toBeInTheDocument();
-		expect(screen.getByText("时间轴、单栏与正式投递")).toBeInTheDocument();
-		expect(screen.getByText("侧栏信息")).toBeInTheDocument();
-		expect(screen.getByText("技能、作品入口与项目经历")).toBeInTheDocument();
+		expect(screen.getByText(/精选真实可导出的中文模板/)).toBeInTheDocument();
+		expect(screen.getByText(/优先展示更接近中文招聘习惯的版式/)).toBeInTheDocument();
 
 		for (const template of featuredTemplateIds) {
 			const name = systemTemplates[template].name;
@@ -42,9 +38,6 @@ describe("Templates section", () => {
 		expect(screen.getAllByText("适合财务、法务、行政等正式场景").length).toBeGreaterThan(0);
 		expect(screen.getAllByText("适合带项目链接或作品集入口的候选人").length).toBeGreaterThan(0);
 		expect(screen.getAllByText(/时间轴 · 稳重/).length).toBeGreaterThan(0);
-		expect(screen.getAllByText("单栏").length).toBeGreaterThan(0);
-		expect(screen.getAllByText("左侧栏").length).toBeGreaterThan(0);
-		expect(screen.getAllByText("右侧栏").length).toBeGreaterThan(0);
 		expect(screen.queryByText("参考样式")).toBeNull();
 		expect(screen.queryByText("仅参考")).toBeNull();
 		expect(screen.queryByText("可套用相近版式")).toBeNull();

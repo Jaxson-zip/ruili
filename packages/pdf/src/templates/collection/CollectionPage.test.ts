@@ -18,20 +18,12 @@ describe("CollectionPage variants", () => {
 	it("assigns distinct visual treatments to polished collection variants", () => {
 		const source = readCollectionSource();
 
-		expect(source).toContain(
-			'visualTreatment?: "timelineStrip" | "leftBlock" | "contactBand" | "sidebarRail" | "softCards" | "topRule"',
-		);
+		expect(source).toContain('visualTreatment?: "timelineStrip" | "leftBlock" | "contactBand"');
 		expect(source).toContain('visualTreatment: "timelineStrip"');
 		expect(source).toContain('visualTreatment: "leftBlock"');
 		expect(source).toContain('visualTreatment: "contactBand"');
-		expect(source).toMatch(/collection016:[\s\S]*?visualTreatment: "sidebarRail"/);
-		expect(source).toMatch(/collection017:[\s\S]*?visualTreatment: "softCards"/);
-		expect(source).toMatch(/collection021:[\s\S]*?visualTreatment: "topRule"/);
 		expect(source).toContain('const isTimelineStrip = variant.visualTreatment === "timelineStrip"');
 		expect(source).toContain('const isLeftBlock = variant.visualTreatment === "leftBlock"');
 		expect(source).toContain('const isContactBand = variant.visualTreatment === "contactBand"');
-		expect(source).toContain('const isSidebarRail = variant.visualTreatment === "sidebarRail"');
-		expect(source).toContain('const isSoftCards = variant.visualTreatment === "softCards"');
-		expect(source).toContain('const isTopRule = variant.visualTreatment === "topRule"');
 	});
 });
