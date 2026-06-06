@@ -45,8 +45,8 @@ describe("Templates section", () => {
 		const exportableImageUrls = featuredTemplateIds.map((template) => systemTemplates[template].imageUrl);
 		expect(new Set(exportableImageUrls).size).toBe(exportableImageUrls.length);
 
-		for (const template of ["collection019", "collection026", "collection028"] as const) {
-			expect(screen.getAllByAltText(systemTemplates[template].name).length).toBeGreaterThan(0);
-		}
+		expect(screen.getAllByAltText(systemTemplates.collection028.name).length).toBeGreaterThan(0);
+		expect(screen.queryByAltText(systemTemplates.collection019.name)).toBeNull();
+		expect(screen.queryByAltText(systemTemplates.collection026.name)).toBeNull();
 	});
 });

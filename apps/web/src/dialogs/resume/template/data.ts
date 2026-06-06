@@ -313,19 +313,10 @@ export const featuredTemplateIds = [
 	"collection002",
 	"collection003",
 	"collection005",
-	"collection007",
 	"collection016",
-	"collection017",
 	"collection018",
-	"collection019",
-	"collection020",
 	"collection021",
-	"collection022",
-	"collection024",
-	"collection026",
-	"collection027",
 	"collection028",
-	"collection029",
 ] as const satisfies Template[];
 
 export const primaryTemplateIds = featuredTemplateIds;

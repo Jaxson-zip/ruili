@@ -97,19 +97,10 @@ describe("templates metadata", () => {
 			"collection002",
 			"collection003",
 			"collection005",
-			"collection007",
 			"collection016",
-			"collection017",
 			"collection018",
-			"collection019",
-			"collection020",
 			"collection021",
-			"collection022",
-			"collection024",
-			"collection026",
-			"collection027",
 			"collection028",
-			"collection029",
 		]);
 		expect(featuredTemplateIds).not.toContain("azurill");
 		expect(featuredTemplateIds).not.toContain("onyx");
@@ -156,7 +147,9 @@ describe("templates metadata", () => {
 		expect(templates.collection019.imageUrl).toBe("/templates/jpg/collection019.jpg");
 		expect(templates.collection026.imageUrl).toBe("/templates/jpg/collection026.jpg");
 		expect(templates.collection028.imageUrl).toBe("/templates/jpg/collection028.jpg");
-		expect(featuredTemplateIds).toEqual(expect.arrayContaining(["collection019", "collection026", "collection028"]));
+		expect(featuredTemplateIds).toContain("collection028");
+		expect(featuredTemplateIds).not.toContain("collection019");
+		expect(featuredTemplateIds).not.toContain("collection026");
 		expect(additionalCollectionTemplateReferences.map((reference) => reference.id)).not.toEqual(
 			expect.arrayContaining(["collection-019", "collection-026", "collection-028"]),
 		);

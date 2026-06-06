@@ -34,7 +34,7 @@ import { primaryTemplateIds, templates } from "./data";
 import { createRecommendedTemplateLayout } from "./layout";
 import { TemplateThumbnail } from "./thumbnail";
 
-const allSystemTemplateIds = Object.keys(templates) as Template[];
+const allSystemTemplateIds = primaryTemplateIds as readonly Template[];
 
 const templateFilterOptions = [
 	{ id: "all", label: "全部", keywords: [] },
@@ -145,8 +145,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 	const hiddenSystemTemplateCount = allSystemTemplateIds.filter((template) =>
 		hiddenSystemTemplates.includes(template),
 	).length;
-	const primaryTemplateSet = new Set<Template>(primaryTemplateIds);
-	const secondaryTemplateIds = allSystemTemplateIds.filter((template) => !primaryTemplateSet.has(template));
+	const secondaryTemplateIds = [] as const satisfies readonly Template[];
 	const getVisibleTemplates = (templateIds: readonly Template[]) =>
 		templateIds
 			.map((template) => [template, templates[template]] as const)
@@ -288,31 +287,6 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 						{visiblePrimaryTemplates.length === 0 ? (
 							<div className="rounded-md border border-dashed bg-secondary/20 px-4 py-8 text-center text-muted-foreground text-sm">
 								<Trans>精品模板已全部隐藏，可点击右上角恢复全部。</Trans>
-							</div>
-						) : null}
-					</section>
-
-					<section className="space-y-4">
-						<TemplateSectionHeader
-							title="更多可导出模板"
-							badge={`${visibleSecondaryTemplates.length} 个`}
-							description="仍可导出，但不是首批主推；适合后续逐个打磨后再放到首页。"
-						/>
-						<div className="grid grid-cols-1 xs:grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
-							{visibleSecondaryTemplates.map(([template, metadata]) => (
-								<SystemTemplateCard
-									key={template}
-									metadata={metadata}
-									id={template}
-									isActive={template === selectedTemplate}
-									onDelete={onHideSystemTemplate}
-									onSelect={onSelectTemplate}
-								/>
-							))}
-						</div>
-						{visibleSecondaryTemplates.length === 0 ? (
-							<div className="rounded-md border border-dashed bg-secondary/20 px-4 py-8 text-center text-muted-foreground text-sm">
-								<Trans>全部可导出模板已隐藏或被筛选，可点击右上角恢复全部，或换个筛选条件。</Trans>
 							</div>
 						) : null}
 					</section>
