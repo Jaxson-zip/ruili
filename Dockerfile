@@ -55,6 +55,13 @@ ENV NODE_ENV="production" \
 
 WORKDIR /app
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        fontconfig \
+        fonts-noto-cjk \
+        libreoffice-writer \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN mkdir -p /app/apps/server /app/apps/web /app/data && chown node:node /app/data
 
 COPY --from=runtime-deps --chown=node:node /app/node_modules ./node_modules

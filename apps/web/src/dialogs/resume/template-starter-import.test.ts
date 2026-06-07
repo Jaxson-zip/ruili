@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { resumeTemplateStarters } from "@reactive-resume/schema/resume/starters";
 import { templates } from "./template/data";
-import { buildBlankTemplateImportInput, buildResumeStarterImportInput } from "./template-starter-import";
+import {
+	buildBlankTemplateImportInput,
+	buildResumeStarterImportInput,
+	buildWordTemplateImportInput,
+} from "./template-starter-import";
 
 describe("buildResumeStarterImportInput", () => {
 	it("builds an import payload from a template starter", () => {
@@ -55,5 +59,17 @@ describe("buildResumeStarterImportInput", () => {
 		expect(input.data.metadata.template).toBe("collection003");
 		expect(input.data.metadata.layout.pages[0]?.fullWidth).toBe(true);
 		expect(input.data.metadata.layout.pages[0]?.sidebar).toEqual([]);
+	});
+
+	it("builds Word template resumes with editable Chinese sample content", () => {
+		const input = buildWordTemplateImportInput(" 深灰橙色侧栏 简历 ");
+
+		expect(input.name).toBe("深灰橙色侧栏 简历");
+		expect(input.preferRequestedName).toBe(true);
+		expect(input.data.metadata.template).toBe("onyx");
+		expect(input.data.metadata.layout.pages[0]?.main).toContain("experience");
+		expect(input.data.metadata.layout.pages[0]?.sidebar).toContain("skills");
+		expect(input.data.basics.name).not.toBe("");
+		expect(input.data.sections.experience.items.length).toBeGreaterThan(0);
 	});
 });

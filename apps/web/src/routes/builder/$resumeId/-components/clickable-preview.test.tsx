@@ -21,21 +21,34 @@ const resumeData = vi.hoisted(() => ({
 	},
 }));
 
+const resumeMock = vi.hoisted(() => ({
+	id: "resume-1",
+	data: resumeData,
+}));
+
 vi.mock("@/features/resume/builder/draft", () => ({
+	useResume: () => resumeMock,
 	useResumeData: () => resumeData,
+	useUpdateResumeData: () => vi.fn(),
 }));
 
 vi.mock("@/features/resume/preview/preview", () => ({
 	ResumePreview: () => <div data-testid="resume-preview-canvas">PDF preview</div>,
 }));
 
+vi.mock("@/features/resume/word-template/preview", () => ({
+	WordTemplateDataPreview: () => <div data-testid="word-template-data-preview">动态 Word 模板</div>,
+}));
+
 const { BuilderClickableResumePreview } = await import("./clickable-preview");
+const { setSelectedWordTemplateId } = await import("@/features/resume/word-template/library");
 
 beforeAll(() => {
 	i18n.loadAndActivate({ locale: "zh", messages: {} });
 });
 
 afterEach(() => {
+	localStorage.clear();
 	useSectionStore.setState({ sections: {}, selectedSection: null, selectionRequestId: 0 });
 });
 
@@ -89,5 +102,15 @@ describe("BuilderClickableResumePreview", () => {
 		fireEvent.keyDown(previewButton, { key: "Enter" });
 
 		expect(useSectionStore.getState().selectedSection).toBe("basics");
+	});
+
+	it("shows the selected Word template preview instead of the system PDF preview", () => {
+		setSelectedWordTemplateId("resume-1", "dark-orange-sidebar");
+
+		renderClickablePreview();
+
+		expect(screen.getByTestId("word-template-data-preview")).toBeInTheDocument();
+		expect(screen.queryByTestId("resume-preview-canvas")).toBeNull();
+		expect(screen.getByText("左侧维护内容，预览和导出使用所选 Word 模板")).toBeInTheDocument();
 	});
 });

@@ -36,6 +36,7 @@ const updateResumeData = vi.hoisted(() => vi.fn());
 
 vi.mock("@/features/resume/builder/draft", () => ({
 	useCurrentResume: () => ({
+		id: "resume-1",
 		data: resumeDataMock.current,
 	}),
 	useUpdateResumeData: () => updateResumeData,
@@ -44,6 +45,9 @@ vi.mock("@/features/resume/builder/draft", () => ({
 resetResumeDataMock();
 
 const { TemplateSectionBuilder } = await import("./template");
+const { getSelectedWordTemplateId, setSelectedWordTemplateId } = await import(
+	"@/features/resume/word-template/library"
+);
 
 beforeAll(() => {
 	i18n.loadAndActivate({ locale: "en", messages: {} });
@@ -51,6 +55,7 @@ beforeAll(() => {
 
 afterEach(() => {
 	updateResumeData.mockReset();
+	localStorage.clear();
 	resetResumeDataMock();
 	useDialogStore.setState({ open: false, activeDialog: null, onBeforeClose: null });
 });
@@ -96,6 +101,28 @@ describe("TemplateSectionBuilder", () => {
 	it("renders the Chinese thumbnail preview", () => {
 		renderTemplate();
 		expect(screen.getByRole("img", { name: "ATS 极简" })).toBeInTheDocument();
+	});
+
+	it("shows the selected Word template instead of the system template", () => {
+		setSelectedWordTemplateId("resume-1", "dark-orange-sidebar");
+
+		renderTemplate();
+
+		expect(screen.getByRole("heading", { level: 3 }).textContent).toBe("深灰橙色侧栏");
+		expect(screen.getByText("当前 Word 模板")).toBeInTheDocument();
+		expect(screen.getByRole("img", { name: "深灰橙色侧栏" })).toBeInTheDocument();
+		expect(screen.queryByText("ATS 极简")).toBeNull();
+		expect(screen.getByRole("button", { name: "前往导出 Word" })).toBeInTheDocument();
+	});
+
+	it("can switch between Word templates from the template section", () => {
+		setSelectedWordTemplateId("resume-1", "dark-orange-sidebar");
+
+		renderTemplate();
+		fireEvent.click(screen.getByRole("button", { name: "使用此模板" }));
+
+		expect(screen.getByRole("heading", { level: 3 }).textContent).toBe("1.docx 中文模板");
+		expect(getSelectedWordTemplateId("resume-1")).toBe("compact-blue-grid");
 	});
 
 	it("can resync stale sidebar layout for a no-sidebar template", () => {

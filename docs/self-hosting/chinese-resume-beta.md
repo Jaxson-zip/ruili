@@ -8,6 +8,8 @@
 - 建议 Beta：2 核 2G 起步。
 - 建议系统：Debian 12 / Ubuntu 22.04+ / 1Panel 或纯 Docker Compose。
 
+Word 模板高保真预览会在服务端把 DOCX 填充后转换成 PDF，因此运行镜像需要 LibreOffice/soffice 和中文字体。仓库内 Dockerfile 已安装 `libreoffice-writer`、`fontconfig`、`fonts-noto-cjk`；如果不用仓库镜像手动部署，请在 VPS 上安装同等依赖，否则前端会提示“当前环境还不能生成 Word 高保真预览”。
+
 如果只能用 1 核 1G，务必先开启 2G 左右 Swap。PDF 导出会启动无头浏览器，和 AI/OCR 导入同时发生时容易触发 OOM。低配机器建议先限制内测人数，避免多人同时导出 PDF。
 
 Ubuntu / Debian 可以参考：

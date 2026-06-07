@@ -57,6 +57,17 @@ function makeResumeData(): ResumeData {
 			keywords: ["TypeScript", "性能优化"],
 		},
 	];
+	data.sections.awards.items = [
+		{
+			id: "award-1",
+			hidden: false,
+			title: "年度优秀新人",
+			awarder: "云启科技",
+			date: "2023.12",
+			description: "<p>跨团队协作表现突出。</p>",
+			website: { label: "", url: "", inlineLink: false },
+		},
+	];
 
 	return data;
 }
@@ -91,6 +102,7 @@ describe("docx template export", () => {
 			"<w:t>{{summary.content}}</w:t>",
 			"<w:t>{{#experience}}{{position}} / {{company}} / {{description}}{{/experience}}</w:t>",
 			"<w:t>{{skills}}</w:t>",
+			"<w:t>{{awards}}</w:t>",
 			"<w:t>{{basics.unknown}}</w:t>",
 		].join("");
 
@@ -101,6 +113,7 @@ describe("docx template export", () => {
 		expect(rendered).toContain("高级前端工程师 / 云启科技 / 将首屏加载时间降低 32%。");
 		expect(rendered).not.toContain("隐藏公司");
 		expect(rendered).toContain("React：TypeScript、性能优化");
+		expect(rendered).toContain("2023.12 | 云启科技 | 年度优秀新人 | 跨团队协作表现突出。");
 		expect(rendered).toContain("{{basics.unknown}}");
 	});
 

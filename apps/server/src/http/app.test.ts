@@ -19,6 +19,7 @@ const mocks = vi.hoisted(() => ({
 	serveWebDistStatic: vi.fn(),
 	handleWebApp: vi.fn(),
 	handleWebAppHead: vi.fn(),
+	handleWordTemplatePreview: vi.fn(),
 }));
 
 vi.mock("./auth", () => ({
@@ -66,6 +67,10 @@ vi.mock("../mcp/handler", () => ({
 	handleMcp: mocks.handleMcp,
 }));
 
+vi.mock("../word-template/preview", () => ({
+	handleWordTemplatePreview: mocks.handleWordTemplatePreview,
+}));
+
 beforeEach(() => {
 	vi.clearAllMocks();
 	mocks.handleAuth.mockResolvedValue(new Response("auth"));
@@ -86,6 +91,7 @@ beforeEach(() => {
 	mocks.serveWebDistStatic.mockResolvedValue(undefined);
 	mocks.handleWebApp.mockResolvedValue(new Response("web"));
 	mocks.handleWebAppHead.mockReturnValue(new Response(null));
+	mocks.handleWordTemplatePreview.mockResolvedValue(new Response("word-preview"));
 });
 
 describe("createApp", () => {
@@ -120,5 +126,21 @@ describe("createApp", () => {
 		expect(mocks.serveWebDistStatic).not.toHaveBeenCalled();
 		expect(mocks.handleWebApp).not.toHaveBeenCalled();
 		expect(mocks.handleWebAppHead).not.toHaveBeenCalled();
+	});
+
+	it("routes Word template preview before the static fallback", async () => {
+		const { createApp } = await import("./app");
+		const app = createApp();
+		const request = new Request("http://localhost:3001/api/word-template/preview", {
+			method: "POST",
+			body: "{}",
+		});
+
+		const response = await app.fetch(request);
+
+		await expect(response.text()).resolves.toBe("word-preview");
+		expect(mocks.handleWordTemplatePreview).toHaveBeenCalledWith(request);
+		expect(mocks.serveWebDistStatic).not.toHaveBeenCalled();
+		expect(mocks.handleWebApp).not.toHaveBeenCalled();
 	});
 });

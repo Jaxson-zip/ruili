@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
 
+import { readFileSync } from "node:fs";
 import { beforeEach, describe, expect, it } from "vitest";
 import { defaultResumeData } from "@reactive-resume/schema/resume/default";
 import {
@@ -8,6 +9,8 @@ import {
 	parseTemplatePresetJson,
 	saveCustomTemplatePresets,
 } from "./custom-presets";
+
+const deepGrayOrangePresetJson = readFileSync("../../docs/superpowers/demos/deep-gray-orange-preset.json", "utf8");
 
 describe("custom template presets", () => {
 	beforeEach(() => {
@@ -30,6 +33,16 @@ describe("custom template presets", () => {
 
 		expect(preset.name).toBe("resume-style");
 		expect(preset.metadata.layout.pages).toHaveLength(defaultResumeData.metadata.layout.pages.length);
+	});
+
+	it("parses the deep gray orange sidebar demo preset", () => {
+		const preset = parseTemplatePresetJson(deepGrayOrangePresetJson, "deep-gray-orange-preset.json");
+
+		expect(preset.name).toBe("深灰橙色侧栏");
+		expect(preset.metadata.template).toBe("collection026");
+		expect(preset.metadata.layout.sidebarWidth).toBe(31);
+		expect(preset.metadata.design.level.type).toBe("progress-bar");
+		expect(preset.metadata.styleRules.length).toBeGreaterThan(0);
 	});
 
 	it("rejects JSON without metadata", () => {

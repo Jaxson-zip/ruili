@@ -1,11 +1,12 @@
 import type { Template } from "@reactive-resume/schema/templates";
+import type { ChangeEvent } from "react";
 import type { DialogProps } from "@/dialogs/store";
 import type { CustomTemplatePreset } from "./custom-presets";
 import type { TemplateMetadata } from "./data";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
-import { MagnifyingGlassIcon, SlideshowIcon, TrashSimpleIcon } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
+import { MagnifyingGlassIcon, SlideshowIcon, TrashSimpleIcon, UploadSimpleIcon } from "@phosphor-icons/react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@reactive-resume/ui/components/badge";
 import { Button } from "@reactive-resume/ui/components/button";
@@ -15,7 +16,12 @@ import { ScrollArea } from "@reactive-resume/ui/components/scroll-area";
 import { cn } from "@reactive-resume/utils/style";
 import { useDialogStore } from "@/dialogs/store";
 import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
-import { loadCustomTemplatePresets, saveCustomTemplatePresets } from "./custom-presets";
+import {
+	createCustomTemplatePreset,
+	loadCustomTemplatePresets,
+	parseTemplatePresetJson,
+	saveCustomTemplatePresets,
+} from "./custom-presets";
 import { primaryTemplateIds, templates } from "./data";
 import { createRecommendedTemplateLayout } from "./layout";
 import { TemplateThumbnail } from "./thumbnail";
@@ -57,6 +63,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 	const [customPresets, setCustomPresets] = useState<CustomTemplatePreset[]>([]);
 	const [activeFilter, setActiveFilter] = useState<TemplateFilterId>("all");
 	const [searchQuery, setSearchQuery] = useState("");
+	const templatePresetInputRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
 		setCustomPresets(loadCustomTemplatePresets());
@@ -91,6 +98,27 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 	function onDeleteCustomTemplate(id: string) {
 		persistCustomPresets(customPresets.filter((preset) => preset.id !== id));
 		toast.success("模板已删除。");
+	}
+
+	function onSelectTemplatePresetFile() {
+		templatePresetInputRef.current?.click();
+	}
+
+	async function onImportTemplatePresetFile(event: ChangeEvent<HTMLInputElement>) {
+		const input = event.currentTarget;
+		const file = input.files?.[0];
+		if (!file) return;
+
+		try {
+			const imported = parseTemplatePresetJson(await file.text(), file.name);
+			const preset = createCustomTemplatePreset(imported);
+			persistCustomPresets([preset, ...customPresets]);
+			toast.success(`已导入模板：${preset.name}`);
+		} catch (error) {
+			toast.error(error instanceof Error ? error.message : "模板导入失败，请检查 JSON 文件。");
+		} finally {
+			input.value = "";
+		}
 	}
 
 	const getVisibleTemplates = (templateIds: readonly Template[]) =>
@@ -158,6 +186,24 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 					<Badge variant="secondary">可导出模板 {allSystemTemplateIds.length} 个</Badge>
 					<Badge variant="secondary">可切换模板 {primaryTemplateIds.length} 个</Badge>
 					<Badge variant="secondary">保留简历内容</Badge>
+					<Input
+						ref={templatePresetInputRef}
+						type="file"
+						accept="application/json,.json"
+						aria-label="导入模板 JSON 文件"
+						className="hidden"
+						onChange={onImportTemplatePresetFile}
+					/>
+					<Button
+						type="button"
+						variant="outline"
+						size="sm"
+						className="h-6 gap-1.5 px-2 text-xs"
+						onClick={onSelectTemplatePresetFile}
+					>
+						<UploadSimpleIcon className="size-3.5" />
+						<Trans>导入模板 JSON</Trans>
+					</Button>
 				</div>
 			</div>
 

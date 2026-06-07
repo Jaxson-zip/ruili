@@ -2,7 +2,7 @@ import type { Template } from "@reactive-resume/schema/templates";
 import { Trans } from "@lingui/react/macro";
 import { m } from "motion/react";
 import { useMemo } from "react";
-import { primaryTemplateIds, templates as systemTemplates } from "@/dialogs/resume/template/data";
+import { homepageTemplateIds, templates as systemTemplates } from "@/dialogs/resume/template/data";
 
 type SystemTemplatePreview = {
 	id: string;
@@ -28,10 +28,10 @@ const createSystemTemplatePreviews = (templates: readonly Template[]): SystemTem
 		name: systemTemplates[template].name,
 		role: systemTemplates[template].tags.slice(0, 3).join(" / "),
 		imageUrl: systemTemplates[template].imageUrl,
-		source: "可导出 PDF",
+		source: "可切换模板",
 	}));
 
-const promotedTemplatePreviews = createSystemTemplatePreviews(primaryTemplateIds);
+const promotedTemplatePreviews = createSystemTemplatePreviews(homepageTemplateIds);
 
 function TemplateItem({ preview, loading = "lazy" }: TemplateItemProps) {
 	return (

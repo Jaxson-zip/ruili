@@ -11,6 +11,13 @@ import { primaryTemplateIds, templates } from "./data";
 
 const updateResumeData = vi.hoisted(() => vi.fn());
 
+vi.mock("sonner", () => ({
+	toast: {
+		error: vi.fn(),
+		success: vi.fn(),
+	},
+}));
+
 vi.mock("@/features/resume/builder/draft", () => ({
 	useCurrentResume: () => ({
 		data: { metadata: { template: "collection001" } },
@@ -21,6 +28,7 @@ vi.mock("@/features/resume/builder/draft", () => ({
 const { TemplateGalleryDialog } = await import("./gallery");
 
 beforeAll(() => {
+	if (!Element.prototype.getAnimations) Element.prototype.getAnimations = () => [];
 	i18n.loadAndActivate({ locale: "en", messages: {} });
 });
 
@@ -45,7 +53,7 @@ describe("TemplateGalleryDialog", () => {
 		expect(screen.getByText("模板库")).toBeInTheDocument();
 		expect(screen.getByText(/选择一套适合岗位的中文模板/)).toBeInTheDocument();
 		expect(screen.queryByText("Word 模板保留原样式")).toBeNull();
-		expect(screen.queryByRole("button", { name: "导入排版预设（仅 JSON）" })).toBeNull();
+		expect(screen.getByRole("button", { name: "导入模板 JSON" })).toBeInTheDocument();
 		expect(screen.getByLabelText("搜索模板")).toBeInTheDocument();
 	});
 
@@ -178,5 +186,61 @@ describe("TemplateGalleryDialog", () => {
 		expect(screen.getByRole("img", { name: "金色商务" })).toBeInTheDocument();
 		expect(screen.queryByLabelText("隐藏精选模板：金色商务")).toBeNull();
 		expect(screen.queryByText("恢复全部")).toBeNull();
+	});
+
+	it("imports a JSON template preset into the custom template section", async () => {
+		renderGallery();
+		const file = new File(
+			[
+				JSON.stringify({
+					name: "深灰橙色侧栏",
+					metadata: {
+						...sampleResumeData.metadata,
+						template: "collection026",
+						layout: {
+							sidebarWidth: 31,
+							pages: [
+								{
+									fullWidth: false,
+									main: ["summary", "experience", "projects"],
+									sidebar: ["profiles", "skills", "languages"],
+								},
+							],
+						},
+						design: {
+							...sampleResumeData.metadata.design,
+							colors: {
+								...sampleResumeData.metadata.design.colors,
+								primary: "rgba(232, 137, 43, 1)",
+							},
+							level: {
+								...sampleResumeData.metadata.design.level,
+								type: "progress-bar",
+							},
+						},
+					},
+				}),
+			],
+			"deep-gray-orange-preset.json",
+			{ type: "application/json" },
+		);
+		const input = screen.getByLabelText("导入模板 JSON 文件") as HTMLInputElement;
+
+		fireEvent.change(input, { target: { files: [file] } });
+
+		expect(await screen.findByText("深灰橙色侧栏")).toBeInTheDocument();
+		expect(screen.getAllByText("我的模板").length).toBeGreaterThan(0);
+		expect(screen.getByText("基于「深灰橙色」保存的排版预设")).toBeInTheDocument();
+
+		const card = screen.getByText("深灰橙色侧栏").closest("article") as HTMLElement;
+		fireEvent.click(card.querySelector("button") as HTMLButtonElement);
+
+		expect(updateResumeData).toHaveBeenCalledTimes(1);
+		const recipe = updateResumeData.mock.calls[0]?.[0] as (draft: typeof sampleResumeData) => void;
+		const draft = structuredClone(sampleResumeData);
+		recipe(draft);
+		expect(draft.metadata.template).toBe("collection026");
+		expect(draft.metadata.layout.sidebarWidth).toBe(31);
+		expect(draft.metadata.design.level.type).toBe("progress-bar");
 	});
 });

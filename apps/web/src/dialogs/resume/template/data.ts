@@ -297,15 +297,19 @@ export const templates = {
 } as const satisfies Record<Template, TemplateMetadata>;
 
 export const featuredTemplateIds = [
-	"collection001",
 	"collection002",
 	"collection003",
 	"collection005",
 	"collection016",
+	"collection017",
 	"collection018",
+	"collection019",
 	"collection021",
-	"collection028",
+	"collection024",
+	"collection026",
 ] as const satisfies Template[];
+
+export const homepageTemplateIds = featuredTemplateIds;
 
 export const primaryTemplateIds = [
 	"collection001",

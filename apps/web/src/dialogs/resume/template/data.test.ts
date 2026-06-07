@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { featuredTemplateIds, primaryTemplateIds, templates } from "./data";
+import { featuredTemplateIds, homepageTemplateIds, primaryTemplateIds, templates } from "./data";
 
 describe("templates metadata", () => {
 	const entries = Object.entries(templates);
@@ -97,21 +97,48 @@ describe("templates metadata", () => {
 	it("keeps featured templates unique and backed by system metadata", () => {
 		expect(new Set(featuredTemplateIds).size).toBe(featuredTemplateIds.length);
 		expect(featuredTemplateIds).toEqual([
-			"collection001",
 			"collection002",
 			"collection003",
 			"collection005",
 			"collection016",
+			"collection017",
 			"collection018",
+			"collection019",
 			"collection021",
-			"collection028",
+			"collection024",
+			"collection026",
 		]);
 		expect(featuredTemplateIds).not.toContain("azurill");
 		expect(featuredTemplateIds).not.toContain("onyx");
+		expect(featuredTemplateIds).not.toContain("collection020");
+		expect(featuredTemplateIds).not.toContain("collection022");
+		expect(featuredTemplateIds).not.toContain("collection027");
+		expect(featuredTemplateIds).not.toContain("collection029");
 
 		for (const id of featuredTemplateIds) {
 			expect(templates[id], id).toBeDefined();
 			expect(templates[id].accentColor, id).toMatch(/^rgba\(/);
+		}
+	});
+
+	it("keeps homepage templates as a curated subset while preserving the full gallery catalog", () => {
+		expect(homepageTemplateIds).toEqual(featuredTemplateIds);
+		expect(homepageTemplateIds.length).toBeLessThan(primaryTemplateIds.length);
+
+		for (const id of homepageTemplateIds) {
+			expect(primaryTemplateIds).toContain(id);
+		}
+
+		const downgradedTemplateIds = [
+			"collection020",
+			"collection022",
+			"collection027",
+			"collection028",
+			"collection029",
+		] as const;
+		expect(primaryTemplateIds).toEqual(expect.arrayContaining([...downgradedTemplateIds]));
+		for (const id of downgradedTemplateIds) {
+			expect(homepageTemplateIds).not.toContain(id);
 		}
 	});
 
@@ -161,9 +188,10 @@ describe("templates metadata", () => {
 		expect(templates.collection019.imageUrl).toBe("/templates/collection/019.jpg");
 		expect(templates.collection026.imageUrl).toBe("/templates/collection/026.jpg");
 		expect(templates.collection028.imageUrl).toBe("/templates/collection/028.jpg");
-		expect(featuredTemplateIds).toContain("collection028");
-		expect(featuredTemplateIds).not.toContain("collection019");
-		expect(featuredTemplateIds).not.toContain("collection026");
+		expect(primaryTemplateIds).toContain("collection028");
+		expect(homepageTemplateIds).not.toContain("collection028");
+		expect(homepageTemplateIds).toContain("collection019");
+		expect(homepageTemplateIds).toContain("collection026");
 		expect(primaryTemplateIds).toEqual(expect.arrayContaining(["collection019", "collection026", "collection028"]));
 	});
 });

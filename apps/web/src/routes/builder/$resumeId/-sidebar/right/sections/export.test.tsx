@@ -40,6 +40,7 @@ vi.mock("@/features/resume/builder/draft", () => ({
 }));
 
 const { ExportSectionBuilder } = await import("./export");
+const { setSelectedWordTemplateId } = await import("@/features/resume/word-template/library");
 
 beforeAll(() => {
 	i18n.loadAndActivate({ locale: "en", messages: {} });
@@ -51,6 +52,8 @@ afterEach(() => {
 	buildDocxFromTemplate.mockClear();
 	createResumePdfBlob.mockClear();
 	inspectDocxTemplate.mockClear();
+	localStorage.clear();
+	vi.unstubAllGlobals();
 });
 
 const renderExport = () =>
@@ -103,13 +106,13 @@ describe("ExportSectionBuilder", () => {
 		const file = new File(["template"], "template.docx", {
 			type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 		});
-		expect(screen.getByText("选择 Word 模板")).toBeInTheDocument();
+		expect(screen.getByText("上传其他 Word 模板")).toBeInTheDocument();
 		const input = screen.getByLabelText("上传 DOCX 模板") as HTMLInputElement;
 
 		fireEvent.change(input, { target: { files: [file] } });
 
 		await screen.findByText("template.docx");
-		expect(screen.getByText("更换 Word 模板")).toBeInTheDocument();
+		expect(screen.getByText("更换上传模板")).toBeInTheDocument();
 		expect(inspectDocxTemplate).toHaveBeenCalledWith(file);
 		expect(screen.getByText("basics.name")).toBeInTheDocument();
 		expect(screen.getByText("experience")).toBeInTheDocument();
@@ -121,6 +124,32 @@ describe("ExportSectionBuilder", () => {
 		expect(buildDocxFromTemplate).toHaveBeenCalledWith(file, defaultResumeData);
 		expect(downloadWithAnchor).toHaveBeenCalledTimes(1);
 		expect(downloadWithAnchor.mock.calls[0]?.[1]).toBe("My Resume.template.docx");
+	});
+
+	it("downloads a filled Word file from the selected library template", async () => {
+		setSelectedWordTemplateId("r1", "dark-orange-sidebar");
+		const fetchMock = vi.fn().mockResolvedValue({
+			ok: true,
+			blob: vi.fn().mockResolvedValue(
+				new Blob(["library-template"], {
+					type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+				}),
+			),
+		});
+		vi.stubGlobal("fetch", fetchMock);
+
+		renderExport();
+
+		expect(screen.getByText("深灰橙色侧栏")).toBeInTheDocument();
+		fireEvent.click(screen.getByRole("button", { name: "用所选模板生成 Word" }));
+		await Promise.resolve();
+		await Promise.resolve();
+		await Promise.resolve();
+
+		expect(fetchMock).toHaveBeenCalledWith("/templates/word/dark-orange-sidebar.docx");
+		expect(buildDocxFromTemplate).toHaveBeenCalledWith(expect.any(Blob), defaultResumeData);
+		expect(downloadWithAnchor).toHaveBeenCalledTimes(1);
+		expect(downloadWithAnchor.mock.calls[0]?.[1]).toBe("My Resume.word-template.docx");
 	});
 
 	it("calls createResumePdfBlob and downloads when PDF is clicked", async () => {

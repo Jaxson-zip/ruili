@@ -3,6 +3,7 @@ import type { Template } from "@reactive-resume/schema/templates";
 import type { RouterInput } from "@/libs/orpc/client";
 import type { TemplateMetadata } from "./template/data";
 import { defaultResumeData } from "@reactive-resume/schema/resume/default";
+import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
 
 function cloneStarterData(starter: ResumeTemplateStarter) {
 	return JSON.parse(JSON.stringify(starter.data)) as ResumeTemplateStarter["data"];
@@ -10,6 +11,10 @@ function cloneStarterData(starter: ResumeTemplateStarter) {
 
 function cloneDefaultResumeData() {
 	return JSON.parse(JSON.stringify(defaultResumeData)) as typeof defaultResumeData;
+}
+
+function cloneSampleResumeData() {
+	return JSON.parse(JSON.stringify(sampleResumeData)) as typeof sampleResumeData;
 }
 
 function createBlankLayout(metadata: TemplateMetadata) {
@@ -80,6 +85,31 @@ export function buildBlankTemplateImportInput(
 
 	return {
 		name: requestedName?.trim() || `${metadata.name} 空白简历`,
+		preferRequestedName: true,
+		data,
+	};
+}
+
+export function buildWordTemplateImportInput(requestedName?: string): RouterInput["resume"]["import"] {
+	const data = cloneSampleResumeData();
+	data.metadata.template = "onyx";
+	data.metadata.page.locale = "zh-CN";
+	data.metadata.layout = {
+		sidebarWidth: 30,
+		pages: [
+			{
+				fullWidth: false,
+				main: ["summary", "experience", "projects", "education"],
+				sidebar: ["profiles", "skills", "languages", "certifications", "awards", "interests", "references"],
+			},
+		],
+	};
+	data.metadata.design.colors.primary = "rgba(255, 133, 0, 1)";
+	data.metadata.typography.body.fontFamily = "Noto Sans SC";
+	data.metadata.typography.heading.fontFamily = "Noto Sans SC";
+
+	return {
+		name: requestedName?.trim() || "中文 Word 模板简历",
 		preferRequestedName: true,
 		data,
 	};

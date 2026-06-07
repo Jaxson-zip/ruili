@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="594" viewBox="0 0 420 594" role="img" aria-label="蓝线表格式单页模板预览">
+  <rect width="420" height="594" fill="#fbfbfa"/>
+  <rect x="0" y="0" width="84" height="4" fill="#1296db"/>
+  <line x1="84" y1="4" x2="390" y2="4" stroke="#d8d8d8" stroke-width="1"/>
+  <text x="38" y="58" fill="#555" font-family="Microsoft YaHei, Arial, sans-serif" font-size="26" font-weight="700" letter-spacing="5">张锦鹏</text>
+  <rect x="312" y="34" width="58" height="72" fill="#e9eef2" stroke="#b8c4cc"/>
+  <circle cx="341" cy="59" r="12" fill="#b8c4cc"/>
+  <path d="M321 93c6-15 34-15 40 0" fill="#b8c4cc"/>
+  <g font-family="Microsoft YaHei, Arial, sans-serif" font-size="9">
+    <rect x="38" y="82" width="236" height="52" fill="none" stroke="#d5dde2"/>
+    <rect x="38" y="82" width="54" height="26" fill="#f2f7fa" stroke="#d5dde2"/>
+    <rect x="156" y="82" width="54" height="26" fill="#f2f7fa" stroke="#d5dde2"/>
+    <rect x="38" y="108" width="54" height="26" fill="#f2f7fa" stroke="#d5dde2"/>
+    <rect x="156" y="108" width="54" height="26" fill="#f2f7fa" stroke="#d5dde2"/>
+    <text x="48" y="99" fill="#557282" font-weight="700">岗位</text>
+    <text x="101" y="99" fill="#333">数据标注与测试实习生</text>
+    <text x="166" y="99" fill="#557282" font-weight="700">城市</text>
+    <text x="219" y="99" fill="#333">深圳</text>
+    <text x="48" y="125" fill="#557282" font-weight="700">电话</text>
+    <text x="101" y="125" fill="#333">15347640609</text>
+    <text x="166" y="125" fill="#557282" font-weight="700">邮箱</text>
+    <text x="219" y="125" fill="#333">name@example.com</text>
+  </g>
+  <g font-family="Microsoft YaHei, Arial, sans-serif">
+    <g transform="translate(38 166)">
+      <text fill="#555" font-size="15" font-weight="700">求职意向</text>
+      <line x1="74" y1="-5" x2="332" y2="-5" stroke="#d7dfe3"/>
+      <text y="21" fill="#333" font-size="10" font-weight="700">数据标注与测试实习生</text>
+    </g>
+    <g transform="translate(38 216)">
+      <text fill="#555" font-size="15" font-weight="700">教育经历</text>
+      <line x1="74" y1="-5" x2="332" y2="-5" stroke="#d7dfe3"/>
+      <text y="22" fill="#333" font-size="11" font-weight="700">2023.9-2026.6  深圳职业技术大学</text>
+      <text y="41" fill="#606060" font-size="10">大数据技术 | 大专    GPA: 3.67/4.0</text>
+    </g>
+    <g transform="translate(38 286)">
+      <text fill="#555" font-size="15" font-weight="700">获奖荣誉</text>
+      <line x1="74" y1="-5" x2="332" y2="-5" stroke="#d7dfe3"/>
+      <text y="21" fill="#5a5a5a" font-size="9">国家级比赛获奖 5 次、省市级比赛获奖 6 次、校级荣誉 3 次</text>
+      <text y="38" fill="#5a5a5a" font-size="9">2023-2024 金砖国家技能大赛国赛二等奖</text>
+      <text y="55" fill="#5a5a5a" font-size="9">2024-2025 广东省职业院校技能大赛二等奖</text>
+    </g>
+    <g transform="translate(38 380)">
+      <text fill="#555" font-size="15" font-weight="700">项目经历</text>
+      <line x1="74" y1="-5" x2="332" y2="-5" stroke="#d7dfe3"/>
+      <text y="22" fill="#333" font-size="11" font-weight="700">2025.5-2025.7  Nutrinet 个性化膳食营养系统</text>
+      <text y="41" fill="#606060" font-size="10">后端开发 / 协同开发</text>
+      <text y="59" fill="#5a5a5a" font-size="9">负责模型集成、数据处理、功能封装及异常处理机制搭建。</text>
+    </g>
+  </g>
+</svg>
