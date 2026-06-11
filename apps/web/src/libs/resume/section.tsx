@@ -90,6 +90,14 @@ export const rightSidebarSections: RightSidebarSection[] = [
 	"information",
 ] as const;
 
+export const wordTemplateRightSidebarSections: RightSidebarSection[] = [
+	"template",
+	"layout",
+	"sharing",
+	"export",
+	"information",
+] as const;
+
 export const getSectionTitle = (type: SidebarSection | CustomOnlyType): string => {
 	return (
 		match(type)

@@ -38,6 +38,7 @@ import {
 import { cn } from "@reactive-resume/utils/style";
 import { useDialogStore } from "@/dialogs/store";
 import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
+import { getSelectedWordTemplate } from "@/features/resume/word-template/library";
 import { useConfirm } from "@/hooks/use-confirm";
 import {
 	addItemToSection,
@@ -178,7 +179,9 @@ export function SectionItem<T extends CustomSectionItem | SectionItemType>({
 	const confirm = useConfirm();
 	const controls = useDragControls();
 	const { openDialog } = useDialogStore();
+	const resume = useCurrentResume();
 	const updateResumeData = useUpdateResumeData();
+	const isWordTemplateMode = Boolean(getSelectedWordTemplate(resume.id, resume.data));
 
 	const onToggleVisibility = () => {
 		updateResumeData((draft) => {
@@ -272,7 +275,9 @@ export function SectionItem<T extends CustomSectionItem | SectionItemType>({
 				)}
 			>
 				<div className="line-clamp-1 font-medium">{title}</div>
-				{subtitle && <div className="line-clamp-1 text-muted-foreground text-xs">{subtitle}</div>}
+				<div className="flex max-w-full flex-wrap items-center gap-x-1.5 gap-y-0.5">
+					{subtitle && <span className="line-clamp-1 text-muted-foreground text-xs">{subtitle}</span>}
+				</div>
 			</button>
 
 			<DropdownMenu>
@@ -301,7 +306,7 @@ export function SectionItem<T extends CustomSectionItem | SectionItemType>({
 							<Trans>复制</Trans>
 						</DropdownMenuItem>
 
-						<MoveItemSubmenu type={type} item={item} customSectionId={customSectionId} />
+						{isWordTemplateMode ? null : <MoveItemSubmenu type={type} item={item} customSectionId={customSectionId} />}
 					</DropdownMenuGroup>
 
 					<DropdownMenuSeparator />
@@ -323,7 +328,16 @@ type AddButtonProps = Omit<ButtonProps, "type"> & {
 	customSectionId?: string;
 };
 
-export function SectionAddItemButton({ type, customSectionId, className, children, ...props }: AddButtonProps) {
+export function SectionAddItemButton({
+	type,
+	customSectionId,
+	className,
+	children,
+	disabled,
+	title,
+	variant = "ghost",
+	...props
+}: AddButtonProps) {
 	const { openDialog } = useDialogStore();
 
 	const handleAdd = () => {
@@ -336,13 +350,15 @@ export function SectionAddItemButton({ type, customSectionId, className, childre
 
 	return (
 		<Button
-			variant="ghost"
+			{...props}
+			variant={variant}
 			onClick={handleAdd}
 			className={cn("h-12 w-full justify-start rounded-t-none", className)}
-			{...props}
+			disabled={disabled}
+			title={title}
 		>
 			<PlusIcon />
-			{children}
+			<span className="min-w-0 flex-1 text-left">{children}</span>
 		</Button>
 	);
 }

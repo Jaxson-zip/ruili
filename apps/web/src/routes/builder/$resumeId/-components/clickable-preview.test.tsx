@@ -1,12 +1,21 @@
 // @vitest-environment happy-dom
 
 import { fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { useSectionStore } from "../-store/section";
 
 const resumeData = vi.hoisted(() => ({
+	basics: {
+		customFields: [] as Array<{ id: string; icon: string; link: string; text: string }>,
+		email: "demo@example.com",
+		headline: "产品运营实习生",
+		location: "深圳",
+		name: "林知夏",
+		phone: "13800000000",
+		website: { label: "", url: "" },
+	},
 	metadata: {
 		layout: {
 			sidebarWidth: 30,
@@ -18,6 +27,27 @@ const resumeData = vi.hoisted(() => ({
 				},
 			],
 		},
+		design: {
+			colors: {
+				primary: "rgba(74, 111, 125, 1)",
+				text: "rgba(17, 24, 39, 1)",
+			},
+		},
+		typography: {
+			body: { fontFamily: "Noto Sans SC" },
+			heading: { fontFamily: "Noto Sans SC" },
+		},
+		wordTemplate: { id: null },
+	},
+	picture: { hidden: true, url: "" },
+	sections: {
+		awards: {
+			items: [{ date: "2024", id: "award-1", title: "校级一等奖" }],
+		},
+		education: { items: [] },
+		experience: { items: [] },
+		projects: { items: [] },
+		skills: { items: [{ id: "skill-1", keywords: ["Vue 3", "TypeScript"], name: "前端开发" }] },
 	},
 }));
 
@@ -26,10 +56,12 @@ const resumeMock = vi.hoisted(() => ({
 	data: resumeData,
 }));
 
+const updateResumeData = vi.hoisted(() => vi.fn());
+
 vi.mock("@/features/resume/builder/draft", () => ({
 	useResume: () => resumeMock,
 	useResumeData: () => resumeData,
-	useUpdateResumeData: () => vi.fn(),
+	useUpdateResumeData: () => updateResumeData,
 }));
 
 vi.mock("@/features/resume/preview/preview", () => ({
@@ -37,7 +69,54 @@ vi.mock("@/features/resume/preview/preview", () => ({
 }));
 
 vi.mock("@/features/resume/word-template/preview", () => ({
-	WordTemplateDataPreview: () => <div data-testid="word-template-data-preview">动态 Word 模板</div>,
+	WordTemplateDataPreview: ({
+		onEdit,
+		template,
+	}: {
+		onEdit?: (
+			target:
+				| { field: "name"; type: "basics" }
+				| { field: "date" | "title"; id: string; type: "award" }
+				| { icon: string; id: string; type: "customField" }
+				| { field: "keywords"; id: string; type: "skill" },
+			value: string,
+		) => void;
+		template?: { id: string };
+	}) => (
+		<div data-template-id={template?.id} data-testid="word-template-data-preview">
+			<button type="button" onClick={() => onEdit?.({ field: "name", type: "basics" }, "王小明")}>
+				实时网页模板预览
+			</button>
+			<button
+				type="button"
+				data-testid="award-edit"
+				onClick={() => onEdit?.({ field: "title", id: "award-1", type: "award" }, "2024 校级特等奖")}
+			>
+				编辑获奖
+			</button>
+			<button
+				type="button"
+				data-testid="award-date-edit"
+				onClick={() => onEdit?.({ field: "date", id: "award-1", type: "award" }, "2025")}
+			>
+				编辑获奖日期
+			</button>
+			<button
+				type="button"
+				data-testid="skill-edit"
+				onClick={() => onEdit?.({ field: "keywords", id: "skill-1", type: "skill" }, "后端与数据：Flask、MySQL、JWT")}
+			>
+				编辑技能
+			</button>
+			<button
+				type="button"
+				data-testid="custom-field-edit"
+				onClick={() => onEdit?.({ icon: "user", id: "zh-internship-gender", type: "customField" }, "女")}
+			>
+				编辑性别
+			</button>
+		</div>
+	),
 }));
 
 const { BuilderClickableResumePreview } = await import("./clickable-preview");
@@ -47,9 +126,29 @@ beforeAll(() => {
 	i18n.loadAndActivate({ locale: "zh", messages: {} });
 });
 
+beforeEach(() => {
+	localStorage.clear();
+	updateResumeData.mockReset();
+	resumeData.basics.name = "林知夏";
+	resumeData.basics.customFields = [];
+
+	const award = resumeData.sections.awards.items[0];
+	if (award) {
+		award.date = "2024";
+		award.title = "校级一等奖";
+	}
+
+	const skill = resumeData.sections.skills.items[0];
+	if (skill) {
+		skill.name = "前端开发";
+		skill.keywords = ["Vue 3", "TypeScript"];
+	}
+
+	useSectionStore.setState({ sections: {}, selectedSection: null, selectionRequestId: 0 });
+});
+
 afterEach(() => {
 	localStorage.clear();
-	useSectionStore.setState({ sections: {}, selectedSection: null, selectionRequestId: 0 });
 });
 
 function setPreviewBounds(element: HTMLElement) {
@@ -104,13 +203,76 @@ describe("BuilderClickableResumePreview", () => {
 		expect(useSectionStore.getState().selectedSection).toBe("basics");
 	});
 
-	it("shows the selected Word template preview instead of the system PDF preview", () => {
-		setSelectedWordTemplateId("resume-1", "dark-orange-sidebar");
+	it("shows the realtime HTML Word template preview when a Word template is selected", () => {
+		setSelectedWordTemplateId("resume-1", "zh-internship-001");
 
 		renderClickablePreview();
 
 		expect(screen.getByTestId("word-template-data-preview")).toBeInTheDocument();
+		expect(screen.getByTestId("word-template-data-preview")).toHaveAttribute("data-template-id", "zh-internship-001");
+		expect(screen.getByText("实时网页模板预览")).toBeInTheDocument();
 		expect(screen.queryByTestId("resume-preview-canvas")).toBeNull();
-		expect(screen.getByText("左侧维护内容，预览和导出使用所选 Word 模板")).toBeInTheDocument();
+	});
+
+	it("commits inline edits from the realtime Word template preview", () => {
+		setSelectedWordTemplateId("resume-1", "zh-internship-001");
+
+		renderClickablePreview();
+		fireEvent.click(screen.getByRole("button", { name: "实时网页模板预览" }));
+
+		expect(updateResumeData).toHaveBeenCalledTimes(1);
+		const recipe = updateResumeData.mock.calls[0]?.[0] as (draft: typeof resumeData) => void;
+		recipe(resumeData);
+		expect(resumeData.basics.name).toBe("王小明");
+	});
+
+	it("commits award edits from the realtime Word template preview", () => {
+		setSelectedWordTemplateId("resume-1", "zh-internship-001");
+
+		renderClickablePreview();
+		fireEvent.click(screen.getByTestId("award-edit"));
+
+		expect(updateResumeData).toHaveBeenCalledTimes(1);
+		const recipe = updateResumeData.mock.calls[0]?.[0] as (draft: typeof resumeData) => void;
+		recipe(resumeData);
+		expect(resumeData.sections.awards.items[0]?.title).toBe("2024 校级特等奖");
+	});
+
+	it("commits award date edits from the realtime Word template preview", () => {
+		setSelectedWordTemplateId("resume-1", "zh-internship-001");
+
+		renderClickablePreview();
+		fireEvent.click(screen.getByTestId("award-date-edit"));
+
+		expect(updateResumeData).toHaveBeenCalledTimes(1);
+		const recipe = updateResumeData.mock.calls[0]?.[0] as (draft: typeof resumeData) => void;
+		recipe(resumeData);
+		expect(resumeData.sections.awards.items[0]?.date).toBe("2025");
+	});
+
+	it("commits skill line edits without duplicating the skill name", () => {
+		setSelectedWordTemplateId("resume-1", "zh-internship-001");
+
+		renderClickablePreview();
+		fireEvent.click(screen.getByTestId("skill-edit"));
+
+		expect(updateResumeData).toHaveBeenCalledTimes(1);
+		const recipe = updateResumeData.mock.calls[0]?.[0] as (draft: typeof resumeData) => void;
+		recipe(resumeData);
+		expect(resumeData.sections.skills.items[0]?.name).toBe("后端与数据");
+		expect(resumeData.sections.skills.items[0]?.keywords).toEqual(["Flask", "MySQL", "JWT"]);
+	});
+
+	it("commits Word template custom field edits from the realtime preview", () => {
+		setSelectedWordTemplateId("resume-1", "zh-internship-001");
+
+		renderClickablePreview();
+		fireEvent.click(screen.getByTestId("custom-field-edit"));
+
+		expect(updateResumeData).toHaveBeenCalledTimes(1);
+		const recipe = updateResumeData.mock.calls[0]?.[0] as (draft: typeof resumeData) => void;
+		recipe(resumeData);
+		expect(resumeData.basics.customFields.find((field) => field.id === "zh-internship-gender")?.text).toBe("女");
+		expect(resumeData.basics.customFields.find((field) => field.id === "zh-internship-gender")?.icon).toBe("user");
 	});
 });

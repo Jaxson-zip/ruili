@@ -3,7 +3,6 @@ import type { PreviewPageSize, ResolvedResumePreviewProps } from "./preview.shar
 import { AnimatePresence, m } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@reactive-resume/utils/style";
-import { createResumePdfBlob } from "@/features/resume/export/pdf-document";
 import { useResumeData } from "../builder/draft";
 import { PdfCanvasDocument, PdfCanvasPage } from "./pdf-canvas";
 import { getResumePreviewGapValue, getResumePreviewPageCount, ResumePreviewLoader } from "./preview.shared";
@@ -109,6 +108,7 @@ export function ResumePreviewClient({
 		const generatePdfPreview = async () => {
 			try {
 				if (cancelled || requestId !== requestIdRef.current) return;
+				const { createResumePdfBlob } = await import("@/features/resume/export/pdf-document");
 				const blob = await createResumePdfBlob(resumeData);
 
 				if (!cancelled && requestId === requestIdRef.current) {

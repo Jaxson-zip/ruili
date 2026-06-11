@@ -48,7 +48,14 @@ export const storageRouter = {
 					message: "Only valid JPEG, PNG, GIF, or WebP images can be uploaded.",
 				});
 			}
-			const processed = await processImageForUpload(file);
+			let processed: Awaited<ReturnType<typeof processImageForUpload>>;
+			try {
+				processed = await processImageForUpload(file);
+			} catch {
+				throw new ORPCError("BAD_REQUEST", {
+					message: "The uploaded image could not be processed. Please try another JPEG, PNG, GIF, or WebP file.",
+				});
+			}
 
 			const result = await uploadFile({
 				userId: context.user.id,

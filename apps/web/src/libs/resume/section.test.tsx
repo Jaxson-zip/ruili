@@ -3,7 +3,13 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { i18n } from "@lingui/core";
 import { isValidElement } from "react";
-import { getSectionIcon, getSectionTitle, leftSidebarSections, rightSidebarSections } from "./section";
+import {
+	getSectionIcon,
+	getSectionTitle,
+	leftSidebarSections,
+	rightSidebarSections,
+	wordTemplateRightSidebarSections,
+} from "./section";
 
 beforeAll(() => {
 	i18n.loadAndActivate({ locale: "en", messages: {} });
@@ -55,6 +61,17 @@ describe("sidebar section collections", () => {
 		expect(rightSidebarSections).toContain("template");
 		expect(rightSidebarSections).toContain("design");
 		expect(rightSidebarSections).toContain("export");
+	});
+
+	it("scopes Word template mode to controls that affect the Word workflow", () => {
+		expect(wordTemplateRightSidebarSections).toEqual(["template", "layout", "sharing", "export", "information"]);
+		expect(wordTemplateRightSidebarSections).not.toContain("typography");
+		expect(wordTemplateRightSidebarSections).not.toContain("design");
+		expect(wordTemplateRightSidebarSections).not.toContain("styles");
+		expect(wordTemplateRightSidebarSections).not.toContain("page");
+		expect(wordTemplateRightSidebarSections).not.toContain("notes");
+		expect(wordTemplateRightSidebarSections).not.toContain("statistics");
+		expect(wordTemplateRightSidebarSections).not.toContain("analysis");
 	});
 
 	it("do not overlap (every section belongs to exactly one sidebar)", () => {

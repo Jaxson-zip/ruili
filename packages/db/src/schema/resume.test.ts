@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { getTableColumns, getTableName } from "drizzle-orm";
-import { defaultResumeData } from "@reactive-resume/schema/resume/default";
+import { createDefaultResumeData } from "@reactive-resume/schema/resume/default";
 import { resume, resumeAnalysis, resumeStatistics, resumeTarget, resumeVersion } from "./resume";
 
 describe("resume table definition", () => {
@@ -33,7 +33,7 @@ describe("resume table definition", () => {
 		// most stable way to assert intent is to make sure `data` has a default at all.
 		expect(columns.data).toBeDefined();
 		// Roundtrip the imported default to make sure the import wiring works.
-		expect(defaultResumeData.basics).toBeDefined();
+		expect(createDefaultResumeData().basics).toBeDefined();
 	});
 });
 

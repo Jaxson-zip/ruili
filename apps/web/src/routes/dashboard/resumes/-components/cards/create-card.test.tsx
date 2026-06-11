@@ -19,9 +19,9 @@ describe("CreateResumeCard", () => {
 	it("renders the create-resume copy", () => {
 		render(<CreateResumeCard />);
 		expect(screen.getByText("创建简历")).toBeInTheDocument();
-		expect(screen.getByText("选样张或模板开始")).toBeInTheDocument();
-		expect(screen.getByAltText("前端工程师样张预览")).toBeInTheDocument();
-		expect(screen.getByAltText("中文模板预览")).toBeInTheDocument();
+		expect(screen.getByText("3 套 Word 模板可用")).toBeInTheDocument();
+		expect(screen.queryByAltText("前端工程师样张预览")).toBeNull();
+		expect(screen.queryByAltText("中文模板预览")).toBeNull();
 	});
 
 	it("opens the resume.create dialog when clicked", () => {

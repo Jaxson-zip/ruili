@@ -23,7 +23,7 @@ describe("handleWordTemplatePreview", () => {
 		const response = await handleWordTemplatePreview(
 			new Request("http://localhost:3000/api/word-template/preview", {
 				method: "POST",
-				body: JSON.stringify({ templateId: "compact-blue-grid", data: sampleResumeData }),
+				body: JSON.stringify({ templateId: "zh-internship-001", data: sampleResumeData }),
 			}),
 			{ resolveUser: vi.fn(async () => null) },
 		);
@@ -42,7 +42,7 @@ describe("handleWordTemplatePreview", () => {
 		const response = await handleWordTemplatePreview(
 			new Request("http://localhost:3000/api/word-template/preview", {
 				method: "POST",
-				body: JSON.stringify({ templateId: "compact-blue-grid", data: sampleResumeData }),
+				body: JSON.stringify({ templateId: "zh-internship-001", data: sampleResumeData }),
 				headers: { "content-type": "application/json" },
 			}),
 			{
@@ -64,7 +64,7 @@ describe("handleWordTemplatePreview", () => {
 		const response = await handleWordTemplatePreview(
 			new Request("http://localhost:3000/api/word-template/preview", {
 				method: "POST",
-				body: JSON.stringify({ templateId: "compact-blue-grid", data: sampleResumeData }),
+				body: JSON.stringify({ templateId: "zh-internship-001", data: sampleResumeData }),
 				headers: { "content-type": "application/json" },
 			}),
 			{
@@ -79,5 +79,19 @@ describe("handleWordTemplatePreview", () => {
 
 		expect(response.status).toBe(503);
 		await expect(response.json()).resolves.toMatchObject({ code: "DOCX_TO_PDF_UNAVAILABLE" });
+	});
+
+	it("rejects old experimental template ids that are no longer in the library", async () => {
+		const response = await handleWordTemplatePreview(
+			new Request("http://localhost:3000/api/word-template/preview", {
+				method: "POST",
+				body: JSON.stringify({ templateId: "compact-blue-grid", data: sampleResumeData }),
+				headers: { "content-type": "application/json" },
+			}),
+			{ resolveUser: vi.fn(async () => user) },
+		);
+
+		expect(response.status).toBe(400);
+		await expect(response.json()).resolves.toMatchObject({ code: "BAD_REQUEST" });
 	});
 });

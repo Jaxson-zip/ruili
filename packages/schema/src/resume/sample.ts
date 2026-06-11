@@ -575,5 +575,8 @@ export const sampleResumeData: ResumeData = {
 		},
 		notes: "",
 		styleRules: [],
+		wordTemplate: {
+			id: null,
+		},
 	},
 };

@@ -41,6 +41,7 @@
 		"test:ci": "turbo run test:ci",
 		"test:agent": "turbo run test:agent",
 		"verify:beta": "node tooling/verify-beta-smoke.mjs",
+		"verify:word-template": "node tooling/verify-word-template-mode.mjs",
 		"verify:production": "node tooling/verify-production-canary.mjs"
 	},
 	"devDependencies": {

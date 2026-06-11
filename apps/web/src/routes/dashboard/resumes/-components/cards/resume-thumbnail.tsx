@@ -6,9 +6,10 @@ import { useInView } from "motion/react";
 import { useEffect, useRef } from "react";
 import { Spinner } from "@reactive-resume/ui/components/spinner";
 import { cn } from "@reactive-resume/utils/style";
-import { createResumePdfBlob } from "@/features/resume/export/pdf-document";
 import { createPdfFirstPageImageUrl } from "@/features/resume/preview/pdf-thumbnail";
 import { getResumeThumbnailCacheKey } from "@/features/resume/preview/resume-thumbnail.shared";
+import { getSelectedWordTemplate } from "@/features/resume/word-template/library";
+import { WordTemplateBuilderViewportThumbnail } from "@/features/resume/word-template/thumbnail";
 import { orpc } from "@/libs/orpc/client";
 
 type ResumeListItem = RouterOutput["resume"]["list"][number];
@@ -25,6 +26,9 @@ const throwIfAborted = (signal: AbortSignal) => {
 };
 
 const createResumeThumbnailUrl = async (data: ResumeData, signal: AbortSignal) => {
+	const { createResumePdfBlob } = await import("@/features/resume/export/pdf-document");
+	throwIfAborted(signal);
+
 	const pdf = await createResumePdfBlob(data);
 	throwIfAborted(signal);
 
@@ -75,9 +79,12 @@ export function ResumeThumbnail({ isLocked, resume }: ResumeThumbnailProps) {
 		...orpc.resume.getById.queryOptions({ input: { id: resume.id } }),
 		enabled: isInView,
 	});
+	const selectedWordTemplate = resumeQuery.data?.data
+		? getSelectedWordTemplate(resume.id, resumeQuery.data.data)
+		: undefined;
 	const thumbnail = useResumeThumbnail(
-		resumeQuery.data?.data,
-		isInView ? getResumeThumbnailCacheKey(resume.id, resume.updatedAt) : undefined,
+		selectedWordTemplate ? undefined : resumeQuery.data?.data,
+		isInView && !selectedWordTemplate ? getResumeThumbnailCacheKey(resume.id, resume.updatedAt) : undefined,
 	);
 	const hasFailed = resumeQuery.isError || thumbnail.status === "error";
 
@@ -86,7 +93,13 @@ export function ResumeThumbnail({ isLocked, resume }: ResumeThumbnailProps) {
 			ref={containerRef}
 			className={cn("relative size-full overflow-hidden bg-muted/40 transition-all", isLocked && "blur-xs")}
 		>
-			{thumbnail.status === "ready" ? (
+			{selectedWordTemplate && resumeQuery.data?.data ? (
+				<WordTemplateCardPreview
+					data={resumeQuery.data.data}
+					name={selectedWordTemplate.name}
+					template={selectedWordTemplate}
+				/>
+			) : thumbnail.status === "ready" ? (
 				<div
 					aria-hidden
 					className="absolute inset-0 bg-center bg-contain bg-white bg-no-repeat"
@@ -101,6 +114,20 @@ export function ResumeThumbnail({ isLocked, resume }: ResumeThumbnailProps) {
 					<Spinner className="size-8 text-muted-foreground" />
 				</div>
 			)}
+		</div>
+	);
+}
+
+type WordTemplateCardPreviewProps = {
+	data: ResumeData;
+	name: string;
+	template: NonNullable<ReturnType<typeof getSelectedWordTemplate>>;
+};
+
+function WordTemplateCardPreview({ data, name, template }: WordTemplateCardPreviewProps) {
+	return (
+		<div data-testid="word-template-card-preview-stage" className="absolute inset-x-0 top-0 bottom-16 overflow-hidden">
+			<WordTemplateBuilderViewportThumbnail data={data} name={name} scale={0.25} template={template} />
 		</div>
 	);
 }

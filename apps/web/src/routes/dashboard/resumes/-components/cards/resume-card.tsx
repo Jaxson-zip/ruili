@@ -33,7 +33,14 @@ export function ResumeCard({ resume }: ResumeCardProps) {
 					whileTap={{ scale: 0.998 }}
 					transition={{ type: "spring", stiffness: 320, damping: 28 }}
 				>
-					<BaseCard title={resume.name} description={t`最后更新于 ${updatedAt}`} tags={resume.tags}>
+					<BaseCard
+						title={resume.name}
+						description={t`最后更新于 ${updatedAt}`}
+						tags={resume.tags}
+						footerClassName="bg-background/55 px-3 py-2"
+						titleClassName="text-sm"
+						descriptionClassName="text-[11px]"
+					>
 						<ResumeThumbnail resume={resume} isLocked={resume.isLocked} />
 
 						<ResumeLockOverlay isLocked={resume.isLocked} />

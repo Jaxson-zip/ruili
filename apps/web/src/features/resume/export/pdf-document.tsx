@@ -1,7 +1,6 @@
 import type { ResumeData } from "@reactive-resume/schema/resume/data";
 import type { Template } from "@reactive-resume/schema/templates";
 import { useMemo } from "react";
-import { createResumePdfBlob as createPdfBlob } from "@reactive-resume/pdf/browser";
 import { ResumeDocument } from "@reactive-resume/pdf/document";
 import { createSectionTitleResolverForLocale, useSectionTitleResolver } from "@/libs/resume/section-title-locale";
 
@@ -23,6 +22,7 @@ export const useLocalizedResumeDocument = (data?: ResumeData, template?: Templat
 
 export const createResumePdfBlob = async (data: ResumeData, template?: Template) => {
 	const sectionTitleResolver = await createSectionTitleResolverForLocale(data.metadata.page.locale);
+	const { createResumePdfBlob: createPdfBlob } = await import("@reactive-resume/pdf/browser");
 
 	return createPdfBlob({
 		data,

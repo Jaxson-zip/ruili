@@ -12,6 +12,18 @@ describe("createSectionItem", () => {
 		expect((result.sections.skills.items[0] as { name?: string })?.name).toBe("Go");
 	});
 
+	it("unhides a built-in section when an item is added", () => {
+		const initial = produce(defaultResumeData, (draft) => {
+			draft.sections.skills.hidden = true;
+		});
+
+		const result = produce(initial, (draft) => {
+			createSectionItem(draft, "skills", { id: "1", name: "Go" });
+		});
+
+		expect(result.sections.skills.hidden).toBe(false);
+	});
+
 	it("appends to a custom section by id", () => {
 		const initial = produce(defaultResumeData, (draft) => {
 			draft.customSections.push({
@@ -30,6 +42,7 @@ describe("createSectionItem", () => {
 
 		const customSection = result.customSections.find((s) => s.id === "custom-1");
 		expect(customSection?.items).toHaveLength(1);
+		expect(customSection?.hidden).toBe(false);
 		// Built-in section is untouched
 		expect(result.sections.skills.items).toHaveLength(0);
 	});

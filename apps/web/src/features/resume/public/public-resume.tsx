@@ -8,7 +8,6 @@ import { BrandIcon } from "@reactive-resume/ui/components/brand-icon";
 import { Button } from "@reactive-resume/ui/components/button";
 import { downloadWithAnchor, generateFilename } from "@reactive-resume/utils/file";
 import { LoadingScreen } from "@/components/layout/loading-screen";
-import { createResumePdfBlob } from "@/features/resume/export/pdf-document";
 import { orpc } from "@/libs/orpc/client";
 import { PdfViewer } from "./pdf-viewer";
 
@@ -29,6 +28,7 @@ export function PublicResumeRoute() {
 		setIsPrinting(true);
 
 		try {
+			const { createResumePdfBlob } = await import("@/features/resume/export/pdf-document");
 			const blob = await createResumePdfBlob(resume.data);
 			downloadWithAnchor(blob, filename);
 		} catch {

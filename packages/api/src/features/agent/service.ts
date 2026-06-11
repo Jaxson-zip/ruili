@@ -15,6 +15,7 @@ import { getAgentModel } from "../ai/service";
 import { aiProvidersService } from "../ai-providers/service";
 import { resumeService } from "../resume/service";
 import { getStorageService, inferContentType } from "../storage/service";
+import { buildAgentReadableResumeData, buildAgentResumeVisibilityNotes } from "./readable-resume";
 import { buildAgentDraftResumeName, buildUniqueAgentDraftSlug } from "./resume";
 import { claimActiveAgentRun, clearActiveAgentRunIfCurrent } from "./runs";
 import { agentStreamLifecycle } from "./streams";
@@ -793,7 +794,8 @@ function createAgent(input: {
 						"Do not prefix paths with `/data`.",
 						"The resume file/title `name` metadata is read-only for apply_resume_patch.",
 					],
-					data: resume.data,
+					visibilityNotes: buildAgentResumeVisibilityNotes(resume.data),
+					data: buildAgentReadableResumeData(resume.data),
 				};
 			},
 			readAttachment: (attachmentId) =>

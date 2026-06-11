@@ -23,6 +23,7 @@ import {
 } from "@reactive-resume/ui/components/dropdown-menu";
 import { useDialogStore } from "@/dialogs/store";
 import { useCurrentResume, usePatchResume } from "@/features/resume/builder/draft";
+import { getSelectedWordTemplate } from "@/features/resume/word-template/library";
 import { useConfirm } from "@/hooks/use-confirm";
 import { getResumeErrorMessage } from "@/libs/error-message";
 import { orpc } from "@/libs/orpc/client";
@@ -30,7 +31,9 @@ import { useBuilderSidebar } from "../-store/sidebar";
 
 export function BuilderHeader() {
 	const resume = useCurrentResume();
-	const name = resume.name;
+	const selectedWordTemplate = getSelectedWordTemplate(resume.id, resume.data);
+	const name = selectedWordTemplate ? resume.data.basics.name.trim() || resume.name : resume.name;
+	const templateName = selectedWordTemplate?.name;
 	const isLocked = resume.isLocked;
 	const toggleSidebar = useBuilderSidebar((state) => state.toggleSidebar);
 
@@ -61,7 +64,14 @@ export function BuilderHeader() {
 					}
 				/>
 				<span className="me-2.5 text-muted-foreground">/</span>
-				<h2 className="flex-1 truncate font-medium">{name}</h2>
+				<div className="flex min-w-0 items-center gap-2">
+					<h2 className="truncate font-medium">{name}</h2>
+					{templateName ? (
+						<span className="hidden max-w-[14rem] truncate text-muted-foreground text-xs sm:inline">
+							{templateName}
+						</span>
+					) : null}
+				</div>
 				{isLocked && <LockSimpleIcon className="ms-2 text-muted-foreground" />}
 				<BuilderHeaderDropdown />
 			</div>

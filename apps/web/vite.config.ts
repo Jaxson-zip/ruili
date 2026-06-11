@@ -1,5 +1,7 @@
 import type { ProxyOptions } from "vite";
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
+import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { lingui, linguiTransformerBabelPreset } from "@lingui/vite-plugin";
 import babel from "@rolldown/plugin-babel";
@@ -12,6 +14,8 @@ const rootPackageJsonPath = new URL("../../package.json", import.meta.url);
 const rootPackageJson = JSON.parse(readFileSync(rootPackageJsonPath, "utf-8")) as { version: string | undefined };
 const appVersion = JSON.stringify(rootPackageJson.version ?? "0.0.0");
 const workspaceRoot = fileURLToPath(new URL("../..", import.meta.url));
+const require = createRequire(import.meta.url);
+const pakoZlibDir = dirname(require.resolve("pako/lib/zlib/zstream.js")).replaceAll("\\", "/");
 
 const serverPaths = ["/api", "/mcp", "/uploads", "/.well-known", "/schema.json"] as const;
 
@@ -31,6 +35,7 @@ export default defineConfig({
 
 	resolve: {
 		tsconfigPaths: true,
+		alias: [{ find: /^pako\/lib\/zlib\/(.+)$/, replacement: `${pakoZlibDir}/$1` }],
 	},
 
 	define: {
@@ -42,6 +47,15 @@ export default defineConfig({
 		rolldownOptions: {
 			external: ["bcrypt", "sharp", "@aws-sdk/client-s3", "ioredis", "linkedom"],
 		},
+	},
+
+	optimizeDeps: {
+		include: [
+			"pako/lib/zlib/constants.js",
+			"pako/lib/zlib/deflate.js",
+			"pako/lib/zlib/inflate.js",
+			"pako/lib/zlib/zstream.js",
+		],
 	},
 
 	server: {

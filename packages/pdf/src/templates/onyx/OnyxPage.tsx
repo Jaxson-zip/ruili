@@ -17,6 +17,7 @@ import { RichText } from "../shared/rich-text";
 import { createRtlStyleHelpers } from "../shared/rtl";
 import { Section } from "../shared/sections";
 import { composeStyles, headerNameLineHeight } from "../shared/styles";
+import { cleanOnyxContactLabel, hasOnyxHeaderContent } from "./header";
 
 type OnyxStyles = Omit<TemplateStyleSlots, "page"> & {
 	page: Style;
@@ -221,18 +222,28 @@ const CompactProjectsSection = ({ colors, placement, styles }: CompactSkillsProp
 const Header = ({ styles }: OnyxHeaderProps) => {
 	const { basics, picture } = useRender();
 	const hasPicture = hasTemplatePicture(picture);
+	if (!hasOnyxHeaderContent({ basics, picture })) return null;
+
+	const email = cleanOnyxContactLabel(basics.email);
+	const phone = cleanOnyxContactLabel(basics.phone);
+	const location = cleanOnyxContactLabel(basics.location);
+	const websiteUrl = cleanOnyxContactLabel(basics.website.url);
 	const contactEntries: ContactEntry[] = [
-		basics.email ? { id: "email", label: basics.email, url: `mailto:${basics.email}` } : null,
-		basics.phone ? { id: "phone", label: basics.phone, url: `tel:${basics.phone}` } : null,
-		basics.location ? { id: "location", label: basics.location } : null,
-		basics.website.url
-			? { id: "website", label: getWebsiteDisplayText(basics.website), url: basics.website.url }
+		email ? { id: "email", label: email, url: `mailto:${email}` } : null,
+		phone ? { id: "phone", label: phone, url: `tel:${phone}` } : null,
+		location ? { id: "location", label: location } : null,
+		websiteUrl
+			? {
+					id: "website",
+					label: getWebsiteDisplayText({ ...basics.website, url: websiteUrl }),
+					url: websiteUrl,
+				}
 			: null,
 		...basics.customFields
 			.filter((field) => field.text.trim().length > 0)
 			.map((field) => ({
 				id: field.id,
-				label: field.text,
+				label: cleanOnyxContactLabel(field.text),
 				url: getCustomFieldLinkUrl(field),
 			})),
 	].filter(Boolean) as ContactEntry[];

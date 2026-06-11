@@ -1,11 +1,8 @@
-import type { resumeTemplateStarters } from "@reactive-resume/schema/resume/starters";
-import type { Template } from "@reactive-resume/schema/templates";
 import type { WordTemplate } from "@/features/resume/word-template/library";
 import type { DialogProps } from "../store";
 import { t } from "@lingui/core/macro";
-import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
-import { FileDocIcon, MagicWandIcon, PencilSimpleLineIcon, PlusIcon, UploadSimpleIcon } from "@phosphor-icons/react";
+import { MagicWandIcon, PencilSimpleLineIcon, PlusIcon } from "@phosphor-icons/react";
 import { useStore } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
@@ -33,22 +30,16 @@ import { generateId, generateRandomName, slugify } from "@reactive-resume/utils/
 import { ChipInput } from "@/components/input/chip-input";
 import { usePatchResume } from "@/features/resume/builder/draft";
 import { getWordTemplateLibrary, setSelectedWordTemplateId } from "@/features/resume/word-template/library";
+import { WordTemplateLiveThumbnail } from "@/features/resume/word-template/thumbnail";
 import { useFormBlocker } from "@/hooks/use-form-blocker";
 import { authClient } from "@/libs/auth/client";
 import { getResumeErrorMessage } from "@/libs/error-message";
 import { orpc } from "@/libs/orpc/client";
 import { useAppForm, withForm } from "@/libs/tanstack-form";
 import { useDialogStore } from "../store";
-import { getLaunchResumeTemplateStarters, getStarterPreviewImageUrl } from "./starter-preview";
-import { primaryTemplateIds, templates } from "./template/data";
-import { TemplateThumbnail } from "./template/thumbnail";
-import {
-	buildBlankTemplateImportInput,
-	buildResumeStarterImportInput,
-	buildWordTemplateImportInput,
-} from "./template-starter-import";
+import { buildWordTemplateImportInput } from "./template-starter-import";
 
-type CreateMode = "word" | "upload" | "blank" | "online";
+type CreateMode = "word" | "blank";
 
 const formSchema = z.object({
 	id: z.string(),
@@ -67,7 +58,6 @@ const defaultValues: FormValues = {
 };
 
 export function CreateResumeDialog(_: DialogProps<"resume.create">) {
-	const { i18n } = useLingui();
 	const navigate = useNavigate();
 	const closeDialog = useDialogStore((state) => state.closeDialog);
 
@@ -101,7 +91,6 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 
 	const name = useStore(form.store, (s) => s.values.name);
 	const [createMode, setCreateMode] = useState<CreateMode>("word");
-	const launchStarters = getLaunchResumeTemplateStarters();
 	const wordTemplates = getWordTemplateLibrary();
 
 	useEffect(() => {
@@ -110,43 +99,9 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 
 	useFormBlocker(form);
 
-	const onCreateFromStarter = (starter: (typeof resumeTemplateStarters)[number]) => {
-		const input = buildResumeStarterImportInput(starter, form.state.values.name);
-
-		const toastId = toast.loading(t`正在套用模板...`);
-
-		importStarter(input, {
-			onSuccess: (id) => {
-				toast.success(t`模板简历已创建`, { id: toastId });
-				closeDialog();
-				void navigate({ to: "/builder/$resumeId", params: { resumeId: id } });
-			},
-			onError: (error) => {
-				toast.error(getResumeErrorMessage(error), { id: toastId });
-			},
-		});
-	};
-
-	const onCreateFromTemplate = (template: Template) => {
-		const input = buildBlankTemplateImportInput(template, templates[template], form.state.values.name);
-
-		const toastId = toast.loading(t`正在创建模板简历...`);
-
-		importStarter(input, {
-			onSuccess: (id) => {
-				toast.success(t`模板简历已创建`, { id: toastId });
-				closeDialog();
-				void navigate({ to: "/builder/$resumeId", params: { resumeId: id } });
-			},
-			onError: (error) => {
-				toast.error(getResumeErrorMessage(error), { id: toastId });
-			},
-		});
-	};
-
 	const onCreateFromWordTemplate = (template: WordTemplate) => {
 		const requestedName = form.state.values.name.trim() || `${template.name} 简历`;
-		const input = buildWordTemplateImportInput(requestedName);
+		const input = buildWordTemplateImportInput(requestedName, template.id);
 
 		const toastId = toast.loading(t`正在创建 Word 模板简历...`);
 
@@ -163,6 +118,12 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 		});
 	};
 
+	const getTemplateModuleSummary = (template: WordTemplate) => {
+		const visibleModules = template.modules.slice(0, 4).join("、");
+		const suffix = template.modules.length > 4 ? `等 ${template.modules.length} 个模块` : "";
+		return suffix ? `${visibleModules}${suffix}` : visibleModules;
+	};
+
 	return (
 		<DialogContent className="lg:max-w-5xl">
 			<DialogHeader>
@@ -171,7 +132,7 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 					<Trans>新建简历</Trans>
 				</DialogTitle>
 				<DialogDescription>
-					<Trans>优先选择真实 Word 模板；系统在线模板保留为轻量编辑入口。</Trans>
+					<Trans>从内置 DOCX 模板或空白简历开始。模板简历会保留 Word 版式并填入结构化内容。</Trans>
 				</DialogDescription>
 			</DialogHeader>
 
@@ -183,24 +144,12 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 					void form.handleSubmit();
 				}}
 			>
-				<div className="grid grid-cols-1 gap-2 rounded-md border bg-secondary/20 p-1 sm:grid-cols-2 lg:grid-cols-4">
+				<div className="grid grid-cols-1 gap-2 rounded-md border bg-secondary/20 p-1 sm:grid-cols-2">
 					<CreateModeButton
 						active={createMode === "word"}
-						description={`${wordTemplates.length} 套真实 DOCX`}
+						description={wordTemplates.length > 0 ? `${wordTemplates.length} 套内置 DOCX` : "模板待添加"}
 						label="Word 模板库"
 						onClick={() => setCreateMode("word")}
-					/>
-					<CreateModeButton
-						active={createMode === "upload"}
-						description="保留自己的样式"
-						label="上传 Word 模板"
-						onClick={() => setCreateMode("upload")}
-					/>
-					<CreateModeButton
-						active={createMode === "online"}
-						description={`${primaryTemplateIds.length + launchStarters.length} 套可编辑`}
-						label="旧版在线模板"
-						onClick={() => setCreateMode("online")}
 					/>
 					<CreateModeButton
 						active={createMode === "blank"}
@@ -218,177 +167,59 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 								<span className="ms-2 text-muted-foreground">({wordTemplates.length} 套)</span>
 							</h3>
 							<p className="text-muted-foreground text-sm">
-								<Trans>选择真实 DOCX 模板，后续导出会保留 Word 原始版式，只替换简历文字。</Trans>
+								<Trans>
+									这里展示可直接套用的内置 DOCX 模板。示例内容仅用于预览，创建后可以继续编辑结构化内容，并按模板版式导出
+									Word。
+								</Trans>
 							</p>
 						</div>
 
-						<div className="grid max-h-[58svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-3">
-							{wordTemplates.map((template, index) => (
-								<button
-									key={template.id}
-									type="button"
-									data-word-template-id={template.id}
-									disabled={isBusy}
-									className="group overflow-hidden rounded-md border bg-background text-left transition-colors hover:border-foreground/30 disabled:cursor-not-allowed disabled:opacity-60"
-									onClick={() => onCreateFromWordTemplate(template)}
-								>
-									<div className="aspect-page overflow-hidden border-b bg-white">
-										<img
-											src={template.previewUrl}
-											alt={template.name}
-											loading={index < 3 ? "eager" : "lazy"}
-											className="size-full object-cover object-top"
-										/>
-									</div>
-
-									<div className="space-y-2 p-3">
-										<div className="flex items-start justify-between gap-2">
-											<h4 className="line-clamp-1 font-semibold text-sm">{template.name}</h4>
-											<Badge variant="secondary" className="shrink-0 text-[11px]">
-												DOCX
-											</Badge>
-										</div>
-										<p className="line-clamp-2 min-h-9 text-muted-foreground text-xs leading-relaxed">
-											{template.description}
-										</p>
-										<div className="flex min-h-6 flex-wrap gap-1">
-											{template.tags.slice(0, 3).map((tag) => (
-												<Badge key={tag} variant="secondary" className="text-[11px]">
-													{tag}
-												</Badge>
-											))}
-										</div>
-									</div>
-								</button>
-							))}
-						</div>
-					</section>
-				) : null}
-
-				{createMode === "upload" ? (
-					<section className="space-y-4 rounded-md border bg-secondary/20 p-4">
-						<div className="flex items-start gap-3">
-							<UploadSimpleIcon className="mt-0.5 size-5 shrink-0" />
-							<div className="space-y-1">
-								<h3 className="font-semibold text-sm">
-									<Trans>上传自己的 Word 模板</Trans>
-								</h3>
-								<p className="text-muted-foreground text-sm">
-									<Trans>先创建一份空白简历，进入编辑器后可在右侧导出面板上传 .docx 模板并生成 Word。</Trans>
-								</p>
-							</div>
-						</div>
-
-						<ResumeForm form={form} />
-
-						<DialogFooter>
-							<Button type="submit" disabled={isBusy}>
-								<FileDocIcon />
-								<Trans>创建后上传 Word</Trans>
-							</Button>
-						</DialogFooter>
-					</section>
-				) : null}
-
-				{createMode === "online" ? (
-					<section className="space-y-3">
-						<div className="flex flex-col gap-1">
-							<h3 className="font-semibold text-sm">
-								<Trans>在线编辑模板和成品样张</Trans>
-								<span className="ms-2 text-muted-foreground">
-									({primaryTemplateIds.length + launchStarters.length} 套)
-								</span>
-							</h3>
-							<p className="text-muted-foreground text-sm">
-								<Trans>这些模板适合在线预览和快速编辑；真实 Word 版式请优先使用 Word 模板库。</Trans>
-							</p>
-						</div>
-
-						<div className="grid max-h-[58svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-3">
-							{launchStarters.map((starter, index) => (
-								<button
-									key={starter.id}
-									type="button"
-									data-starter-id={starter.id}
-									disabled={isBusy}
-									className="group overflow-hidden rounded-md border bg-background text-left transition-colors hover:border-foreground/30 disabled:cursor-not-allowed disabled:opacity-60"
-									onClick={() => onCreateFromStarter(starter)}
-								>
-									<div className="aspect-page overflow-hidden border-b bg-white">
-										<TemplateThumbnail
-											template={starter.template}
-											label={starter.name}
-											imageUrl={getStarterPreviewImageUrl(starter)}
-											loading={index < 6 ? "eager" : "lazy"}
-										/>
-									</div>
-
-									<div className="space-y-2 p-3">
-										<div className="flex items-start justify-between gap-2">
-											<h4 className="line-clamp-1 font-semibold text-sm">{starter.name}</h4>
-											<Badge variant="secondary" className="shrink-0 text-[11px]">
-												PDF
-											</Badge>
-										</div>
-										<p className="line-clamp-2 min-h-9 text-muted-foreground text-xs leading-relaxed">
-											{starter.description}
-										</p>
-										<div className="flex min-h-6 flex-wrap gap-1">
-											{starter.tags.slice(0, 3).map((tag) => (
-												<Badge key={tag} variant="secondary" className="text-[11px]">
-													{tag}
-												</Badge>
-											))}
-										</div>
-									</div>
-								</button>
-							))}
-
-							{primaryTemplateIds.map((template, index) => {
-								const metadata = templates[template];
-
-								return (
+						{wordTemplates.length === 0 ? (
+							<EmptyTemplateState />
+						) : (
+							<div className="grid max-h-[58svh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-3">
+								{wordTemplates.map((template) => (
 									<button
-										key={template}
+										key={template.id}
 										type="button"
+										data-word-template-id={template.id}
 										disabled={isBusy}
 										className="group overflow-hidden rounded-md border bg-background text-left transition-colors hover:border-foreground/30 disabled:cursor-not-allowed disabled:opacity-60"
-										onClick={() => onCreateFromTemplate(template)}
+										onClick={() => onCreateFromWordTemplate(template)}
 									>
-										<div className="aspect-page overflow-hidden border-b bg-white">
-											<TemplateThumbnail
-												template={template}
-												label={metadata.name}
-												imageUrl={metadata.imageUrl}
-												loading={index < 3 ? "eager" : "lazy"}
-											/>
-										</div>
+										<WordTemplateLiveThumbnail
+											className="rounded-none border-0 border-b"
+											data={buildWordTemplateImportInput(undefined, template.id).data}
+											name={template.name}
+											scale={0.25}
+											template={template}
+										/>
 
 										<div className="space-y-2 p-3">
 											<div className="flex items-start justify-between gap-2">
-												<h4 className="line-clamp-1 font-semibold text-sm">{metadata.name}</h4>
+												<h4 className="line-clamp-1 font-semibold text-sm">{template.name}</h4>
 												<Badge variant="secondary" className="shrink-0 text-[11px]">
-													PDF
+													DOCX
 												</Badge>
 											</div>
-											<p className="line-clamp-2 min-h-10 text-muted-foreground text-xs leading-relaxed">
-												{i18n.t(metadata.description)}
+											<p className="line-clamp-2 min-h-9 text-muted-foreground text-xs leading-relaxed">
+												{template.description}
 											</p>
-											<div className="flex flex-wrap gap-1">
-												{metadata.tags.slice(0, 3).map((tag) => (
+											<p className="line-clamp-1 text-[11px] text-muted-foreground">
+												包含：{getTemplateModuleSummary(template)}
+											</p>
+											<div className="flex min-h-6 flex-wrap gap-1">
+												{template.tags.slice(0, 3).map((tag) => (
 													<Badge key={tag} variant="secondary" className="text-[11px]">
 														{tag}
 													</Badge>
 												))}
 											</div>
-											<div className="pt-1 font-medium text-primary text-xs group-hover:underline">
-												<Trans>创建空白简历</Trans>
-											</div>
 										</div>
 									</button>
-								);
-							})}
-						</div>
+								))}
+							</div>
+						)}
 					</section>
 				) : null}
 
@@ -399,7 +230,7 @@ export function CreateResumeDialog(_: DialogProps<"resume.create">) {
 								<Trans>从空白简历开始</Trans>
 							</h3>
 							<p className="text-muted-foreground text-sm">
-								<Trans>输入名称后创建空白版本，后续仍可添加组件、切换模板和调整排版。</Trans>
+								<Trans>输入名称后创建空白版本，后续仍可添加内容、切换模板和调整排版。</Trans>
 							</p>
 						</div>
 
@@ -425,6 +256,15 @@ type CreateModeButtonProps = {
 	label: string;
 	onClick: () => void;
 };
+
+function EmptyTemplateState() {
+	return (
+		<div className="rounded-md border border-dashed bg-secondary/20 px-4 py-10 text-center">
+			<h4 className="font-semibold text-sm">模板库暂时为空</h4>
+			<p className="mx-auto mt-2 max-w-md text-muted-foreground text-sm">确认后的 Word 模板会逐个加入这里。</p>
+		</div>
+	);
+}
 
 function CreateModeButton({ active, description, label, onClick }: CreateModeButtonProps) {
 	return (
@@ -500,7 +340,7 @@ export function UpdateResumeDialog({ data }: DialogProps<"resume.update">) {
 					<Trans>编辑简历</Trans>
 				</DialogTitle>
 				<DialogDescription>
-					<Trans>给这份简历换一个更清楚的名称，方便区分不同投递版本。</Trans>
+					<Trans>给这份简历换一个更清晰的名称，方便区分不同投递版本。</Trans>
 				</DialogDescription>
 			</DialogHeader>
 
@@ -668,7 +508,7 @@ const ResumeForm = withForm({
 							/>
 							<FormMessage errors={field.state.meta.errors} />
 							<FormDescription>
-								<Trans>这是简历公开访问地址的一部分，可以用拼音或英文。</Trans>
+								<Trans>这是简历公开访问地址的一部分，可以使用拼音或英文。</Trans>
 							</FormDescription>
 						</FormItem>
 					)}

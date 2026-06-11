@@ -11,7 +11,7 @@ import { match } from "ts-pattern";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
 import { applyResumePatches, ResumePatchError } from "@reactive-resume/resume/patch";
-import { defaultResumeData } from "@reactive-resume/schema/resume/default";
+import { createDefaultResumeData } from "@reactive-resume/schema/resume/default";
 import { generateId } from "@reactive-resume/utils/string";
 import { getStorageService } from "../storage/service";
 import { grantResumeAccess, hasResumeAccess } from "./access";
@@ -332,7 +332,7 @@ export const resumeService = {
 		data?: ResumeData;
 	}) => {
 		const id = generateId();
-		const data = input.data ?? defaultResumeData;
+		const data = input.data ? structuredClone(input.data) : createDefaultResumeData();
 		data.metadata.page.locale = input.locale;
 
 		try {

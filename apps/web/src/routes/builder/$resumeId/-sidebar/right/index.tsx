@@ -5,7 +5,14 @@ import { Button } from "@reactive-resume/ui/components/button";
 import { ScrollArea } from "@reactive-resume/ui/components/scroll-area";
 import { Separator } from "@reactive-resume/ui/components/separator";
 import { Copyright } from "@/components/ui/copyright";
-import { getSectionIcon, getSectionTitle, rightSidebarSections } from "@/libs/resume/section";
+import { useCurrentResume } from "@/features/resume/builder/draft";
+import { getSelectedWordTemplate } from "@/features/resume/word-template/library";
+import {
+	getSectionIcon,
+	getSectionTitle,
+	rightSidebarSections,
+	wordTemplateRightSidebarSections,
+} from "@/libs/resume/section";
 import { BuilderSidebarEdge } from "../../-components/edge";
 import { useSectionStore } from "../../-store/section";
 import { useBuilderSidebar } from "../../-store/sidebar";
@@ -42,14 +49,18 @@ function getSectionComponent(type: RightSidebarSection) {
 
 export function BuilderSidebarRight() {
 	const scrollAreaRef = useRef<HTMLDivElement | null>(null);
+	const resume = useCurrentResume();
 	const selectedSection = useSectionStore((state) => state.selectedSection);
 	const selectionRequestId = useSectionStore((state) => state.selectionRequestId);
 	const setCollapsed = useSectionStore((state) => state.setCollapsed);
 	const toggleSidebar = useBuilderSidebar((state) => state.toggleSidebar);
+	const sections = getSelectedWordTemplate(resume.id, resume.data)
+		? wordTemplateRightSidebarSections
+		: rightSidebarSections;
 
 	useEffect(() => {
 		if (selectionRequestId === 0 || !selectedSection) return;
-		if (!rightSidebarSections.includes(selectedSection as RightSidebarSection)) return;
+		if (!sections.includes(selectedSection as RightSidebarSection)) return;
 
 		const section = selectedSection as RightSidebarSection;
 		toggleSidebar("right", true);
@@ -63,11 +74,11 @@ export function BuilderSidebarRight() {
 		return () => {
 			window.cancelAnimationFrame(frame);
 		};
-	}, [selectedSection, selectionRequestId, setCollapsed, toggleSidebar]);
+	}, [sections, selectedSection, selectionRequestId, setCollapsed, toggleSidebar]);
 
 	return (
 		<>
-			<SidebarEdge />
+			<SidebarEdge sections={sections} />
 
 			<ScrollArea
 				ref={scrollAreaRef}
@@ -77,7 +88,7 @@ export function BuilderSidebarRight() {
 					<ReplacementChecklistSection />
 					<Separator />
 
-					{rightSidebarSections.map((section) => (
+					{sections.map((section) => (
 						<Fragment key={section}>
 							{getSectionComponent(section)}
 							<Separator />
@@ -91,7 +102,7 @@ export function BuilderSidebarRight() {
 	);
 }
 
-function SidebarEdge() {
+function SidebarEdge({ sections }: { sections: RightSidebarSection[] }) {
 	const selectedSection = useSectionStore((state) => state.selectedSection);
 	const selectSection = useSectionStore((state) => state.selectSection);
 
@@ -99,7 +110,7 @@ function SidebarEdge() {
 		<BuilderSidebarEdge side="right">
 			<div className="no-scrollbar min-h-0 w-full flex-1 overflow-y-auto overflow-x-hidden">
 				<div className="flex min-h-full flex-col items-center justify-center gap-y-2">
-					{rightSidebarSections.map((section) => (
+					{sections.map((section) => (
 						<Button
 							key={section}
 							size="icon"

@@ -1,21 +1,22 @@
-import { useLingui } from "@lingui/react";
-import { FileDocIcon, InfoIcon, SwapIcon } from "@phosphor-icons/react";
+import type { ResumeData } from "@reactive-resume/schema/resume/data";
+import type { WordTemplate } from "@/features/resume/word-template/library";
+import { FileDocIcon } from "@phosphor-icons/react";
+import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Alert, AlertDescription, AlertTitle } from "@reactive-resume/ui/components/alert";
 import { Badge } from "@reactive-resume/ui/components/badge";
 import { Button } from "@reactive-resume/ui/components/button";
-import { primaryTemplateIds, templates } from "@/dialogs/resume/template/data";
-import { createRecommendedTemplateLayout, needsTemplateLayoutSync } from "@/dialogs/resume/template/layout";
-import { TemplateThumbnail } from "@/dialogs/resume/template/thumbnail";
-import { useDialogStore } from "@/dialogs/store";
-import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
+import { useCurrentResume, usePatchResume, useUpdateResumeData } from "@/features/resume/builder/draft";
 import {
 	getSelectedWordTemplateId,
 	getWordTemplateById,
+	getWordTemplateDefaultResumeName,
 	getWordTemplateLibrary,
+	isDefaultWordTemplateResumeName,
 	setSelectedWordTemplateId,
 	wordTemplateSelectionChangeEvent,
 } from "@/features/resume/word-template/library";
+import { WordTemplateLiveThumbnail } from "@/features/resume/word-template/thumbnail";
+import { orpc } from "@/libs/orpc/client";
 import { useSectionStore } from "../../../-store/section";
 import { SectionBase } from "../shared/section-base";
 
@@ -28,169 +29,178 @@ export function TemplateSectionBuilder() {
 }
 
 function TemplateSectionForm() {
-	const { i18n } = useLingui();
-	const openDialog = useDialogStore((state) => state.openDialog);
 	const resume = useCurrentResume();
+	const patchResume = usePatchResume();
 	const updateResumeData = useUpdateResumeData();
+	const { mutate: updateResume } = useMutation(orpc.resume.update.mutationOptions());
 	const selectSection = useSectionStore((state) => state.selectSection);
-	const [selectedWordTemplateId, setSelectedWordTemplateIdState] = useState(() => getSelectedWordTemplateId(resume.id));
+	const [selectedWordTemplateId, setSelectedWordTemplateIdState] = useState(() =>
+		getSelectedWordTemplateId(resume.id, resume.data),
+	);
 	const selectedWordTemplate = getWordTemplateById(selectedWordTemplateId);
 	const wordTemplates = getWordTemplateLibrary();
-	const alternateWordTemplates = wordTemplates.filter((template) => template.id !== selectedWordTemplate?.id);
-	const template = resume.data.metadata.template;
-
-	const metadata = templates[template];
-	const shouldSyncLayout = needsTemplateLayoutSync(resume.data, metadata);
-
-	const onOpenTemplateGallery = () => {
-		openDialog("resume.template.gallery", undefined);
-	};
-
-	const onSyncTemplateLayout = () => {
-		updateResumeData((draft) => {
-			draft.metadata.layout = createRecommendedTemplateLayout(draft, metadata);
-		});
-	};
 
 	const onSelectWordTemplate = (templateId: (typeof wordTemplates)[number]["id"]) => {
+		const shouldSyncDefaultName = isDefaultWordTemplateResumeName(resume.name);
+		const nextDefaultName = getWordTemplateDefaultResumeName(templateId);
+
 		setSelectedWordTemplateId(resume.id, templateId);
 		setSelectedWordTemplateIdState(templateId);
+		updateResumeData((draft) => {
+			draft.metadata.wordTemplate = { id: templateId };
+		});
+
+		if (!shouldSyncDefaultName || resume.name.trim() === nextDefaultName) return;
+
+		updateResume(
+			{ id: resume.id, name: nextDefaultName },
+			{
+				onSuccess: (updated) => {
+					patchResume((draft) => {
+						draft.name = updated.name;
+						draft.slug = updated.slug;
+						draft.tags = updated.tags;
+						draft.isLocked = updated.isLocked;
+						draft.isPublic = updated.isPublic;
+						draft.hasPassword = updated.hasPassword;
+						draft.updatedAt = updated.updatedAt;
+					});
+				},
+			},
+		);
 	};
 
 	useEffect(() => {
-		const onSelectionChange = () => setSelectedWordTemplateIdState(getSelectedWordTemplateId(resume.id));
+		const onSelectionChange = () => setSelectedWordTemplateIdState(getSelectedWordTemplateId(resume.id, resume.data));
 		window.addEventListener(wordTemplateSelectionChangeEvent, onSelectionChange);
 		return () => window.removeEventListener(wordTemplateSelectionChangeEvent, onSelectionChange);
-	}, [resume.id]);
+	}, [resume.id, resume.data]);
 
 	if (selectedWordTemplate) {
+		const alternateWordTemplates = wordTemplates.filter((template) => template.id !== selectedWordTemplate.id);
+
 		return (
-			<div className="flex @md:flex-row flex-col items-stretch gap-x-4 gap-y-3">
-				<div className="relative w-40 shrink-0 overflow-hidden rounded-md border bg-white">
-					<img
-						src={selectedWordTemplate.previewUrl}
-						alt={selectedWordTemplate.name}
-						className="aspect-page size-full object-cover object-top"
-					/>
-					<div className="absolute top-2 left-2 rounded-md bg-background/90 px-2 py-0.5 font-medium text-[11px] shadow-sm">
-						DOCX
-					</div>
-				</div>
+			<div className="space-y-4">
+				<WordTemplatePreview
+					data={resume.data}
+					template={selectedWordTemplate}
+					name={selectedWordTemplate.name}
+					badge="DOCX"
+					className="mx-auto w-36"
+					scale={0.18}
+				/>
 
-				<div className="flex flex-1 flex-col gap-y-4 @md:pt-1 @md:pb-3">
-					<div className="space-y-1">
-						<div className="flex flex-wrap items-center gap-2">
-							<Badge variant="secondary">当前 Word 模板</Badge>
-							{selectedWordTemplate.badges.map((badge) => (
-								<Badge key={badge} variant="outline">
-									{badge}
-								</Badge>
-							))}
-						</div>
-						<h3 className="font-semibold text-2xl tracking-tight">{selectedWordTemplate.name}</h3>
-						<p className="text-muted-foreground text-sm">{selectedWordTemplate.description}</p>
-						<p className="text-muted-foreground text-xs leading-relaxed">
-							在线编辑区用于维护简历内容；导出 Word 时会使用这份 DOCX 模板填充文字并保留原模板样式。
-						</p>
+				<div className="space-y-3">
+					<div className="space-y-2">
+						<Badge variant="secondary">当前 Word 模板</Badge>
+						<h3 className="text-balance font-semibold text-xl tracking-tight">{selectedWordTemplate.name}</h3>
 					</div>
 
-					<div className="flex flex-wrap gap-2.5">
-						{selectedWordTemplate.tags.map((tag) => (
-							<Badge key={tag} variant="secondary">
-								{tag}
+					<div className="flex flex-wrap gap-1.5">
+						{selectedWordTemplate.modules.map((module) => (
+							<Badge key={module} variant="secondary" className="text-[11px]">
+								{module}
 							</Badge>
 						))}
 					</div>
 
-					<Button size="sm" className="w-fit gap-2" onClick={() => selectSection("export")}>
+					<Button size="sm" className="w-full gap-2" onClick={() => selectSection("export")}>
 						<FileDocIcon className="size-4" />
-						前往导出 Word
+						Word 导出
 					</Button>
 
 					{alternateWordTemplates.length > 0 ? (
-						<div className="space-y-2 border-t pt-3">
-							<p className="font-medium text-muted-foreground text-xs">其他 Word 模板</p>
-							<div className="grid gap-2">
-								{alternateWordTemplates.map((template) => (
-									<div key={template.id} className="flex items-center gap-3 rounded-md border p-2">
-										<img
-											src={template.previewUrl}
-											alt={template.name}
-											className="aspect-page w-12 shrink-0 rounded-sm border bg-white object-cover object-top"
-										/>
-										<div className="min-w-0 flex-1">
-											<p className="truncate font-medium text-sm">{template.name}</p>
-											<p className="line-clamp-1 text-muted-foreground text-xs">{template.description}</p>
-										</div>
-										<Button type="button" size="sm" variant="outline" onClick={() => onSelectWordTemplate(template.id)}>
-											使用此模板
-										</Button>
-									</div>
-								))}
-							</div>
-						</div>
+						<WordTemplateList
+							title="其他 Word 模板"
+							templates={alternateWordTemplates}
+							onSelectWordTemplate={onSelectWordTemplate}
+						/>
 					) : null}
 				</div>
 			</div>
 		);
 	}
 
+	if (wordTemplates.length === 0) {
+		return <EmptyTemplateState />;
+	}
+
 	return (
-		<div className="flex @md:flex-row flex-col items-stretch gap-x-4 gap-y-3">
-			<Button
-				variant="ghost"
-				onClick={onOpenTemplateGallery}
-				aria-label={`浏览全部中文模板，当前模板：${metadata.name}`}
-				className="group/preview relative h-auto w-40 shrink-0 cursor-pointer overflow-hidden rounded-md border bg-white p-0"
-			>
-				<div className="relative z-10 aspect-page size-full overflow-hidden rounded-md opacity-100 transition-opacity group-hover/preview:opacity-50">
-					<TemplateThumbnail template={template} label={metadata.name} imageUrl={metadata.imageUrl} />
+		<div className="space-y-4">
+			<div className="space-y-1">
+				<div className="flex flex-wrap items-center gap-2">
+					<Badge variant="secondary">Word 模板库</Badge>
+					<Badge variant="outline">{wordTemplates.length} 套可选</Badge>
 				</div>
+				<h3 className="font-semibold text-2xl tracking-tight">选择 Word 模板</h3>
+				<p className="text-muted-foreground text-sm leading-relaxed">
+					选择一个固定 Word 模板作为当前简历的预览和导出版式。
+				</p>
+			</div>
 
-				<div className="absolute inset-0 flex items-center justify-center">
-					<SwapIcon size={48} weight="thin" className="size-12" />
-				</div>
-			</Button>
+			<WordTemplateList title="可用 Word 模板" templates={wordTemplates} onSelectWordTemplate={onSelectWordTemplate} />
+		</div>
+	);
+}
 
-			<div className="flex flex-1 flex-col gap-y-4 @md:pt-1 @md:pb-3">
-				<div className="space-y-1">
-					<div className="flex flex-wrap items-center gap-2">
-						<Badge variant="secondary">当前模板</Badge>
-						<Badge variant="outline">{primaryTemplateIds.length} 套可选</Badge>
+function EmptyTemplateState() {
+	return (
+		<div className="rounded-md border border-dashed bg-secondary/20 px-4 py-10 text-center">
+			<h3 className="font-semibold text-2xl tracking-tight">模板库暂时为空</h3>
+			<p className="mx-auto mt-2 max-w-md text-muted-foreground text-sm">确认后的 Word 模板会逐个加入这里。</p>
+		</div>
+	);
+}
+
+type WordTemplateListProps = {
+	onSelectWordTemplate: (templateId: ReturnType<typeof getWordTemplateLibrary>[number]["id"]) => void;
+	templates: ReturnType<typeof getWordTemplateLibrary>;
+	title: string;
+};
+
+function WordTemplateList({ onSelectWordTemplate, templates, title }: WordTemplateListProps) {
+	return (
+		<div className="space-y-2 border-t pt-3">
+			<p className="font-medium text-muted-foreground text-xs">{title}</p>
+			<div className="grid gap-2">
+				{templates.map((template) => (
+					<div key={template.id} className="flex items-center gap-3 rounded-md border p-2">
+						<WordTemplatePreview name={template.name} template={template} className="w-12" scale={0.06} />
+						<div className="min-w-0 flex-1">
+							<p className="truncate font-medium text-sm">{template.name}</p>
+							<p className="line-clamp-1 text-muted-foreground text-xs">{template.description}</p>
+							<p className="line-clamp-1 text-[11px] text-muted-foreground">适用：{template.suitableFor}</p>
+						</div>
+						<Button type="button" size="sm" variant="outline" onClick={() => onSelectWordTemplate(template.id)}>
+							使用此模板
+						</Button>
 					</div>
-					<h3 className="font-semibold text-2xl tracking-tight">{metadata.name}</h3>
-					<p className="text-muted-foreground text-sm">{i18n.t(metadata.description)}</p>
-					<p className="text-muted-foreground text-xs leading-relaxed">
-						切换模板只调整版式、颜色和布局，正文内容会保留。
-					</p>
-				</div>
-
-				{shouldSyncLayout ? (
-					<Alert className="border-primary/30 bg-primary/5">
-						<InfoIcon className="size-4 text-primary" />
-						<AlertTitle>排版需要整理</AlertTitle>
-						<AlertDescription className="space-y-3">
-							<p>当前简历的栏位或模块顺序还不是这套模板的推荐排版。整理后预览和导出会更接近模板样张。</p>
-							<Button type="button" size="sm" variant="outline" className="w-fit" onClick={onSyncTemplateLayout}>
-								按当前模板整理排版
-							</Button>
-						</AlertDescription>
-					</Alert>
-				) : null}
-
-				<div className="flex flex-wrap gap-2.5">
-					{metadata.tags.map((tag) => (
-						<Badge key={tag} variant="secondary">
-							{tag}
-						</Badge>
-					))}
-				</div>
-
-				<Button size="sm" className="w-fit gap-2" onClick={onOpenTemplateGallery}>
-					<SwapIcon className="size-4" />
-					浏览全部中文模板
-				</Button>
+				))}
 			</div>
 		</div>
+	);
+}
+
+type WordTemplatePreviewProps = {
+	badge?: string;
+	className: string;
+	data?: ResumeData;
+	name: string;
+	scale: number;
+	template: WordTemplate;
+};
+
+function WordTemplatePreview({ badge, className, data, name, scale, template }: WordTemplatePreviewProps) {
+	const resume = useCurrentResume();
+
+	return (
+		<WordTemplateLiveThumbnail
+			badge={badge}
+			className={className}
+			data={data ?? resume.data}
+			name={name}
+			scale={scale}
+			template={template}
+		/>
 	);
 }

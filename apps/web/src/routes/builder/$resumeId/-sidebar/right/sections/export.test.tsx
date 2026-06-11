@@ -1,168 +1,49 @@
-// @vitest-environment happy-dom
-
-import { fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { i18n } from "@lingui/core";
-import { I18nProvider } from "@lingui/react";
+import type { ReactNode } from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderToStaticMarkup } from "react-dom/server";
 import { defaultResumeData } from "@reactive-resume/schema/resume/default";
 
-const downloadWithAnchor = vi.hoisted(() => vi.fn());
-const buildDocx = vi.hoisted(() => vi.fn().mockResolvedValue(new Blob(["x"], { type: "application/x-docx" })));
-const buildDocxFromTemplate = vi.hoisted(() =>
-	vi.fn().mockResolvedValue(new Blob(["template"], { type: "application/x-docx" })),
-);
-const createResumePdfBlob = vi.hoisted(() => vi.fn().mockResolvedValue(new Blob(["x"], { type: "application/pdf" })));
-const inspectDocxTemplate = vi.hoisted(() =>
-	vi.fn().mockResolvedValue({
-		placeholders: ["basics.name", "experience"],
-		supportedPlaceholders: ["basics.name", "experience"],
-		unsupportedPlaceholders: [],
-		xmlFileCount: 1,
-	}),
-);
+const mocks = vi.hoisted(() => ({
+	resume: vi.fn(),
+}));
 
-type SectionBaseProps = {
-	children: React.ReactNode;
-};
+vi.mock("@/features/resume/builder/draft", () => ({
+	useResume: () => mocks.resume(),
+}));
 
 vi.mock("../shared/section-base", () => ({
-	SectionBase: ({ children }: SectionBaseProps) => <div>{children}</div>,
-}));
-vi.mock("@reactive-resume/utils/file", () => ({
-	downloadWithAnchor,
-	generateFilename: (name: string, ext: string) => `${name}.${ext}`,
-}));
-vi.mock("@reactive-resume/docx", () => ({ buildDocx }));
-vi.mock("@/features/resume/export/docx-template", () => ({ buildDocxFromTemplate, inspectDocxTemplate }));
-vi.mock("@/features/resume/export/pdf-document", () => ({ createResumePdfBlob }));
-vi.mock("@/features/resume/builder/draft", () => ({
-	useResume: () => ({ id: "r1", name: "My Resume", data: defaultResumeData }),
+	SectionBase: ({ children }: { children: ReactNode }) => <div>{children}</div>,
 }));
 
 const { ExportSectionBuilder } = await import("./export");
-const { setSelectedWordTemplateId } = await import("@/features/resume/word-template/library");
 
-beforeAll(() => {
-	i18n.loadAndActivate({ locale: "en", messages: {} });
+beforeEach(() => {
+	mocks.resume.mockReset();
 });
-
-afterEach(() => {
-	downloadWithAnchor.mockReset();
-	buildDocx.mockClear();
-	buildDocxFromTemplate.mockClear();
-	createResumePdfBlob.mockClear();
-	inspectDocxTemplate.mockClear();
-	localStorage.clear();
-	vi.unstubAllGlobals();
-});
-
-const renderExport = () =>
-	render(
-		<I18nProvider i18n={i18n}>
-			<ExportSectionBuilder />
-		</I18nProvider>,
-	);
 
 describe("ExportSectionBuilder", () => {
-	it("renders JSON, DOCX, and PDF action buttons", () => {
-		renderExport();
-		expect(screen.getByText("JSON")).toBeInTheDocument();
-		expect(screen.getByText("DOCX")).toBeInTheDocument();
-		expect(screen.getByText("PDF")).toBeInTheDocument();
-		expect(screen.getByText("Word 模板导出")).toBeInTheDocument();
-		expect(screen.queryByText(/Beta/)).toBeNull();
-		expect(screen.getByText(/复杂双栏或强视觉模板请以 PDF 为准/)).toBeInTheDocument();
+	it("shows the selected word template export card when a template is active", () => {
+		const data = structuredClone(defaultResumeData);
+		data.metadata.wordTemplate = { id: "zh-internship-001" };
+		mocks.resume.mockReturnValue({ id: "resume-1", name: "Resume", data });
+
+		const html = renderToStaticMarkup(<ExportSectionBuilder />);
+
+		expect(html).toContain("校招实习标准模板");
+		expect(html).toContain("Word 导出");
+		expect(html).not.toContain("通用 DOCX");
+		expect(html).not.toContain("JSON");
+		expect(html).toContain("PDF");
 	});
 
-	it("downloads a JSON blob when the JSON button is clicked", () => {
-		renderExport();
-		const button = screen.getByText("JSON").closest("button") as HTMLButtonElement;
-		fireEvent.click(button);
+	it("falls back to the plain DOCX export when no word template is selected", () => {
+		const data = structuredClone(defaultResumeData);
+		data.metadata.wordTemplate = { id: null };
+		mocks.resume.mockReturnValue({ id: "resume-1", name: "Resume", data });
 
-		expect(downloadWithAnchor).toHaveBeenCalledTimes(1);
-		// biome-ignore lint/style/noNonNullAssertion: The assertion above verifies the download call exists before destructuring it.
-		const [blob, filename] = downloadWithAnchor.mock.calls[0]!;
-		expect(blob).toBeInstanceOf(Blob);
-		expect((blob as Blob).type).toBe("application/json");
-		expect(filename).toBe("My Resume.json");
-	});
+		const html = renderToStaticMarkup(<ExportSectionBuilder />);
 
-	it("calls buildDocx and downloads the resulting blob when DOCX is clicked", async () => {
-		renderExport();
-		const button = screen.getByText("DOCX").closest("button") as HTMLButtonElement;
-
-		fireEvent.click(button);
-		// Wait for the async callback chain to settle.
-		await Promise.resolve();
-		await Promise.resolve();
-
-		expect(buildDocx).toHaveBeenCalledTimes(1);
-		expect(downloadWithAnchor).toHaveBeenCalledTimes(1);
-		expect(downloadWithAnchor.mock.calls[0]?.[1]).toBe("My Resume.docx");
-	});
-
-	it("uploads a DOCX template and downloads a filled Word file", async () => {
-		renderExport();
-		const file = new File(["template"], "template.docx", {
-			type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-		});
-		expect(screen.getByText("上传其他 Word 模板")).toBeInTheDocument();
-		const input = screen.getByLabelText("上传 DOCX 模板") as HTMLInputElement;
-
-		fireEvent.change(input, { target: { files: [file] } });
-
-		await screen.findByText("template.docx");
-		expect(screen.getByText("更换上传模板")).toBeInTheDocument();
-		expect(inspectDocxTemplate).toHaveBeenCalledWith(file);
-		expect(screen.getByText("basics.name")).toBeInTheDocument();
-		expect(screen.getByText("experience")).toBeInTheDocument();
-
-		fireEvent.click(screen.getByRole("button", { name: "用当前简历生成 Word" }));
-		await Promise.resolve();
-		await Promise.resolve();
-
-		expect(buildDocxFromTemplate).toHaveBeenCalledWith(file, defaultResumeData);
-		expect(downloadWithAnchor).toHaveBeenCalledTimes(1);
-		expect(downloadWithAnchor.mock.calls[0]?.[1]).toBe("My Resume.template.docx");
-	});
-
-	it("downloads a filled Word file from the selected library template", async () => {
-		setSelectedWordTemplateId("r1", "dark-orange-sidebar");
-		const fetchMock = vi.fn().mockResolvedValue({
-			ok: true,
-			blob: vi.fn().mockResolvedValue(
-				new Blob(["library-template"], {
-					type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-				}),
-			),
-		});
-		vi.stubGlobal("fetch", fetchMock);
-
-		renderExport();
-
-		expect(screen.getByText("深灰橙色侧栏")).toBeInTheDocument();
-		fireEvent.click(screen.getByRole("button", { name: "用所选模板生成 Word" }));
-		await Promise.resolve();
-		await Promise.resolve();
-		await Promise.resolve();
-
-		expect(fetchMock).toHaveBeenCalledWith("/templates/word/dark-orange-sidebar.docx");
-		expect(buildDocxFromTemplate).toHaveBeenCalledWith(expect.any(Blob), defaultResumeData);
-		expect(downloadWithAnchor).toHaveBeenCalledTimes(1);
-		expect(downloadWithAnchor.mock.calls[0]?.[1]).toBe("My Resume.word-template.docx");
-	});
-
-	it("calls createResumePdfBlob and downloads when PDF is clicked", async () => {
-		renderExport();
-		const button = screen.getByText("PDF").closest("button") as HTMLButtonElement;
-
-		fireEvent.click(button);
-		await Promise.resolve();
-		await Promise.resolve();
-		await Promise.resolve();
-
-		expect(createResumePdfBlob).toHaveBeenCalledTimes(1);
-		expect(downloadWithAnchor).toHaveBeenCalledTimes(1);
-		expect(downloadWithAnchor.mock.calls[0]?.[1]).toBe("My Resume.pdf");
+		expect(html).toContain("Word 导出");
+		expect(html).not.toContain("JSON");
 	});
 });

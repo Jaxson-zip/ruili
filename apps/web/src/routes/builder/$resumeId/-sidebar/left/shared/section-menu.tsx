@@ -26,6 +26,7 @@ import {
 } from "@reactive-resume/ui/components/dropdown-menu";
 import { useDialogStore } from "@/dialogs/store";
 import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
+import { getSelectedWordTemplate } from "@/features/resume/word-template/library";
 import { useConfirm } from "@/hooks/use-confirm";
 import { usePrompt } from "@/hooks/use-prompt";
 
@@ -41,6 +42,7 @@ export function SectionDropdownMenu({ type }: Props) {
 	const updateResumeData = useUpdateResumeData();
 	const resume = useCurrentResume();
 	const section = type === "summary" ? resume.data.summary : resume.data.sections[type];
+	const selectedWordTemplate = getSelectedWordTemplate(resume.id, resume.data);
 
 	const onAddItem = () => {
 		if (type === "summary") return;
@@ -138,27 +140,31 @@ export function SectionDropdownMenu({ type }: Props) {
 						{section.hidden ? <Trans>显示</Trans> : <Trans>隐藏</Trans>}
 					</DropdownMenuItem>
 
-					<DropdownMenuItem onClick={onRenameSection}>
-						<PencilSimpleLineIcon />
-						<Trans>重命名</Trans>
-					</DropdownMenuItem>
+					{selectedWordTemplate ? null : (
+						<DropdownMenuItem onClick={onRenameSection}>
+							<PencilSimpleLineIcon />
+							<Trans>重命名</Trans>
+						</DropdownMenuItem>
+					)}
 
-					<DropdownMenuSub>
-						<DropdownMenuSubTrigger>
-							<ColumnsIcon />
-							<Trans>栏数</Trans>
-						</DropdownMenuSubTrigger>
+					{selectedWordTemplate ? null : (
+						<DropdownMenuSub>
+							<DropdownMenuSubTrigger>
+								<ColumnsIcon />
+								<Trans>栏数</Trans>
+							</DropdownMenuSubTrigger>
 
-						<DropdownMenuSubContent>
-							<DropdownMenuRadioGroup value={section.columns.toString()} onValueChange={onSetColumns}>
-								{[1, 2, 3, 4, 5, 6].map((column) => (
-									<DropdownMenuRadioItem key={column} value={column.toString()}>
-										<Plural value={column} one="# 栏" other="# 栏" />
-									</DropdownMenuRadioItem>
-								))}
-							</DropdownMenuRadioGroup>
-						</DropdownMenuSubContent>
-					</DropdownMenuSub>
+							<DropdownMenuSubContent>
+								<DropdownMenuRadioGroup value={section.columns.toString()} onValueChange={onSetColumns}>
+									{[1, 2, 3, 4, 5, 6].map((column) => (
+										<DropdownMenuRadioItem key={column} value={column.toString()}>
+											<Plural value={column} one="# 栏" other="# 栏" />
+										</DropdownMenuRadioItem>
+									))}
+								</DropdownMenuRadioGroup>
+							</DropdownMenuSubContent>
+						</DropdownMenuSub>
+					)}
 				</DropdownMenuGroup>
 
 				<DropdownMenuSeparator />

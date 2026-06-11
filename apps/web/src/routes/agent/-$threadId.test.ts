@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
+import { defaultResumeData } from "@reactive-resume/schema/resume/default";
 import {
 	attachmentIdsFromTransportBody,
 	attachmentToFilePart,
 	buildAgentChatSubmission,
 } from "./-helpers/chat-attachments";
+import { getAgentResumeWordTemplate } from "./-helpers/resume-preview-mode";
 
 describe("agent chat attachment helpers", () => {
 	it("builds safe UI file parts without embedding file bytes", () => {
@@ -65,5 +67,24 @@ describe("agent chat attachment helpers", () => {
 			],
 		});
 		expect(submission.options).toEqual({ body: { attachmentIds: ["attachment-1"] } });
+	});
+});
+
+describe("agent resume preview mode", () => {
+	it("uses the selected Word template for agent preview resumes", () => {
+		const data = structuredClone(defaultResumeData);
+		data.metadata.wordTemplate = { id: "zh-sidebar-clean-001" };
+
+		const template = getAgentResumeWordTemplate({ id: "resume-1", data });
+
+		expect(template?.id).toBe("zh-sidebar-clean-001");
+	});
+
+	it("falls back to the PDF preview mode when no Word template is selected", () => {
+		const data = structuredClone(defaultResumeData);
+		data.metadata.wordTemplate = { id: null };
+
+		expect(getAgentResumeWordTemplate({ id: "resume-1", data })).toBeUndefined();
+		expect(getAgentResumeWordTemplate(null)).toBeUndefined();
 	});
 });

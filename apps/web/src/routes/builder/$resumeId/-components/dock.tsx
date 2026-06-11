@@ -8,7 +8,6 @@ import {
 	CircleNotchIcon,
 	CubeFocusIcon,
 	FileDocIcon,
-	FileJsIcon,
 	FilePdfIcon,
 	LinkSimpleIcon,
 	MagnifyingGlassMinusIcon,
@@ -26,7 +25,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@reactive-resume/ui/com
 import { downloadWithAnchor, generateFilename } from "@reactive-resume/utils/file";
 import { cn } from "@reactive-resume/utils/style";
 import { useCurrentResume } from "@/features/resume/builder/draft";
-import { createResumePdfBlob } from "@/features/resume/export/pdf-document";
+import { buildDocxFromTemplate } from "@/features/resume/export/docx-template";
+import { createWordTemplateHtmlPreviewPdfBlob } from "@/features/resume/export/html-preview-pdf";
+import { getSelectedWordTemplate } from "@/features/resume/word-template/library";
 import { authClient } from "@/libs/auth/client";
 
 type BuilderDockProps = {
@@ -38,6 +39,7 @@ export function BuilderDock({ pageLayout, onTogglePageLayout }: BuilderDockProps
 	const { data: session } = authClient.useSession();
 	const resume = useCurrentResume();
 	const navigate = useNavigate();
+	const selectedWordTemplate = resume ? getSelectedWordTemplate(resume.id, resume.data) : undefined;
 
 	const [_, copyToClipboard] = useCopyToClipboard();
 	const { zoomIn, zoomOut, centerView } = useControls();
@@ -54,27 +56,28 @@ export function BuilderDock({ pageLayout, onTogglePageLayout }: BuilderDockProps
 		toast.success(t`简历链接已复制到剪贴板。`);
 	}, [publicUrl, copyToClipboard]);
 
-	const onDownloadJSON = useCallback(async () => {
-		if (!resume) return;
-		const filename = generateFilename(resume.name, "json");
-		const jsonString = JSON.stringify(resume.data, null, 2);
-		const blob = new Blob([jsonString], { type: "application/json" });
-
-		downloadWithAnchor(blob, filename);
-	}, [resume]);
-
 	const onDownloadDOCX = useCallback(async () => {
 		if (!resume) return;
 		const filename = generateFilename(resume.name, "docx");
 
 		try {
-			const blob = await buildDocx(resume.data);
+			const blob = selectedWordTemplate
+				? await fetch(selectedWordTemplate.docxUrl)
+						.then((response) => {
+							if (!response.ok) throw new Error("Failed to fetch selected Word template.");
+							return response.blob();
+						})
+						.then((templateBlob) => buildDocxFromTemplate(templateBlob, resume.data))
+				: await buildDocx(resume.data);
+
 			downloadWithAnchor(blob, filename);
-			toast.success(t`DOCX 已导出；这是方便二次编辑的文字版，正式投递建议使用 PDF。`);
+			toast.success(
+				selectedWordTemplate ? t`Word 模板已导出。` : t`DOCX 已导出；这是方便二次编辑的文字版，正式投递建议使用 PDF。`,
+			);
 		} catch {
 			toast.error(t`生成 DOCX 时出现问题，请重试。`);
 		}
-	}, [resume]);
+	}, [resume, selectedWordTemplate]);
 
 	const onDownloadPDF = useCallback(async () => {
 		if (!resume) return;
@@ -85,7 +88,11 @@ export function BuilderDock({ pageLayout, onTogglePageLayout }: BuilderDockProps
 		setIsPrinting(true);
 
 		try {
-			const blob = await createResumePdfBlob(resume.data);
+			const blob = selectedWordTemplate
+				? await createWordTemplateHtmlPreviewPdfBlob()
+				: await import("@/features/resume/export/pdf-document").then(({ createResumePdfBlob }) =>
+						createResumePdfBlob(resume.data),
+					);
 			downloadWithAnchor(blob, filename);
 		} catch {
 			toast.error(t`生成 PDF 时出现问题，请重试。`);
@@ -93,7 +100,7 @@ export function BuilderDock({ pageLayout, onTogglePageLayout }: BuilderDockProps
 			setIsPrinting(false);
 			toast.dismiss(toastId);
 		}
-	}, [resume]);
+	}, [resume, selectedWordTemplate]);
 
 	return (
 		<div className="fixed inset-x-0 bottom-4 flex items-center justify-center">
@@ -122,7 +129,6 @@ export function BuilderDock({ pageLayout, onTogglePageLayout }: BuilderDockProps
 				/>
 				<div className="mx-1 h-8 w-px bg-border" />
 				<DockIcon icon={LinkSimpleIcon} title={t`复制链接`} onClick={() => onCopyUrl()} />
-				<DockIcon icon={FileJsIcon} title={t`下载 JSON`} onClick={() => onDownloadJSON()} />
 				<DockIcon icon={FileDocIcon} title={t`下载 DOCX`} onClick={() => onDownloadDOCX()} />
 				<DockIcon
 					title={t`下载 PDF`}

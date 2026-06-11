@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { resumeDataSchema } from "./data";
-import { defaultResumeData } from "./default";
+import { createDefaultResumeData, defaultResumeData } from "./default";
 
 describe("defaultResumeData", () => {
 	it("conforms to resumeDataSchema", () => {
@@ -10,6 +10,10 @@ describe("defaultResumeData", () => {
 
 	it("uses the 'onyx' template", () => {
 		expect(defaultResumeData.metadata.template).toBe("onyx");
+	});
+
+	it("starts without a selected Word template", () => {
+		expect(defaultResumeData.metadata.wordTemplate).toEqual({ id: null });
 	});
 
 	it("uses zh-CN locale", () => {
@@ -54,5 +58,15 @@ describe("defaultResumeData", () => {
 
 	it("custom sections are empty", () => {
 		expect(defaultResumeData.customSections).toEqual([]);
+	});
+
+	it("creates an isolated default resume copy for each new blank resume", () => {
+		const first = createDefaultResumeData();
+		const second = createDefaultResumeData();
+
+		first.basics.name = "临时姓名";
+
+		expect(second.basics.name).toBe("");
+		expect(defaultResumeData.basics.name).toBe("");
 	});
 });

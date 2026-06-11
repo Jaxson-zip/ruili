@@ -50,13 +50,15 @@ import { Textarea } from "@reactive-resume/ui/components/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@reactive-resume/ui/components/tooltip";
 import { downloadWithAnchor, generateFilename } from "@reactive-resume/utils/file";
 import { cn } from "@reactive-resume/utils/style";
-import { createResumePdfBlob } from "@/features/resume/export/pdf-document";
 import { ResumePreview } from "@/features/resume/preview/preview";
+import { DEFAULT_PDF_PAGE_SIZE } from "@/features/resume/preview/preview.shared";
+import { WordTemplateDataPreview } from "@/features/resume/word-template/preview";
 import { useConfirm } from "@/hooks/use-confirm";
 import { getOrpcErrorMessage } from "@/libs/error-message";
 import { client, orpc, streamClient } from "@/libs/orpc/client";
 import { AgentThreadSidebar } from "./-components/thread-sidebar";
 import { attachmentIdsFromTransportBody, buildAgentChatSubmission } from "./-helpers/chat-attachments";
+import { getAgentResumeWordTemplate } from "./-helpers/resume-preview-mode";
 import { useAgentResumeUpdateSubscription } from "./-hooks/use-agent-resume-updates";
 
 type AgentThreadDetail = RouterOutput["agent"]["threads"]["get"];
@@ -157,6 +159,13 @@ type ToolbarButtonProps = React.ComponentProps<typeof Button> & {
 
 type ResumePaneProps = {
 	resume: AgentThreadDetail["resume"];
+};
+
+type AgentWordTemplatePreviewProps = {
+	data: NonNullable<AgentThreadDetail["resume"]>["data"];
+	exportRootRef: React.RefObject<HTMLDivElement | null>;
+	template: NonNullable<ReturnType<typeof getAgentResumeWordTemplate>>;
+	zoom: number;
 };
 
 function toRecord(value: unknown) {
@@ -1097,6 +1106,8 @@ function ToolbarButton({ label, children, ...props }: ToolbarButtonProps) {
 function ResumePane({ resume }: ResumePaneProps) {
 	const [zoom, setZoom] = useState(getInitialPreviewZoom);
 	const [isPrinting, setIsPrinting] = useState(false);
+	const wordTemplateExportRootRef = useRef<HTMLDivElement>(null);
+	const selectedWordTemplate = getAgentResumeWordTemplate(resume);
 
 	useEffect(() => {
 		window.localStorage.setItem(AGENT_PREVIEW_ZOOM_STORAGE_KEY, String(zoom));
@@ -1115,7 +1126,13 @@ function ResumePane({ resume }: ResumePaneProps) {
 		setIsPrinting(true);
 
 		try {
-			const blob = await createResumePdfBlob(resume.data);
+			const blob = selectedWordTemplate
+				? await import("@/features/resume/export/html-preview-pdf").then(({ createWordTemplateHtmlPreviewPdfBlob }) =>
+						createWordTemplateHtmlPreviewPdfBlob({ root: wordTemplateExportRootRef.current ?? document }),
+					)
+				: await import("@/features/resume/export/pdf-document").then(({ createResumePdfBlob }) =>
+						createResumePdfBlob(resume.data),
+					);
 			downloadWithAnchor(blob, filename);
 		} catch {
 			toast.error(t`There was a problem while generating the PDF, please try again.`);
@@ -1123,7 +1140,7 @@ function ResumePane({ resume }: ResumePaneProps) {
 			setIsPrinting(false);
 			toast.dismiss(toastId);
 		}
-	}, [resume]);
+	}, [resume, selectedWordTemplate]);
 
 	const zoomPercent = Math.round(zoom * 100);
 
@@ -1192,7 +1209,14 @@ function ResumePane({ resume }: ResumePaneProps) {
 					</div>
 				</div>
 				<div className="p-4">
-					{resume ? (
+					{resume && selectedWordTemplate ? (
+						<AgentWordTemplatePreview
+							data={resume.data}
+							exportRootRef={wordTemplateExportRootRef}
+							template={selectedWordTemplate}
+							zoom={zoom}
+						/>
+					) : resume ? (
 						<ResumePreview
 							data={resume.data}
 							pageLayout="vertical"
@@ -1209,6 +1233,75 @@ function ResumePane({ resume }: ResumePaneProps) {
 				</div>
 			</div>
 		</section>
+	);
+}
+
+function AgentWordTemplatePreview({ data, exportRootRef, template, zoom }: AgentWordTemplatePreviewProps) {
+	const viewportRef = useRef<HTMLDivElement>(null);
+	const scaleRootRef = useRef<HTMLDivElement>(null);
+	const [availableWidth, setAvailableWidth] = useState(DEFAULT_PDF_PAGE_SIZE.width);
+	const [scaledHeight, setScaledHeight] = useState<number | undefined>();
+	const fitScale = Math.min(1, availableWidth / DEFAULT_PDF_PAGE_SIZE.width);
+	const displayScale = zoom * fitScale;
+	const scaledWidth = DEFAULT_PDF_PAGE_SIZE.width * displayScale;
+
+	useEffect(() => {
+		const element = viewportRef.current;
+		if (!element) return;
+
+		const updateWidth = () => {
+			setAvailableWidth(element.clientWidth || DEFAULT_PDF_PAGE_SIZE.width);
+		};
+
+		updateWidth();
+
+		if (typeof ResizeObserver === "undefined") return;
+
+		const observer = new ResizeObserver(updateWidth);
+		observer.observe(element);
+
+		return () => observer.disconnect();
+	}, []);
+
+	useEffect(() => {
+		const element = scaleRootRef.current;
+		if (!element) return;
+
+		const updateHeight = () => {
+			setScaledHeight(element.scrollHeight * displayScale);
+		};
+
+		updateHeight();
+
+		if (typeof ResizeObserver === "undefined") return;
+
+		const observer = new ResizeObserver(updateHeight);
+		observer.observe(element);
+
+		return () => observer.disconnect();
+	}, [displayScale]);
+
+	return (
+		<div ref={viewportRef} className="w-full">
+			<div className="mx-auto" style={{ height: scaledHeight, width: scaledWidth }}>
+				<div
+					ref={scaleRootRef}
+					style={{
+						transform: `scale(${displayScale})`,
+						transformOrigin: "top left",
+						width: DEFAULT_PDF_PAGE_SIZE.width,
+					}}
+				>
+					<div
+						ref={exportRootRef}
+						data-word-template-export-root
+						className="relative overflow-hidden rounded-md bg-background shadow-lg ring-1 ring-border"
+					>
+						<WordTemplateDataPreview data={data} template={template} />
+					</div>
+				</div>
+			</div>
+		</div>
 	);
 }
 

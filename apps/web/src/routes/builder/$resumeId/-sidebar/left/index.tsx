@@ -6,6 +6,8 @@ import { Button } from "@reactive-resume/ui/components/button";
 import { ScrollArea } from "@reactive-resume/ui/components/scroll-area";
 import { Separator } from "@reactive-resume/ui/components/separator";
 import { getInitials } from "@reactive-resume/utils/string";
+import { useCurrentResume } from "@/features/resume/builder/draft";
+import { getSelectedWordTemplate, getWordTemplateLeftSidebarSectionIds } from "@/features/resume/word-template/library";
 import { ThemeToggleButton } from "@/features/theme/toggle-button";
 import { UserDropdownMenu } from "@/features/user/dropdown-menu";
 import { getSectionIcon, getSectionTitle, leftSidebarSections } from "@/libs/resume/section";
@@ -52,6 +54,11 @@ function getSectionComponent(type: LeftSidebarSection) {
 
 export function BuilderSidebarLeft() {
 	const scrollAreaRef = useRef<HTMLDivElement | null>(null);
+	const resume = useCurrentResume();
+	const selectedWordTemplate = getSelectedWordTemplate(resume.id, resume.data);
+	const sections = selectedWordTemplate
+		? getWordTemplateLeftSidebarSectionIds(selectedWordTemplate.id)
+		: leftSidebarSections;
 	const selectedSection = useSectionStore((state) => state.selectedSection);
 	const selectionRequestId = useSectionStore((state) => state.selectionRequestId);
 	const setCollapsed = useSectionStore((state) => state.setCollapsed);
@@ -59,7 +66,7 @@ export function BuilderSidebarLeft() {
 
 	useEffect(() => {
 		if (selectionRequestId === 0 || !selectedSection) return;
-		if (!leftSidebarSections.includes(selectedSection as LeftSidebarSection)) return;
+		if (!(sections as readonly string[]).includes(selectedSection)) return;
 
 		const section = selectedSection as LeftSidebarSection;
 		toggleSidebar("left", true);
@@ -73,15 +80,15 @@ export function BuilderSidebarLeft() {
 		return () => {
 			window.cancelAnimationFrame(frame);
 		};
-	}, [selectedSection, selectionRequestId, setCollapsed, toggleSidebar]);
+	}, [sections, selectedSection, selectionRequestId, setCollapsed, toggleSidebar]);
 
 	return (
 		<>
-			<SidebarEdge />
+			<SidebarEdge sections={sections} />
 
 			<ScrollArea ref={scrollAreaRef} className="@container h-[calc(100svh-3.5rem)] bg-background sm:ms-12">
 				<div className="space-y-4 p-4">
-					{leftSidebarSections.map((section) => (
+					{sections.map((section) => (
 						<Fragment key={section}>
 							{getSectionComponent(section)}
 							<Separator />
@@ -93,7 +100,7 @@ export function BuilderSidebarLeft() {
 	);
 }
 
-function SidebarEdge() {
+function SidebarEdge({ sections }: { sections: readonly LeftSidebarSection[] }) {
 	const selectedSection = useSectionStore((state) => state.selectedSection);
 	const selectSection = useSectionStore((state) => state.selectSection);
 
@@ -102,7 +109,7 @@ function SidebarEdge() {
 			<div className="flex min-h-0 w-full flex-1 flex-col items-center gap-y-2 overflow-hidden">
 				<div className="no-scrollbar min-h-0 w-full flex-1 overflow-y-auto overflow-x-hidden">
 					<div className="flex min-h-full flex-col items-center justify-center gap-y-2">
-						{leftSidebarSections.map((section) => (
+						{sections.map((section) => (
 							<Button
 								key={section}
 								size="icon"

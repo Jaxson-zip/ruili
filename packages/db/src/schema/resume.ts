@@ -1,7 +1,7 @@
 import type { StoredResumeAnalysis } from "@reactive-resume/schema/resume/analysis";
 import type { ResumeData } from "@reactive-resume/schema/resume/data";
 import * as pg from "drizzle-orm/pg-core";
-import { defaultResumeData } from "@reactive-resume/schema/resume/default";
+import { createDefaultResumeData } from "@reactive-resume/schema/resume/default";
 import { generateId } from "@reactive-resume/utils/string";
 import { user } from "./auth";
 
@@ -23,7 +23,7 @@ export const resume = pg.pgTable(
 			.jsonb("data")
 			.notNull()
 			.$type<ResumeData>()
-			.$defaultFn(() => defaultResumeData),
+			.$defaultFn(() => createDefaultResumeData()),
 		userId: pg
 			.text("user_id")
 			.notNull()

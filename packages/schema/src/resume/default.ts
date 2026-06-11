@@ -165,5 +165,10 @@ export const defaultResumeData: ResumeData = {
 		},
 		notes: "",
 		styleRules: [],
+		wordTemplate: {
+			id: null,
+		},
 	},
 };
+
+export const createDefaultResumeData = (): ResumeData => structuredClone(defaultResumeData);

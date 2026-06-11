@@ -1,4 +1,5 @@
 import type { ResumeData } from "@reactive-resume/schema/resume/data";
+import type { WordTemplateId } from "@reactive-resume/schema/resume/word-template";
 import { execFile } from "node:child_process";
 import { existsSync } from "node:fs";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
@@ -8,24 +9,20 @@ import { promisify } from "node:util";
 import { z } from "zod";
 import { resolveUserFromRequestHeaders } from "@reactive-resume/api/context";
 import { resumeDataSchema } from "@reactive-resume/schema/resume/data";
+import { getWordTemplateManifest, wordTemplateIds } from "@reactive-resume/schema/resume/word-template";
 import { renderWordTemplateDocx } from "./docx";
 
 const execFileAsync = promisify(execFile);
 
 const previewRequestSchema = z.object({
-	templateId: z.enum(["compact-blue-grid", "dark-orange-sidebar"]),
+	templateId: z.enum(wordTemplateIds),
 	data: resumeDataSchema,
 });
-
-const wordTemplateFileNames = {
-	"compact-blue-grid": "compact-blue-grid.docx",
-	"dark-orange-sidebar": "dark-orange-sidebar.docx",
-} as const;
 
 export type WordTemplatePreviewDeps = {
 	convertDocxToPdf?: (docxPath: string, outDir: string) => Promise<string>;
 	makeTempDir?: () => Promise<string>;
-	readTemplateDocx?: (templateId: keyof typeof wordTemplateFileNames) => Promise<Buffer>;
+	readTemplateDocx?: (templateId: WordTemplateId) => Promise<Buffer>;
 	renderTemplateDocx?: (template: Buffer, data: ResumeData) => Promise<Buffer>;
 	resolveUser?: (headers: Headers) => Promise<unknown>;
 };
@@ -84,8 +81,10 @@ export async function handleWordTemplatePreview(request: Request, deps: WordTemp
 	}
 }
 
-async function readWordTemplateDocx(templateId: keyof typeof wordTemplateFileNames) {
-	const fileName = wordTemplateFileNames[templateId];
+async function readWordTemplateDocx(templateId: WordTemplateId) {
+	const fileName = getWordTemplateManifest(templateId)?.docxFileName;
+	if (!fileName) throw new Error(`Word template not found: ${templateId}`);
+
 	const candidates = [
 		resolve(process.cwd(), "apps/web/public/templates/word", fileName),
 		resolve(process.cwd(), "apps/web/dist/templates/word", fileName),
@@ -101,8 +100,34 @@ async function readWordTemplateDocx(templateId: keyof typeof wordTemplateFileNam
 
 export async function convertWordDocxToPdf(docxPath: string, outDir: string) {
 	const soffice = findSofficeExecutable();
-	if (!soffice) throw new Error("LibreOffice soffice executable was not found.");
+	const conversionErrors: Error[] = [];
 
+	if (soffice) {
+		try {
+			return await convertDocxToPdfWithLibreOffice(soffice, docxPath, outDir);
+		} catch (error) {
+			conversionErrors.push(error instanceof Error ? error : new Error(String(error)));
+		}
+	}
+
+	if (process.platform === "win32") {
+		try {
+			return await convertDocxToPdfWithMicrosoftWord(docxPath, outDir);
+		} catch (error) {
+			conversionErrors.push(error instanceof Error ? error : new Error(String(error)));
+		}
+	}
+
+	const details = conversionErrors
+		.map((error) => error.message)
+		.filter(Boolean)
+		.join(" | ");
+	throw new Error(
+		`No DOCX to PDF converter succeeded. Install LibreOffice/soffice or Microsoft Word. ${details}`.trim(),
+	);
+}
+
+async function convertDocxToPdfWithLibreOffice(soffice: string, docxPath: string, outDir: string) {
 	await execFileAsync(soffice, ["--headless", "--convert-to", "pdf", "--outdir", outDir, docxPath], {
 		timeout: 60_000,
 		windowsHide: true,
@@ -112,6 +137,47 @@ export async function convertWordDocxToPdf(docxPath: string, outDir: string) {
 	if (!existsSync(pdfPath)) throw new Error(`LibreOffice did not create ${pdfPath}`);
 
 	return pdfPath;
+}
+
+async function convertDocxToPdfWithMicrosoftWord(docxPath: string, outDir: string) {
+	const pdfPath = join(outDir, `${basename(docxPath, ".docx")}.pdf`);
+	const script = `
+$ErrorActionPreference = "Stop"
+$DocxPath = ${quotePowerShellString(docxPath)}
+$PdfPath = ${quotePowerShellString(pdfPath)}
+$Word = New-Object -ComObject Word.Application
+$Word.Visible = $false
+$Word.DisplayAlerts = 0
+try {
+	$Document = $Word.Documents.Open($DocxPath, $false, $true, $false)
+	try {
+		$Document.ExportAsFixedFormat($PdfPath, 17)
+	}
+	finally {
+		$Document.Close($false)
+	}
+}
+finally {
+	$Word.Quit()
+	[System.Runtime.InteropServices.Marshal]::ReleaseComObject($Word) | Out-Null
+}
+if (!(Test-Path -LiteralPath $PdfPath)) {
+	throw "Microsoft Word did not create $PdfPath"
+}
+`;
+
+	await execFileAsync("powershell.exe", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", script], {
+		timeout: 60_000,
+		windowsHide: true,
+	});
+
+	if (!existsSync(pdfPath)) throw new Error(`Microsoft Word did not create ${pdfPath}`);
+
+	return pdfPath;
+}
+
+function quotePowerShellString(value: string) {
+	return `'${value.replaceAll("'", "''")}'`;
 }
 
 function findSofficeExecutable() {

@@ -587,6 +587,12 @@ export const styleRulesSchema = z.array(styleRuleSchema).catch([]);
 export type StyleRule = z.infer<typeof styleRuleSchema>;
 export type StyleRuleTarget = z.infer<typeof styleRuleTargetSchema>;
 
+export const wordTemplateSelectionSchema = z
+	.object({
+		id: z.enum(["zh-internship-001", "zh-ats-compact-001", "zh-sidebar-clean-001"]).nullable().catch(null),
+	})
+	.catch({ id: null });
+
 export const metadataSchema = z.object({
 	template: templateSchema
 		.catch("onyx")
@@ -610,6 +616,9 @@ export const metadataSchema = z.object({
 		),
 	styleRules: styleRulesSchema.describe(
 		"Structured style rules that target semantic resume sections and slots for React PDF rendering.",
+	),
+	wordTemplate: wordTemplateSelectionSchema.describe(
+		"The selected DOCX Word template used by the Chinese Word template export workflow.",
 	),
 });
 

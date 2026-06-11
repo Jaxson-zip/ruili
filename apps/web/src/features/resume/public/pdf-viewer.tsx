@@ -5,7 +5,6 @@ import { EventBus, LinkTarget, PDFLinkService, PDFViewer } from "pdfjs-dist/lega
 import { useEffect, useReducer, useRef } from "react";
 import { Spinner } from "@reactive-resume/ui/components/spinner";
 import { cn } from "@reactive-resume/utils/style";
-import { createResumePdfBlob } from "@/features/resume/export/pdf-document";
 import "pdfjs-dist/legacy/web/pdf_viewer.css";
 import "./pdf-viewer.css";
 
@@ -83,7 +82,8 @@ export function PdfViewer({ className, data }: PdfViewerProps) {
 		fileRef.current = null;
 		dispatch({ type: "resetForData" });
 
-		void createResumePdfBlob(data)
+		void import("@/features/resume/export/pdf-document")
+			.then(({ createResumePdfBlob }) => createResumePdfBlob(data))
 			.then((blob) => {
 				if (isCancelled) return;
 

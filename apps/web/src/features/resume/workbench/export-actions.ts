@@ -1,11 +1,11 @@
 import type { Resume } from "@/features/resume/builder/draft";
 import { buildDocx } from "@reactive-resume/docx";
 import { downloadWithAnchor, generateFilename } from "@reactive-resume/utils/file";
-import { createResumePdfBlob } from "@/features/resume/export/pdf-document";
 
 type ExportableResume = Pick<Resume, "data" | "name">;
 
 export async function exportResumePdf(resume: ExportableResume) {
+	const { createResumePdfBlob } = await import("@/features/resume/export/pdf-document");
 	const blob = await createResumePdfBlob(resume.data);
 	downloadWithAnchor(blob, generateFilename(resume.name, "pdf"));
 }

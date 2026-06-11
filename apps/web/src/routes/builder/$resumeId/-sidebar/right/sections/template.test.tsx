@@ -1,159 +1,124 @@
 // @vitest-environment happy-dom
 
+import type { ReactNode } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { i18n } from "@lingui/core";
-import { I18nProvider } from "@lingui/react";
-import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
-import { primaryTemplateIds } from "@/dialogs/resume/template/data";
-import { useDialogStore } from "@/dialogs/store";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderToStaticMarkup } from "react-dom/server";
+import { defaultResumeData } from "@reactive-resume/schema/resume/default";
+import { clearSelectedWordTemplateId } from "@/features/resume/word-template/library";
 
-type SectionBaseProps = {
-	children: React.ReactNode;
-};
+type SectionStoreState = { selectSection: (...args: unknown[]) => unknown };
+type ThumbnailMockProps = { template: { id: string; name: string } };
 
-vi.mock("../shared/section-base", () => ({
-	SectionBase: ({ children }: SectionBaseProps) => <div>{children}</div>,
+const mocks = vi.hoisted(() => ({
+	selectSection: vi.fn(),
+	currentResume: vi.fn(),
+	patchResume: vi.fn(),
+	updateResume: vi.fn(),
+	updateResumeData: vi.fn(),
 }));
-
-const resumeDataMock = vi.hoisted(() => ({
-	current: undefined as unknown as typeof sampleResumeData,
-}));
-
-function resetResumeDataMock() {
-	resumeDataMock.current = structuredClone(sampleResumeData);
-	resumeDataMock.current.metadata = {
-		...resumeDataMock.current.metadata,
-		template: "ditto",
-		layout: {
-			sidebarWidth: 35,
-			pages: [{ fullWidth: true, main: ["profiles", "summary"], sidebar: [] }],
-		},
-	};
-}
-
-const updateResumeData = vi.hoisted(() => vi.fn());
 
 vi.mock("@/features/resume/builder/draft", () => ({
-	useCurrentResume: () => ({
-		id: "resume-1",
-		data: resumeDataMock.current,
-	}),
-	useUpdateResumeData: () => updateResumeData,
+	useCurrentResume: () => mocks.currentResume(),
+	usePatchResume: () => mocks.patchResume,
+	useUpdateResumeData: () => mocks.updateResumeData,
 }));
 
-resetResumeDataMock();
+vi.mock("@tanstack/react-query", () => ({
+	useMutation: () => ({ mutate: mocks.updateResume }),
+}));
+
+vi.mock("@/libs/orpc/client", () => ({
+	orpc: {
+		resume: {
+			update: {
+				mutationOptions: () => ({}),
+			},
+		},
+	},
+}));
+
+vi.mock("../../../-store/section", () => ({
+	useSectionStore: (selector: (state: SectionStoreState) => unknown) =>
+		selector({ selectSection: mocks.selectSection }),
+}));
+
+vi.mock("@/features/resume/word-template/thumbnail", () => ({
+	WordTemplateLiveThumbnail: ({ template }: ThumbnailMockProps) => (
+		<div data-template-id={template.id}>{template.name}</div>
+	),
+}));
+
+vi.mock("../shared/section-base", () => ({
+	SectionBase: ({ children }: { children: ReactNode }) => <div>{children}</div>,
+}));
 
 const { TemplateSectionBuilder } = await import("./template");
-const { getSelectedWordTemplateId, setSelectedWordTemplateId } = await import(
-	"@/features/resume/word-template/library"
-);
 
-beforeAll(() => {
-	i18n.loadAndActivate({ locale: "en", messages: {} });
+beforeEach(() => {
+	mocks.selectSection.mockReset();
+	mocks.currentResume.mockReset();
+	mocks.patchResume.mockReset();
+	mocks.updateResume.mockReset();
+	mocks.updateResumeData.mockReset();
+	clearSelectedWordTemplateId("resume-1");
 });
-
-afterEach(() => {
-	updateResumeData.mockReset();
-	localStorage.clear();
-	resetResumeDataMock();
-	useDialogStore.setState({ open: false, activeDialog: null, onBeforeClose: null });
-});
-
-const renderTemplate = () =>
-	render(
-		<I18nProvider i18n={i18n}>
-			<TemplateSectionBuilder />
-		</I18nProvider>,
-	);
 
 describe("TemplateSectionBuilder", () => {
-	it("renders the current template's display name", () => {
-		renderTemplate();
-		expect(screen.getByRole("heading", { level: 3 }).textContent).toBe("ATS 极简");
+	it("shows the configured word template library", () => {
+		const data = structuredClone(defaultResumeData);
+		mocks.currentResume.mockReturnValue({ id: "resume-1", name: "Resume", data });
+
+		const html = renderToStaticMarkup(<TemplateSectionBuilder />);
+
+		expect(html).toContain("校招实习标准模板");
+		expect(html).toContain("ATS 单栏精简模板");
+		expect(html).toContain("蓝灰侧栏双栏模板");
 	});
 
-	it("renders the template tags as badges", () => {
-		renderTemplate();
-		expect(screen.getByText("ATS 友好")).toBeInTheDocument();
+	it("shows the selected template details when metadata is set", () => {
+		const data = structuredClone(defaultResumeData);
+		data.metadata.wordTemplate = { id: "zh-internship-001" };
+		mocks.currentResume.mockReturnValue({ id: "resume-1", name: "Resume", data });
+
+		const html = renderToStaticMarkup(<TemplateSectionBuilder />);
+
+		expect(html).toContain("校招实习标准模板");
+		expect(html).toContain("Word 导出");
+		expect(html).not.toContain("适用场景");
+		expect(html).not.toContain("模板能力");
 	});
 
-	it("explains that template switching keeps the current resume content", () => {
-		renderTemplate();
+	it("renames default template-generated resumes when switching templates", () => {
+		const data = structuredClone(defaultResumeData);
+		data.metadata.wordTemplate = { id: "zh-ats-compact-001" };
+		mocks.currentResume.mockReturnValue({ id: "resume-1", name: "ATS 单栏精简模板 简历", data });
 
-		expect(screen.getByText("当前模板")).toBeInTheDocument();
-		expect(screen.getByText(`${primaryTemplateIds.length} 套可选`)).toBeInTheDocument();
-		expect(screen.getByText("切换模板只调整版式、颜色和布局，正文内容会保留。")).toBeInTheDocument();
-		expect(screen.getByRole("button", { name: "浏览全部中文模板" })).toBeInTheDocument();
+		render(<TemplateSectionBuilder />);
+
+		fireEvent.click(screen.getAllByRole("button", { name: "使用此模板" })[1]);
+
+		expect(mocks.updateResumeData).toHaveBeenCalledTimes(1);
+		const recipe = mocks.updateResumeData.mock.calls[0]?.[0] as (draft: typeof data) => void;
+		const nextData = structuredClone(data);
+		recipe(nextData);
+		expect(nextData.metadata.wordTemplate).toEqual({ id: "zh-sidebar-clean-001" });
+		expect(mocks.updateResume).toHaveBeenCalledWith(
+			{ id: "resume-1", name: "蓝灰侧栏双栏模板 简历" },
+			expect.any(Object),
+		);
 	});
 
-	it("opens the template gallery dialog when the preview is clicked", () => {
-		renderTemplate();
+	it("keeps custom resume names when switching templates", () => {
+		const data = structuredClone(defaultResumeData);
+		data.metadata.wordTemplate = { id: "zh-ats-compact-001" };
+		mocks.currentResume.mockReturnValue({ id: "resume-1", name: "前端暑期实习-v3", data });
 
-		const preview = screen.getByRole("img", { name: "ATS 极简" }).closest("button") as HTMLButtonElement;
-		fireEvent.click(preview);
+		render(<TemplateSectionBuilder />);
 
-		const state = useDialogStore.getState();
-		expect(state.open).toBe(true);
-		expect(state.activeDialog?.type).toBe("resume.template.gallery");
-	});
+		fireEvent.click(screen.getAllByRole("button", { name: "使用此模板" })[1]);
 
-	it("renders the Chinese thumbnail preview", () => {
-		renderTemplate();
-		expect(screen.getByRole("img", { name: "ATS 极简" })).toBeInTheDocument();
-	});
-
-	it("shows the selected Word template instead of the system template", () => {
-		setSelectedWordTemplateId("resume-1", "dark-orange-sidebar");
-
-		renderTemplate();
-
-		expect(screen.getByRole("heading", { level: 3 }).textContent).toBe("深灰橙色侧栏");
-		expect(screen.getByText("当前 Word 模板")).toBeInTheDocument();
-		expect(screen.getByRole("img", { name: "深灰橙色侧栏" })).toBeInTheDocument();
-		expect(screen.queryByText("ATS 极简")).toBeNull();
-		expect(screen.getByRole("button", { name: "前往导出 Word" })).toBeInTheDocument();
-	});
-
-	it("can switch between Word templates from the template section", () => {
-		setSelectedWordTemplateId("resume-1", "dark-orange-sidebar");
-
-		renderTemplate();
-		fireEvent.click(screen.getByRole("button", { name: "使用此模板" }));
-
-		expect(screen.getByRole("heading", { level: 3 }).textContent).toBe("1.docx 中文模板");
-		expect(getSelectedWordTemplateId("resume-1")).toBe("compact-blue-grid");
-	});
-
-	it("can resync stale sidebar layout for a no-sidebar template", () => {
-		resumeDataMock.current.metadata = {
-			...resumeDataMock.current.metadata,
-			template: "collection003",
-			layout: {
-				sidebarWidth: 30,
-				pages: [{ fullWidth: false, main: ["summary", "experience"], sidebar: ["profiles", "skills"] }],
-			},
-		};
-
-		renderTemplate();
-		fireEvent.click(screen.getByRole("button", { name: "按当前模板整理排版" }));
-
-		expect(screen.getByText("排版需要整理")).toBeInTheDocument();
-		expect(updateResumeData).toHaveBeenCalledTimes(1);
-
-		const recipe = updateResumeData.mock.calls[0]?.[0] as (draft: typeof sampleResumeData) => void;
-		const draft = structuredClone(sampleResumeData);
-		draft.metadata.template = "collection003";
-		draft.metadata.layout = {
-			sidebarWidth: 30,
-			pages: [{ fullWidth: false, main: ["summary", "experience"], sidebar: ["profiles", "skills"] }],
-		};
-
-		recipe(draft);
-
-		expect(draft.metadata.layout.pages[0]?.fullWidth).toBe(true);
-		expect(draft.metadata.layout.pages[0]?.sidebar).toEqual([]);
-		expect(draft.metadata.layout.pages[0]?.main).toContain("profiles");
-		expect(draft.metadata.layout.pages[0]?.main).toContain("skills");
+		expect(mocks.updateResumeData).toHaveBeenCalledTimes(1);
+		expect(mocks.updateResume).not.toHaveBeenCalled();
 	});
 });

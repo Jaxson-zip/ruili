@@ -13,9 +13,14 @@ export function createSectionItem(
 ) {
 	if (customSectionId) {
 		const section = draft.customSections.find((s) => s.id === customSectionId);
-		if (section) section.items.push(formData as never);
+		if (section) {
+			section.hidden = false;
+			section.items.push(formData as never);
+		}
 	} else {
-		(draft.sections[sectionKey].items as unknown[]).push(formData);
+		const section = draft.sections[sectionKey];
+		section.hidden = false;
+		(section.items as unknown[]).push(formData);
 	}
 }
 

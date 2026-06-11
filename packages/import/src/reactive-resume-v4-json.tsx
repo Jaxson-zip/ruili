@@ -763,6 +763,9 @@ export class ReactiveResumeV4JSONImporter {
 					},
 					notes: v4Data.metadata.notes ?? "",
 					styleRules: [],
+					wordTemplate: {
+						id: null,
+					},
 				},
 			};
 
