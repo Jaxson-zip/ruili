@@ -44,4 +44,32 @@ describe("getLocaleMessages", () => {
 			expect(flattenMessage(messages[descriptor.id])).toBe(descriptor.message);
 		}
 	});
+
+	it("includes Chinese translations for auth page production message ids", async () => {
+		const { messages } = await getLocaleMessages("zh-CN");
+
+		const authMessages = [
+			msg`登录账号`,
+			msg`邮箱地址`,
+			msg`密码`,
+			msg`登录`,
+			msg`立即创建`,
+			msg`也可以使用用户名登录。`,
+			msg`通行密钥`,
+		];
+
+		for (const descriptor of authMessages) {
+			expect(flattenMessage(messages[descriptor.id])).toBe(descriptor.message);
+		}
+	});
+
+	it("does not include empty Chinese translations for production message ids", async () => {
+		const { messages } = await getLocaleMessages("zh-CN");
+
+		const emptyMessageIds = Object.entries(messages)
+			.filter(([id, value]) => id.length > 0 && flattenMessage(value).length === 0)
+			.map(([id]) => id);
+
+		expect(emptyMessageIds).toEqual([]);
+	});
 });
