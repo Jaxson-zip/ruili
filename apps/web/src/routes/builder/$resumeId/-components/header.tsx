@@ -165,7 +165,7 @@ function BuilderHeaderDropdown() {
 		<DropdownMenu>
 			<DropdownMenuTrigger
 				render={
-					<Button size="icon" variant="ghost">
+					<Button size="icon" variant="ghost" aria-label={t`简历操作`}>
 						<CaretDownIcon />
 					</Button>
 				}

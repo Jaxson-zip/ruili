@@ -113,6 +113,7 @@ function PicturePreviewControls({
 							<Button
 								size="icon"
 								variant="ghost"
+								aria-label={picture.hidden ? t`显示照片` : t`隐藏照片`}
 								onClick={() => {
 									form.setFieldValue("hidden", !picture.hidden);
 									onAutoSave();

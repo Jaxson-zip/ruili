@@ -114,7 +114,7 @@ export function SectionDropdownMenu({ type }: Props) {
 		<DropdownMenu>
 			<DropdownMenuTrigger
 				render={
-					<Button size="icon" variant="ghost">
+					<Button size="icon" variant="ghost" aria-label={t`模块操作`}>
 						<ListIcon />
 					</Button>
 				}

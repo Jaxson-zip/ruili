@@ -266,7 +266,7 @@ function CustomSectionDropdownMenu({ section }: CustomSectionDropdownMenuProps) 
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger>
+			<DropdownMenuTrigger aria-label={t`自定义模块操作`}>
 				<DotsThreeVerticalIcon />
 			</DropdownMenuTrigger>
 

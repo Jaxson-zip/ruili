@@ -871,7 +871,7 @@ export const agentService = {
 					aiProviderId: selectedProvider.id,
 					sourceResumeId: input.sourceResumeId ?? null,
 					workingResumeId: working.id,
-					title: "New thread",
+					title: "新会话",
 				})
 				.returning();
 

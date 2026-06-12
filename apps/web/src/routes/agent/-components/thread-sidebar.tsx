@@ -147,7 +147,7 @@ function ThreadRow({ thread, activeThreadId }: ThreadRowProps) {
 	);
 	const isActive = thread.id === activeThreadId;
 	const isArchived = thread.status === "archived";
-	const title = thread.title === thread.resumeName ? t`新会话` : thread.title;
+	const title = thread.title === thread.resumeName || thread.title === "New thread" ? t`新会话` : thread.title;
 
 	return (
 		<div

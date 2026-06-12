@@ -73,19 +73,27 @@ function RouteComponent() {
 			<div className="grid gap-2 rounded-md border bg-muted/30 p-3 text-sm md:grid-cols-4">
 				<div className="flex items-center gap-2">
 					<span className="grid size-6 place-items-center rounded bg-primary text-primary-foreground text-xs">1</span>
-					<span className="font-medium">创建简历</span>
+					<span className="font-medium">
+						<Trans>创建简历</Trans>
+					</span>
 				</div>
 				<div className="flex items-center gap-2 text-muted-foreground">
 					<PencilSimpleLineIcon />
-					<span>填写内容</span>
+					<span>
+						<Trans>填写内容</Trans>
+					</span>
 				</div>
 				<div className="flex items-center gap-2 text-muted-foreground">
 					<SquaresFourIcon />
-					<span>选择模板</span>
+					<span>
+						<Trans>选择模板</Trans>
+					</span>
 				</div>
 				<div className="flex items-center gap-2 text-muted-foreground">
 					<ExportIcon />
-					<span>导出 PDF</span>
+					<span>
+						<Trans>导出 PDF</Trans>
+					</span>
 				</div>
 			</div>
 

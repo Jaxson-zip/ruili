@@ -116,6 +116,7 @@ function SidebarEdge({ sections }: { sections: RightSidebarSection[] }) {
 							size="icon"
 							variant={selectedSection === section ? "secondary" : "ghost"}
 							title={getSectionTitle(section)}
+							aria-label={getSectionTitle(section)}
 							onClick={() => selectSection(section)}
 						>
 							{getSectionIcon(section)}

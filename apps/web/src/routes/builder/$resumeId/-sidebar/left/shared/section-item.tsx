@@ -281,7 +281,10 @@ export function SectionItem<T extends CustomSectionItem | SectionItemType>({
 			</button>
 
 			<DropdownMenu>
-				<DropdownMenuTrigger className="flex cursor-context-menu items-center px-1.5 opacity-40 transition-[background-color,opacity] hover:bg-secondary/40 focus:outline-none focus-visible:ring-1 group-hover:opacity-100">
+				<DropdownMenuTrigger
+					aria-label={`${title} 操作`}
+					className="flex cursor-context-menu items-center px-1.5 opacity-40 transition-[background-color,opacity] hover:bg-secondary/40 focus:outline-none focus-visible:ring-1 group-hover:opacity-100"
+				>
 					<DotsThreeVerticalIcon />
 				</DropdownMenuTrigger>
 

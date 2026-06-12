@@ -73,6 +73,37 @@ describe("getLocaleMessages", () => {
 		}
 	});
 
+	it("includes Chinese translations for dashboard and settings production message ids", async () => {
+		const { messages } = await getLocaleMessages("zh-CN");
+
+		const dashboardMessages = [
+			msg`我的简历`,
+			msg`AI 助手`,
+			msg`设置`,
+			msg`个人资料`,
+			msg`创建简历`,
+			msg`填写内容`,
+			msg`选择模板`,
+			msg`导出 PDF`,
+			msg`最近更新`,
+			msg`创建时间`,
+			msg`名称`,
+			msg`网格`,
+			msg`列表`,
+			msg`基础`,
+			msg`专业`,
+			msg`教育经历`,
+			msg`奖项`,
+			msg`工作经历`,
+			msg`项目`,
+			msg`技能`,
+		];
+
+		for (const descriptor of dashboardMessages) {
+			expect(flattenMessage(messages[descriptor.id])).toBe(descriptor.message);
+		}
+	});
+
 	it("does not include empty Chinese translations for production message ids", async () => {
 		const { messages } = await getLocaleMessages("zh-CN");
 

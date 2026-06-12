@@ -115,6 +115,7 @@ function SidebarEdge({ sections }: { sections: readonly LeftSidebarSection[] }) 
 								size="icon"
 								variant={selectedSection === section ? "secondary" : "ghost"}
 								title={getSectionTitle(section)}
+								aria-label={getSectionTitle(section)}
 								onClick={() => selectSection(section)}
 							>
 								{getSectionIcon(section)}
@@ -128,7 +129,7 @@ function SidebarEdge({ sections }: { sections: readonly LeftSidebarSection[] }) 
 
 					<UserDropdownMenu>
 						{({ session }) => (
-							<Button size="icon" variant="ghost">
+							<Button size="icon" variant="ghost" aria-label="用户菜单">
 								<Avatar className="size-6">
 									<AvatarImage src={session.user.image ?? undefined} />
 									<AvatarFallback className="text-[0.5rem]">{getInitials(session.user.name)}</AvatarFallback>
