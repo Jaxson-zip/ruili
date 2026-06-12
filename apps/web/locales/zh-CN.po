@@ -38,6 +38,11 @@ msgstr "姓名"
 msgid "(opens in new tab)"
 msgstr "（在新标签页中打开）"
 
+#: src/routes/_home/-sections/footer.tsx
+#: src/routes/_home/-sections/hero.tsx
+msgid "（在新标签页打开）"
+msgstr "（在新标签页打开）"
+
 #. placeholder {0}: section.items.length
 #: src/routes/builder/$resumeId/-sidebar/left/sections/custom.tsx
 msgid "{0, plural, one {# item} other {# items}}"
@@ -47,6 +52,11 @@ msgstr "{0, plural, other {# 项}}"
 #: src/routes/builder/$resumeId/-sidebar/left/sections/experience.tsx
 msgid "{0, plural, one {# role} other {# roles}}"
 msgstr "{0, plural, other {# 个职位}}"
+
+#. placeholder {0}: primaryTemplateIds.length
+#: src/routes/_home/-sections/features.tsx
+msgid "{0} 套可切换模板使用中文样张预览，方便判断是否适合投递。"
+msgstr "{0} 套可切换模板使用中文样张预览，方便判断是否适合投递。"
 
 #: src/routes/builder/$resumeId/-sidebar/left/sections/custom.tsx
 #: src/routes/builder/$resumeId/-sidebar/left/shared/section-menu.tsx
@@ -65,6 +75,15 @@ msgstr "<0>常见</0><1>问题</1><2>解答</2>"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/information.tsx
 msgid "<0>Thank you for using Reactive Resume! This app is a labor of love, created mostly in my spare time, with wonderful support from open-source contributors around the world.</0><1>If Reactive Resume has been helpful to you, and you'd like to help keep it free and open for everyone, please consider making a donation. Every little bit is appreciated!</1>"
 msgstr "<0>感谢你使用 Reactive Resume！这个应用是我在业余时间倾心打造的作品，并得到了全球开源贡献者的鼎力支持。</0><1>如果 Reactive Resume 对你有所帮助，并且你希望它能继续为所有人免费开放，请考虑捐赠支持。每一份心意我们都万分感激！</1>"
+
+#: src/routes/_home/-sections/faq.tsx
+msgctxt "Home page FAQ section heading with each word visually separated into individual spans"
+msgid "<0>常见</0><1>问题</1>"
+msgstr "<0>常见</0><1>问题</1>"
+
+#: src/routes/_home/-sections/hero.tsx
+msgid "<0>终于，</0><1>一款更懂中文求职的简历工作台</1>"
+msgstr "<0>终于，</0><1>一款更懂中文求职的简历工作台</1>"
 
 #: src/dialogs/api-key/create.tsx
 msgid "1 month"
@@ -284,6 +303,14 @@ msgstr "人工智能提供商"
 #: src/features/settings/integrations/components/ai-section.tsx
 msgid "AI providers require REDIS_URL and ENCRYPTION_SECRET to be configured."
 msgstr "AI 提供商需要配置 REDIS_URL 和 ENCRYPTION_SECRET。"
+
+#: src/routes/_home/-sections/features.tsx
+msgid "AI 优化入口"
+msgstr "AI 优化入口"
+
+#: src/routes/_home/-sections/faq.tsx
+msgid "AI 改简历是不是还需要接 LLM？"
+msgstr "AI 改简历是不是还需要接 LLM？"
 
 #: src/libs/locale.ts
 msgid "Albanian"
@@ -1617,10 +1644,6 @@ msgstr "人工智能将对您的简历进行深入审核，并给出总分、主
 msgid "Get Started"
 msgstr "开始"
 
-#. Authentication provider display name in account settings
-#. Brand name label for GitHub social sign-in button
-#: src/features/auth/components/social-auth.tsx
-#: src/features/settings/authentication/components/hooks.tsx
 #: src/routes/_home/-sections/footer.tsx
 msgid "GitHub"
 msgstr "GitHub"
@@ -2174,6 +2197,10 @@ msgstr "Microsoft Word"
 msgid "Missing working resume"
 msgstr "缺少工作简历"
 
+#: src/routes/_home/-sections/footer.tsx
+msgid "MIT 许可证"
+msgstr "MIT 许可证"
+
 #: src/features/settings/integrations/components/ai-section.tsx
 msgid "Model"
 msgstr "模型"
@@ -2453,6 +2480,10 @@ msgstr "补丁已回滚。"
 #: src/dialogs/resume/import.tsx
 msgid "PDF"
 msgstr "PDF"
+
+#: src/routes/_home/-sections/features.tsx
+msgid "PDF 导出"
+msgstr "PDF 导出"
 
 #: src/dialogs/resume/sections/education.tsx
 #: src/dialogs/resume/sections/experience.tsx
@@ -3988,6 +4019,203 @@ msgstr "缩小"
 msgid "Zulu"
 msgstr "祖鲁语"
 
+#: src/routes/_home/-sections/footer.tsx
+msgid "上游开源项目"
+msgstr "上游开源项目"
+
+#: src/routes/_home/-sections/features.tsx
+msgid "中文优先"
+msgstr "中文优先"
+
+#: src/routes/_home/-sections/features.tsx
+msgid "中文模板"
+msgstr "中文模板"
+
+#: src/routes/_home/-sections/templates.tsx
+msgid "中文简历模板与风格"
+msgstr "中文简历模板与风格"
+
+#: src/routes/_home/-sections/hero.tsx
+msgid "中文简历生成与优化工作台"
+msgstr "中文简历生成与优化工作台"
+
+#: src/routes/_home/-sections/features.tsx
+msgid "为不同岗位复制和调整简历，避免把原始版本改乱。"
+msgstr "为不同岗位复制和调整简历，避免把原始版本改乱。"
+
+#: src/routes/_home/-sections/faq.tsx
+msgid "为什么说它是中文优先？"
+msgstr "为什么说它是中文优先？"
+
+#: src/routes/_home/-sections/header.tsx
+msgid "主导航"
+msgstr "主导航"
+
+#: src/routes/_home/-sections/footer.tsx
+msgid "产品"
+msgstr "产品"
+
+#: src/routes/_home/-sections/prefooter.tsx
+msgid "从一份能投递的中文简历开始"
+msgstr "从一份能投递的中文简历开始"
+
+#: src/routes/_home/-sections/hero.tsx
+msgid "使用锐历编辑中文简历的动态演示"
+msgstr "使用锐历编辑中文简历的动态演示"
+
+#: src/routes/_home/-sections/faq.tsx
+msgid "可以。自托管后可以控制部署域名、数据库、邮件服务、AI 模型服务商和 OCR 服务商，更适合团队或个人长期维护。"
+msgstr "可以。自托管后可以控制部署域名、数据库、邮件服务、AI 模型服务商和 OCR 服务商，更适合团队或个人长期维护。"
+
+#: src/routes/_home/-sections/faq.tsx
+msgid "可以自托管吗？"
+msgstr "可以自托管吗？"
+
+#: src/routes/_home/-sections/features.tsx
+msgid "围绕中文简历最常见的流程设计：选样张、改内容、看预览、导出 PDF，再按不同岗位维护多个版本。"
+msgstr "围绕中文简历最常见的流程设计：选样张、改内容、看预览、导出 PDF，再按不同岗位维护多个版本。"
+
+#: src/routes/_home/-sections/footer.tsx
+msgid "在新标签页打开"
+msgstr "在新标签页打开"
+
+#: src/routes/_home/-sections/features.tsx
+msgid "基础信息、经历、项目和技能分模块维护，后续改投递方向更省心。"
+msgstr "基础信息、经历、项目和技能分模块维护，后续改投递方向更省心。"
+
+#: src/routes/_home/-sections/features.tsx
+msgid "多岗位版本"
+msgstr "多岗位版本"
+
+#: src/routes/_home/-sections/footer.tsx
+msgid "常见问题"
+msgstr "常见问题"
+
+#: src/routes/_home/-sections/footer.tsx
+#: src/routes/_home/-sections/hero.tsx
+msgid "开始使用"
+msgstr "开始使用"
+
+#: src/routes/_home/-sections/prefooter.tsx
+msgid "开始创建简历"
+msgstr "开始创建简历"
+
+#: src/routes/_home/-sections/faq.tsx
+msgid "开源许可怎么说明？"
+msgstr "开源许可怎么说明？"
+
+#: src/routes/_home/-sections/footer.tsx
+msgid "开源说明"
+msgstr "开源说明"
+
+#: src/routes/_home/-sections/features.tsx
+msgid "成品样张"
+msgstr "成品样张"
+
+#: src/routes/_home/-sections/features.tsx
+msgid "接入模型服务后，可以生成岗位匹配、经历改写和关键词检查建议。"
+msgstr "接入模型服务后，可以生成岗位匹配、经历改写和关键词检查建议。"
+
+#: src/routes/_home/-sections/features.tsx
+msgid "支持 JSON 导入；配置 AI 后可继续解析 PDF 和 Word 简历。"
+msgstr "支持 JSON 导入；配置 AI 后可继续解析 PDF 和 Word 简历。"
+
+#: src/routes/_home/-sections/faq.tsx
+msgid "支持 Word 和版本管理吗？"
+msgstr "支持 Word 和版本管理吗？"
+
+#: src/routes/_home/-sections/faq.tsx
+msgid "支持导出可编辑 DOCX，也可以用带占位符的 Word 模板生成文档。重要修改前建议复制一份简历作为岗位版本，方便保留原稿。"
+msgstr "支持导出可编辑 DOCX，也可以用带占位符的 Word 模板生成文档。重要修改前建议复制一份简历作为岗位版本，方便保留原稿。"
+
+#: src/routes/_home/-sections/features.tsx
+msgid "文件导入"
+msgstr "文件导入"
+
+#: src/routes/_home/-sections/faq.tsx
+msgid "是的。PDF、Word 解析和简历优化需要配置可用的 AI 模型服务商；图片简历和扫描版 PDF 还需要 OCR 服务商。基础编辑、模板预览和 PDF 导出不依赖 LLM。"
+msgstr "是的。PDF、Word 解析和简历优化需要配置可用的 AI 模型服务商；图片简历和扫描版 PDF 还需要 OCR 服务商。基础编辑、模板预览和 PDF 导出不依赖 LLM。"
+
+#: src/routes/_home/-sections/faq.tsx
+msgid "普通模板更像一次性文档，锐历把简历拆成结构化模块，方便长期维护、切换模板、导出 PDF，并为 AI 优化保留清晰的数据基础。"
+msgstr "普通模板更像一次性文档，锐历把简历拆成结构化模块，方便长期维护、切换模板、导出 PDF，并为 AI 优化保留清晰的数据基础。"
+
+#: src/routes/_home/-sections/hero.tsx
+msgid "查看源码"
+msgstr "查看源码"
+
+#: src/routes/_home/-sections/features.tsx
+msgid "核心能力"
+msgstr "核心能力"
+
+#: src/routes/_home/-sections/footer.tsx
+msgid "模板预览"
+msgstr "模板预览"
+
 #: src/features/settings/integrations/components/ai-section.tsx
 msgid "添加并测试一个 AI 模型后，才能使用简历解析、JD 匹配和 AI Patch。"
 msgstr "添加并测试一个 AI 模型后，才能使用简历解析、JD 匹配和 AI Patch。"
+
+#: src/routes/_home/-sections/features.tsx
+msgid "界面、示例、模板预览和说明都按中文求职场景整理。"
+msgstr "界面、示例、模板预览和说明都按中文求职场景整理。"
+
+#: src/routes/_home/-sections/faq.tsx
+msgid "界面文案、样张内容、模板预览和岗位表达都按中文求职场景整理，不只是把按钮翻译成中文。"
+msgstr "界面文案、样张内容、模板预览和岗位表达都按中文求职场景整理，不只是把按钮翻译成中文。"
+
+#: src/routes/_home/-sections/features.tsx
+msgid "结构化编辑"
+msgstr "结构化编辑"
+
+#: src/routes/_home/-sections/features.tsx
+msgid "编辑完成后直接导出 PDF，适合投递、分享和留档。"
+msgstr "编辑完成后直接导出 PDF，适合投递、分享和留档。"
+
+#: src/routes/_home/route.tsx
+msgid "跳到主要内容"
+msgstr "跳到主要内容"
+
+#: src/routes/_home/-sections/header.tsx
+msgid "进入工作台"
+msgstr "进入工作台"
+
+#: src/routes/_home/-sections/prefooter.tsx
+msgid "选择一份完整样张，替换成自己的经历，确认预览后导出 PDF，并按不同岗位保存多个版本。"
+msgstr "选择一份完整样张，替换成自己的经历，确认预览后导出 PDF，并按不同岗位保存多个版本。"
+
+#: src/routes/_home/-sections/header.tsx
+msgid "锐历 - 返回首页"
+msgstr "锐历 - 返回首页"
+
+#: src/routes/_home/-sections/faq.tsx
+msgid "锐历和普通简历模板有什么不一样？"
+msgstr "锐历和普通简历模板有什么不一样？"
+
+#: src/routes/_home/-sections/faq.tsx
+msgid "锐历基于 MIT 开源项目 Reactive Resume 构建，页脚保留了上游项目、原作者和 MIT 许可证入口。你可以查看源码并按许可证要求使用。"
+msgstr "锐历基于 MIT 开源项目 Reactive Resume 构建，页脚保留了上游项目、原作者和 MIT 许可证入口。你可以查看源码并按许可证要求使用。"
+
+#: src/routes/_home/-sections/hero.tsx
+msgid "锐历把简历编辑、模板排版、PDF 导出和 AI 优化放在同一个工作流里，适合中文求职者长期维护不同岗位版本。"
+msgstr "锐历把简历编辑、模板排版、PDF 导出和 AI 优化放在同一个工作流里，适合中文求职者长期维护不同岗位版本。"
+
+#: src/routes/_home/-sections/footer.tsx
+msgid "隐私与数据处理"
+msgstr "隐私与数据处理"
+
+#: src/routes/_home/-sections/footer.tsx
+msgid "面向中文求职场景的简历生成与优化工作台，支持结构化编辑、模板排版、PDF 导出和 AI 辅助优化。"
+msgstr "面向中文求职场景的简历生成与优化工作台，支持结构化编辑、模板排版、PDF 导出和 AI 辅助优化。"
+
+#: src/routes/_home/-sections/footer.tsx
+msgid "项目源码"
+msgstr "项目源码"
+
+#: src/routes/_home/-sections/templates.tsx
+msgid "首批可切换的中文模板，预览图展示风格方向，最终以编辑器预览和导出结果为准。"
+msgstr "首批可切换的中文模板，预览图展示风格方向，最终以编辑器预览和导出结果为准。"
+
+#: src/routes/_home/-sections/features.tsx
+msgid "默认展示少量完整中文样张，先看效果，再替换成自己的经历。"
+msgstr "默认展示少量完整中文样张，先看效果，再替换成自己的经历。"

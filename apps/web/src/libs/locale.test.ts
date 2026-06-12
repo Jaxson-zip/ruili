@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { getLocale, resolveLocale } from "./locale";
+import { msg } from "@lingui/core/macro";
+import { getLocale, getLocaleMessages, resolveLocale } from "./locale";
+
+const flattenMessage = (value: unknown): string => {
+	if (typeof value === "string") return value;
+	if (Array.isArray(value)) return value.map(flattenMessage).join("");
+	return "";
+};
 
 describe("resolveLocale", () => {
 	it("always resolves valid locales to zh-CN in the single-language app", () => {
@@ -18,5 +25,23 @@ describe("resolveLocale", () => {
 describe("getLocale", () => {
 	it("ignores persisted browser locale and returns zh-CN", () => {
 		expect(getLocale()).toBe("zh-CN");
+	});
+});
+
+describe("getLocaleMessages", () => {
+	it("includes Chinese translations for home page production message ids", async () => {
+		const { messages } = await getLocaleMessages("zh-CN");
+
+		const homeMessages = [
+			msg`中文简历生成与优化工作台`,
+			msg`开始使用`,
+			msg`核心能力`,
+			msg`中文优先`,
+			msg`中文简历模板与风格`,
+		];
+
+		for (const descriptor of homeMessages) {
+			expect(flattenMessage(messages[descriptor.id])).toBe(descriptor.message);
+		}
 	});
 });
