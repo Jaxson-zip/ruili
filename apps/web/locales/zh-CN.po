@@ -276,6 +276,10 @@ msgstr "代理人"
 msgid "AI"
 msgstr "AI（人工智能）"
 
+#: src/features/command-palette/pages/navigation.tsx
+msgid "AI Agent"
+msgstr "AI Agent"
+
 #: src/routes/agent/-components/new-thread-setup.tsx
 msgid "AI agent setup is unavailable right now. Please try again in a moment."
 msgstr "目前无法设置人工智能代理，请稍后再试。"
@@ -308,9 +312,17 @@ msgstr "AI 提供商需要配置 REDIS_URL 和 ENCRYPTION_SECRET。"
 msgid "AI 优化入口"
 msgstr "AI 优化入口"
 
+#: src/features/command-palette/pages/navigation.tsx
+msgid "AI 助手"
+msgstr "AI 助手"
+
 #: src/routes/_home/-sections/faq.tsx
 msgid "AI 改简历是不是还需要接 LLM？"
 msgstr "AI 改简历是不是还需要接 LLM？"
+
+#: src/features/command-palette/pages/navigation.tsx
+msgid "AI 服务商"
+msgstr "AI 服务商"
 
 #: src/libs/locale.ts
 msgid "Albanian"
@@ -370,7 +382,7 @@ msgstr "访问此链接的任何人均可查看并下载简历。"
 msgid "API Access"
 msgstr "API 访问"
 
-#: src/features/settings/integrations/components/ai-section.tsx
+#: src/features/command-palette/pages/navigation.tsx
 msgid "API Key"
 msgstr "API Key"
 
@@ -387,6 +399,10 @@ msgstr "API密钥在服务器上进行加密，保存后将不再显示。"
 #: src/features/settings/pages/api-keys.tsx
 msgid "API Reference"
 msgstr "API 参考"
+
+#: src/features/command-palette/pages/navigation.tsx
+msgid "API 密钥"
+msgstr "API 密钥"
 
 #: src/routes/dashboard/-components/sidebar.tsx
 msgid "App"
@@ -474,8 +490,6 @@ msgid "Attachment uploaded."
 msgstr "附件已上传。"
 
 #: src/features/command-palette/pages/navigation.tsx
-#: src/routes/dashboard/-components/sidebar.tsx
-#: src/routes/dashboard/settings/authentication/index.tsx
 msgid "Authentication"
 msgstr "身份验证"
 
@@ -993,8 +1007,6 @@ msgid "Czech"
 msgstr "捷克语"
 
 #: src/features/command-palette/pages/navigation.tsx
-#: src/routes/dashboard/-components/sidebar.tsx
-#: src/routes/dashboard/settings/danger-zone.tsx
 msgid "Danger Zone"
 msgstr "危险操作区"
 
@@ -2545,9 +2557,6 @@ msgid "Position"
 msgstr "职位"
 
 #: src/features/command-palette/pages/navigation.tsx
-#: src/features/command-palette/pages/preferences/index.tsx
-#: src/routes/dashboard/-components/sidebar.tsx
-#: src/routes/dashboard/settings/preferences.tsx
 msgid "Preferences"
 msgstr "偏好设置"
 
@@ -2577,8 +2586,6 @@ msgid "Proficiency"
 msgstr "熟练度"
 
 #: src/features/command-palette/pages/navigation.tsx
-#: src/routes/dashboard/-components/sidebar.tsx
-#: src/routes/dashboard/settings/profile.tsx
 msgid "Profile"
 msgstr "个人资料"
 
@@ -2606,7 +2613,7 @@ msgstr "使用密码保护你的简历，防止未经授权的访问"
 msgid "Protect your resume with a password, and let only people with the password view it."
 msgstr "用密码保护你的简历，只允许拥有密码的人查看。"
 
-#: src/features/settings/integrations/components/ai-section.tsx
+#: src/features/command-palette/pages/navigation.tsx
 msgid "Provider"
 msgstr "服务提供商"
 
@@ -2786,9 +2793,6 @@ msgstr "恢复补丁"
 
 #: src/features/command-palette/pages/navigation.tsx
 #: src/features/command-palette/pages/resumes.tsx
-#: src/routes/_home/-sections/statistics.tsx
-#: src/routes/dashboard/-components/sidebar.tsx
-#: src/routes/dashboard/resumes/index.tsx
 msgid "Resumes"
 msgstr "简历"
 
@@ -2968,8 +2972,6 @@ msgid "Set Password"
 msgstr "设置密码"
 
 #: src/features/command-palette/pages/navigation.tsx
-#: src/routes/agent/-components/new-thread-setup.tsx
-#: src/routes/dashboard/-components/sidebar.tsx
 msgid "Settings"
 msgstr "设置"
 
@@ -4019,6 +4021,10 @@ msgstr "祖鲁语"
 msgid "上游开源项目"
 msgstr "上游开源项目"
 
+#: src/features/command-palette/pages/navigation.tsx
+msgid "个人资料"
+msgstr "个人资料"
+
 #: src/routes/_home/-sections/features.tsx
 msgid "中文优先"
 msgstr "中文优先"
@@ -4047,6 +4053,10 @@ msgstr "为什么说它是中文优先？"
 msgid "主导航"
 msgstr "主导航"
 
+#: src/features/command-palette/pages/preferences/theme.tsx
+msgid "主题"
+msgstr "主题"
+
 #: src/features/auth/pages/login.tsx
 msgid "也可以使用用户名登录。"
 msgstr "也可以使用用户名登录。"
@@ -4059,6 +4069,10 @@ msgstr "产品"
 msgid "从一份能投递的中文简历开始"
 msgstr "从一份能投递的中文简历开始"
 
+#: src/features/command-palette/pages/resumes.tsx
+msgid "从空白简历开始"
+msgstr "从空白简历开始"
+
 #: src/features/auth/pages/verify-2fa-backup.tsx
 msgid "使用备用码验证"
 msgstr "使用备用码验证"
@@ -4067,9 +4081,26 @@ msgstr "使用备用码验证"
 msgid "使用锐历编辑中文简历的动态演示"
 msgstr "使用锐历编辑中文简历的动态演示"
 
+#: src/features/command-palette/pages/navigation.tsx
+#: src/features/command-palette/pages/preferences/index.tsx
+msgid "偏好设置"
+msgstr "偏好设置"
+
+#: src/features/command-palette/pages/preferences/index.tsx
+msgid "切换主题…"
+msgstr "切换主题…"
+
 #: src/features/auth/pages/register.tsx
 msgid "创建新账号"
 msgstr "创建新账号"
+
+#: src/features/command-palette/pages/resumes.tsx
+msgid "加载简历..."
+msgstr "加载简历..."
+
+#: src/features/command-palette/pages/navigation.tsx
+msgid "危险操作"
+msgstr "危险操作"
 
 #: src/features/auth/pages/verify-2fa.tsx
 msgid "双重验证"
@@ -4092,6 +4123,17 @@ msgstr "可以自托管吗？"
 msgid "后续找回密码时需要先验证邮箱。"
 msgstr "后续找回密码时需要先验证邮箱。"
 
+#. Accessible label for command list region inside command palette
+#. Accessible label for the command palette dialog
+#: src/features/command-palette/index.tsx
+msgid "命令面板"
+msgstr "命令面板"
+
+#. Accessible label for command palette dialog when browsing a nested command page
+#: src/features/command-palette/index.tsx
+msgid "命令面板 - {currentPage}"
+msgstr "命令面板 - {currentPage}"
+
 #: src/routes/_home/-sections/features.tsx
 msgid "围绕中文简历最常见的流程设计：选样张、改内容、看预览、导出 PDF，再按不同岗位维护多个版本。"
 msgstr "围绕中文简历最常见的流程设计：选样张、改内容、看预览、导出 PDF，再按不同岗位维护多个版本。"
@@ -4112,6 +4154,14 @@ msgstr "备用码验证失败，请重试。"
 #: src/routes/_home/-sections/features.tsx
 msgid "多岗位版本"
 msgstr "多岗位版本"
+
+#: src/features/command-palette/pages/navigation.tsx
+msgid "大模型助手"
+msgstr "大模型助手"
+
+#: src/features/command-palette/pages/navigation.tsx
+msgid "大模型配置"
+msgstr "大模型配置"
 
 #. Label for full name input on registration form
 #: src/features/auth/pages/register.tsx
@@ -4183,6 +4233,11 @@ msgstr "想起密码了？ <0/>"
 msgid "成品样张"
 msgstr "成品样张"
 
+#: src/features/command-palette/pages/navigation.tsx
+#: src/features/command-palette/pages/resumes.tsx
+msgid "我的简历"
+msgstr "我的简历"
+
 #: src/features/auth/components/social-auth.tsx
 msgctxt "Choose to authenticate with a social provider (Google, GitHub, etc.) instead of email and password"
 msgid "或使用以下方式继续"
@@ -4193,9 +4248,25 @@ msgstr "或使用以下方式继续"
 msgid "打开邮箱客户端"
 msgstr "打开邮箱客户端"
 
+#. Command palette hint that pressing Enter opens the selected resume
+#: src/features/command-palette/pages/resumes.tsx
+msgid "按 <0>Enter</0> 打开"
+msgstr "按 <0>Enter</0> 打开"
+
 #: src/routes/_home/-sections/features.tsx
 msgid "接入模型服务后，可以生成岗位匹配、经历改写和关键词检查建议。"
 msgstr "接入模型服务后，可以生成岗位匹配、经历改写和关键词检查建议。"
+
+#. Placeholder in command palette input on nested pages
+#: src/features/command-palette/index.tsx
+#: src/features/command-palette/pages/resumes.tsx
+msgid "搜索..."
+msgstr "搜索..."
+
+#. Accessible label for command palette search input
+#: src/features/command-palette/index.tsx
+msgid "搜索命令"
+msgstr "搜索命令"
 
 #: src/routes/_home/-sections/features.tsx
 msgid "支持 JSON 导入；配置 AI 后可继续解析 PDF 和 Word 简历。"
@@ -4279,10 +4350,23 @@ msgstr "正在验证..."
 msgid "正在验证备用码..."
 msgstr "正在验证备用码..."
 
+#. Empty-state message when no command palette results match the search query
+#: src/features/command-palette/index.tsx
+msgid "没有找到匹配的命令。"
+msgstr "没有找到匹配的命令。"
+
 #. Primary action button label on registration form
 #: src/features/auth/pages/register.tsx
 msgid "注册"
 msgstr "注册"
+
+#: src/features/command-palette/pages/preferences/theme.tsx
+msgid "浅色主题"
+msgstr "浅色主题"
+
+#: src/features/command-palette/pages/preferences/theme.tsx
+msgid "深色主题"
+msgstr "深色主题"
 
 #: src/features/settings/integrations/components/ai-section.tsx
 msgid "添加并测试一个 AI 模型后，才能使用简历解析、JD 匹配和 AI Patch。"
@@ -4335,6 +4419,11 @@ msgstr "登录账号"
 msgid "立即创建"
 msgstr "立即创建"
 
+#. Screen-reader dialog title for the command palette in the resume builder
+#: src/features/command-palette/index.tsx
+msgid "简历编辑命令面板"
+msgstr "简历编辑命令面板"
+
 #: src/routes/_home/-sections/features.tsx
 msgid "结构化编辑"
 msgstr "结构化编辑"
@@ -4347,6 +4436,10 @@ msgstr "继续"
 #: src/routes/_home/-sections/features.tsx
 msgid "编辑完成后直接导出 PDF，适合投递、分享和留档。"
 msgstr "编辑完成后直接导出 PDF，适合投递、分享和留档。"
+
+#: src/features/command-palette/pages/navigation.tsx
+msgid "设置"
+msgstr "设置"
 
 #: src/features/auth/pages/register.tsx
 msgid "请查收邮箱，点击链接完成账号验证。"
@@ -4369,13 +4462,27 @@ msgstr "请输入简历所有者提供的访问密码。"
 msgid "账号创建失败，请稍后重试。"
 msgstr "账号创建失败，请稍后重试。"
 
+#: src/features/command-palette/pages/navigation.tsx
+msgid "账号安全"
+msgstr "账号安全"
+
 #: src/routes/_home/route.tsx
 msgid "跳到主要内容"
 msgstr "跳到主要内容"
 
+#: src/features/command-palette/pages/navigation.tsx
+msgid "跳转到..."
+msgstr "跳转到..."
+
 #: src/features/auth/pages/verify-2fa-backup.tsx
 msgid "输入一个已保存的备用码来登录账号"
 msgstr "输入一个已保存的备用码来登录账号"
+
+#. Placeholder in command palette input on root page
+#. Screen-reader dialog description instructing users how to use the command palette
+#: src/features/command-palette/index.tsx
+msgid "输入命令或搜索..."
+msgstr "输入命令或搜索..."
 
 #: src/features/auth/pages/verify-2fa.tsx
 msgid "输入验证器应用中的验证码"
@@ -4477,6 +4584,10 @@ msgstr "项目源码"
 #: src/routes/_home/-sections/templates.tsx
 msgid "首批可切换的中文模板，预览图展示风格方向，最终以编辑器预览和导出结果为准。"
 msgstr "首批可切换的中文模板，预览图展示风格方向，最终以编辑器预览和导出结果为准。"
+
+#: src/features/command-palette/pages/navigation.tsx
+msgid "首页"
+msgstr "首页"
 
 #. Primary action button to submit 2FA code
 #. Primary action button to submit backup code

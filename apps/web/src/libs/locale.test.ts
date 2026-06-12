@@ -63,6 +63,16 @@ describe("getLocaleMessages", () => {
 		}
 	});
 
+	it("includes Chinese translations for global command palette production message ids", async () => {
+		const { messages } = await getLocaleMessages("zh-CN");
+
+		const commandPaletteMessages = [msg`简历编辑命令面板`, msg`输入命令或搜索...`, msg`命令面板`];
+
+		for (const descriptor of commandPaletteMessages) {
+			expect(flattenMessage(messages[descriptor.id])).toBe(descriptor.message);
+		}
+	});
+
 	it("does not include empty Chinese translations for production message ids", async () => {
 		const { messages } = await getLocaleMessages("zh-CN");
 
